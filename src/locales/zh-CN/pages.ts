@@ -1,5 +1,5 @@
 export default {
-  'pages.layouts.userLayout.title': 'HRS 人事系统',
+  'pages.layouts.userLayout.title': 'Ant Design 是西湖区最具影响力的 Web 设计规范',
   'pages.login.accountLogin.tab': '账户密码登录',
   'pages.login.accountLogin.errorMessage': '错误的用户名和密码',
   'pages.login.username.placeholder': '用户名',

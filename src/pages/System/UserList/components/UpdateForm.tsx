@@ -9,8 +9,7 @@ import {
   ProFormDateTimePicker,
 } from '@ant-design/pro-form';
 import { useIntl, FormattedMessage } from 'umi';
-
-import type { TableListItem } from '../data.d';
+import type { UserListItem } from '@/services/user/typings';
 
 export type FormValueType = {
   target?: string;
@@ -18,13 +17,13 @@ export type FormValueType = {
   type?: string;
   time?: string;
   frequency?: string;
-} & Partial<TableListItem>;
+} & Partial<UserListItem>;
 
 export type UpdateFormProps = {
   onCancel: (flag?: boolean, formVals?: FormValueType) => void;
   onSubmit: (values: FormValueType) => Promise<void>;
   updateModalVisible: boolean;
-  values: Partial<TableListItem>;
+  values: Partial<UserListItem>;
 };
 
 const UpdateForm: React.FC<UpdateFormProps> = (props) => {

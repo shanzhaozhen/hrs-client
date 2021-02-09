@@ -6,23 +6,28 @@ import type { RequestConfig, RunTimeLayoutConfig } from 'umi';
 import { history } from 'umi';
 import RightContent from '@/components/RightContent';
 import Footer from '@/components/Footer';
-import type { ResponseError } from 'umi-request';
-import { queryCurrent } from './services/user';
+import type { RequestOptionsInit, ResponseError } from 'umi-request';
+import { BookOutlined, LinkOutlined } from '@ant-design/icons';
+import type { CurrentUser } from '@/services/user/typings';
+import { queryCurrentUserInfo } from '@/services/system/user';
 
 /** 获取用户信息比较慢的时候会展示一个 loading */
 export const initialStateConfig = {
   loading: <PageLoading />,
 };
 
+/**
+ * @see  https://umijs.org/zh-CN/plugins/plugin-initial-state
+ * */
 export async function getInitialState(): Promise<{
   settings?: Partial<LayoutSettings>;
-  currentUser?: API.CurrentUser;
-  fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
+  currentUser?: CurrentUser;
+  fetchUserInfo?: () => Promise<CurrentUser | undefined>;
 }> {
   const fetchUserInfo = async () => {
     try {
-      const currentUser = await queryCurrent();
-      return currentUser;
+      const res = await queryCurrentUserInfo();
+      return res.data;
     } catch (error) {
       history.push('/user/login');
     }
@@ -43,6 +48,7 @@ export async function getInitialState(): Promise<{
   };
 }
 
+// https://umijs.org/zh-CN/plugins/plugin-layout
 export const layout: RunTimeLayoutConfig = ({ initialState }) => {
   return {
     rightContentRender: () => <RightContent />,
@@ -55,6 +61,28 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
         history.push('/user/login');
       }
     },
+    links: [
+      <>
+        <LinkOutlined />
+        <span
+          onClick={() => {
+            window.open('/umi/plugin/openapi');
+          }}
+        >
+          openAPI 文档
+        </span>
+      </>,
+      <>
+        <BookOutlined />
+        <span
+          onClick={() => {
+            window.open('/~docs');
+          }}
+        >
+          业务组件文档
+        </span>
+      </>,
+    ],
     menuHeaderRender: undefined,
     // 自定义 403 页面
     // unAccessible: <div>unAccessible</div>,
@@ -81,7 +109,29 @@ const codeMessage = {
   504: '网关超时。',
 };
 
-/** 异常处理程序 */
+/** response拦截器, 处理response */
+const jwtInterceptor = (url: string, options: RequestOptionsInit) => {
+  // 判断是否有 token
+  const token = localStorage.getItem('ACCESS_TOKEN');
+  if (token) {
+    return {
+      url,
+      options: {
+        ...options,
+        interceptors: true,
+        headers: {
+          ...options.headers,
+          Authorization: `${token}`,
+        },
+      },
+    };
+  }
+  return { url, options };
+};
+
+/** 异常处理程序
+ * @see https://beta-pro.ant.design/docs/request-cn
+ */
 const errorHandler = (error: ResponseError) => {
   const { response } = error;
   if (response && response.status) {
@@ -103,6 +153,8 @@ const errorHandler = (error: ResponseError) => {
   throw error;
 };
 
+// https://umijs.org/zh-CN/plugins/plugin-request
 export const request: RequestConfig = {
+  requestInterceptors: [jwtInterceptor],
   errorHandler,
 };

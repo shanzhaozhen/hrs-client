@@ -3,7 +3,7 @@ export default {
     'Ant Design adalah spesifikasi desain Web yang paling berpengaruh di Kabupaten Xihu',
   'pages.login.accountLogin.tab': 'Login dengan akun',
   'pages.login.accountLogin.errorMessage': 'Nama pengguna dan kata sandi salah',
-  'pages.login.username.placeholder': 'nama pengguna',
+  'pages.login.username.placeholder': 'nama pengguna: admin atau user',
   'pages.login.username.required': 'Nama pengguna harus diisi!',
   'pages.login.password.placeholder': 'kata sandi',
   'pages.login.password.required': 'Kata sandi harus diisi!',

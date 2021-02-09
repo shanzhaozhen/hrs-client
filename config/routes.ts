@@ -37,16 +37,29 @@
     ],
   },
   {
-    name: 'list.table-list',
-    icon: 'table',
-    path: '/list',
-    component: './TableList',
+    path: '/system',
+    name: 'system',
+    icon: 'crown',
+    routes: [
+      {
+        path: '/system/user',
+        name: 'user',
+        icon: 'smile',
+        component: './System/UserList',
+      },
+    ],
   },
   {
     path: '/',
     redirect: '/welcome',
   },
   {
-    component: './404',
+    component: './ErrorPage/500',
+  },
+  {
+    component: './ErrorPage/403',
+  },
+  {
+    component: './ErrorPage/404',
   },
 ];

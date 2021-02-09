@@ -7,10 +7,10 @@
  */
 export default {
   dev: {
-    '/api/': {
-      target: 'https://preview.pro.ant.design',
+    '/hrs-api/': {
+      target: 'http://localhost:8080/',
       changeOrigin: true,
-      pathRewrite: { '^': '' },
+      pathRewrite: { '^/hrs-api': '' },
     },
   },
   test: {

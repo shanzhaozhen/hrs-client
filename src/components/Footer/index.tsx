@@ -4,24 +4,24 @@ import { DefaultFooter } from '@ant-design/pro-layout';
 
 export default () => (
   <DefaultFooter
-    copyright="2020 蚂蚁集团体验技术部出品"
+    copyright="神大人嚟啦！特别制作"
     links={[
       {
-        key: 'Ant Design Pro',
-        title: 'Ant Design Pro',
-        href: 'https://pro.ant.design',
+        key: 'Home',
+        title: 'Home',
+        href: 'https://github.com/shanzhaozhen',
         blankTarget: true,
       },
       {
-        key: 'github',
+        key: 'github repositories ',
         title: <GithubOutlined />,
-        href: 'https://github.com/ant-design/ant-design-pro',
+        href: 'https://github.com/shanzhaozhen/hrs-client',
         blankTarget: true,
       },
       {
-        key: 'Ant Design',
-        title: 'Ant Design',
-        href: 'https://ant.design',
+        key: 'Github',
+        title: 'Github',
+        href: 'https://github.com/shanzhaozhen',
         blankTarget: true,
       },
     ]}
