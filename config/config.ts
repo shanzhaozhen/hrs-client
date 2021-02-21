@@ -1,6 +1,6 @@
 // https://umijs.org/config/
 import { defineConfig } from 'umi';
-import { join } from 'path';
+// import { join } from 'path';
 import defaultSettings from './defaultSettings';
 import proxy from './proxy';
 import routes from './routes';
@@ -51,8 +51,8 @@ export default defineConfig({
   openAPI: {
     requestLibPath: "import { request } from 'umi'",
     // 或者使用在线的版本
-    // schemaPath: "https://gw.alipayobjects.com/os/antfincdn/M%24jrzTTYJN/oneapi.json"
-    schemaPath: join(__dirname, 'oneapi.json'),
+    schemaPath: 'http://localhost:8080/v3/api-docs',
+    // schemaPath: join(__dirname, 'oneapi.json'),
     mock: false,
   },
 });

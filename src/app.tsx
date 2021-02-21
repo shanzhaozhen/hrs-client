@@ -8,8 +8,9 @@ import RightContent from '@/components/RightContent';
 import Footer from '@/components/Footer';
 import type { RequestOptionsInit, ResponseError } from 'umi-request';
 import { BookOutlined, LinkOutlined } from '@ant-design/icons';
-import type { CurrentUser } from '@/services/user/typings';
 import { queryCurrentUserInfo } from '@/services/system/user';
+
+const isDev = process.env.NODE_ENV === 'development';
 
 /** 获取用户信息比较慢的时候会展示一个 loading */
 export const initialStateConfig = {
@@ -21,13 +22,13 @@ export const initialStateConfig = {
  * */
 export async function getInitialState(): Promise<{
   settings?: Partial<LayoutSettings>;
-  currentUser?: CurrentUser;
-  fetchUserInfo?: () => Promise<CurrentUser | undefined>;
+  currentUser?: API.CurrentUser;
+  fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
 }> {
   const fetchUserInfo = async () => {
     try {
-      const res = await queryCurrentUserInfo();
-      return res.data;
+      const currentUser = await queryCurrentUserInfo();
+      return currentUser;
     } catch (error) {
       history.push('/user/login');
     }
@@ -61,28 +62,30 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
         history.push('/user/login');
       }
     },
-    links: [
-      <>
-        <LinkOutlined />
-        <span
-          onClick={() => {
-            window.open('/umi/plugin/openapi');
-          }}
-        >
-          openAPI 文档
-        </span>
-      </>,
-      <>
-        <BookOutlined />
-        <span
-          onClick={() => {
-            window.open('/~docs');
-          }}
-        >
-          业务组件文档
-        </span>
-      </>,
-    ],
+    links: isDev
+      ? [
+          <>
+            <LinkOutlined />
+            <span
+              onClick={() => {
+                window.open('/umi/plugin/openapi');
+              }}
+            >
+              openAPI 文档
+            </span>
+          </>,
+          <>
+            <BookOutlined />
+            <span
+              onClick={() => {
+                window.open('/~docs');
+              }}
+            >
+              业务组件文档
+            </span>
+          </>,
+        ]
+      : [],
     menuHeaderRender: undefined,
     // 自定义 403 页面
     // unAccessible: <div>unAccessible</div>,
@@ -109,6 +112,17 @@ const codeMessage = {
   504: '网关超时。',
 };
 
+// 响应后拦截器
+// const afterResponseInterceptors = async (response: Response) => {
+//   const res = await response.clone().json()
+//
+//   if (res.code === 0) {
+//     return res.data
+//   }
+//
+//   return res;
+// };
+
 /** response拦截器, 处理response */
 const jwtInterceptor = (url: string, options: RequestOptionsInit) => {
   // 判断是否有 token
@@ -120,7 +134,7 @@ const jwtInterceptor = (url: string, options: RequestOptionsInit) => {
         ...options,
         interceptors: true,
         headers: {
-          ...options.headers,
+          // ...options.headers,
           Authorization: `${token}`,
         },
       },
@@ -157,4 +171,5 @@ const errorHandler = (error: ResponseError) => {
 export const request: RequestConfig = {
   requestInterceptors: [jwtInterceptor],
   errorHandler,
+  // responseInterceptors: [afterResponseInterceptors],
 };

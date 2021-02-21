@@ -55,6 +55,7 @@
     "@umijs/route-utils": "^1.0.33",
     "antd": "^4.9.4",
     "classnames": "^2.2.6",
+    "dva": "^2.4.0",
     "lodash": "^4.17.11",
     "moment": "^2.25.3",
     "omit.js": "^2.0.2",

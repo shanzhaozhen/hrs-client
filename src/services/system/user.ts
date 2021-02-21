@@ -1,17 +1,17 @@
 import { request } from 'umi';
-import type { CurrentUser, UserList, UserListItem } from '@/services/user/typings';
-import type { ResponseBody, PageParams } from '@/services/common/typings';
+import type { CurrentUser, UserPageItem } from '@/services/user/typings';
+import type { ResultBody, PageParams, Page } from '@/services/common/typings';
 
 /** 获取当前的用户 GET /user/current */
 export async function queryCurrentUserInfo() {
-  return request<ResponseBody<CurrentUser>>('/hrs-api/user/current', {
+  return request<ResultBody<CurrentUser>>('/hrs-api/user/current', {
     method: 'GET',
   });
 }
 
-/** 获取规则列表 GET /api/user */
+/** 获取查询用户分页列表 GET /api/user */
 export async function queryUserList(params: PageParams) {
-  return request<UserList>('/hrs-api/user/page', {
+  return request<ResultBody<Page<UserPageItem>>>('/hrs-api/user/page', {
     method: 'POST',
     data: {
       ...params,
@@ -21,7 +21,7 @@ export async function queryUserList(params: PageParams) {
 
 /** 新建规则 PUT /api/user */
 export async function updateUser(options?: Record<string, any>) {
-  return request<UserListItem>('/hrs-api/user', {
+  return request<UserPageItem>('/hrs-api/user', {
     method: 'PUT',
     ...(options || {}),
   });
@@ -29,7 +29,7 @@ export async function updateUser(options?: Record<string, any>) {
 
 /** 新建规则 POST /api/user */
 export async function addUser(options?: { [key: string]: any }) {
-  return request<UserListItem>('/hrs-api/user', {
+  return request<UserPageItem>('/hrs-api/user', {
     method: 'POST',
     ...(options || {}),
   });
