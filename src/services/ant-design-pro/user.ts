@@ -71,11 +71,10 @@ export async function deleteUser(
   },
   options?: { [key: string]: any },
 ) {
-  const { userId: param0 } = params;
-  return request<API.ResultBodyLong>(`/user/${param0}`, {
+  const { userId } = params;
+  return request<API.ResultBodyLong>(`/user/${userId}`, {
     method: 'DELETE',
     params: { ...params },
-    responseType: '*/*',
     ...(options || {}),
   });
 }

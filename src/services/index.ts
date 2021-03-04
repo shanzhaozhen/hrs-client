@@ -3,7 +3,7 @@
 // API 更新时间：
 // API 唯一标识：
 import * as login from './common/login';
-import * as rule from './system/user';
+import * as rule from './user/user';
 export default {
   login,
   rule,

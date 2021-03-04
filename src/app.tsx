@@ -8,7 +8,7 @@ import RightContent from '@/components/RightContent';
 import Footer from '@/components/Footer';
 import type { RequestOptionsInit, ResponseError } from 'umi-request';
 import { BookOutlined, LinkOutlined } from '@ant-design/icons';
-import { queryCurrentUserInfo } from '@/services/system/user';
+import { getCurrentUserInfo } from '@/services/user/user';
 
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -27,7 +27,7 @@ export async function getInitialState(): Promise<{
 }> {
   const fetchUserInfo = async () => {
     try {
-      const currentUser = await queryCurrentUserInfo();
+      const currentUser = await getCurrentUserInfo();
       return currentUser;
     } catch (error) {
       history.push('/user/login');

@@ -54,6 +54,18 @@ export default [
     redirect: '/welcome',
   },
   {
+    name: '高级表单',
+    icon: 'smile',
+    path: '/test/formadvancedform',
+    component: './Test/FormAdvancedForm',
+  },
+  {
+    name: '查询表格',
+    icon: 'smile',
+    path: '/test/listtablelist',
+    component: './Test/ListTableList',
+  },
+  {
     component: './ErrorPage/500',
   },
   {
