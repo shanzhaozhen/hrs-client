@@ -1,16 +1,17 @@
-import React from 'react';
-import { message, Modal } from 'antd';
+import React, { Dispatch, SetStateAction } from 'react';
+import { message } from 'antd';
 import { addUser } from '@/services/user/user';
 import type { UserForm } from '@/services/user/typings';
 import FormBody from '@/pages/System/UserList/components/FormBody';
+import { ModalForm } from '@ant-design/pro-form';
 
 interface CreateFormProps {
   createModalVisible: boolean;
-  onCancel: (flag?: boolean) => void;
+  handleCreateModalVisible: Dispatch<SetStateAction<boolean>>;
 }
 
 const CreateForm: React.FC<CreateFormProps> = (props) => {
-  const { createModalVisible, onCancel: handleCreateModalVisible } = props;
+  const { createModalVisible, handleCreateModalVisible } = props;
 
   /**
    * 添加用户
@@ -30,16 +31,18 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
   };
 
   return (
-    <Modal
+    <ModalForm
       width={748}
-      destroyOnClose
       title="新建用户"
       visible={createModalVisible}
-      onCancel={() => handleCreateModalVisible()}
-      footer={null}
+      onVisibleChange={handleCreateModalVisible}
+      modalProps={{
+        destroyOnClose: true,
+      }}
+      onFinish={handleAdd}
     >
       <FormBody handleSubmit={handleAdd} />
-    </Modal>
+    </ModalForm>
   );
 };
 

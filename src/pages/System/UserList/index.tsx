@@ -7,8 +7,9 @@ import ProTable from '@ant-design/pro-table';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
-import { deleteUser, queryUserList } from '@/services/user/user';
+import { deleteUser, getUserByUserId, queryUserList } from '@/services/user/user';
 import type { UserVO } from '@/services/user/typings';
+import { UserForm } from '@/services/user/typings';
 
 /**
  *  删除用户
@@ -36,6 +37,7 @@ const TableList: React.FC<{}> = () => {
   const actionRef = useRef<ActionType>();
   const [row, setRow] = useState<UserVO>();
   const [selectedRowsState, setSelectedRows] = useState<UserVO[]>([]);
+
   const columns: ProColumns<UserVO>[] = [
     {
       title: '关键字',
@@ -123,10 +125,19 @@ const TableList: React.FC<{}> = () => {
       render: (_, record) => (
         <>
           <a
-            onClick={() => {
-              handleUpdateModalVisible(true);
-
-              setUpdateFormValues(record);
+            onClick={async () => {
+              if (record && record.id) {
+                const res = await getUserByUserId(record.id);
+                if (res.code === 0 && res.data) {
+                  const { data } = res;
+                  setUpdateFormValues(data as UserForm);
+                  handleUpdateModalVisible(true);
+                } else {
+                  message.error(res.message || `没有获取到用户信息（id:${record.id}）`);
+                }
+              } else {
+                message.warn('没有选中有效的用户');
+              }
             }}
           >
             修改
@@ -199,19 +210,15 @@ const TableList: React.FC<{}> = () => {
         </FooterToolbar>
       )}
       <CreateForm
-        onCancel={() => handleCreateModalVisible(false)}
         createModalVisible={createModalVisible}
+        handleCreateModalVisible={handleCreateModalVisible}
       />
       {updateFormValues && Object.keys(updateFormValues).length ? (
         <UpdateForm
-          onCancel={() => {
-            handleUpdateModalVisible(false);
-            setUpdateFormValues({});
-          }}
           updateModalVisible={updateModalVisible}
-          values={() => {
-            return updateFormValues;
-          }}
+          handleUpdateModalVisible={handleUpdateModalVisible}
+          values={updateFormValues}
+          onCancel={() => setUpdateFormValues({})}
         />
       ) : null}
 

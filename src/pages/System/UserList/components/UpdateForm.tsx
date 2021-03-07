@@ -1,47 +1,58 @@
-import React from 'react';
-import { message, Modal } from 'antd';
+import React, { Dispatch, SetStateAction } from 'react';
+import { message } from 'antd';
 
-import type { UserForm } from '@/services/user/typings';
+import type { UserForm, UserVO } from '@/services/user/typings';
 import FormBody from '@/pages/System/UserList/components/FormBody';
 import { updateUser } from '@/services/user/user';
+import { ModalForm } from '@ant-design/pro-form';
 
 export interface UpdateFormProps {
-  onCancel: (flag?: boolean, formVals?: UserForm) => void;
   updateModalVisible: boolean;
-  // values: UserForm;
+  handleUpdateModalVisible: Dispatch<SetStateAction<boolean>>;
+  onCancel: () => void;
+  values?: UserVO;
 }
 
 const UpdateForm: React.FC<UpdateFormProps> = (props) => {
-  const { onCancel: handleUpdateModalVisible, updateModalVisible, values } = props;
+  const { updateModalVisible, handleUpdateModalVisible, onCancel, values } = props;
 
   /**
    * 修改用户
    * @param fields
    */
   const handleUpdate = async (fields: UserForm) => {
-    const hide = message.loading('正在添加');
+    const hide = message.loading('正在修改');
     try {
-      await updateUser({ ...fields });
-      hide();
-      message.success('添加成功');
-      handleUpdateModalVisible(false);
+      const res = await updateUser(fields);
+      if (res.code === 0) {
+        hide();
+        message.success('修改成功');
+        handleUpdateModalVisible(false);
+      } else {
+        hide();
+        message.error(res.message || '修改失败请重试！');
+      }
     } catch (error) {
       hide();
-      message.error('添加失败请重试！');
+      message.error('修改失败请重试！');
     }
   };
 
   return (
-    <Modal
+    <ModalForm
       width={748}
-      destroyOnClose
       title="修改用户"
       visible={updateModalVisible}
-      footer={null}
-      onCancel={() => handleUpdateModalVisible()}
+      onVisibleChange={handleUpdateModalVisible}
+      initialValues={values}
+      modalProps={{
+        onCancel,
+        destroyOnClose: true,
+      }}
+      onFinish={handleUpdate}
     >
-      <FormBody isEdit={true} handleSubmit={handleUpdate} initialValues={values} />
-    </Modal>
+      <FormBody isEdit={true} handleSubmit={handleUpdate} />
+    </ModalForm>
   );
 };
 

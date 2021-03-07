@@ -55,25 +55,16 @@ export async function updateUser(userForm: UserForm, options?: { [key: string]: 
 }
 
 /** 获取角色信息（通过角色id） GET /user/${userId} */
-export async function getUserByUserId(
-  params: {
-    // path
-    /** 角色id */
-    userId: number;
-  },
-  options?: Record<string, any>,
-) {
-  const { userId } = params;
-  return request<ResultBody<UserVO>>(`/user/${userId}`, {
+export async function getUserByUserId(userId: number, options?: Record<string, any>) {
+  return request<ResultBody<UserVO>>(`/hrs-api/user/${userId}`, {
     method: 'GET',
-    params: { ...params },
     ...(options || {}),
   });
 }
 
 /** 登出用户接口 GET /user/logout */
 export async function logout(options?: Record<string, any>) {
-  return request<ResultBody<boolean>>('/user/logout', {
+  return request<ResultBody<boolean>>('/hrs-api/user/logout', {
     method: 'GET',
     ...(options || {}),
   });

@@ -17,8 +17,6 @@ export type Role = {
   name: string;
 };
 
-export type AsyncRoute = {};
-
 export type UserForm = {
   /** 主键ID */
   id: number;
