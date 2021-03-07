@@ -1,9 +1,9 @@
 import React, { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import { message } from 'antd';
 
-import type { UserForm, UserVO } from '@/services/user/typings';
-import FormBody from '@/pages/System/UserList/components/FormBody';
-import { updateUser } from '@/services/user/user';
+import type { MenuForm, MenuVO } from '@/services/menu/typings';
+import FormBody from '@/pages/System/MenuList/components/FormBody';
+import { updateMenu } from '@/services/menu/menu';
 import { ModalForm } from '@ant-design/pro-form';
 import { ActionType } from '@ant-design/pro-table';
 
@@ -12,7 +12,7 @@ export interface UpdateFormProps {
   handleUpdateModalVisible: Dispatch<SetStateAction<boolean>>;
   onCancel: () => void;
   tableActionRef: MutableRefObject<ActionType | undefined>;
-  values?: UserVO;
+  values?: MenuVO;
 }
 
 const UpdateForm: React.FC<UpdateFormProps> = (props) => {
@@ -22,10 +22,10 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
    * 修改用户
    * @param fields
    */
-  const handleUpdate = async (fields: UserForm) => {
+  const handleUpdate = async (fields: MenuForm) => {
     const hide = message.loading('正在修改');
     try {
-      await updateUser(fields);
+      await updateMenu(fields);
       hide();
       message.success('修改成功');
       handleUpdateModalVisible(false);

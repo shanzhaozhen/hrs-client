@@ -7,6 +7,7 @@ import type { NoticeIconTabProps } from './NoticeList';
 import NoticeList from './NoticeList';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
+import type { NoticeIconItem } from '@/services/system/typings';
 
 const { TabPane } = Tabs;
 
@@ -16,7 +17,7 @@ export type NoticeIconProps = {
   className?: string;
   loading?: boolean;
   onClear?: (tabName: string, tabKey: string) => void;
-  onItemClick?: (item: API.NoticeIconItem, tabProps: NoticeIconTabProps) => void;
+  onItemClick?: (item: NoticeIconItem, tabProps: NoticeIconTabProps) => void;
   onViewMore?: (tabProps: NoticeIconTabProps, e: MouseEvent) => void;
   onTabChange?: (tabTile: string) => void;
   style?: React.CSSProperties;

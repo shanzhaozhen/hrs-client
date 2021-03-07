@@ -40,11 +40,13 @@ const Login: React.FC = () => {
   const intl = useIntl();
 
   const fetchUserInfo = async () => {
-    const userInfo = await initialState?.fetchUserInfo?.();
-    if (userInfo) {
+    const currentUser = await initialState?.fetchUserInfo?.();
+    if (currentUser) {
       setInitialState({
         ...initialState,
-        currentUser: userInfo,
+        userInfo: currentUser?.userInfo,
+        role: currentUser.role,
+        menu: currentUser.menu,
       });
     }
   };

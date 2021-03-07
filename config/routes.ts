@@ -1,69 +1,55 @@
 export default [
   {
-    path: '/user',
+    name: 'login',
+    path: '/login',
     layout: false,
-    routes: [
-      {
-        path: '/user',
-        routes: [
-          {
-            name: 'login',
-            path: '/user/login',
-            component: './User/login',
-          },
-        ],
-      },
-    ],
+    hideInMenu: true,
+    component: './Common/login',
   },
   {
-    path: '/welcome',
-    name: 'welcome',
+    path: '/index',
+    name: '首页',
+    locale: 'menu.index',
     icon: 'smile',
     component: './Welcome',
   },
-  {
-    path: '/admin',
-    name: 'admin',
-    icon: 'crown',
-    access: 'canAdmin',
-    component: './Admin',
-    routes: [
-      {
-        path: '/admin/sub-page',
-        name: 'sub-page',
-        icon: 'smile',
-        component: './Welcome',
-      },
-    ],
-  },
-  {
-    path: '/system',
-    name: 'system',
-    icon: 'crown',
-    routes: [
-      {
-        path: '/system/user',
-        name: 'user',
-        icon: 'smile',
-        component: './System/UserList',
-      },
-    ],
-  },
+  // {
+  //   path: '/admin',
+  //   name: 'admin',
+  //   icon: 'crown',
+  //   access: 'canAdmin',
+  //   component: './Admin',
+  //   routes: [
+  //     {
+  //       path: '/admin/sub-page',
+  //       name: 'sub-page',
+  //       icon: 'smile',
+  //       component: './Welcome',
+  //     },
+  //   ],
+  // },
+  // {
+  //   path: '/system',
+  //   name: 'system',
+  //   icon: 'crown',
+  //   routes: [
+  //     {
+  //       path: '/system/user',
+  //       name: 'user',
+  //       icon: 'smile',
+  //       component: './System/UserList',
+  //     },
+  //     {
+  //       path: '/system/menu',
+  //       name: 'menu',
+  //       icon: 'smile',
+  //       component: './System/MenuList',
+  //     },
+  //   ],
+  // },
   {
     path: '/',
-    redirect: '/welcome',
-  },
-  {
-    name: '高级表单',
-    icon: 'smile',
-    path: '/test/formadvancedform',
-    component: './Test/FormAdvancedForm',
-  },
-  {
-    name: '查询表格',
-    icon: 'smile',
-    path: '/test/listtablelist',
-    component: './Test/ListTableList',
+    redirect: '/index',
   },
   {
     component: './ErrorPage/500',

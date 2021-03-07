@@ -1,5 +1,5 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, message, Input, Drawer, Space, Tag } from 'antd';
+import { Button, message, Input, Drawer, Space } from 'antd';
 import React, { useState, useRef } from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
@@ -7,19 +7,19 @@ import ProTable from '@ant-design/pro-table';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
-import { deleteUser, getUserByUserId, queryUserList } from '@/services/user/user';
-import type { UserVO } from '@/services/user/typings';
-import type { UserForm } from '@/services/user/typings';
+import { deleteMenu, getMenuByMenuId, getAllMenuTree } from '@/services/menu/menu';
+import type { MenuVO } from '@/services/menu/typings';
+import type { MenuForm } from '@/services/menu/typings';
 
 /**
- *  删除用户
+ *  删除菜单
  * @param selectedRows
  */
-const handleDelete = async (selectedRows: UserVO[]) => {
+const handleDelete = async (selectedRows: MenuVO[]) => {
   const hide = message.loading('正在删除');
   if (!selectedRows) return true;
   try {
-    await deleteUser(selectedRows.map((row) => row.id));
+    await deleteMenu(selectedRows.map((row) => row.id));
     hide();
     message.success('删除成功，即将刷新');
     return true;
@@ -35,10 +35,10 @@ const TableList: React.FC<{}> = () => {
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [updateFormValues, setUpdateFormValues] = useState({});
   const actionRef = useRef<ActionType>();
-  const [row, setRow] = useState<UserVO>();
-  const [selectedRowsState, setSelectedRows] = useState<UserVO[]>([]);
+  const [row, setRow] = useState<MenuVO>();
+  const [selectedRowsState, setSelectedRows] = useState<MenuVO[]>([]);
 
-  const columns: ProColumns<UserVO>[] = [
+  const columns: ProColumns<MenuVO>[] = [
     {
       title: '关键字',
       key: 'keyword',
@@ -49,14 +49,14 @@ const TableList: React.FC<{}> = () => {
         return <Input placeholder="请输入关键字" />;
       },
     },
+    // {
+    //   dataIndex: 'index',
+    //   valueType: 'indexBorder',
+    //   width: 48,
+    // },
     {
-      dataIndex: 'index',
-      valueType: 'indexBorder',
-      width: 48,
-    },
-    {
-      title: '用户名',
-      dataIndex: 'username',
+      title: '菜单名称',
+      dataIndex: 'name',
       valueType: 'text',
       sorter: true,
       hideInSearch: true,
@@ -70,88 +70,41 @@ const TableList: React.FC<{}> = () => {
       },
     },
     {
-      title: '姓名',
-      dataIndex: 'name',
+      title: '菜单名称（本地化）',
+      dataIndex: 'locale',
       valueType: 'text',
       sorter: true,
       hideInSearch: true,
     },
     {
-      title: '昵称',
-      dataIndex: 'nickname',
+      title: '菜单路径',
+      dataIndex: 'path',
       valueType: 'text',
       hideInSearch: true,
     },
     {
-      title: '性别',
-      dataIndex: 'sex',
-      valueType: 'text',
-      hideInSearch: true,
-      valueEnum: {
-        0: { text: '男' },
-        1: { text: '女' },
-      },
-    },
-    {
-      title: '头像',
-      dataIndex: 'avatar',
+      title: '图标',
+      dataIndex: 'icon',
       valueType: 'text',
       hideInSearch: true,
     },
     {
-      title: '角色',
-      dataIndex: 'roleIds',
+      title: '排序等级',
+      dataIndex: 'priority',
       valueType: 'text',
       hideInSearch: true,
-      // hideInTable: true,
     },
     {
-      title: '是否过期',
-      dataIndex: 'accountNonExpired',
+      title: '菜单是否隐藏',
+      dataIndex: 'hideInMenu',
       hideInSearch: true,
-      render: (_, record) => (
-        <Space>
-          {record.accountNonExpired ? (
-            <Tag color="green">未过期</Tag>
-          ) : (
-            <Tag color="red">已过期</Tag>
-          )}
-        </Space>
-      ),
+      render: (_, record) => <Space>{record.hideInMenu ? '是' : '否'}</Space>,
     },
     {
-      title: '是否锁定',
-      dataIndex: 'accountNonLocked',
+      title: '隐藏子节点',
+      dataIndex: 'hideChildrenInMenu',
       hideInSearch: true,
-      render: (_, record) => (
-        <Space>
-          {record.accountNonLocked ? <Tag color="green">开启</Tag> : <Tag color="red">锁定</Tag>}
-        </Space>
-      ),
-    },
-    {
-      title: '密码过期',
-      dataIndex: 'credentialsNonExpired',
-      hideInSearch: true,
-      render: (_, record) => (
-        <Space>
-          {record.credentialsNonExpired ? (
-            <Tag color="green">未过期</Tag>
-          ) : (
-            <Tag color="red">已过期</Tag>
-          )}
-        </Space>
-      ),
-    },
-    {
-      title: '是否禁用',
-      dataIndex: 'enabled',
-      hideInSearch: true,
-      render: (_, record) => (
-        <Space>
-          {record.enabled ? <Tag color="green">可用</Tag> : <Tag color="red">禁用</Tag>}
-        </Space>
-      ),
+      render: (_, record) => <Space>{record.hideChildrenInMenu ? '是' : '否'}</Space>,
     },
     {
       title: '创建时间',
@@ -176,12 +129,12 @@ const TableList: React.FC<{}> = () => {
           <a
             onClick={async () => {
               if (record && record.id) {
-                const data = await getUserByUserId(record.id);
-                setUpdateFormValues(data as UserForm);
+                const data = await getMenuByMenuId(record.id);
+                setUpdateFormValues(data as MenuForm);
                 handleUpdateModalVisible(true);
-                // message.error(res.message || `没有获取到用户信息（id:${record.id}）`);
+                // message.error(res.message || `没有获取到菜单信息（id:${record.id}）`);
               } else {
-                message.warn('没有选中有效的用户');
+                message.warn('没有选中有效的菜单');
               }
             }}
           >
@@ -196,8 +149,8 @@ const TableList: React.FC<{}> = () => {
 
   return (
     <PageContainer>
-      <ProTable<UserVO>
-        headerTitle="用户管理"
+      <ProTable<MenuVO>
+        headerTitle="菜单管理"
         actionRef={actionRef}
         rowKey="id"
         search={{
@@ -211,15 +164,15 @@ const TableList: React.FC<{}> = () => {
             <PlusOutlined /> 新建
           </Button>,
         ]}
-        request={async (params, sorter) => {
-          const data = await queryUserList(params, sorter);
+        request={async (params) => {
+          const data = await getAllMenuTree(params);
           return {
             // success 请返回 true，
             // 不然 table 会停止解析数据，即使有数据
             success: true,
-            data: data.records,
+            data,
             // 不传会使用 data 的长度，如果是分页一定要传
-            total: data.total,
+            total: data.length,
           };
           // return {
           //   success: false,
@@ -275,7 +228,7 @@ const TableList: React.FC<{}> = () => {
         closable={false}
       >
         {row?.name && (
-          <ProDescriptions<UserVO>
+          <ProDescriptions<MenuVO>
             column={2}
             title={row?.name}
             request={async () => ({

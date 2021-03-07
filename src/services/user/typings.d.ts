@@ -1,7 +1,9 @@
+import { MenuDataItem } from '@ant-design/pro-layout';
+
 export type CurrentUser = {
-  userInfo?: UserInfo;
-  role?: Role[];
-  asyncRoutes?: AsyncRoute[];
+  userInfo: UserInfo;
+  role: Role[];
+  menu: MenuDataItem[];
 };
 
 export type UserInfo = {
