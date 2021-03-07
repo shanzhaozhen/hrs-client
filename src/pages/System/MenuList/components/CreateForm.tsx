@@ -1,8 +1,9 @@
-import React, { Dispatch, MutableRefObject, SetStateAction } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
+import React, { MutableRefObject } from 'react';
 import { message } from 'antd';
-import { addUser } from '@/services/user/user';
-import type { UserForm } from '@/services/user/typings';
-import FormBody from '@/pages/System/UserList/components/FormBody';
+import { addMenu } from '@/services/menu/menu';
+import type { MenuForm } from '@/services/menu/typings';
+import FormBody from '@/pages/System/MenuList/components/FormBody';
 import { ModalForm } from '@ant-design/pro-form';
 import { ActionType } from '@ant-design/pro-table';
 
@@ -19,10 +20,10 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
    * 添加用户
    * @param fields
    */
-  const handleAdd = async (fields: UserForm) => {
+  const handleAdd = async (fields: MenuForm) => {
     const hide = message.loading('正在添加');
     try {
-      await addUser({ ...fields });
+      await addMenu({ ...fields });
       hide();
       message.success('添加成功');
       handleCreateModalVisible(false);

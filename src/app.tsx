@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Settings as LayoutSettings } from '@ant-design/pro-layout';
+import type { Settings as LayoutSettings, MenuDataItem } from '@ant-design/pro-layout';
 import { PageLoading } from '@ant-design/pro-layout';
 import { notification } from 'antd';
 import type { RequestConfig, RunTimeLayoutConfig } from 'umi';
@@ -9,6 +9,10 @@ import Footer from '@/components/Footer';
 import type { RequestOptionsInit, ResponseError } from 'umi-request';
 import { BookOutlined, LinkOutlined } from '@ant-design/icons';
 import { getCurrentUserInfo } from '@/services/user/user';
+import type { CurrentUser, UserInfo } from '@/services/user/typings';
+import routes from '../config/routes';
+import { IconMap } from '@/components/Common/icon';
+import type { Role } from '@/services/user/typings';
 
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -22,24 +26,28 @@ export const initialStateConfig = {
  * */
 export async function getInitialState(): Promise<{
   settings?: Partial<LayoutSettings>;
-  currentUser?: API.CurrentUser;
-  fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
+  // currentUser?: CurrentUser;
+  userInfo?: UserInfo;
+  role?: Role[];
+  menu?: MenuDataItem[];
+  fetchUserInfo?: () => Promise<CurrentUser | undefined>;
 }> {
   const fetchUserInfo = async () => {
     try {
-      const currentUser = await getCurrentUserInfo();
-      return currentUser;
+      return await getCurrentUserInfo();
     } catch (error) {
-      history.push('/user/login');
+      history.push('/login');
     }
     return undefined;
   };
   // 如果是登录页面，不执行
-  if (history.location.pathname !== '/user/login') {
+  if (history.location.pathname !== '/login') {
     const currentUser = await fetchUserInfo();
     return {
       fetchUserInfo,
-      currentUser,
+      userInfo: currentUser?.userInfo,
+      role: currentUser?.role,
+      menu: currentUser?.menu,
       settings: {},
     };
   }
@@ -48,6 +56,13 @@ export async function getInitialState(): Promise<{
     settings: {},
   };
 }
+
+const loopMenuItem = (menus: MenuDataItem[]): MenuDataItem[] =>
+  menus.map(({ icon, children, ...item }) => ({
+    ...item,
+    icon: icon && IconMap[icon as string],
+    children: children && loopMenuItem(children),
+  }));
 
 // https://umijs.org/zh-CN/plugins/plugin-layout
 export const layout: RunTimeLayoutConfig = ({ initialState }) => {
@@ -58,9 +73,21 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
     onPageChange: () => {
       const { location } = history;
       // 如果没有登录，重定向到 login
-      if (!initialState?.currentUser && location.pathname !== '/user/login') {
-        history.push('/user/login');
+      if (!initialState?.userInfo && location.pathname !== '/login') {
+        history.push('/login');
       }
+    },
+    menuDataRender: () => {
+      console.log(initialState);
+
+      if (initialState) {
+        const { menu } = initialState;
+        if (menu && menu.length > 0) {
+          console.log('wowowo');
+          return loopMenuItem(menu);
+        }
+      }
+      return loopMenuItem(routes);
     },
     links: isDev
       ? [
@@ -113,15 +140,18 @@ const codeMessage = {
 };
 
 // 响应后拦截器
-// const afterResponseInterceptors = async (response: Response) => {
-//   const res = await response.clone().json()
-//
-//   if (res.code === 0) {
-//     return res.data
-//   }
-//
-//   return res;
-// };
+const afterResponseInterceptors = async (response: Response) => {
+  const res = await response.clone().json();
+  // // 成功请求直接返回data
+  // if (res.code === 0 && res.data) {
+  //   return res.data
+  // }
+  // return res;
+  if (res.code === 2000) {
+    return res;
+  }
+  return res.data;
+};
 
 /** response拦截器, 处理response */
 const jwtInterceptor = (url: string, options: RequestOptionsInit) => {
@@ -171,5 +201,5 @@ const errorHandler = (error: ResponseError) => {
 export const request: RequestConfig = {
   requestInterceptors: [jwtInterceptor],
   errorHandler,
-  // responseInterceptors: [afterResponseInterceptors],
+  responseInterceptors: [afterResponseInterceptors],
 };

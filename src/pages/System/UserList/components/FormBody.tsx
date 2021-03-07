@@ -3,11 +3,9 @@ import { Col, Row } from 'antd';
 import { ProFormSelect, ProFormSwitch, ProFormText } from '@ant-design/pro-form';
 import { getAllRoles } from '@/services/role/role';
 import type { RoleVO } from '@/services/role/typings';
-import type { UserForm } from '@/services/user/typings';
 
 interface FormProps {
   isEdit?: boolean;
-  handleSubmit: (formData: UserForm) => Promise<boolean | void>;
 }
 
 const FormBody: React.FC<FormProps> = (props) => {
@@ -97,7 +95,7 @@ const FormBody: React.FC<FormProps> = (props) => {
               0: { text: '男' },
               1: { text: '女' },
             }}
-            placeholder="请选择你的角色"
+            placeholder="请选择您的性别"
             rules={[{ message: '请选择您的性别' }]}
           />
         </Col>
@@ -110,17 +108,14 @@ const FormBody: React.FC<FormProps> = (props) => {
             showSearch={false}
             placeholder="请选择用户角色"
             request={async () => {
-              const res = await getAllRoles();
-              if (res.code === 0 && res.data) {
-                const { data } = res;
-                if (data.length) {
-                  return data.map((item: RoleVO) => {
-                    return {
-                      label: item.name,
-                      value: item.id,
-                    };
-                  });
-                }
+              const data = await getAllRoles();
+              if (data) {
+                return data.map((item: RoleVO) => {
+                  return {
+                    label: item.name,
+                    value: item.id,
+                  };
+                });
               }
               return [];
             }}
