@@ -1,8 +1,15 @@
 import React from 'react';
 import { Col, Row } from 'antd';
-import { ProFormSelect, ProFormSwitch, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
+import {
+  ProFormDigit,
+  ProFormSelect,
+  ProFormSwitch,
+  ProFormText,
+  ProFormTextArea,
+} from '@ant-design/pro-form';
 import { getAllMenu } from '@/services/menu/menu';
 import type { MenuVO } from '@/services/menu/typings';
+import { iconOption } from '@/components/Common/icon';
 
 interface FormProps {
   isEdit?: boolean;
@@ -74,10 +81,10 @@ const FormBody: React.FC<FormProps> = (props) => {
           />
         </Col>
         <Col xl={12} md={24}>
-          <ProFormText width="md" name="icon" label="图标" />
+          <ProFormSelect width="md" name="icon" label="图标" showSearch options={iconOption} />
         </Col>
         <Col xl={12} md={24}>
-          <ProFormText width="md" name="priority" label="排序等级" />
+          <ProFormDigit width="md" name="priority" label="排序等级" min={1} />
         </Col>
         <Col xl={12} md={12} sm={24}>
           <ProFormSwitch

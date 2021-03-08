@@ -5,7 +5,6 @@ import { history, useModel } from 'umi';
 import { stringify } from 'querystring';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
-import { outLogin } from '@/services/common/login';
 
 export type GlobalHeaderRightProps = {
   menu?: boolean;
@@ -15,7 +14,10 @@ export type GlobalHeaderRightProps = {
  * 退出登录，并且将当前的 url 保存
  */
 const loginOut = async () => {
-  await outLogin();
+  // await outLogin();
+  // todo: 清除后台缓存
+
+  localStorage.removeItem('ACCESS_TOKEN');
   const { query = {}, pathname } = history.location;
   const { redirect } = query;
   // Note: There may be security issues, please note
@@ -41,8 +43,8 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
     }) => {
       const { key } = event;
       if (key === 'logout' && initialState) {
-        setInitialState({ ...initialState, userInfo: undefined, role: undefined, menu: undefined });
-        loginOut();
+        setInitialState({ ...initialState });
+        loginOut().then();
         return;
       }
       history.push(`/account/${key}`);
@@ -68,7 +70,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
 
   const { userInfo } = initialState;
 
-  if (!userInfo || !userInfo.name) {
+  if (!userInfo) {
     return loading;
   }
 

@@ -10,9 +10,8 @@ import type { RequestOptionsInit, ResponseError } from 'umi-request';
 import { BookOutlined, LinkOutlined } from '@ant-design/icons';
 import { getCurrentUserInfo } from '@/services/user/user';
 import type { CurrentUser, UserInfo } from '@/services/user/typings';
-import routes from '../config/routes';
-import { IconMap } from '@/components/Common/icon';
 import type { Role } from '@/services/user/typings';
+import { iconMap } from '@/components/Common/icon';
 
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -20,6 +19,13 @@ const isDev = process.env.NODE_ENV === 'development';
 export const initialStateConfig = {
   loading: <PageLoading />,
 };
+
+const loopMenuItem = (menuData: MenuDataItem[]): MenuDataItem[] =>
+  menuData.map(({ icon, children, ...item }) => ({
+    ...item,
+    icon: icon && iconMap[icon as string] && React.createElement(iconMap[icon as string]),
+    children: children && loopMenuItem(children),
+  }));
 
 /**
  * @see  https://umijs.org/zh-CN/plugins/plugin-initial-state
@@ -29,7 +35,7 @@ export async function getInitialState(): Promise<{
   // currentUser?: CurrentUser;
   userInfo?: UserInfo;
   role?: Role[];
-  menus?: MenuDataItem[];
+  menuData?: MenuDataItem[];
   fetchUserInfo?: () => Promise<CurrentUser | undefined>;
 }> {
   const fetchUserInfo = async () => {
@@ -43,11 +49,12 @@ export async function getInitialState(): Promise<{
   // 如果是登录页面，不执行
   if (history.location.pathname !== '/login') {
     const currentUser = await fetchUserInfo();
+
     return {
       fetchUserInfo,
       userInfo: currentUser?.userInfo,
       role: currentUser?.role,
-      menus: currentUser?.menus,
+      menuData: currentUser?.menus && loopMenuItem(currentUser?.menus),
       settings: {},
     };
   }
@@ -56,13 +63,6 @@ export async function getInitialState(): Promise<{
     settings: {},
   };
 }
-
-const loopMenuItem = (menus: MenuDataItem[]): MenuDataItem[] =>
-  menus.map(({ icon, children, ...item }) => ({
-    ...item,
-    icon: icon && IconMap[icon as string],
-    children: children && loopMenuItem(children),
-  }));
 
 // https://umijs.org/zh-CN/plugins/plugin-layout
 export const layout: RunTimeLayoutConfig = ({ initialState }) => {
@@ -77,19 +77,8 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
         history.push('/login');
       }
     },
-    menuDataRender: () => {
-      console.log(initialState);
-
-      if (initialState) {
-        const { menus } = initialState;
-        console.log(menus);
-        if (menus && menus.length > 0) {
-          console.log('wowowo');
-          return loopMenuItem(menus);
-        }
-      }
-      return loopMenuItem(routes);
-    },
+    // menuDataRender: (menuData) => initialState?.menuData || menuData,
+    menuDataRender: () => initialState?.menuData || [],
     links: isDev
       ? [
           <>

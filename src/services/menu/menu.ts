@@ -1,5 +1,5 @@
 import { request } from 'umi';
-import type { MenuVO } from '@/services/menu/typings';
+import type { MenuForm, MenuVO } from '@/services/menu/typings';
 
 /** 获取所有菜单信息 GET /menu/all */
 export async function getAllMenu(options?: Record<string, any>) {
@@ -18,25 +18,25 @@ export async function getAllMenuTree(options?: Record<string, any>) {
 }
 
 /** 添加菜单接口 POST /menu */
-export async function addMenu(body: API.MenuForm, options?: Record<string, any>) {
+export async function addMenu(menuForm: MenuForm, options?: Record<string, any>) {
   return request<number>('/hrs-api/menu', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    data: body,
+    data: menuForm,
     ...(options || {}),
   });
 }
 
 /** 更新菜单接口 PUT /menu */
-export async function updateMenu(body: API.MenuForm, options?: Record<string, any>) {
+export async function updateMenu(menuForm: MenuForm, options?: Record<string, any>) {
   return request<number>('/hrs-api/menu', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    data: body,
+    data: menuForm,
     ...(options || {}),
   });
 }

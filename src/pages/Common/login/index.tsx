@@ -46,7 +46,7 @@ const Login: React.FC = () => {
         ...initialState,
         userInfo: currentUser?.userInfo,
         role: currentUser.role,
-        menu: currentUser.menu,
+        menuData: currentUser.menus,
       });
     }
   };

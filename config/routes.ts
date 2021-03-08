@@ -28,25 +28,25 @@ export default [
   //     },
   //   ],
   // },
-  // {
-  //   path: '/system',
-  //   name: 'system',
-  //   icon: 'crown',
-  //   routes: [
-  //     {
-  //       path: '/system/user',
-  //       name: 'user',
-  //       icon: 'smile',
-  //       component: './System/UserList',
-  //     },
-  //     {
-  //       path: '/system/menu',
-  //       name: 'menu',
-  //       icon: 'smile',
-  //       component: './System/MenuList',
-  //     },
-  //   ],
-  // },
+  {
+    path: '/system',
+    name: 'system',
+    icon: 'crown',
+    routes: [
+      {
+        path: '/system/user',
+        name: 'user',
+        icon: 'smile',
+        component: './System/UserList',
+      },
+      {
+        path: '/system/menu',
+        name: 'menu',
+        icon: 'smile',
+        component: './System/MenuList',
+      },
+    ],
+  },
   {
     path: '/',
     redirect: '/index',

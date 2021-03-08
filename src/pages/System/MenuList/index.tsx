@@ -10,6 +10,7 @@ import UpdateForm from './components/UpdateForm';
 import { deleteMenu, getMenuByMenuId, getAllMenuTree } from '@/services/menu/menu';
 import type { MenuVO } from '@/services/menu/typings';
 import type { MenuForm } from '@/services/menu/typings';
+import * as iconMap from '@ant-design/icons';
 
 /**
  *  删除菜单
@@ -87,6 +88,9 @@ const TableList: React.FC<{}> = () => {
       dataIndex: 'icon',
       valueType: 'text',
       hideInSearch: true,
+      render: (_, record) => (
+        <Space>{record.icon && React.createElement(iconMap[record.icon])}</Space>
+      ),
     },
     {
       title: '排序等级',

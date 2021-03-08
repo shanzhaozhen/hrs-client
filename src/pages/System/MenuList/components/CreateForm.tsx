@@ -1,11 +1,11 @@
-import type { Dispatch, SetStateAction } from 'react';
-import React, { MutableRefObject } from 'react';
+import React from 'react';
+import type { Dispatch, SetStateAction, MutableRefObject } from 'react';
 import { message } from 'antd';
 import { addMenu } from '@/services/menu/menu';
 import type { MenuForm } from '@/services/menu/typings';
 import FormBody from '@/pages/System/MenuList/components/FormBody';
 import { ModalForm } from '@ant-design/pro-form';
-import { ActionType } from '@ant-design/pro-table';
+import type { ActionType } from '@ant-design/pro-table';
 
 interface CreateFormProps {
   createModalVisible: boolean;
