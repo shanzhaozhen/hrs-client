@@ -29,7 +29,7 @@ export async function getInitialState(): Promise<{
   // currentUser?: CurrentUser;
   userInfo?: UserInfo;
   role?: Role[];
-  menu?: MenuDataItem[];
+  menus?: MenuDataItem[];
   fetchUserInfo?: () => Promise<CurrentUser | undefined>;
 }> {
   const fetchUserInfo = async () => {
@@ -47,7 +47,7 @@ export async function getInitialState(): Promise<{
       fetchUserInfo,
       userInfo: currentUser?.userInfo,
       role: currentUser?.role,
-      menu: currentUser?.menu,
+      menus: currentUser?.menus,
       settings: {},
     };
   }
@@ -81,10 +81,11 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
       console.log(initialState);
 
       if (initialState) {
-        const { menu } = initialState;
-        if (menu && menu.length > 0) {
+        const { menus } = initialState;
+        console.log(menus);
+        if (menus && menus.length > 0) {
           console.log('wowowo');
-          return loopMenuItem(menu);
+          return loopMenuItem(menus);
         }
       }
       return loopMenuItem(routes);

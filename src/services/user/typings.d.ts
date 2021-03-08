@@ -3,7 +3,7 @@ import { MenuDataItem } from '@ant-design/pro-layout';
 export type CurrentUser = {
   userInfo: UserInfo;
   role: Role[];
-  menu: MenuDataItem[];
+  menus: MenuDataItem[];
 };
 
 export type UserInfo = {
