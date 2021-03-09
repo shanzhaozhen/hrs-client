@@ -40,7 +40,7 @@ const FormBody: React.FC<FormProps> = () => {
 
   const onCheck = (checkedKeysValue: React.Key[] | any) => {
     console.log('onCheck', checkedKeysValue);
-    setCheckedKeys(checkedKeysValue);
+    setCheckedKeys(checkedKeysValue.checked);
   };
 
   return (
@@ -68,8 +68,13 @@ const FormBody: React.FC<FormProps> = () => {
           <ProFormTextArea name="description" label="描述" />
         </Col>
         <Col span={24}>
-          <ProFormText name="menuIds" label="菜单选择" />
-          <ProForm.Item label="菜单选择">
+          {/* <ProFormText name="menuIds" label="菜单选择" /> */}
+          <ProForm.Item
+            label="菜单选择"
+            name="menuIds"
+            valuePropName="checkedKeys"
+            trigger="onCheck"
+          >
             <Tree
               checkable
               checkStrictly

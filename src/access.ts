@@ -1,9 +1,11 @@
 /**
  * @see https://umijs.org/zh-CN/plugins/plugin-access
  * */
-export default function access(initialState: { currentUser?: API.CurrentUser | undefined }) {
+import type { CurrentUser } from '@/services/user/typings';
+
+export default function access(initialState: { currentUser?: CurrentUser | undefined }) {
   const { currentUser } = initialState || {};
   return {
-    canAdmin: currentUser && currentUser.access === 'admin',
+    canAdmin: currentUser && currentUser.role === 'admin',
   };
 }

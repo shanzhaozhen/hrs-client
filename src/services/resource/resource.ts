@@ -1,7 +1,7 @@
 // @ts-ignore
 import { request } from 'umi';
 import type { SortOrder } from 'antd/lib/table/interface';
-import type { ResourceVO } from '@/services/resource/typings';
+import type { ResourceForm, ResourceVO } from '@/services/resource/typings';
 import type { PageParams } from '@/services/common/typings';
 
 /** 获取所有资源（树状结构） GET /resource/tree */
@@ -37,7 +37,7 @@ export async function getResourceByResourceId(resourceId: number, options?: Reco
 }
 
 /** 资源添加接口 POST /resource */
-export async function addResource(body: API.ResourceForm, options?: Record<string, any>) {
+export async function addResource(body: ResourceForm, options?: Record<string, any>) {
   return request<number>('/hrs-api/resource', {
     method: 'POST',
     headers: {
@@ -49,7 +49,7 @@ export async function addResource(body: API.ResourceForm, options?: Record<strin
 }
 
 /** 资源更新接口 PUT /resource */
-export async function updateResource(body: API.ResourceForm, options?: Record<string, any>) {
+export async function updateResource(body: ResourceForm, options?: Record<string, any>) {
   return request<number>('/hrs-api/resource', {
     method: 'PUT',
     headers: {
