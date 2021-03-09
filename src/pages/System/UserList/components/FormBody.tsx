@@ -19,7 +19,7 @@ const FormBody: React.FC<FormProps> = (props) => {
     <>
       <Row gutter={24}>
         <ProFormText name="id" label="用户id" hidden={true} />
-        <Col xl={12} md={24}>
+        <Col xl={12} lg={12} md={24}>
           <ProFormText
             width="md"
             name="username"
@@ -29,10 +29,10 @@ const FormBody: React.FC<FormProps> = (props) => {
             rules={[{ required: true, message: '请输入您的用户名' }]}
           />
         </Col>
-        <Col xl={12} md={24}>
+        <Col xl={12} lg={12} md={24}>
           <ProFormText width="md" name="name" label="姓名" />
         </Col>
-        <Col xl={12} md={24}>
+        <Col xl={12} lg={12} md={24}>
           <ProFormText.Password
             width="md"
             label="密码"
@@ -57,7 +57,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             ]}
           />
         </Col>
-        <Col xl={12} md={24}>
+        <Col xl={12} lg={12} md={24}>
           <ProFormText.Password
             width="md"
             label="确认密码"
@@ -83,10 +83,10 @@ const FormBody: React.FC<FormProps> = (props) => {
             ]}
           />
         </Col>
-        <Col xl={12} md={24}>
+        <Col xl={12} lg={12} md={24}>
           <ProFormText width="md" name="nickname" label="昵称" />
         </Col>
-        <Col xl={12} md={24}>
+        <Col xl={12} lg={12} md={24}>
           <ProFormSelect
             width="md"
             name="sex"
@@ -110,12 +110,10 @@ const FormBody: React.FC<FormProps> = (props) => {
             request={async () => {
               const data = await getAllRoles();
               if (data) {
-                return data.map((item: RoleVO) => {
-                  return {
-                    label: item.name,
-                    value: item.id,
-                  };
-                });
+                return data.map((item: RoleVO) => ({
+                  label: item.name,
+                  value: item.id,
+                }));
               }
               return [];
             }}

@@ -45,6 +45,12 @@ export default [
         icon: 'smile',
         component: './System/MenuList',
       },
+      {
+        path: '/system/role',
+        name: 'role',
+        icon: 'smile',
+        component: './System/RoleList',
+      },
     ],
   },
   {

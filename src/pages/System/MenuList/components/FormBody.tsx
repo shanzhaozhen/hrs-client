@@ -27,7 +27,7 @@ const FormBody: React.FC<FormProps> = (props) => {
     <>
       <Row gutter={24}>
         <ProFormText name="id" label="菜单id" hidden={true} />
-        <Col xl={12} md={24}>
+        <Col xl={12} lg={12} md={24}>
           <ProFormText
             width="md"
             name="name"
@@ -35,10 +35,10 @@ const FormBody: React.FC<FormProps> = (props) => {
             rules={[{ required: true, message: '请输入您的菜单名称' }]}
           />
         </Col>
-        <Col xl={12} md={24}>
+        <Col xl={12} lg={12} md={24}>
           <ProFormText width="md" name="locale" label="菜单名称（本地化）" />
         </Col>
-        <Col xl={12} md={24}>
+        <Col xl={12} lg={12} md={24}>
           <ProFormText
             width="md"
             name="path"
@@ -46,7 +46,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             rules={[{ required: true, message: '请输入您的菜单路径' }]}
           />
         </Col>
-        <Col xl={12} md={24}>
+        <Col xl={12} lg={12} md={24}>
           <ProFormSelect
             width="md"
             name="pid"
@@ -80,10 +80,10 @@ const FormBody: React.FC<FormProps> = (props) => {
             ]}
           />
         </Col>
-        <Col xl={12} md={24}>
+        <Col xl={12} lg={12} md={24}>
           <ProFormSelect width="md" name="icon" label="图标" showSearch options={iconOption} />
         </Col>
-        <Col xl={12} md={24}>
+        <Col xl={12} lg={12} md={24}>
           <ProFormDigit width="md" name="priority" label="排序等级" min={1} />
         </Col>
         <Col xl={12} md={12} sm={24}>
