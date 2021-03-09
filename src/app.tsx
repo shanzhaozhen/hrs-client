@@ -2,11 +2,12 @@ import React from 'react';
 import type { Settings as LayoutSettings, MenuDataItem } from '@ant-design/pro-layout';
 import { PageLoading } from '@ant-design/pro-layout';
 import { notification } from 'antd';
-import type { RequestConfig, RunTimeLayoutConfig } from 'umi';
+import type { RunTimeLayoutConfig } from 'umi';
 import { history } from 'umi';
+import type { RequestOptionsInit, ResponseError } from 'umi-request';
 import RightContent from '@/components/RightContent';
 import Footer from '@/components/Footer';
-import type { RequestOptionsInit, ResponseError } from 'umi-request';
+import type { RequestConfig } from '@@/plugin-request/request';
 import { BookOutlined, LinkOutlined } from '@ant-design/icons';
 import { getCurrentUserInfo } from '@/services/user/user';
 import type { CurrentUser, UserInfo } from '@/services/user/typings';
@@ -54,7 +55,8 @@ export async function getInitialState(): Promise<{
       fetchUserInfo,
       userInfo: currentUser?.userInfo,
       role: currentUser?.role,
-      menuData: currentUser?.menus && loopMenuItem(currentUser?.menus),
+      // menuData: currentUser?.menus && loopMenuItem(currentUser?.menus),
+      menuData: currentUser?.menus,
       settings: {},
     };
   }
@@ -78,7 +80,8 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
       }
     },
     // menuDataRender: (menuData) => initialState?.menuData || menuData,
-    menuDataRender: () => initialState?.menuData || [],
+    // menuDataRender: () => initialState?.menuData || [],
+    menuDataRender: () => (initialState?.menuData && loopMenuItem(initialState.menuData)) || [],
     links: isDev
       ? [
           <>
