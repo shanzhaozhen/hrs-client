@@ -51,6 +51,12 @@ export default [
         icon: 'smile',
         component: './System/RoleList',
       },
+      {
+        path: '/system/resource',
+        name: 'resource',
+        icon: 'smile',
+        component: './System/ResourceList',
+      },
     ],
   },
   {

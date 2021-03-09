@@ -1,11 +1,11 @@
-import React, { Dispatch, MutableRefObject, SetStateAction } from 'react';
+import React from 'react';
+import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import { message } from 'antd';
-
 import type { UserForm, UserVO } from '@/services/user/typings';
 import FormBody from '@/pages/System/UserList/components/FormBody';
 import { updateUser } from '@/services/user/user';
 import { ModalForm } from '@ant-design/pro-form';
-import { ActionType } from '@ant-design/pro-table';
+import type { ActionType } from '@ant-design/pro-table';
 
 export interface UpdateFormProps {
   updateModalVisible: boolean;

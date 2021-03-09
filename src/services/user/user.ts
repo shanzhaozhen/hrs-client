@@ -1,3 +1,4 @@
+// @ts-ignore
 import { request } from 'umi';
 import type { CurrentUser, UserForm, UserVO } from '@/services/user/typings';
 import type { PageParams, Page } from '@/services/common/typings';

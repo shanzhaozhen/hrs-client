@@ -1,15 +1,24 @@
+// @ts-ignore
 import { request } from 'umi';
 import type { RoleForm, RoleVO } from '@/services/role/typings';
-import type { Page } from '@/services/common/typings';
+import type { BaseSearchForm, Page } from '@/services/common/typings';
 
-/** 更新角色接口 PUT /role */
-export async function updateRole(roleForm: RoleForm, options?: Record<string, any>) {
-  return request<number>('/hrs-api/role', {
-    method: 'PUT',
+/** 获取角色信息（分页） POST /role/page */
+export async function getRolePage(body: BaseSearchForm, options?: Record<string, any>) {
+  return request<Page<RoleVO>>('/hrs-api/role/page', {
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    data: roleForm,
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 获取角色信息（通过角色id） GET /role/${roleId} */
+export async function getRoleByRoleId(roleId: number, options?: Record<string, any>) {
+  return request<RoleVO>(`/hrs-api/role/${roleId}`, {
+    method: 'GET',
     ...(options || {}),
   });
 }
@@ -26,22 +35,14 @@ export async function addRole(roleForm: RoleForm, options?: Record<string, any>)
   });
 }
 
-/** 获取角色信息（分页） POST /role/page */
-export async function getRolePage(body: API.BaseSearchForm, options?: Record<string, any>) {
-  return request<Page<RoleVO>>('/hrs-api/role/page', {
-    method: 'POST',
+/** 更新角色接口 PUT /role */
+export async function updateRole(roleForm: RoleForm, options?: Record<string, any>) {
+  return request<number>('/hrs-api/role', {
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    data: body,
-    ...(options || {}),
-  });
-}
-
-/** 获取角色信息（通过角色id） GET /role/${roleId} */
-export async function getRoleByRoleId(roleId: number, options?: Record<string, any>) {
-  return request<RoleVO>(`/hrs-api/role/${roleId}`, {
-    method: 'GET',
+    data: roleForm,
     ...(options || {}),
   });
 }
