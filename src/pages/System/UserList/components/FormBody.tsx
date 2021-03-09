@@ -91,10 +91,10 @@ const FormBody: React.FC<FormProps> = (props) => {
             width="md"
             name="sex"
             label="性别"
-            valueEnum={{
-              0: { text: '男' },
-              1: { text: '女' },
-            }}
+            options={[
+              { label: '男', value: 0 },
+              { label: '女', value: 1 },
+            ]}
             placeholder="请选择您的性别"
             rules={[{ message: '请选择您的性别' }]}
           />

@@ -15,13 +15,10 @@ interface FormProps {
   isEdit?: boolean;
 }
 
-const FormBody: React.FC<FormProps> = (props) => {
+const FormBody: React.FC<FormProps> = () => {
   FormBody.defaultProps = {
     isEdit: false,
   };
-
-  const { isEdit } = props;
-  console.log(isEdit);
 
   return (
     <>
@@ -56,7 +53,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             placeholder="请选择上级菜单"
             request={async () => {
               const data = await getAllMenu();
-              if (data.length) {
+              if (data) {
                 return data.map((item: MenuVO) => {
                   return {
                     label: `${item.name}(${item.path})`,
