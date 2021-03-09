@@ -1,25 +1,29 @@
-import React, { useState, useRef } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, message, Input, Drawer, Space, Tag } from 'antd';
+import { Button, message, Input, Drawer, Tag, Space } from 'antd';
+import React, { useState, useRef } from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
-import { deleteUser, getUserByUserId, queryUserList } from '@/services/user/user';
-import type { UserVO } from '@/services/user/typings';
-import type { UserForm } from '@/services/user/typings';
+import {
+  deleteResources,
+  getResourceByResourceId,
+  getAllResourceTree,
+} from '@/services/resource/resource';
+import type { ResourceVO } from '@/services/resource/typings';
+import type { ResourceForm } from '@/services/resource/typings';
 
 /**
- *  删除用户
+ *  删除资源
  * @param selectedRows
  */
-const handleDelete = async (selectedRows: UserVO[]) => {
+const handleDelete = async (selectedRows: ResourceVO[]) => {
   const hide = message.loading('正在删除');
   if (!selectedRows) return true;
   try {
-    await deleteUser(selectedRows.map((row) => row.id));
+    await deleteResources(selectedRows.map((row) => row.id));
     hide();
     message.success('删除成功，即将刷新');
     return true;
@@ -35,10 +39,10 @@ const TableList: React.FC<{}> = () => {
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [updateFormValues, setUpdateFormValues] = useState({});
   const actionRef = useRef<ActionType>();
-  const [row, setRow] = useState<UserVO>();
-  const [selectedRowsState, setSelectedRows] = useState<UserVO[]>([]);
+  const [row, setRow] = useState<ResourceVO>();
+  const [selectedRowsState, setSelectedRows] = useState<ResourceVO[]>([]);
 
-  const columns: ProColumns<UserVO>[] = [
+  const columns: ProColumns<ResourceVO>[] = [
     {
       title: '关键字',
       key: 'keyword',
@@ -50,13 +54,8 @@ const TableList: React.FC<{}> = () => {
       },
     },
     {
-      dataIndex: 'index',
-      valueType: 'indexBorder',
-      width: 48,
-    },
-    {
-      title: '用户名',
-      dataIndex: 'username',
+      title: '名称',
+      dataIndex: 'name',
       valueType: 'text',
       sorter: true,
       hideInSearch: true,
@@ -70,88 +69,34 @@ const TableList: React.FC<{}> = () => {
       },
     },
     {
-      title: '姓名',
-      dataIndex: 'name',
+      title: '资源路由',
+      dataIndex: 'path',
+      valueType: 'text',
+      hideInSearch: true,
+    },
+    {
+      title: '资源类型',
+      dataIndex: 'type',
       valueType: 'text',
       sorter: true,
       hideInSearch: true,
-    },
-    {
-      title: '昵称',
-      dataIndex: 'nickname',
-      valueType: 'text',
-      hideInSearch: true,
-    },
-    {
-      title: '性别',
-      dataIndex: 'sex',
-      valueType: 'text',
-      hideInSearch: true,
+      align: 'center',
       valueEnum: {
-        0: { text: '男' },
-        1: { text: '女' },
+        0: { text: '分类' },
+        1: { text: 'API' },
       },
+      render: (_, record) => (
+        <Space>
+          {record.type === 0 ? <Tag color="blue">分类</Tag> : <Tag color="green">API</Tag>}
+        </Space>
+      ),
     },
     {
-      title: '头像',
-      dataIndex: 'avatar',
+      title: '排序等级',
+      dataIndex: 'priority',
       valueType: 'text',
+      align: 'center',
       hideInSearch: true,
-    },
-    {
-      title: '角色',
-      dataIndex: 'roleIds',
-      valueType: 'text',
-      hideInSearch: true,
-      // hideInTable: true,
-    },
-    {
-      title: '是否过期',
-      dataIndex: 'accountNonExpired',
-      hideInSearch: true,
-      render: (_, record) => (
-        <Space>
-          {record.accountNonExpired ? (
-            <Tag color="green">未过期</Tag>
-          ) : (
-            <Tag color="red">已过期</Tag>
-          )}
-        </Space>
-      ),
-    },
-    {
-      title: '是否锁定',
-      dataIndex: 'accountNonLocked',
-      hideInSearch: true,
-      render: (_, record) => (
-        <Space>
-          {record.accountNonLocked ? <Tag color="green">开启</Tag> : <Tag color="red">锁定</Tag>}
-        </Space>
-      ),
-    },
-    {
-      title: '密码过期',
-      dataIndex: 'credentialsNonExpired',
-      hideInSearch: true,
-      render: (_, record) => (
-        <Space>
-          {record.credentialsNonExpired ? (
-            <Tag color="green">未过期</Tag>
-          ) : (
-            <Tag color="red">已过期</Tag>
-          )}
-        </Space>
-      ),
-    },
-    {
-      title: '是否禁用',
-      dataIndex: 'enabled',
-      hideInSearch: true,
-      render: (_, record) => (
-        <Space>
-          {record.enabled ? <Tag color="green">可用</Tag> : <Tag color="red">禁用</Tag>}
-        </Space>
-      ),
     },
     {
       title: '创建时间',
@@ -176,12 +121,12 @@ const TableList: React.FC<{}> = () => {
           <a
             onClick={async () => {
               if (record && record.id) {
-                const data = await getUserByUserId(record.id);
-                setUpdateFormValues(data as UserForm);
+                const data = await getResourceByResourceId(record.id);
+                setUpdateFormValues(data as ResourceForm);
                 handleUpdateModalVisible(true);
-                // message.error(res.message || `没有获取到用户信息（id:${record.id}）`);
+                // message.error(res.message || `没有获取到资源信息（id:${record.id}）`);
               } else {
-                message.warn('没有选中有效的用户');
+                message.warn('没有选中有效的资源');
               }
             }}
           >
@@ -196,8 +141,8 @@ const TableList: React.FC<{}> = () => {
 
   return (
     <PageContainer>
-      <ProTable<UserVO>
-        headerTitle="用户管理"
+      <ProTable<ResourceVO>
+        headerTitle="资源管理"
         actionRef={actionRef}
         rowKey="id"
         search={{
@@ -212,14 +157,14 @@ const TableList: React.FC<{}> = () => {
           </Button>,
         ]}
         request={async (params, sorter) => {
-          const data = await queryUserList(params, sorter);
+          const data = await getAllResourceTree(params, sorter);
           return {
             // success 请返回 true，
             // 不然 table 会停止解析数据，即使有数据
             success: true,
-            data: data.records,
+            data: data || [],
             // 不传会使用 data 的长度，如果是分页一定要传
-            total: data.total,
+            total: (data && data.length) || 0,
           };
           // return {
           //   success: false,
@@ -275,7 +220,7 @@ const TableList: React.FC<{}> = () => {
         closable={false}
       >
         {row?.name && (
-          <ProDescriptions<UserVO>
+          <ProDescriptions<ResourceVO>
             column={2}
             title={row?.name}
             request={async () => ({

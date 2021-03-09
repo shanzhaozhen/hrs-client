@@ -1,3 +1,4 @@
+// @ts-ignore
 import { request } from 'umi';
 import type { LoginParams, LoginResult } from '@/services/common/typings';
 import type { NoticeIconList } from '@/services/system/typings';
