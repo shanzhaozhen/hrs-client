@@ -1,3 +1,5 @@
+// @ts-ignore
+// @ts-ignore
 import { request } from 'umi';
 import type { MenuForm, MenuVO } from '@/services/menu/typings';
 
