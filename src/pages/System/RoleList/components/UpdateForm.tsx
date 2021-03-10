@@ -27,7 +27,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
     try {
       await updateRole({
         ...fields,
-        menuIds: fields.menuIds?.checked || fields.menuIds,
+        menuIds: fields.menuIds.checked || fields.menuIds,
       });
       hide();
       message.success('修改成功');

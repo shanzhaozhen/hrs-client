@@ -20,7 +20,7 @@ const FormBody: React.FC<FormProps> = () => {
     isEdit: false,
   };
 
-  const [checkedKeys, setCheckedKeys] = useState<React.Key[]>([]);
+  const [menuTreeCheckedKeys, setMenuTreeCheckedKeys] = useState<React.Key[]>([]);
 
   const [menuTree, setMenuTree] = useState<[]>();
 
@@ -38,9 +38,36 @@ const FormBody: React.FC<FormProps> = () => {
       });
   }, []);
 
-  const onCheck = (checkedKeysValue: React.Key[] | any) => {
-    console.log('onCheck', checkedKeysValue);
-    setCheckedKeys(checkedKeysValue.checked);
+  // const loopMenuTreeCheck = (node: { children: any[] | undefined; }): number[] => {
+  //   const closeNode: number[] = [];
+  //   if (node.children) {
+  //     node.children.forEach((item: any) => {
+  //       closeNode.push(item.key);
+  //       if (item.children) {
+  //         loopMenuTreeCheck(item.children);
+  //         closeNode.concat(loopMenuTreeCheck(item.children));
+  //       }
+  //     });
+  //   }
+  //   return closeNode;
+  // }
+
+  // const onCheckMenu = (checkedKeysValue: React.Key[] | any, info: any) => {
+  //
+  //   let checkedKeys = checkedKeysValue.checked;
+  //
+  //   if (!info.check) {
+  //     const closeNode = loopMenuTreeCheck(info.node);
+  //     checkedKeys = checkedKeys.filter((item: number) => closeNode.indexOf(item) === -1)
+  //   }
+  //
+  //   setMenuTreeCheckedKeys(checkedKeys);
+  //
+  //   console.log(menuTreeCheckedKeys)
+  // };
+
+  const onCheckMenu = (checkedKeysValue: React.Key[] | any) => {
+    setMenuTreeCheckedKeys(checkedKeysValue);
   };
 
   return (
@@ -68,9 +95,8 @@ const FormBody: React.FC<FormProps> = () => {
           <ProFormTextArea name="description" label="描述" />
         </Col>
         <Col span={24}>
-          {/* <ProFormText name="menuIds" label="菜单选择" /> */}
           <ProForm.Item
-            label="菜单选择"
+            label="菜单权限"
             name="menuIds"
             valuePropName="checkedKeys"
             trigger="onCheck"
@@ -78,8 +104,8 @@ const FormBody: React.FC<FormProps> = () => {
             <Tree
               checkable
               checkStrictly
-              onCheck={onCheck}
-              checkedKeys={checkedKeys}
+              onCheck={onCheckMenu}
+              checkedKeys={menuTreeCheckedKeys}
               treeData={menuTree}
             />
           </ProForm.Item>

@@ -1,5 +1,3 @@
-import { Key } from 'rc-tree/lib/interface';
-
 export type RoleForm = {
   /** 主键ID */
   id: number;
@@ -10,7 +8,7 @@ export type RoleForm = {
   /** 描述 */
   description?: string;
   /** 关联的菜单id */
-  menuIds?: number[] | { checked: Key[]; halfChecked: Key[] } | Key[];
+  menuIds?: number[] | any;
   /** 关联的资源id */
   resourceIds?: number[];
 };
