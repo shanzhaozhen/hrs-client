@@ -25,7 +25,10 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
   const handleUpdate = async (fields: RoleForm) => {
     const hide = message.loading('正在修改');
     try {
-      await updateRole(fields);
+      await updateRole({
+        ...fields,
+        menuIds: fields.menuIds?.checked || fields.menuIds,
+      });
       hide();
       message.success('修改成功');
       handleUpdateModalVisible(false);
