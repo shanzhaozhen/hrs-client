@@ -182,11 +182,6 @@ const TableList: React.FC = () => {
             // 不传会使用 data 的长度，如果是分页一定要传
             total: data.length,
           };
-          // return {
-          //   success: false,
-          //   data: [],
-          //   total: 0,
-          // };
         }}
         columns={columns}
         rowSelection={{

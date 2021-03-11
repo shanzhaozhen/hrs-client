@@ -1,21 +1,11 @@
 // @ts-ignore
 import { request } from 'umi';
-import type { SortOrder } from 'antd/lib/table/interface';
 import type { ResourceForm, ResourceVO } from '@/services/resource/typings';
-import type { PageParams } from '@/services/common/typings';
 
 /** 获取所有资源（树状结构） GET /resource/tree */
-export async function getAllResourceTree(
-  params: PageParams,
-  sorter: Record<string, SortOrder>,
-  options?: Record<string, any>,
-) {
+export async function getAllResourceTree(options?: Record<string, any>) {
   return request<ResourceVO[]>('/hrs-api/resource/tree', {
     method: 'GET',
-    data: {
-      ...params,
-      sorter,
-    },
     ...(options || {}),
   });
 }

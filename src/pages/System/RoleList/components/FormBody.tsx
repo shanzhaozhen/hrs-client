@@ -4,6 +4,7 @@ import { ProFormText, ProFormTextArea } from '@ant-design/pro-form';
 import { getAllMenuTree } from '@/services/menu/menu';
 import type { MenuVO } from '@/services/menu/typings';
 import FormTree from '@/components/FormTree';
+import { getAllResourceTree } from '@/services/resource/resource';
 
 interface FormProps {
   isEdit?: boolean;
@@ -18,6 +19,7 @@ const loopMenuData = (menuData: MenuVO[]): any =>
 
 const FormBody: React.FC<FormProps> = () => {
   const [menuTree, setMenuTree] = useState<[]>();
+  const [resourceTree, setResourcesTree] = useState<[]>();
 
   useEffect(() => {
     getAllMenuTree()
@@ -30,6 +32,18 @@ const FormBody: React.FC<FormProps> = () => {
       })
       .catch(() => {
         setMenuTree([]);
+      });
+
+    getAllResourceTree()
+      .then((res) => {
+        if (res) {
+          setResourcesTree(loopMenuData(res));
+        } else {
+          setResourcesTree([]);
+        }
+      })
+      .catch(() => {
+        setResourcesTree([]);
       });
   }, []);
 
@@ -58,8 +72,13 @@ const FormBody: React.FC<FormProps> = () => {
           <ProFormTextArea name="description" label="描述" />
         </Col>
         <Col span={24}>
-          <Form.Item name="menuIds" label="菜单选择">
+          <Form.Item name="menuIds" label="菜单分配">
             <FormTree treeData={menuTree} />
+          </Form.Item>
+        </Col>
+        <Col span={24}>
+          <Form.Item name="resourceIds" label="资源分配">
+            <FormTree treeData={resourceTree} />
           </Form.Item>
         </Col>
       </Row>

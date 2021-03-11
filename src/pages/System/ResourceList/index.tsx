@@ -156,8 +156,8 @@ const TableList: React.FC = () => {
             <PlusOutlined /> 新建
           </Button>,
         ]}
-        request={async (params, sorter) => {
-          const data = await getAllResourceTree(params, sorter);
+        request={async (params) => {
+          const data = await getAllResourceTree(params);
           return {
             // success 请返回 true，
             // 不然 table 会停止解析数据，即使有数据
@@ -166,11 +166,6 @@ const TableList: React.FC = () => {
             // 不传会使用 data 的长度，如果是分页一定要传
             total: (data && data.length) || 0,
           };
-          // return {
-          //   success: false,
-          //   data: [],
-          //   total: 0,
-          // };
         }}
         columns={columns}
         rowSelection={{

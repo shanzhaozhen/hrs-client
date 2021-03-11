@@ -1,5 +1,5 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, message, Input, Drawer } from 'antd';
+import { Button, message, Input, Drawer, Divider } from 'antd';
 import React, { useState, useRef } from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
@@ -12,7 +12,7 @@ import type { RoleVO } from '@/services/role/typings';
 import type { RoleForm } from '@/services/role/typings';
 
 /**
- *  删除用户
+ *  删除角色
  * @param selectedRows
  */
 const handleDelete = async (selectedRows: RoleVO[]) => {
@@ -109,16 +109,29 @@ const TableList: React.FC = () => {
                 const data = await getRoleByRoleId(record.id);
                 setUpdateFormValues(data as RoleForm);
                 handleUpdateModalVisible(true);
-                // message.error(res.message || `没有获取到用户信息（id:${record.id}）`);
+                // message.error(res.message || `没有获取到角色信息（id:${record.id}）`);
               } else {
-                message.warn('没有选中有效的用户');
+                message.warn('没有选中有效的角色');
               }
             }}
           >
             修改
           </a>
-          {/* <Divider type="vertical" /> */}
-          {/* <a href="">订阅警报</a> */}
+          <Divider type="vertical" />
+          <a
+            onClick={async () => {
+              if (record && record.id) {
+                const data = await getRoleByRoleId(record.id);
+                setUpdateFormValues(data as RoleForm);
+                handleUpdateModalVisible(true);
+                // message.error(res.message || `没有获取到角色信息（id:${record.id}）`);
+              } else {
+                message.warn('没有选中有效的角色');
+              }
+            }}
+          >
+            分配角色
+          </a>
         </>
       ),
     },
@@ -127,7 +140,7 @@ const TableList: React.FC = () => {
   return (
     <PageContainer>
       <ProTable<RoleVO>
-        headerTitle="用户管理"
+        headerTitle="角色管理"
         actionRef={actionRef}
         rowKey="id"
         search={{
@@ -151,11 +164,6 @@ const TableList: React.FC = () => {
             // 不传会使用 data 的长度，如果是分页一定要传
             total: data.total,
           };
-          // return {
-          //   success: false,
-          //   data: [],
-          //   total: 0,
-          // };
         }}
         columns={columns}
         rowSelection={{
