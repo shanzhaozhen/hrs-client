@@ -9,10 +9,6 @@ interface FormProps {
 }
 
 const FormBody: React.FC<FormProps> = () => {
-  FormBody.defaultProps = {
-    isEdit: false,
-  };
-
   return (
     <>
       <Row gutter={24}>
@@ -81,6 +77,10 @@ const FormBody: React.FC<FormProps> = () => {
       </Row>
     </>
   );
+};
+
+FormBody.defaultProps = {
+  isEdit: false,
 };
 
 export default FormBody;

@@ -9,10 +9,6 @@ interface FormProps {
 }
 
 const FormBody: React.FC<FormProps> = (props) => {
-  FormBody.defaultProps = {
-    isEdit: false,
-  };
-
   const { isEdit } = props;
 
   return (
@@ -154,6 +150,10 @@ const FormBody: React.FC<FormProps> = (props) => {
       </Row>
     </>
   );
+};
+
+FormBody.defaultProps = {
+  isEdit: false,
 };
 
 export default FormBody;

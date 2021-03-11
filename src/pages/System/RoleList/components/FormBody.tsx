@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Row, Tree } from 'antd';
-import ProForm, { ProFormText, ProFormTextArea } from '@ant-design/pro-form';
+import { Col, Form, Row } from 'antd';
+import { ProFormText, ProFormTextArea } from '@ant-design/pro-form';
 import { getAllMenuTree } from '@/services/menu/menu';
 import type { MenuVO } from '@/services/menu/typings';
+import FormTree from '@/components/FormTree';
 
 interface FormProps {
   isEdit?: boolean;
@@ -16,12 +17,6 @@ const loopMenuData = (menuData: MenuVO[]): any =>
   }));
 
 const FormBody: React.FC<FormProps> = () => {
-  FormBody.defaultProps = {
-    isEdit: false,
-  };
-
-  const [menuTreeCheckedKeys, setMenuTreeCheckedKeys] = useState<React.Key[]>([]);
-
   const [menuTree, setMenuTree] = useState<[]>();
 
   useEffect(() => {
@@ -37,38 +32,6 @@ const FormBody: React.FC<FormProps> = () => {
         setMenuTree([]);
       });
   }, []);
-
-  // const loopMenuTreeCheck = (node: { children: any[] | undefined; }): number[] => {
-  //   const closeNode: number[] = [];
-  //   if (node.children) {
-  //     node.children.forEach((item: any) => {
-  //       closeNode.push(item.key);
-  //       if (item.children) {
-  //         loopMenuTreeCheck(item.children);
-  //         closeNode.concat(loopMenuTreeCheck(item.children));
-  //       }
-  //     });
-  //   }
-  //   return closeNode;
-  // }
-
-  // const onCheckMenu = (checkedKeysValue: React.Key[] | any, info: any) => {
-  //
-  //   let checkedKeys = checkedKeysValue.checked;
-  //
-  //   if (!info.check) {
-  //     const closeNode = loopMenuTreeCheck(info.node);
-  //     checkedKeys = checkedKeys.filter((item: number) => closeNode.indexOf(item) === -1)
-  //   }
-  //
-  //   setMenuTreeCheckedKeys(checkedKeys);
-  //
-  //   console.log(menuTreeCheckedKeys)
-  // };
-
-  const onCheckMenu = (checkedKeysValue: React.Key[] | any) => {
-    setMenuTreeCheckedKeys(checkedKeysValue);
-  };
 
   return (
     <>
@@ -95,24 +58,17 @@ const FormBody: React.FC<FormProps> = () => {
           <ProFormTextArea name="description" label="描述" />
         </Col>
         <Col span={24}>
-          <ProForm.Item
-            label="菜单权限"
-            name="menuIds"
-            valuePropName="checkedKeys"
-            trigger="onCheck"
-          >
-            <Tree
-              checkable
-              checkStrictly
-              onCheck={onCheckMenu}
-              checkedKeys={menuTreeCheckedKeys}
-              treeData={menuTree}
-            />
-          </ProForm.Item>
+          <Form.Item name="menuIds" label="菜单选择">
+            <FormTree treeData={menuTree} />
+          </Form.Item>
         </Col>
       </Row>
     </>
   );
+};
+
+FormBody.defaultProps = {
+  isEdit: false,
 };
 
 export default FormBody;
