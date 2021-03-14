@@ -34,7 +34,7 @@ const handleDelete = async (selectedRows: ResourceVO[]) => {
   }
 };
 
-const TableList: React.FC = () => {
+const ResourceList: React.FC = () => {
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [updateFormValues, setUpdateFormValues] = useState({});
@@ -232,4 +232,4 @@ const TableList: React.FC = () => {
   );
 };
 
-export default TableList;
+export default ResourceList;

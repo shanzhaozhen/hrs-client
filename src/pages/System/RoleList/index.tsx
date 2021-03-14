@@ -10,6 +10,7 @@ import UpdateForm from './components/UpdateForm';
 import { deleteRoles, getRoleByRoleId, getRolePage } from '@/services/role/role';
 import type { RoleVO } from '@/services/role/typings';
 import type { RoleForm } from '@/services/role/typings';
+import RoleUserList from '@/pages/System/RoleUserList';
 
 /**
  *  删除角色
@@ -30,9 +31,10 @@ const handleDelete = async (selectedRows: RoleVO[]) => {
   }
 };
 
-const TableList: React.FC = () => {
+const RoleList: React.FC = () => {
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
+  const [roleUserListVisible, handleRoleUserListVisible] = useState<boolean>(false);
   const [updateFormValues, setUpdateFormValues] = useState({});
   const actionRef = useRef<ActionType>();
   const [row, setRow] = useState<RoleVO>();
@@ -121,9 +123,8 @@ const TableList: React.FC = () => {
           <a
             onClick={async () => {
               if (record && record.id) {
-                const data = await getRoleByRoleId(record.id);
-                setUpdateFormValues(data as RoleForm);
-                handleUpdateModalVisible(true);
+                setUpdateFormValues(record);
+                handleRoleUserListVisible(true);
                 // message.error(res.message || `没有获取到角色信息（id:${record.id}）`);
               } else {
                 message.warn('没有选中有效的角色');
@@ -203,6 +204,13 @@ const TableList: React.FC = () => {
           tableActionRef={actionRef}
         />
       ) : null}
+      {updateFormValues && Object.keys(updateFormValues).length ? (
+        <RoleUserList
+          roleUserListVisible={roleUserListVisible}
+          handleRoleUserListVisible={handleRoleUserListVisible}
+          tableActionRef={actionRef}
+        />
+      ) : null}
 
       <Drawer
         width={600}
@@ -230,4 +238,4 @@ const TableList: React.FC = () => {
   );
 };
 
-export default TableList;
+export default RoleList;

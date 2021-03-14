@@ -1,21 +1,28 @@
-import React, { useState, useRef } from 'react';
-import { PlusOutlined } from '@ant-design/icons';
-import { Button, message, Input, Drawer, Space, Tag } from 'antd';
-import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
-import type { ProColumns, ActionType } from '@ant-design/pro-table';
+import React, { useRef, useState } from 'react';
+import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
+import { Button, Divider, Drawer, Input, message } from 'antd';
+import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import ProDescriptions from '@ant-design/pro-descriptions';
-import CreateForm from './components/CreateForm';
-import UpdateForm from './components/UpdateForm';
+import type { UserForm, UserVO } from '@/services/user/typings';
 import { deleteUser, getUserByUserId, queryUserList } from '@/services/user/user';
-import type { UserVO } from '@/services/user/typings';
-import type { UserForm } from '@/services/user/typings';
+import { FooterToolbar } from '@ant-design/pro-layout';
+import { PlusOutlined } from '@ant-design/icons';
+import UpdateForm from '@/pages/System/UserList/components/UpdateForm';
+import ProDescriptions from '@ant-design/pro-descriptions';
+import CreateForm from '@/pages/System/UserList/components/CreateForm';
+
+interface RoleUserListProps {
+  roleUserListVisible: boolean;
+  handleRoleUserListVisible: Dispatch<SetStateAction<boolean>>;
+  tableActionRef: MutableRefObject<ActionType | undefined>;
+  values: number;
+}
 
 /**
- *  删除用户
+ *  取消关联
  * @param selectedRows
  */
-const handleDelete = async (selectedRows: UserVO[]) => {
+const handleCancelRelation = async (selectedRows: UserVO[]) => {
   const hide = message.loading('正在删除');
   if (!selectedRows) return true;
   try {
@@ -30,7 +37,11 @@ const handleDelete = async (selectedRows: UserVO[]) => {
   }
 };
 
-const UserList: React.FC = () => {
+const RoleUserList: React.FC<RoleUserListProps> = (props) => {
+  const { roleUserListVisible, handleRoleUserListVisible, values } = props;
+
+  console.log(values);
+
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [updateFormValues, setUpdateFormValues] = useState({});
@@ -83,91 +94,6 @@ const UserList: React.FC = () => {
       hideInSearch: true,
     },
     {
-      title: '性别',
-      dataIndex: 'sex',
-      valueType: 'text',
-      hideInSearch: true,
-      valueEnum: {
-        0: { text: '男' },
-        1: { text: '女' },
-      },
-    },
-    {
-      title: '头像',
-      dataIndex: 'avatar',
-      valueType: 'text',
-      hideInSearch: true,
-    },
-    {
-      title: '角色',
-      dataIndex: 'roleIds',
-      valueType: 'text',
-      hideInSearch: true,
-      // hideInTable: true,
-    },
-    {
-      title: '是否过期',
-      dataIndex: 'accountNonExpired',
-      hideInSearch: true,
-      render: (_, record) => (
-        <Space>
-          {record.accountNonExpired ? (
-            <Tag color="green">未过期</Tag>
-          ) : (
-            <Tag color="red">已过期</Tag>
-          )}
-        </Space>
-      ),
-    },
-    {
-      title: '是否锁定',
-      dataIndex: 'accountNonLocked',
-      hideInSearch: true,
-      render: (_, record) => (
-        <Space>
-          {record.accountNonLocked ? <Tag color="green">开启</Tag> : <Tag color="red">锁定</Tag>}
-        </Space>
-      ),
-    },
-    {
-      title: '密码过期',
-      dataIndex: 'credentialsNonExpired',
-      hideInSearch: true,
-      render: (_, record) => (
-        <Space>
-          {record.credentialsNonExpired ? (
-            <Tag color="green">未过期</Tag>
-          ) : (
-            <Tag color="red">已过期</Tag>
-          )}
-        </Space>
-      ),
-    },
-    {
-      title: '是否禁用',
-      dataIndex: 'enabled',
-      hideInSearch: true,
-      render: (_, record) => (
-        <Space>
-          {record.enabled ? <Tag color="green">可用</Tag> : <Tag color="red">禁用</Tag>}
-        </Space>
-      ),
-    },
-    {
-      title: '创建时间',
-      dataIndex: 'createdDate',
-      valueType: 'dateTime',
-      hideInSearch: true,
-      hideInForm: true,
-    },
-    {
-      title: '修改时间',
-      dataIndex: 'lastModifiedDate',
-      valueType: 'dateTime',
-      hideInSearch: true,
-      hideInForm: true,
-    },
-    {
       title: '操作',
       dataIndex: 'option',
       valueType: 'option',
@@ -187,28 +113,50 @@ const UserList: React.FC = () => {
           >
             修改
           </a>
-          {/* <Divider type="vertical" /> */}
-          {/* <a href="">订阅警报</a> */}
+          <Divider type="vertical" />
+          <a
+            onClick={async () => {
+              if (record && record.id) {
+                await handleCancelRelation([record]);
+                setSelectedRows([]);
+                actionRef.current?.reloadAndRest?.();
+              } else {
+                message.warn('没有选中有效的用户');
+              }
+            }}
+          >
+            取消关联
+          </a>
         </>
       ),
     },
   ];
 
   return (
-    <PageContainer>
+    <Drawer
+      title="角色分配"
+      placement="right"
+      width={820}
+      zIndex={500}
+      onClose={() => {
+        handleRoleUserListVisible(false);
+      }}
+      visible={roleUserListVisible}
+    >
       <ProTable<UserVO>
-        headerTitle="用户管理"
         actionRef={actionRef}
         rowKey="id"
+        cardBordered
+        bordered={true}
         search={{
           labelWidth: 120,
         }}
-        // options={{
-        //   search: true,
-        // }}
         toolBarRender={() => [
           <Button type="primary" onClick={() => handleCreateModalVisible(true)}>
-            <PlusOutlined /> 新建
+            <PlusOutlined /> 新建用户
+          </Button>,
+          <Button type="primary" onClick={() => handleCreateModalVisible(true)}>
+            <PlusOutlined /> 已有用户
           </Button>,
         ]}
         request={async (params, sorter) => {
@@ -237,7 +185,7 @@ const UserList: React.FC = () => {
         >
           <Button
             onClick={async () => {
-              await handleDelete(selectedRowsState);
+              await handleCancelRelation(selectedRowsState);
               setSelectedRows([]);
               actionRef.current?.reloadAndRest?.();
             }}
@@ -283,8 +231,8 @@ const UserList: React.FC = () => {
           />
         )}
       </Drawer>
-    </PageContainer>
+    </Drawer>
   );
 };
 
-export default UserList;
+export default RoleUserList;
