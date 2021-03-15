@@ -7,9 +7,10 @@ import ProTable from '@ant-design/pro-table';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
-import { deleteUser, getUserByUserId, queryUserList } from '@/services/user/user';
+import { deleteUser, getUserByUserId, getUserPage } from '@/services/user/user';
 import type { UserVO } from '@/services/user/typings';
 import type { UserForm } from '@/services/user/typings';
+import {getSortOrder} from "@/utils/common";
 
 /**
  *  删除用户
@@ -203,16 +204,13 @@ const UserList: React.FC = () => {
         search={{
           labelWidth: 120,
         }}
-        // options={{
-        //   search: true,
-        // }}
         toolBarRender={() => [
           <Button type="primary" onClick={() => handleCreateModalVisible(true)}>
             <PlusOutlined /> 新建
           </Button>,
         ]}
-        request={async (params, sorter) => {
-          const data = await queryUserList(params, sorter);
+        request={async (pageParams, sorter) => {
+          const data = await getUserPage(pageParams, getSortOrder(sorter));
           return {
             // success 请返回 true，
             // 不然 table 会停止解析数据，即使有数据

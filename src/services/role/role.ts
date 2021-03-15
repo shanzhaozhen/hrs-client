@@ -1,16 +1,17 @@
 // @ts-ignore
 import { request } from 'umi';
 import type { RoleForm, RoleVO } from '@/services/role/typings';
-import type { BaseSearchForm, Page } from '@/services/common/typings';
+import type { Page } from '@/services/common/typings';
+import type { Orders, PageParams } from "@/services/common/typings";
 
 /** 获取角色信息（分页） POST /role/page */
-export async function getRolePage(body: BaseSearchForm, options?: Record<string, any>) {
+export async function getRolePage(pageParams: PageParams, orders?: Orders | undefined | null, options?: Record<string, any>) {
   return request<Page<RoleVO>>('/hrs-api/role/page', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
+    method: 'GET',
+    params: {
+      ...pageParams,
+      ...orders,
     },
-    data: body,
     ...(options || {}),
   });
 }

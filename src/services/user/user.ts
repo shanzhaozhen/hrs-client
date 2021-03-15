@@ -1,8 +1,7 @@
 // @ts-ignore
 import { request } from 'umi';
 import type { CurrentUser, UserForm, UserVO } from '@/services/user/typings';
-import type { PageParams, Page } from '@/services/common/typings';
-import type { SortOrder } from 'antd/lib/table/interface';
+import type {PageParams, Page, Orders} from '@/services/common/typings';
 
 /** 获取当前登录用户的个人和权限信息接口 GET /user/current */
 export async function getCurrentUserInfo(options?: Record<string, any>) {
@@ -13,13 +12,14 @@ export async function getCurrentUserInfo(options?: Record<string, any>) {
 }
 
 /** 获取查询用户分页列表 GET /api/user */
-export async function queryUserList(params: PageParams, sorter: Record<string, SortOrder>) {
+export async function getUserPage(pageParams: PageParams, orders?: Orders | undefined | null, options?: Record<string, any>) {
   return request<Page<UserVO>>('/hrs-api/user/page', {
-    method: 'POST',
-    data: {
-      ...params,
-      sorter,
+    method: 'GET',
+    params: {
+      ...pageParams,
+      ...orders,
     },
+    ...(options || {}),
   });
 }
 
@@ -63,10 +63,3 @@ export async function getUserByUserId(userId: number, options?: Record<string, a
   });
 }
 
-/** 登出用户接口 GET /user/logout */
-export async function logout(options?: Record<string, any>) {
-  return request<boolean>('/hrs-api/user/logout', {
-    method: 'GET',
-    ...(options || {}),
-  });
-}

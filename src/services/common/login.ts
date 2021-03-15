@@ -29,3 +29,11 @@ export async function getNotices(options?: Record<string, any>) {
     ...(options || {}),
   });
 }
+
+/** 登出用户接口 GET /user/logout */
+export async function logout(options?: Record<string, any>) {
+  return request<boolean>('/hrs-api/user/logout', {
+    method: 'GET',
+    ...(options || {}),
+  });
+}

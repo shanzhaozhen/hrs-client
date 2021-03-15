@@ -10,7 +10,8 @@ import UpdateForm from './components/UpdateForm';
 import { deleteRoles, getRoleByRoleId, getRolePage } from '@/services/role/role';
 import type { RoleVO } from '@/services/role/typings';
 import type { RoleForm } from '@/services/role/typings';
-import RoleUserList from '@/pages/System/RoleUserList';
+import UserRoleList from '@/pages/System/UserRoleList';
+import {getSortOrder} from "@/utils/common";
 
 /**
  *  删除角色
@@ -34,7 +35,7 @@ const handleDelete = async (selectedRows: RoleVO[]) => {
 const RoleList: React.FC = () => {
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-  const [roleUserListVisible, handleRoleUserListVisible] = useState<boolean>(false);
+  const [userRoleListVisible, handleUserRoleListVisible] = useState<boolean>(false);
   const [updateFormValues, setUpdateFormValues] = useState({});
   const actionRef = useRef<ActionType>();
   const [row, setRow] = useState<RoleVO>();
@@ -124,7 +125,7 @@ const RoleList: React.FC = () => {
             onClick={async () => {
               if (record && record.id) {
                 setUpdateFormValues(record);
-                handleRoleUserListVisible(true);
+                handleUserRoleListVisible(true);
                 // message.error(res.message || `没有获取到角色信息（id:${record.id}）`);
               } else {
                 message.warn('没有选中有效的角色');
@@ -147,16 +148,13 @@ const RoleList: React.FC = () => {
         search={{
           labelWidth: 120,
         }}
-        // options={{
-        //   search: true,
-        // }}
         toolBarRender={() => [
           <Button type="primary" onClick={() => handleCreateModalVisible(true)}>
             <PlusOutlined /> 新建
           </Button>,
         ]}
         request={async (params, sorter) => {
-          const data = await getRolePage(params, sorter);
+          const data = await getRolePage(params, getSortOrder(sorter));
           return {
             // success 请返回 true，
             // 不然 table 会停止解析数据，即使有数据
@@ -205,10 +203,15 @@ const RoleList: React.FC = () => {
         />
       ) : null}
       {updateFormValues && Object.keys(updateFormValues).length ? (
-        <RoleUserList
-          roleUserListVisible={roleUserListVisible}
-          handleRoleUserListVisible={handleRoleUserListVisible}
+        <UserRoleList
+          userRoleListVisible={userRoleListVisible}
+          handleUserRoleListVisible={handleUserRoleListVisible}
+          onCancel={() => {
+            setUpdateFormValues({});
+            handleUserRoleListVisible(false);
+          }}
           tableActionRef={actionRef}
+          values={updateFormValues}
         />
       ) : null}
 

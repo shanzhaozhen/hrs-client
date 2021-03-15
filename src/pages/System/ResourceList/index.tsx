@@ -148,9 +148,6 @@ const ResourceList: React.FC = () => {
         search={{
           labelWidth: 120,
         }}
-        // options={{
-        //   search: true,
-        // }}
         toolBarRender={() => [
           <Button type="primary" onClick={() => handleCreateModalVisible(true)}>
             <PlusOutlined /> 新建

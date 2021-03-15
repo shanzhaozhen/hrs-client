@@ -4,18 +4,23 @@ import { Button, Divider, Drawer, Input, message } from 'antd';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import type { UserForm, UserVO } from '@/services/user/typings';
-import { deleteUser, getUserByUserId, queryUserList } from '@/services/user/user';
+import { deleteUser, getUserByUserId } from '@/services/user/user';
 import { FooterToolbar } from '@ant-design/pro-layout';
 import { PlusOutlined } from '@ant-design/icons';
 import UpdateForm from '@/pages/System/UserList/components/UpdateForm';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from '@/pages/System/UserList/components/CreateForm';
+import type { RoleVO } from "@/services/role/typings";
+import { getSortOrder } from "@/utils/common";
+import CheckBoxUser from "@/pages/System/UserRoleList/components/CheckBoxUser";
+import { getUserRolePage } from "@/services/user-role/user";
 
-interface RoleUserListProps {
-  roleUserListVisible: boolean;
-  handleRoleUserListVisible: Dispatch<SetStateAction<boolean>>;
+interface UserRoleListProps {
+  userRoleListVisible: boolean;
+  handleUserRoleListVisible: Dispatch<SetStateAction<boolean>>;
   tableActionRef: MutableRefObject<ActionType | undefined>;
-  values: number;
+  onCancel: () => void;
+  values: RoleVO;
 }
 
 /**
@@ -37,14 +42,16 @@ const handleCancelRelation = async (selectedRows: UserVO[]) => {
   }
 };
 
-const RoleUserList: React.FC<RoleUserListProps> = (props) => {
-  const { roleUserListVisible, handleRoleUserListVisible, values } = props;
-
-  console.log(values);
+const UserRoleList: React.FC<UserRoleListProps> = (props) => {
+  const { userRoleListVisible,
+    // handleUserRoleListVisible,
+    onCancel, values } = props;
 
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
+  const [checkBoxUserVisible, handleCheckBoxUserVisible] = useState<boolean>(false);
   const [updateFormValues, setUpdateFormValues] = useState({});
+
   const actionRef = useRef<ActionType>();
   const [row, setRow] = useState<UserVO>();
   const [selectedRowsState, setSelectedRows] = useState<UserVO[]>([]);
@@ -138,10 +145,8 @@ const RoleUserList: React.FC<RoleUserListProps> = (props) => {
       placement="right"
       width={820}
       zIndex={500}
-      onClose={() => {
-        handleRoleUserListVisible(false);
-      }}
-      visible={roleUserListVisible}
+      onClose={onCancel}
+      visible={userRoleListVisible}
     >
       <ProTable<UserVO>
         actionRef={actionRef}
@@ -155,12 +160,12 @@ const RoleUserList: React.FC<RoleUserListProps> = (props) => {
           <Button type="primary" onClick={() => handleCreateModalVisible(true)}>
             <PlusOutlined /> 新建用户
           </Button>,
-          <Button type="primary" onClick={() => handleCreateModalVisible(true)}>
+          <Button type="primary" onClick={() => handleCheckBoxUserVisible(true)}>
             <PlusOutlined /> 已有用户
           </Button>,
         ]}
         request={async (params, sorter) => {
-          const data = await queryUserList(params, sorter);
+          const data = await getUserRolePage(params, values.id, getSortOrder(sorter));
           return {
             // success 请返回 true，
             // 不然 table 会停止解析数据，即使有数据
@@ -208,6 +213,12 @@ const RoleUserList: React.FC<RoleUserListProps> = (props) => {
           tableActionRef={actionRef}
         />
       ) : null}
+      <CheckBoxUser
+        checkBoxUserVisible={checkBoxUserVisible}
+        handleCheckBoxUserVisible={handleCheckBoxUserVisible}
+        values={values}
+        tableActionRef={actionRef}
+      />
 
       <Drawer
         width={600}
@@ -235,4 +246,4 @@ const RoleUserList: React.FC<RoleUserListProps> = (props) => {
   );
 };
 
-export default RoleUserList;
+export default UserRoleList;

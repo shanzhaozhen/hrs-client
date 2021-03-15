@@ -41,6 +41,11 @@ export type OrderItem = {
   asc?: boolean;
 };
 
+type Orders = {
+  asc: string[];
+  desc: string[];
+}
+
 export type LoginParams = {
   /** 用户名 */
   username?: string;
