@@ -4,7 +4,7 @@ import { Button, Divider, Drawer, Input, message } from 'antd';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import type { UserForm, UserVO } from '@/services/user/typings';
-import { deleteUser, getUserByUserId } from '@/services/user/user';
+import { getUserByUserId } from '@/services/user/user';
 import { FooterToolbar } from '@ant-design/pro-layout';
 import { PlusOutlined } from '@ant-design/icons';
 import UpdateForm from '@/pages/System/UserList/components/UpdateForm';
@@ -13,7 +13,7 @@ import CreateForm from '@/pages/System/UserList/components/CreateForm';
 import type { RoleVO } from "@/services/role/typings";
 import { getSortOrder } from "@/utils/common";
 import CheckBoxUser from "@/pages/System/UserRoleList/components/CheckBoxUser";
-import { getUserRolePage } from "@/services/user-role/user";
+import { deleteUserRoles, getUserRolePage } from "@/services/user-role/user";
 
 interface UserRoleListProps {
   userRoleListVisible: boolean;
@@ -23,24 +23,6 @@ interface UserRoleListProps {
   values: RoleVO;
 }
 
-/**
- *  取消关联
- * @param selectedRows
- */
-const handleCancelRelation = async (selectedRows: UserVO[]) => {
-  const hide = message.loading('正在删除');
-  if (!selectedRows) return true;
-  try {
-    await deleteUser(selectedRows.map((row) => row.id));
-    hide();
-    message.success('删除成功，即将刷新');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('删除失败，请重试');
-    return false;
-  }
-};
 
 const UserRoleList: React.FC<UserRoleListProps> = (props) => {
   const { userRoleListVisible,
@@ -55,6 +37,29 @@ const UserRoleList: React.FC<UserRoleListProps> = (props) => {
   const actionRef = useRef<ActionType>();
   const [row, setRow] = useState<UserVO>();
   const [selectedRowsState, setSelectedRows] = useState<UserVO[]>([]);
+
+  /**
+   *  删除用户角色
+   * @param selectedRows
+   */
+  const handleDeleteUserRole = async (selectedRows: UserVO[]) => {
+    const hide = message.loading('正在删除');
+    if (!selectedRows) return true;
+    try {
+      await deleteUserRoles({
+        userIds: selectedRows.map((selectedRow) => selectedRow.id) || [],
+        roleId: values.id
+      });
+      hide();
+      message.success('删除成功，即将刷新');
+      return true;
+    } catch (error) {
+      hide();
+      message.error('删除失败，请重试');
+      return false;
+    }
+  };
+
 
   const columns: ProColumns<UserVO>[] = [
     {
@@ -124,7 +129,7 @@ const UserRoleList: React.FC<UserRoleListProps> = (props) => {
           <a
             onClick={async () => {
               if (record && record.id) {
-                await handleCancelRelation([record]);
+                await handleDeleteUserRole([record]);
                 setSelectedRows([]);
                 actionRef.current?.reloadAndRest?.();
               } else {
@@ -160,7 +165,9 @@ const UserRoleList: React.FC<UserRoleListProps> = (props) => {
           <Button type="primary" onClick={() => handleCreateModalVisible(true)}>
             <PlusOutlined /> 新建用户
           </Button>,
-          <Button type="primary" onClick={() => handleCheckBoxUserVisible(true)}>
+          <Button type="primary" onClick={() => {
+            handleCheckBoxUserVisible(true)
+          }}>
             <PlusOutlined /> 已有用户
           </Button>,
         ]}
@@ -190,7 +197,7 @@ const UserRoleList: React.FC<UserRoleListProps> = (props) => {
         >
           <Button
             onClick={async () => {
-              await handleCancelRelation(selectedRowsState);
+              await handleDeleteUserRole(selectedRowsState);
               setSelectedRows([]);
               actionRef.current?.reloadAndRest?.();
             }}

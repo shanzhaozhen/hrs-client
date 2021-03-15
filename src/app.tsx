@@ -134,16 +134,14 @@ const codeMessage = {
 
 // 响应后拦截器
 const afterResponseInterceptors = async (response: Response) => {
-  const res = await response.clone().json();
-  // // 成功请求直接返回data
-  // if (res.code === 0 && res.data) {
-  //   return res.data
-  // }
-  // return res;
-  if (res.code === 2000) {
-    return res;
+  if (response.status === 200) {
+    const res = await response.clone().json();
+    if (res.code === 2000) {
+      return res;
+    }
+    return res.data;
   }
-  return res.data;
+  return Promise.reject(response)
 };
 
 /** response拦截器, 处理response */
@@ -171,6 +169,7 @@ const jwtInterceptor = (url: string, options: RequestOptionsInit) => {
  */
 const errorHandler = (error: ResponseError) => {
   const { response } = error;
+  console.log(error);
   if (response && response.status) {
     const errorText = codeMessage[response.status] || response.statusText;
     const { status, url } = response;

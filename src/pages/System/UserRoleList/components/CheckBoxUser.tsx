@@ -3,27 +3,46 @@ import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import { Drawer, Input, message, Modal, Space } from 'antd';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import type { UserForm, UserVO } from '@/services/user/typings';
-import { getUserByUserId, getUserPage } from '@/services/user/user';
+import type { UserVO } from '@/services/user/typings';
+import { getUserPage } from '@/services/user/user';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import { getSortOrder } from "@/utils/common";
 import type { RoleVO } from "@/services/role/typings";
+import { addUserRole } from "@/services/user-role/user";
 
 interface CheckBoxUserProps {
   checkBoxUserVisible: boolean;
   handleCheckBoxUserVisible: Dispatch<SetStateAction<boolean>>;
   tableActionRef: MutableRefObject<ActionType | undefined>;
-  values?: RoleVO;
+  values: RoleVO;
 }
 
 const CheckBoxUser: React.FC<CheckBoxUserProps> = (props) => {
-  const { checkBoxUserVisible, handleCheckBoxUserVisible, values } = props;
+  const { checkBoxUserVisible, handleCheckBoxUserVisible, tableActionRef, values } = props;
 
-  const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-  const [updateFormValues, setUpdateFormValues] = useState({});
   const actionRef = useRef<ActionType>();
   const [row, setRow] = useState<UserVO>();
   const [selectedRowsState, setSelectedRows] = useState<UserVO[]>([]);
+
+  const handleAddUserRole = async (selectedRows: UserVO[]) => {
+    const hide = message.loading('正在添加');
+    if (!selectedRows) return true;
+    try {
+      const userIds = selectedRows.map((user) => user.id);
+      await addUserRole({
+        userIds,
+        roleId: values.id,
+      });
+      hide();
+      message.success('添加成功');
+      tableActionRef.current?.reloadAndRest?.();
+      return true;
+    } catch (error) {
+      hide();
+      message.error('添加失败，请重试');
+      return false;
+    }
+  }
 
   const columns: ProColumns<UserVO>[] = [
     {
@@ -78,10 +97,7 @@ const CheckBoxUser: React.FC<CheckBoxUserProps> = (props) => {
           <a
             onClick={async () => {
               if (record && record.id) {
-                const data = await getUserByUserId(record.id);
-                setUpdateFormValues(data as UserForm);
-                handleUpdateModalVisible(true);
-                // message.error(res.message || `没有获取到用户信息（id:${record.id}）`);
+                await handleAddUserRole([record]);
               } else {
                 message.warn('没有选中有效的用户');
               }
@@ -101,7 +117,9 @@ const CheckBoxUser: React.FC<CheckBoxUserProps> = (props) => {
       visible={checkBoxUserVisible}
       onCancel={() => {
         handleCheckBoxUserVisible(false);
+        actionRef.current?.clearSelected?.();
       }}
+      footer={null}
     >
       <ProTable<UserVO>
         actionRef={actionRef}
@@ -111,11 +129,14 @@ const CheckBoxUser: React.FC<CheckBoxUserProps> = (props) => {
         search={{
           labelWidth: 120,
         }}
-        tableAlertOptionRender={({ selectedRowKeys, selectedRows, onCleanSelected }) => {
+        tableAlertOptionRender={({ onCleanSelected }) => {
           return (
             <Space size={16}>
               <a onClick={onCleanSelected}>取消选择</a>
-              <a>批量添加</a>
+              <a onClick={async () => {
+                await handleAddUserRole(selectedRowsState);
+                onCleanSelected();
+              }}>批量添加</a>
             </Space>
           );
         }}
