@@ -57,6 +57,13 @@ export default [
         icon: 'smile',
         component: './System/ResourceList',
       },
+      {
+        path: '/system/department',
+        name: 'department',
+        icon: 'smile',
+        component: './System/DepartmentList',
+      },
+
     ],
   },
   {

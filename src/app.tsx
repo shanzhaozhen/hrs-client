@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Settings as LayoutSettings, MenuDataItem } from '@ant-design/pro-layout';
 import { PageLoading } from '@ant-design/pro-layout';
-import { notification } from 'antd';
+import {Modal, notification} from 'antd';
 import type { RunTimeLayoutConfig } from 'umi';
 import { history } from 'umi';
 import type { RequestOptionsInit, ResponseError } from 'umi-request';
@@ -13,6 +13,7 @@ import { getCurrentUserInfo } from '@/services/user/user';
 import type { CurrentUser, UserInfo } from '@/services/user/typings';
 import type { Role } from '@/services/user/typings';
 import { iconMap } from '@/components/Common/icon';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -132,18 +133,6 @@ const codeMessage = {
   504: '网关超时。',
 };
 
-// 响应后拦截器
-const afterResponseInterceptors = async (response: Response) => {
-  if (response.status === 200) {
-    const res = await response.clone().json();
-    if (res.code === 2000) {
-      return res;
-    }
-    return res.data;
-  }
-  return Promise.reject(response)
-};
-
 /** response拦截器, 处理response */
 const jwtInterceptor = (url: string, options: RequestOptionsInit) => {
   // 判断是否有 token
@@ -164,21 +153,35 @@ const jwtInterceptor = (url: string, options: RequestOptionsInit) => {
   return { url, options };
 };
 
+// 响应后拦截器
+const afterResponseInterceptors = async (response: Response, options: RequestOptionsInit) => {
+  if (response.status === 200) {
+    const res = await response.clone().json();
+    if (res.code === 2000) {
+      return res;
+    }
+    return res.data;
+  }
+
+  const error = {
+    name: response.statusText,
+    response,
+    request: {
+      url: response.url,
+      options,
+    },
+    type: response.type
+  }
+
+  return Promise.reject(error)
+};
+
+
 /** 异常处理程序
  * @see https://beta-pro.ant.design/docs/request-cn
  */
-const errorHandler = (error: ResponseError) => {
+const errorHandler = async (error: ResponseError) => {
   const { response } = error;
-  console.log(error);
-  if (response && response.status) {
-    const errorText = codeMessage[response.status] || response.statusText;
-    const { status, url } = response;
-
-    notification.error({
-      message: `请求错误 ${status}: ${url}`,
-      description: errorText,
-    });
-  }
 
   if (!response) {
     notification.error({
@@ -186,6 +189,54 @@ const errorHandler = (error: ResponseError) => {
       message: '网络异常',
     });
   }
+
+  const res = await response.clone().json();
+
+  if (response.status) {
+    const errorText = codeMessage[response.status] || response.statusText;
+    const { status, url } = response;
+
+
+    if (status === 401) {
+      /**
+       * (4010, "密码账号认证出错")
+       * (4011, "token签名异常")
+       * (4012, "token格式不正确")
+       * (4013, "token已过期")
+       * (4014, "不支持该token")
+       * (4015, "token参数异常")
+       * (4016, "token错误")
+       */
+      if (res.code >= 4011 && res.code <= 4016) {
+
+
+        Modal.confirm({
+          title: '登陆超时',
+          icon: <ExclamationCircleOutlined />,
+          content: '您已被登出，可以取消继续留在该页面，或者重新登录。',
+          okText: '重新登陆',
+          cancelText: '取消',
+          onOk() {
+            history.push('/login');
+          },
+          // onCancel() {},
+        });
+
+      } else {
+        notification.error({
+          description: res.message || '您的网络发生异常，无法连接服务器',
+          message: '网络异常',
+        });
+      }
+    }
+
+
+      notification.error({
+      message: `请求错误 ${status}: ${url}`,
+      description: errorText,
+    });
+  }
+
   throw error;
 };
 
