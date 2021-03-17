@@ -25,10 +25,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
   const handleUpdate = async (fields: DepartmentForm) => {
     const hide = message.loading('正在修改');
     try {
-      await updateDepartment({
-        ...fields,
-        menuIds: fields.menuIds.checked || fields.menuIds,
-      });
+      await updateDepartment({...fields});
       hide();
       message.success('修改成功');
       handleUpdateModalVisible(false);

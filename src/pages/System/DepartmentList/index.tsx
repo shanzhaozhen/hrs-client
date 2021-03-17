@@ -7,11 +7,9 @@ import ProTable from '@ant-design/pro-table';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
-import { deleteDepartments, getDepartmentByDepartmentId, getDepartmentPage } from '@/services/department/department';
+import {deleteDepartments, getDepartmentByDepartmentId, getDepartmentTree} from '@/services/department/department';
 import type { DepartmentVO } from '@/services/department/typings';
 import type { DepartmentForm } from '@/services/department/typings';
-import UserDepartmentList from '@/pages/System/UserDepartmentList';
-import {getSortOrder} from "@/utils/common";
 
 /**
  *  删除部门
@@ -53,11 +51,6 @@ const DepartmentList: React.FC = () => {
       },
     },
     {
-      dataIndex: 'index',
-      valueType: 'indexBorder',
-      width: 48,
-    },
-    {
       title: '名称',
       dataIndex: 'name',
       valueType: 'text',
@@ -73,18 +66,18 @@ const DepartmentList: React.FC = () => {
       },
     },
     {
-      title: '部门标识',
-      dataIndex: 'identification',
+      title: '部门编号',
+      dataIndex: 'code',
       valueType: 'text',
       sorter: true,
       hideInSearch: true,
     },
     {
-      title: '描述',
-      dataIndex: 'description',
+      title: '排序等级',
+      dataIndex: 'priority',
       valueType: 'text',
+      align: 'center',
       hideInSearch: true,
-      hideInTable: true,
     },
     {
       title: '创建时间',
@@ -153,15 +146,15 @@ const DepartmentList: React.FC = () => {
             <PlusOutlined /> 新建
           </Button>,
         ]}
-        request={async (params, sorter) => {
-          const data = await getDepartmentPage(params, getSortOrder(sorter));
+        request={async () => {
+          const data = await getDepartmentTree();
           return {
             // success 请返回 true，
             // 不然 table 会停止解析数据，即使有数据
             success: true,
-            data: data.records,
+            data,
             // 不传会使用 data 的长度，如果是分页一定要传
-            total: data.total,
+            total: data.length,
           };
         }}
         columns={columns}
@@ -202,7 +195,7 @@ const DepartmentList: React.FC = () => {
           tableActionRef={actionRef}
         />
       ) : null}
-      {updateFormValues && Object.keys(updateFormValues).length ? (
+      {/* {updateFormValues && Object.keys(updateFormValues).length ? (
         <UserDepartmentList
           userDepartmentListVisible={userDepartmentListVisible}
           handleUserDepartmentListVisible={handleUserDepartmentListVisible}
@@ -213,7 +206,7 @@ const DepartmentList: React.FC = () => {
           tableActionRef={actionRef}
           values={updateFormValues}
         />
-      ) : null}
+      ) : null} */}
 
       <Drawer
         width={600}

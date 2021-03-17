@@ -52,7 +52,7 @@ const FormBody: React.FC<FormProps> = () => {
               if (data) {
                 return data.map((item: MenuVO) => {
                   return {
-                    label: `${item.name}(${item.path})`,
+                    label: item.name + (item.path ? `(${item.path})` : ''),
                     value: item.id,
                   };
                 });

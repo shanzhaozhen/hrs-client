@@ -15,7 +15,7 @@ export type UserInfo = {
 
 export type Role = {
   id: number;
-  identification: string;
+  code: string;
   name: string;
 };
 

@@ -73,8 +73,8 @@ const RoleList: React.FC = () => {
       },
     },
     {
-      title: '角色标识',
-      dataIndex: 'identification',
+      title: '角色代码',
+      dataIndex: 'code',
       valueType: 'text',
       sorter: true,
       hideInSearch: true,

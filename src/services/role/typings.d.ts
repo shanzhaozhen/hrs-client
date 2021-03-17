@@ -3,8 +3,8 @@ export type RoleForm = {
   id: number;
   /** 名称 */
   name: string;
-  /** 标识名称 */
-  identification: string;
+  /** 角色代码 */
+  code: string;
   /** 描述 */
   description?: string;
   /** 关联的菜单id */
@@ -18,8 +18,8 @@ export type RoleVO = {
   id?: number;
   /** 名称 */
   name?: string;
-  /** 标识名称 */
-  identification?: string;
+  /** 角色代码 */
+  code?: string;
   /** 描述 */
   description?: string;
   /** 关联的路由id */

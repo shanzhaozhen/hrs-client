@@ -196,7 +196,6 @@ const errorHandler = async (error: ResponseError) => {
     const errorText = codeMessage[response.status] || response.statusText;
     const { status, url } = response;
 
-
     if (status === 401) {
       /**
        * (4010, "密码账号认证出错")
@@ -208,33 +207,33 @@ const errorHandler = async (error: ResponseError) => {
        * (4016, "token错误")
        */
       if (res.code >= 4011 && res.code <= 4016) {
-
-
-        Modal.confirm({
-          title: '登陆超时',
-          icon: <ExclamationCircleOutlined />,
-          content: '您已被登出，可以取消继续留在该页面，或者重新登录。',
-          okText: '重新登陆',
-          cancelText: '取消',
-          onOk() {
-            history.push('/login');
-          },
-          // onCancel() {},
-        });
-
+        console.log(history)
+        console.log(history.location.pathname)
+        if (history.location.pathname !== '/login' && history.location.pathname !== '/') {
+          Modal.confirm({
+            title: '登陆超时',
+            icon: <ExclamationCircleOutlined />,
+            content: '您已被登出，可以取消继续留在该页面，或者重新登录。',
+            okText: '重新登陆',
+            cancelText: '取消',
+            onOk() {
+              history.push('/login');
+            },
+            // onCancel() {},
+          });
+        }
       } else {
         notification.error({
           description: res.message || '您的网络发生异常，无法连接服务器',
           message: '网络异常',
         });
       }
-    }
-
-
+    } else {
       notification.error({
-      message: `请求错误 ${status}: ${url}`,
-      description: errorText,
-    });
+        message: `请求错误 ${status}: ${url}`,
+        description: res.message || errorText,
+      });
+    }
   }
 
   throw error;

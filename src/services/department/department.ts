@@ -1,10 +1,10 @@
 // @ts-ignore
 import { request } from 'umi';
-import DepartmentForm = API.DepartmentForm;
+import type { DepartmentForm, DepartmentVO } from "@/services/department/typings";
 
 /** 获取部门信息（通过部门id） GET /department/${departmentId} */
 export async function getDepartmentByDepartmentId(departmentId: number, options?: Record<string, any>) {
-  return request<API.ResultBodyDepartmentVO>(`/department/${departmentId}`, {
+  return request<DepartmentVO>(`/hrs-api/department/${departmentId}`, {
     method: 'GET',
     ...(options || {}),
   });
@@ -12,7 +12,7 @@ export async function getDepartmentByDepartmentId(departmentId: number, options?
 
 /** 获取所有部门（树状） GET /department/tree */
 export async function getDepartmentTree(options?: Record<string, any>) {
-  return request<API.ResultBodyListDepartmentVO>('/department/tree', {
+  return request<DepartmentVO[]>('/hrs-api/department/tree', {
     method: 'GET',
     ...(options || {}),
   });
@@ -20,7 +20,7 @@ export async function getDepartmentTree(options?: Record<string, any>) {
 
 /** 获取所有部门 GET /department/all */
 export async function getAllDepartments(options?: Record<string, any>) {
-  return request<API.ResultBodyListDepartmentVO>('/department/all', {
+  return request<DepartmentVO[]>('/hrs-api/department/all', {
     method: 'GET',
     ...(options || {}),
   });
@@ -28,7 +28,7 @@ export async function getAllDepartments(options?: Record<string, any>) {
 
 /** 添加部门接口 POST /department */
 export async function addDepartment(body: DepartmentForm, options?: Record<string, any>) {
-  return request<API.ResultBodyLong>('/department', {
+  return request<number>('/hrs-api/department', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -40,7 +40,7 @@ export async function addDepartment(body: DepartmentForm, options?: Record<strin
 
 /** 更新部门接口 PUT /department */
 export async function updateDepartment(body: DepartmentForm, options?: Record<string, any>) {
-  return request<number>('/department', {
+  return request<number>('/hrs-api/department', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -53,8 +53,8 @@ export async function updateDepartment(body: DepartmentForm, options?: Record<st
 
 
 /** 删除部门接口 DELETE /department */
-export async function deleteDepartment(body?: number[], options?: Record<string, any>) {
-  return request<API.ResultBodyListLong>('/department', {
+export async function deleteDepartments(body?: (number | undefined)[], options?: Record<string, any>) {
+  return request<number[]>('/hrs-api/department', {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',

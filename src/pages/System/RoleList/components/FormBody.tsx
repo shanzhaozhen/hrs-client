@@ -63,9 +63,9 @@ const FormBody: React.FC<FormProps> = () => {
         <Col xl={12} lg={12} md={24}>
           <ProFormText
             width="md"
-            name="identification"
-            label="标识名称"
-            rules={[{ required: true, message: '请输入您的标识名称' }]}
+            name="code"
+            label="角色代码"
+            rules={[{ required: true, message: '请输入您的角色代码' }]}
           />
         </Col>
         <Col span={24}>

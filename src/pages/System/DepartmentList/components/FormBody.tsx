@@ -1,52 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { Col, Form, Row } from 'antd';
-import { ProFormText, ProFormTextArea } from '@ant-design/pro-form';
-import { getAllMenuTree } from '@/services/menu/menu';
-import type { MenuVO } from '@/services/menu/typings';
-import FormTree from '@/components/FormTree';
-import { getAllResourceTree } from '@/services/resource/resource';
+import React from 'react';
+import { Col, Row } from 'antd';
+import {ProFormDigit, ProFormSelect, ProFormText} from '@ant-design/pro-form';
+import { getAllDepartments } from "@/services/department/department";
+import type { DepartmentVO } from "@/services/department/typings";
 
 interface FormProps {
   isEdit?: boolean;
 }
 
-const loopMenuData = (menuData: MenuVO[]): any =>
-  menuData.map(({ id, name, children }) => ({
-    title: name,
-    key: id,
-    children: children && loopMenuData(children),
-  }));
-
 const FormBody: React.FC<FormProps> = () => {
-  const [menuTree, setMenuTree] = useState<[]>();
-  const [resourceTree, setResourcesTree] = useState<[]>();
-
-  useEffect(() => {
-    getAllMenuTree()
-      .then((res) => {
-        if (res) {
-          setMenuTree(loopMenuData(res));
-        } else {
-          setMenuTree([]);
-        }
-      })
-      .catch(() => {
-        setMenuTree([]);
-      });
-
-    getAllResourceTree()
-      .then((res) => {
-        if (res) {
-          setResourcesTree(loopMenuData(res));
-        } else {
-          setResourcesTree([]);
-        }
-      })
-      .catch(() => {
-        setResourcesTree([]);
-      });
-  }, []);
-
   return (
     <>
       <Row gutter={24}>
@@ -63,23 +25,47 @@ const FormBody: React.FC<FormProps> = () => {
         <Col xl={12} lg={12} md={24}>
           <ProFormText
             width="md"
-            name="identification"
-            label="标识名称"
-            rules={[{ required: true, message: '请输入您的标识名称' }]}
+            name="code"
+            label="部门代码"
+            rules={[{ message: '请输入您的部门代码' }]}
           />
         </Col>
-        <Col span={24}>
-          <ProFormTextArea name="description" label="描述" />
+        <Col xl={12} lg={12} md={24}>
+          <ProFormSelect
+            width="md"
+            name="pid"
+            label="上级部门"
+            params={{}}
+            showSearch={false}
+            placeholder="请选择上级部门"
+            request={async () => {
+              const data = await getAllDepartments();
+              if (data) {
+                return data.map((item: DepartmentVO) => {
+                  return {
+                    label: item.name + (item.code ? `${(item.code)}`: ''),
+                    value: item.id,
+                  };
+                });
+              }
+              return [];
+            }}
+            rules={[
+              ({ getFieldValue }) => ({
+                validator: async (rule, value) => {
+                  const menuId = getFieldValue('id');
+
+                  // 编辑状态时，如果密码为空不进行校验
+                  if (value && value === menuId) {
+                    throw new Error('上级部门不能选择自己');
+                  }
+                },
+              }),
+            ]}
+          />
         </Col>
-        <Col span={24}>
-          <Form.Item name="menuIds" label="菜单分配">
-            <FormTree treeData={menuTree} />
-          </Form.Item>
-        </Col>
-        <Col span={24}>
-          <Form.Item name="resourceIds" label="资源分配">
-            <FormTree treeData={resourceTree} />
-          </Form.Item>
+        <Col xl={12} lg={12} md={24}>
+          <ProFormDigit width="md" name="priority" label="排序等级" min={1} />
         </Col>
       </Row>
     </>

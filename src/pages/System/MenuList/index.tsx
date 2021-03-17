@@ -169,8 +169,8 @@ const MenuList: React.FC = () => {
             <PlusOutlined /> 新建
           </Button>,
         ]}
-        request={async (params) => {
-          const data = await getAllMenuTree(params);
+        request={async () => {
+          const data = await getAllMenuTree();
           return {
             // success 请返回 true，
             // 不然 table 会停止解析数据，即使有数据
