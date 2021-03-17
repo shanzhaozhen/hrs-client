@@ -207,8 +207,6 @@ const errorHandler = async (error: ResponseError) => {
        * (4016, "token错误")
        */
       if (res.code >= 4011 && res.code <= 4016) {
-        console.log(history)
-        console.log(history.location.pathname)
         if (history.location.pathname !== '/login' && history.location.pathname !== '/') {
           Modal.confirm({
             title: '登陆超时',
