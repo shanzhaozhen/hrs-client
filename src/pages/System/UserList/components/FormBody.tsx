@@ -92,7 +92,6 @@ const FormBody: React.FC<FormProps> = (props) => {
               { label: '女', value: 1 },
             ]}
             placeholder="请选择您的性别"
-            rules={[{ message: '请选择您的性别' }]}
           />
         </Col>
         <Col span={24}>
@@ -121,6 +120,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             label="是否过期"
             checkedChildren="未过期"
             unCheckedChildren="已过期"
+            fieldProps={{ defaultChecked: true }}
           />
         </Col>
         <Col xl={6} md={12} sm={24}>
@@ -129,6 +129,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             label="是否锁定"
             checkedChildren="开启"
             unCheckedChildren="锁定"
+            fieldProps={{ defaultChecked: true }}
           />
         </Col>
         <Col xl={6} md={12} sm={24}>
@@ -137,6 +138,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             label="密码过期"
             checkedChildren="未过期"
             unCheckedChildren="已过期"
+            fieldProps={{ defaultChecked: true }}
           />
         </Col>
         <Col xl={6} md={12} sm={24}>
@@ -145,6 +147,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             label="是否禁用"
             checkedChildren="可用"
             unCheckedChildren="禁用"
+            fieldProps={{ defaultChecked: true }}
           />
         </Col>
       </Row>

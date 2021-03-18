@@ -1,5 +1,5 @@
-import React from 'react';
-import { Col, Row } from 'antd';
+import React, {useEffect, useState} from 'react';
+import { Col, Form, Row } from 'antd';
 import {
   ProFormDigit,
   ProFormSelect,
@@ -7,15 +7,40 @@ import {
   ProFormText,
   ProFormTextArea,
 } from '@ant-design/pro-form';
-import { getAllMenu } from '@/services/menu/menu';
 import type { MenuVO } from '@/services/menu/typings';
 import { iconOption } from '@/components/Common/icon';
+import {getMenuTree} from "@/services/menu/menu";
+import FormTreeSelect from "@/components/FormTreeSelect";
 
 interface FormProps {
   isEdit?: boolean;
 }
 
 const FormBody: React.FC<FormProps> = () => {
+
+  const [menuTree, setMenuTree] = useState<[]>();
+
+  const loopMenuData = (menuData: MenuVO[]): any =>
+    menuData.map(({ id, name, path, children }) => ({
+      title: name + (path ? `(${path})` : ''),
+      value: id,
+      children: children && loopMenuData(children),
+    }));
+
+  useEffect(() => {
+    getMenuTree()
+      .then((res) => {
+        if (res) {
+          setMenuTree(loopMenuData(res));
+        } else {
+          setMenuTree([]);
+        }
+      })
+      .catch(() => {
+        setMenuTree([]);
+      });
+  }, []);
+
   return (
     <>
       <Row gutter={24}>
@@ -40,38 +65,22 @@ const FormBody: React.FC<FormProps> = () => {
           />
         </Col>
         <Col xl={12} lg={12} md={24}>
-          <ProFormSelect
-            width="md"
+          <Form.Item
             name="pid"
             label="上级菜单"
-            params={{}}
-            showSearch={false}
-            placeholder="请选择上级菜单"
-            request={async () => {
-              const data = await getAllMenu();
-              if (data) {
-                return data.map((item: MenuVO) => {
-                  return {
-                    label: item.name + (item.path ? `(${item.path})` : ''),
-                    value: item.id,
-                  };
-                });
-              }
-              return [];
-            }}
             rules={[
               ({ getFieldValue }) => ({
                 validator: async (rule, value) => {
                   const menuId = getFieldValue('id');
-
-                  // 编辑状态时，如果密码为空不进行校验
                   if (value && value === menuId) {
                     throw new Error('上级菜单不能选择自己');
                   }
                 },
               }),
             ]}
-          />
+          >
+            <FormTreeSelect treeData={menuTree} />
+          </Form.Item>
         </Col>
         <Col xl={12} lg={12} md={24}>
           <ProFormSelect width="md" name="icon" label="图标" showSearch options={iconOption} />

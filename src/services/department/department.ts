@@ -50,8 +50,6 @@ export async function updateDepartment(body: DepartmentForm, options?: Record<st
   });
 }
 
-
-
 /** 删除部门接口 DELETE /department */
 export async function deleteDepartments(body?: (number | undefined)[], options?: Record<string, any>) {
   return request<number[]>('/hrs-api/department', {
@@ -64,3 +62,22 @@ export async function deleteDepartments(body?: (number | undefined)[], options?:
   });
 }
 
+/** 删除部门接口 DELETE /department/${departmentId} */
+export async function deleteDepartment(departmentId: number, options?: Record<string, any>,) {
+  return request<number>(`/hrs-api/department/${departmentId}`, {
+    method: 'DELETE',
+    ...(options || {}),
+  });
+}
+
+/** 批量删除部门接口 DELETE /department */
+export async function batchDeleteDepartment(body?: (number | undefined)[], options?: Record<string, any>) {
+  return request<number[]>('/hrs-api/department', {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

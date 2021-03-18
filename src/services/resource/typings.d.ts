@@ -1,3 +1,5 @@
+import {RoleVO} from "@/services/role/typings";
+
 export type ResourceForm = {
   /** 主键ID */
   id: number;
@@ -30,19 +32,21 @@ export type ResourceVO = {
   pid?: number;
   /** 排序等级 */
   priority?: number;
-  /** 支持Get请求 */
-  supportGet?: boolean;
-  /** 支持Post请求 */
-  supportPost?: boolean;
-  /** 支持Put请求 */
-  supportPut?: boolean;
-  /** 支持Delete请求 */
-  supportDelete?: boolean;
-  /** 支持Patch请求 */
-  supportPatch?: boolean;
+  // /** 支持Get请求 */
+  // supportGet?: boolean;
+  // /** 支持Post请求 */
+  // supportPost?: boolean;
+  // /** 支持Put请求 */
+  // supportPut?: boolean;
+  // /** 支持Delete请求 */
+  // supportDelete?: boolean;
+  // /** 支持Patch请求 */
+  // supportPatch?: boolean;
   /** 资源描述 */
   description?: string;
+  /** 关联角色 */
   roles?: RoleVO[];
+  /** 下级资源 */
   children?: ResourceVO[];
   /** 创建人 */
   createdBy?: number;

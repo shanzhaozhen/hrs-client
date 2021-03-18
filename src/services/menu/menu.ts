@@ -12,7 +12,7 @@ export async function getAllMenu(options?: Record<string, any>) {
 }
 
 /** 获取所有菜单信息（树状结构） GET /menu/tree */
-export async function getAllMenuTree(options?: Record<string, any>) {
+export async function getMenuTree(options?: Record<string, any>) {
   return request<MenuVO[]>('/hrs-api/menu/tree', {
     method: 'GET',
     ...(options || {}),
@@ -52,9 +52,21 @@ export async function getMenuByMenuId(menuId: number, options?: Record<string, a
 }
 
 /** 删除菜单接口 DELETE /menu/${menuId} */
-export async function deleteMenu(menuId: (number | undefined)[], options?: Record<string, any>) {
+export async function deleteMenu(menuId: number, options?: Record<string, any>) {
   return request<number>(`/hrs-api/menu/${menuId}`, {
     method: 'DELETE',
+    ...(options || {}),
+  });
+}
+
+/** 批量删除菜单接口 DELETE /menu */
+export async function batchDeleteMenu(body?: (number | undefined)[], options?: Record<string, any>) {
+  return request<number[]>('/hrs-api/menu', {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
     ...(options || {}),
   });
 }

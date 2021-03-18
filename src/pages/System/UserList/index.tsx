@@ -1,35 +1,16 @@
 import React, { useState, useRef } from 'react';
-import { PlusOutlined } from '@ant-design/icons';
-import { Button, message, Input, Drawer, Space, Tag } from 'antd';
+import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { Button, message, Input, Drawer, Space, Tag, Modal } from 'antd';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
-import { deleteUser, getUserByUserId, getUserPage } from '@/services/user/user';
+import { batchDeleteUser, getUserByUserId, getUserPage } from '@/services/user/user';
 import type { UserVO } from '@/services/user/typings';
 import type { UserForm } from '@/services/user/typings';
-import {getSortOrder} from "@/utils/common";
-
-/**
- *  删除用户
- * @param selectedRows
- */
-const handleDelete = async (selectedRows: UserVO[]) => {
-  const hide = message.loading('正在删除');
-  if (!selectedRows) return true;
-  try {
-    await deleteUser(selectedRows.map((row) => row.id));
-    hide();
-    message.success('删除成功，即将刷新');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('删除失败，请重试');
-    return false;
-  }
-};
+import { getSortOrder } from "@/utils/common";
 
 const UserList: React.FC = () => {
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
@@ -38,6 +19,38 @@ const UserList: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const [row, setRow] = useState<UserVO>();
   const [selectedRowsState, setSelectedRows] = useState<UserVO[]>([]);
+
+  /**
+   *  删除用户
+   * @param selectedRows
+   */
+  const handleDelete = async (selectedRows: UserVO[]) => {
+    Modal.confirm({
+      title: '确认',
+      icon: <ExclamationCircleOutlined />,
+      content: '确定批量删除勾选中的用户吗',
+      okText: '确认',
+      cancelText: '取消',
+      onOk: async () => {
+        const hide = message.loading('正在删除');
+        if (!selectedRows) return true;
+        try {
+          await batchDeleteUser(selectedRows.map((selectedRow) => selectedRow.id));
+          hide();
+          message.success('删除成功，即将刷新');
+          setSelectedRows([]);
+          actionRef.current?.reloadAndRest?.();
+          return true;
+        } catch (error) {
+          hide();
+          message.error('删除失败，请重试');
+          return false;
+        }
+      },
+    });
+
+
+  };
 
   const columns: ProColumns<UserVO>[] = [
     {
@@ -236,8 +249,6 @@ const UserList: React.FC = () => {
           <Button
             onClick={async () => {
               await handleDelete(selectedRowsState);
-              setSelectedRows([]);
-              actionRef.current?.reloadAndRest?.();
             }}
           >
             批量删除

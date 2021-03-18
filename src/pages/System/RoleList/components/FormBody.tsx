@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Form, Row } from 'antd';
 import { ProFormText, ProFormTextArea } from '@ant-design/pro-form';
-import { getAllMenuTree } from '@/services/menu/menu';
+import { getMenuTree } from '@/services/menu/menu';
 import type { MenuVO } from '@/services/menu/typings';
 import FormTree from '@/components/FormTree';
 import { getAllResourceTree } from '@/services/resource/resource';
@@ -22,7 +22,7 @@ const FormBody: React.FC<FormProps> = () => {
   const [resourceTree, setResourcesTree] = useState<[]>();
 
   useEffect(() => {
-    getAllMenuTree()
+    getMenuTree()
       .then((res) => {
         if (res) {
           setMenuTree(loopMenuData(res));

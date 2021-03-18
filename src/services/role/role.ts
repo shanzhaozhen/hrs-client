@@ -16,6 +16,14 @@ export async function getRolePage(pageParams: PageParams, orders?: Orders | unde
   });
 }
 
+/** 获取所有角色 GET /role/all */
+export async function getAllRoles(options?: Record<string, any>) {
+  return request<RoleVO[]>('/hrs-api/role/all', {
+    method: 'GET',
+    ...(options || {}),
+  });
+}
+
 /** 获取角色信息（通过角色id） GET /role/${roleId} */
 export async function getRoleByRoleId(roleId: number, options?: Record<string, any>) {
   return request<RoleVO>(`/hrs-api/role/${roleId}`, {
@@ -48,19 +56,22 @@ export async function updateRole(roleForm: RoleForm, options?: Record<string, an
   });
 }
 
-/** 删除角色接口 DELETE /role/${param0} */
-export async function deleteRoles(roleIds: (number | undefined)[], options?: Record<string, any>) {
-  return request<number[]>(`/hrs-api/role/${roleIds}`, {
+/** 删除角色接口 DELETE /role/${roleId} */
+export async function deleteRole(roleId: number, options?: Record<string, any>) {
+  return request<number>(`/hrs-api/role/${roleId}`, {
     method: 'DELETE',
-    data: roleIds,
     ...(options || {}),
   });
 }
 
-/** 获取所有角色 GET /role/all */
-export async function getAllRoles(options?: Record<string, any>) {
-  return request<RoleVO[]>('/hrs-api/role/all', {
-    method: 'GET',
+/** 批量删除角色接口 DELETE /role */
+export async function batchDeleteRole(body?: (number | undefined)[], options?: Record<string, any>) {
+  return request<number[]>('/hrs-api/role', {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
     ...(options || {}),
   });
 }

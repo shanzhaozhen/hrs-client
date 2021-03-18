@@ -18,12 +18,12 @@ const FormTree: React.FC<FormTreeProps> = (props) => {
     onChange?.(changeValue);
   };
 
-  const loopMenuTreeCheck = (children: any[]): number[] => {
+  const loopTreeCheck = (children: any[]): number[] => {
     let closeNode: number[] = [];
     if (children) {
       children.forEach((item: any) => {
         closeNode.push(item.key);
-        const tmp = loopMenuTreeCheck(item.children);
+        const tmp = loopTreeCheck(item.children);
         closeNode = closeNode.concat(tmp);
       });
     }
@@ -65,7 +65,7 @@ const FormTree: React.FC<FormTreeProps> = (props) => {
         values = [...new Set(values.concat(parentKeys))];
       } else {
         // 取消父节点同时取消子节点
-        const closeNode = loopMenuTreeCheck(info.node.children);
+        const closeNode = loopTreeCheck(info.node.children);
         values = values.filter((item: number) => closeNode.indexOf(item) === -1);
       }
     }
@@ -75,15 +75,13 @@ const FormTree: React.FC<FormTreeProps> = (props) => {
   };
 
   return (
-    <span>
-      <Tree
-        checkable
-        checkStrictly={checkStrictly}
-        onCheck={onCheck}
-        checkedKeys={treeCheckedKeys}
-        treeData={treeData}
-      />
-    </span>
+    <Tree
+      checkable
+      checkStrictly={checkStrictly}
+      onCheck={onCheck}
+      checkedKeys={treeCheckedKeys}
+      treeData={treeData}
+    />
   );
 };
 

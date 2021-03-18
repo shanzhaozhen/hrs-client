@@ -27,7 +27,7 @@ const FormBody: React.FC<FormProps> = () => {
             width="md"
             name="code"
             label="部门代码"
-            rules={[{ message: '请输入您的部门代码' }]}
+            placeholder="请输入您的部门代码"
           />
         </Col>
         <Col xl={12} lg={12} md={24}>
@@ -54,8 +54,6 @@ const FormBody: React.FC<FormProps> = () => {
               ({ getFieldValue }) => ({
                 validator: async (rule, value) => {
                   const menuId = getFieldValue('id');
-
-                  // 编辑状态时，如果密码为空不进行校验
                   if (value && value === menuId) {
                     throw new Error('上级部门不能选择自己');
                   }

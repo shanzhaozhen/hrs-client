@@ -7,11 +7,7 @@ import ProTable from '@ant-design/pro-table';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
-import {
-  deleteResources,
-  getResourceByResourceId,
-  getAllResourceTree,
-} from '@/services/resource/resource';
+import { getResourceByResourceId, getAllResourceTree, batchDeleteResource } from '@/services/resource/resource';
 import type { ResourceVO } from '@/services/resource/typings';
 import type { ResourceForm } from '@/services/resource/typings';
 
@@ -23,7 +19,7 @@ const handleDelete = async (selectedRows: ResourceVO[]) => {
   const hide = message.loading('正在删除');
   if (!selectedRows) return true;
   try {
-    await deleteResources(selectedRows.map((row) => row.id));
+    await batchDeleteResource(selectedRows.map((row) => row.id));
     hide();
     message.success('删除成功，即将刷新');
     return true;

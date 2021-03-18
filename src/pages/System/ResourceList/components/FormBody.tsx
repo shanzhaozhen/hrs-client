@@ -1,14 +1,41 @@
-import React from 'react';
-import { Col, Row } from 'antd';
+import React, {useEffect, useState} from 'react';
+import {Col, Form, Row} from 'antd';
 import { ProFormDigit, ProFormSelect, ProFormText } from '@ant-design/pro-form';
 import type { MenuVO } from '@/services/menu/typings';
 import { getAllResourceRootTree } from '@/services/resource/resource';
+import FormTreeSelect from "@/components/FormTreeSelect";
+import {getMenuTree} from "@/services/menu/menu";
+import {ResourceVO} from "@/services/resource/typings";
 
 interface FormProps {
   isEdit?: boolean;
 }
 
 const FormBody: React.FC<FormProps> = () => {
+  const [resourceTree, setResourceTree] = useState<[]>();
+
+  const loopResourceData = (resourceData: ResourceVO[]): any =>
+    resourceData.map(({ id, name, path, children }) => ({
+      title: name + (path ? `(${path})` : ''),
+      value: id,
+      children: children && loopResourceData(children),
+    }));
+
+  useEffect(() => {
+    getMenuTree()
+      .then((res) => {
+        if (res) {
+          setResourceTree(loopResourceData(res));
+        } else {
+          setResourceTree([]);
+        }
+      })
+      .catch(() => {
+        setResourceTree([]);
+      });
+  }, []);
+
+
   return (
     <>
       <Row gutter={24}>
@@ -39,6 +66,22 @@ const FormBody: React.FC<FormProps> = () => {
           <ProFormText width="md" name="path" label="资源路由" />
         </Col>
         <Col xl={12} lg={12} md={24}>
+          <Form.Item
+            name="pid"
+            label="上级资源"
+            rules={[
+              ({ getFieldValue }) => ({
+                validator: async (rule, value) => {
+                  const menuId = getFieldValue('id');
+                  if (value && value === menuId) {
+                    throw new Error('上级资源不能选择自己');
+                  }
+                },
+              }),
+            ]}
+          >
+            <FormTreeSelect treeData={resourceTree} />
+          </Form.Item>
           <ProFormSelect
             width="md"
             name="pid"
@@ -62,7 +105,6 @@ const FormBody: React.FC<FormProps> = () => {
               ({ getFieldValue }) => ({
                 validator: async (rule, value) => {
                   const resourceId = getFieldValue('id');
-                  // 编辑状态时，如果密码为空不进行校验
                   if (value && value === resourceId) {
                     throw new Error('上级路由不能选择自己');
                   }

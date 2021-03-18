@@ -23,6 +23,14 @@ export async function getUserPage(pageParams: PageParams, orders?: Orders | unde
   });
 }
 
+/** 获取用户信息（通过用户id） GET /user/${userId} */
+export async function getUserByUserId(userId: number, options?: Record<string, any>) {
+  return request<UserVO>(`/hrs-api/user/${userId}`, {
+    method: 'GET',
+    ...(options || {}),
+  });
+}
+
 /** 添加用户接口 POST /user */
 export async function addUser(userForm: UserForm, options?: Record<string, any>) {
   return request<number>('/hrs-api/user', {
@@ -31,14 +39,6 @@ export async function addUser(userForm: UserForm, options?: Record<string, any>)
       'Content-Type': 'application/json',
     },
     data: userForm,
-    ...(options || {}),
-  });
-}
-
-/** 删除用户接口 DELETE /user/${userId} */
-export async function deleteUser(userId: (number | undefined)[], options?: Record<string, any>) {
-  return request<number>(`/hrs-api/user/${userId}`, {
-    method: 'DELETE',
     ...(options || {}),
   });
 }
@@ -55,11 +55,22 @@ export async function updateUser(userForm: UserForm, options?: Record<string, an
   });
 }
 
-/** 获取用户信息（通过用户id） GET /user/${userId} */
-export async function getUserByUserId(userId: number, options?: Record<string, any>) {
-  return request<UserVO>(`/hrs-api/user/${userId}`, {
-    method: 'GET',
+/** 删除用户接口 DELETE /user/${userId} */
+export async function deleteUser(userId: number, options?: Record<string, any>,) {
+  return request<number>(`/hrs-api/user/${userId}`, {
+    method: 'DELETE',
     ...(options || {}),
   });
 }
 
+/** 批量删除用户接口 DELETE /user */
+export async function batchDeleteUser(body?: (number | undefined)[], options?: Record<string, any>) {
+  return request<number[]>('/hrs-api/user', {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

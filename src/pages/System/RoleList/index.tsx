@@ -7,7 +7,7 @@ import ProTable from '@ant-design/pro-table';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
-import { deleteRoles, getRoleByRoleId, getRolePage } from '@/services/role/role';
+import { batchDeleteRole, getRoleByRoleId, getRolePage } from '@/services/role/role';
 import type { RoleVO } from '@/services/role/typings';
 import type { RoleForm } from '@/services/role/typings';
 import UserRoleList from '@/pages/System/UserRoleList';
@@ -21,7 +21,7 @@ const handleDelete = async (selectedRows: RoleVO[]) => {
   const hide = message.loading('正在删除');
   if (!selectedRows) return true;
   try {
-    await deleteRoles(selectedRows.map((row) => row.id));
+    await batchDeleteRole(selectedRows.map((row) => row.id));
     hide();
     message.success('删除成功，即将刷新');
     return true;

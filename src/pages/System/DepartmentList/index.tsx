@@ -7,7 +7,7 @@ import ProTable from '@ant-design/pro-table';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
-import {deleteDepartments, getDepartmentByDepartmentId, getDepartmentTree} from '@/services/department/department';
+import { batchDeleteDepartment, getDepartmentByDepartmentId, getDepartmentTree } from '@/services/department/department';
 import type { DepartmentVO } from '@/services/department/typings';
 import type { DepartmentForm } from '@/services/department/typings';
 
@@ -19,7 +19,7 @@ const handleDelete = async (selectedRows: DepartmentVO[]) => {
   const hide = message.loading('正在删除');
   if (!selectedRows) return true;
   try {
-    await deleteDepartments(selectedRows.map((row) => row.id));
+    await batchDeleteDepartment(selectedRows.map((row) => row.id));
     hide();
     message.success('删除成功，即将刷新');
     return true;

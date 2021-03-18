@@ -1,5 +1,5 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, message, Input, Drawer, Space } from 'antd';
+import {Button, message, Input, Drawer, Space, Divider, Popconfirm} from 'antd';
 import React, { useState, useRef } from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
@@ -7,7 +7,7 @@ import ProTable from '@ant-design/pro-table';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
-import { deleteMenu, getMenuByMenuId, getAllMenuTree } from '@/services/menu/menu';
+import {batchDeleteMenu, deleteMenu, getMenuByMenuId, getMenuTree} from '@/services/menu/menu';
 import type { MenuVO } from '@/services/menu/typings';
 import type { MenuForm } from '@/services/menu/typings';
 import * as iconMap from '@ant-design/icons';
@@ -20,7 +20,7 @@ const handleDelete = async (selectedRows: MenuVO[]) => {
   const hide = message.loading('正在删除');
   if (!selectedRows) return true;
   try {
-    await deleteMenu(selectedRows.map((row) => row.id));
+    await batchDeleteMenu(selectedRows.map((row) => row.id));
     hide();
     message.success('删除成功，即将刷新');
     return true;
@@ -50,11 +50,6 @@ const MenuList: React.FC = () => {
         return <Input placeholder="请输入关键字" />;
       },
     },
-    // {
-    //   dataIndex: 'index',
-    //   valueType: 'indexBorder',
-    //   width: 48,
-    // },
     {
       title: '菜单名称',
       dataIndex: 'name',
@@ -148,8 +143,27 @@ const MenuList: React.FC = () => {
           >
             修改
           </a>
-          {/* <Divider type="vertical" /> */}
-          {/* <a href="">订阅警报</a> */}
+           <Divider type="vertical" />
+          <Popconfirm
+            title="确定删除该菜单节点?"
+            onConfirm={async () => {
+              if (record && record.id) {
+                if (record.children && record.children.length > 0) {
+                  message.warn('该菜单节点存在子节点，删除已被拒绝');
+                  return;
+                }
+                await deleteMenu(record.id);
+                message.success('删除成功！');
+                actionRef.current?.reloadAndRest?.();
+              } else {
+                message.warn('没有选中有效的菜单');
+              }
+            }}
+            okText="确定"
+            cancelText="取消"
+          >
+            <a href="#">删除</a>
+          </Popconfirm>
         </>
       ),
     },
@@ -170,7 +184,7 @@ const MenuList: React.FC = () => {
           </Button>,
         ]}
         request={async () => {
-          const data = await getAllMenuTree();
+          const data = await getMenuTree();
           return {
             // success 请返回 true，
             // 不然 table 会停止解析数据，即使有数据

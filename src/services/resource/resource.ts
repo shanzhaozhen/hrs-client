@@ -50,14 +50,22 @@ export async function updateResource(body: ResourceForm, options?: Record<string
   });
 }
 
-/** 资源删除接口 DELETE /resource/${param0} */
-export async function deleteResources(
-  resourceIds: (number | undefined)[],
-  options?: Record<string, any>,
-) {
-  return request<number[]>(`/hrs-api/resource`, {
+/** 资源删除接口 DELETE /resource/${resourceId} */
+export async function deleteResource(resourceId: number, options?: Record<string, any>) {
+  return request<number>(`/hrs-api/resource/${resourceId}`, {
     method: 'DELETE',
-    data: resourceIds,
+    ...(options || {}),
+  });
+}
+
+/** 批量资源删除接口 DELETE /resource */
+export async function batchDeleteResource(body?: (number | undefined)[], options?: Record<string, any>) {
+  return request<number[]>('/hrs-api/resource', {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
     ...(options || {}),
   });
 }
