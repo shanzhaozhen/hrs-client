@@ -3,7 +3,7 @@ import { request } from 'umi';
 import type { ResourceForm, ResourceVO } from '@/services/resource/typings';
 
 /** 获取所有资源（树状结构） GET /resource/tree */
-export async function getAllResourceTree(options?: Record<string, any>) {
+export async function getResourceTree(options?: Record<string, any>) {
   return request<ResourceVO[]>('/hrs-api/resource/tree', {
     method: 'GET',
     ...(options || {}),

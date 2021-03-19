@@ -4,7 +4,7 @@ import { ProFormText, ProFormTextArea } from '@ant-design/pro-form';
 import { getMenuTree } from '@/services/menu/menu';
 import type { MenuVO } from '@/services/menu/typings';
 import FormTree from '@/components/FormTree';
-import { getAllResourceTree } from '@/services/resource/resource';
+import { getResourceTree } from '@/services/resource/resource';
 
 interface FormProps {
   isEdit?: boolean;
@@ -34,7 +34,7 @@ const FormBody: React.FC<FormProps> = () => {
         setMenuTree([]);
       });
 
-    getAllResourceTree()
+    getResourceTree()
       .then((res) => {
         if (res) {
           setResourcesTree(loopMenuData(res));

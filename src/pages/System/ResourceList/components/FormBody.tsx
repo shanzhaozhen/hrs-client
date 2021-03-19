@@ -1,11 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {Col, Form, Row} from 'antd';
+import { Col, Form, Row } from 'antd';
 import { ProFormDigit, ProFormSelect, ProFormText } from '@ant-design/pro-form';
-import type { MenuVO } from '@/services/menu/typings';
-import { getAllResourceRootTree } from '@/services/resource/resource';
+import { getResourceTree } from '@/services/resource/resource';
 import FormTreeSelect from "@/components/FormTreeSelect";
-import {getMenuTree} from "@/services/menu/menu";
-import {ResourceVO} from "@/services/resource/typings";
+import type { ResourceVO } from "@/services/resource/typings";
 
 interface FormProps {
   isEdit?: boolean;
@@ -22,7 +20,7 @@ const FormBody: React.FC<FormProps> = () => {
     }));
 
   useEffect(() => {
-    getMenuTree()
+    getResourceTree()
       .then((res) => {
         if (res) {
           setResourceTree(loopResourceData(res));
@@ -63,7 +61,17 @@ const FormBody: React.FC<FormProps> = () => {
           />
         </Col>
         <Col xl={12} lg={12} md={24}>
-          <ProFormText width="md" name="path" label="资源路由" />
+          <ProFormText
+            width="md"
+            name="path"
+            label="资源路由"
+            rules={[
+              ({ getFieldValue }) => ({
+                required: getFieldValue('type') === 1,
+                message: '请输入资源路由'
+              }),
+            ]}
+          />
         </Col>
         <Col xl={12} lg={12} md={24}>
           <Form.Item
@@ -82,36 +90,6 @@ const FormBody: React.FC<FormProps> = () => {
           >
             <FormTreeSelect treeData={resourceTree} />
           </Form.Item>
-          <ProFormSelect
-            width="md"
-            name="pid"
-            label="上级路由"
-            params={{}}
-            showSearch={false}
-            placeholder="请选择上级路由"
-            request={async () => {
-              const data = await getAllResourceRootTree();
-              if (data) {
-                return data.map((item: MenuVO) => {
-                  return {
-                    label: item.name + (item.path ? `(${item.path})` : ''),
-                    value: item.id,
-                  };
-                });
-              }
-              return [];
-            }}
-            rules={[
-              ({ getFieldValue }) => ({
-                validator: async (rule, value) => {
-                  const resourceId = getFieldValue('id');
-                  if (value && value === resourceId) {
-                    throw new Error('上级路由不能选择自己');
-                  }
-                },
-              }),
-            ]}
-          />
         </Col>
         <Col xl={12} lg={12} md={24}>
           <ProFormDigit width="md" name="priority" label="排序等级" min={1} />

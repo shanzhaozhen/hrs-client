@@ -1,5 +1,5 @@
-import { PlusOutlined } from '@ant-design/icons';
-import { Button, message, Input, Drawer, Divider } from 'antd';
+import {ExclamationCircleOutlined, PlusOutlined} from '@ant-design/icons';
+import {Button, message, Input, Drawer, Divider, Popconfirm, Modal} from 'antd';
 import React, { useState, useRef } from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
@@ -7,39 +7,49 @@ import ProTable from '@ant-design/pro-table';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
-import { batchDeleteRole, getRoleByRoleId, getRolePage } from '@/services/role/role';
+import { batchDeleteRole, deleteRole, getRoleByRoleId, getRolePage } from '@/services/role/role';
 import type { RoleVO } from '@/services/role/typings';
 import type { RoleForm } from '@/services/role/typings';
-import UserRoleList from '@/pages/System/UserRoleList';
+import UserRelateList from '@/pages/System/UserRelateList';
 import {getSortOrder} from "@/utils/common";
-
-/**
- *  删除角色
- * @param selectedRows
- */
-const handleDelete = async (selectedRows: RoleVO[]) => {
-  const hide = message.loading('正在删除');
-  if (!selectedRows) return true;
-  try {
-    await batchDeleteRole(selectedRows.map((row) => row.id));
-    hide();
-    message.success('删除成功，即将刷新');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('删除失败，请重试');
-    return false;
-  }
-};
 
 const RoleList: React.FC = () => {
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-  const [userRoleListVisible, handleUserRoleListVisible] = useState<boolean>(false);
+  const [userRelateListVisible, handleUserRelateListVisible] = useState<boolean>(false);
   const [updateFormValues, setUpdateFormValues] = useState({});
   const actionRef = useRef<ActionType>();
   const [row, setRow] = useState<RoleVO>();
   const [selectedRowsState, setSelectedRows] = useState<RoleVO[]>([]);
+
+  /**
+   * 删除角色
+   */
+  const handleDelete = () => {
+    Modal.confirm({
+      title: '确认',
+      icon: <ExclamationCircleOutlined />,
+      content: '确定批量删除勾选中的用户吗',
+      okText: '确认',
+      cancelText: '取消',
+      onOk: async () => {
+        const hide = message.loading('正在删除');
+        if (!selectedRowsState) return true;
+        try {
+          await batchDeleteRole(selectedRowsState.map((selectedRow) => selectedRow.id));
+          hide();
+          message.success('删除成功，即将刷新');
+          setSelectedRows([]);
+          actionRef.current?.reloadAndRest?.();
+          return true;
+        } catch (error) {
+          hide();
+          message.error('删除失败，请重试');
+          return false;
+        }
+      },
+    });
+  };
 
   const columns: ProColumns<RoleVO>[] = [
     {
@@ -125,7 +135,7 @@ const RoleList: React.FC = () => {
             onClick={async () => {
               if (record && record.id) {
                 setUpdateFormValues(record);
-                handleUserRoleListVisible(true);
+                handleUserRelateListVisible(true);
                 // message.error(res.message || `没有获取到角色信息（id:${record.id}）`);
               } else {
                 message.warn('没有选中有效的角色');
@@ -134,6 +144,23 @@ const RoleList: React.FC = () => {
           >
             分配角色
           </a>
+          <Divider type="vertical" />
+          <Popconfirm
+            title="确定删除该角色节点?"
+            onConfirm={async () => {
+              if (record && record.id) {
+                await deleteRole(record.id);
+                message.success('删除成功！');
+                actionRef.current?.reloadAndRest?.();
+              } else {
+                message.warn('没有选中有效的角色');
+              }
+            }}
+            okText="确定"
+            cancelText="取消"
+          >
+            <a href="#">删除</a>
+          </Popconfirm>
         </>
       ),
     },
@@ -177,15 +204,7 @@ const RoleList: React.FC = () => {
             </div>
           }
         >
-          <Button
-            onClick={async () => {
-              await handleDelete(selectedRowsState);
-              setSelectedRows([]);
-              actionRef.current?.reloadAndRest?.();
-            }}
-          >
-            批量删除
-          </Button>
+          <Button onClick={handleDelete}>批量删除</Button>
         </FooterToolbar>
       )}
       <CreateForm
@@ -203,12 +222,12 @@ const RoleList: React.FC = () => {
         />
       ) : null}
       {updateFormValues && Object.keys(updateFormValues).length ? (
-        <UserRoleList
-          userRoleListVisible={userRoleListVisible}
-          handleUserRoleListVisible={handleUserRoleListVisible}
+        <UserRelateList
+          userRelateListVisible={userRelateListVisible}
+          handleUserRelateListVisible={handleUserRelateListVisible}
           onCancel={() => {
             setUpdateFormValues({});
-            handleUserRoleListVisible(false);
+            handleUserRelateListVisible(false);
           }}
           tableActionRef={actionRef}
           values={updateFormValues}

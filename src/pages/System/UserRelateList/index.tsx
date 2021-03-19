@@ -1,32 +1,32 @@
 import React, { useRef, useState } from 'react';
 import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
-import { Button, Divider, Drawer, Input, message } from 'antd';
+import {Button, Divider, Drawer, Input, message, Modal} from 'antd';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import type { UserForm, UserVO } from '@/services/user/typings';
 import { getUserByUserId } from '@/services/user/user';
 import { FooterToolbar } from '@ant-design/pro-layout';
-import { PlusOutlined } from '@ant-design/icons';
+import {ExclamationCircleOutlined, PlusOutlined} from '@ant-design/icons';
 import UpdateForm from '@/pages/System/UserList/components/UpdateForm';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from '@/pages/System/UserList/components/CreateForm';
 import type { RoleVO } from "@/services/role/typings";
 import { getSortOrder } from "@/utils/common";
-import CheckBoxUser from "@/pages/System/UserRoleList/components/CheckBoxUser";
+import CheckBoxUser from "@/pages/System/UserRelateList/components/CheckBoxUser";
 import { deleteUserRoles, getUserRolePage } from "@/services/user-role/user";
 
-interface UserRoleListProps {
-  userRoleListVisible: boolean;
-  handleUserRoleListVisible: Dispatch<SetStateAction<boolean>>;
+interface UserRelateListProps {
+  userRelateListVisible: boolean;
+  handleUserRelateListVisible: Dispatch<SetStateAction<boolean>>;
   tableActionRef: MutableRefObject<ActionType | undefined>;
   onCancel: () => void;
   values: RoleVO;
 }
 
 
-const UserRoleList: React.FC<UserRoleListProps> = (props) => {
-  const { userRoleListVisible,
-    // handleUserRoleListVisible,
+const UserRelateList: React.FC<UserRelateListProps> = (props) => {
+  const { userRelateListVisible,
+    // handleUserRelateListVisible,
     onCancel, values } = props;
 
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
@@ -40,24 +40,34 @@ const UserRoleList: React.FC<UserRoleListProps> = (props) => {
 
   /**
    *  删除用户角色
-   * @param selectedRows
    */
-  const handleDeleteUserRole = async (selectedRows: UserVO[]) => {
-    const hide = message.loading('正在删除');
-    if (!selectedRows) return true;
-    try {
-      await deleteUserRoles({
-        userIds: selectedRows.map((selectedRow) => selectedRow.id) || [],
-        roleId: values.id
-      });
-      hide();
-      message.success('删除成功，即将刷新');
-      return true;
-    } catch (error) {
-      hide();
-      message.error('删除失败，请重试');
-      return false;
-    }
+  const handleDeleteUserRole = () => {
+    Modal.confirm({
+      title: '确认',
+      icon: <ExclamationCircleOutlined/>,
+      content: '确定批量删除勾选中的用户吗',
+      okText: '确认',
+      cancelText: '取消',
+      onOk: async () => {
+        const hide = message.loading('正在删除');
+        if (!selectedRowsState) return true;
+        try {
+          await deleteUserRoles({
+            userIds: selectedRowsState.map((selectedRow) => selectedRow.id) || [],
+            roleId: values.id
+          });
+          hide();
+          message.success('删除成功，即将刷新');
+          setSelectedRows([]);
+          actionRef.current?.reloadAndRest?.();
+          return true;
+        } catch (error) {
+          hide();
+          message.error('删除失败，请重试');
+          return false;
+        }
+      },
+    });
   };
 
 
@@ -126,19 +136,7 @@ const UserRoleList: React.FC<UserRoleListProps> = (props) => {
             修改
           </a>
           <Divider type="vertical" />
-          <a
-            onClick={async () => {
-              if (record && record.id) {
-                await handleDeleteUserRole([record]);
-                setSelectedRows([]);
-                actionRef.current?.reloadAndRest?.();
-              } else {
-                message.warn('没有选中有效的用户');
-              }
-            }}
-          >
-            取消关联
-          </a>
+          <a onClick={handleDeleteUserRole}>取消关联</a>
         </>
       ),
     },
@@ -151,7 +149,7 @@ const UserRoleList: React.FC<UserRoleListProps> = (props) => {
       width={820}
       zIndex={500}
       onClose={onCancel}
-      visible={userRoleListVisible}
+      visible={userRelateListVisible}
     >
       <ProTable<UserVO>
         actionRef={actionRef}
@@ -195,15 +193,7 @@ const UserRoleList: React.FC<UserRoleListProps> = (props) => {
             </div>
           }
         >
-          <Button
-            onClick={async () => {
-              await handleDeleteUserRole(selectedRowsState);
-              setSelectedRows([]);
-              actionRef.current?.reloadAndRest?.();
-            }}
-          >
-            批量删除
-          </Button>
+          <Button onClick={handleDeleteUserRole}>批量删除</Button>
         </FooterToolbar>
       )}
       <CreateForm
@@ -253,4 +243,4 @@ const UserRoleList: React.FC<UserRoleListProps> = (props) => {
   );
 };
 
-export default UserRoleList;
+export default UserRelateList;

@@ -1,5 +1,5 @@
-import { PlusOutlined } from '@ant-design/icons';
-import {Button, message, Input, Drawer, Space, Divider, Popconfirm} from 'antd';
+import {ExclamationCircleOutlined, PlusOutlined} from '@ant-design/icons';
+import {Button, message, Input, Drawer, Space, Divider, Popconfirm, Modal} from 'antd';
 import React, { useState, useRef } from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
@@ -12,25 +12,6 @@ import type { MenuVO } from '@/services/menu/typings';
 import type { MenuForm } from '@/services/menu/typings';
 import * as iconMap from '@ant-design/icons';
 
-/**
- *  删除菜单
- * @param selectedRows
- */
-const handleDelete = async (selectedRows: MenuVO[]) => {
-  const hide = message.loading('正在删除');
-  if (!selectedRows) return true;
-  try {
-    await batchDeleteMenu(selectedRows.map((row) => row.id));
-    hide();
-    message.success('删除成功，即将刷新');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('删除失败，请重试');
-    return false;
-  }
-};
-
 const MenuList: React.FC = () => {
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
@@ -38,6 +19,35 @@ const MenuList: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const [row, setRow] = useState<MenuVO>();
   const [selectedRowsState, setSelectedRows] = useState<MenuVO[]>([]);
+
+  /**
+   *  删除菜单
+   */
+  const handleDelete = () => {
+    Modal.confirm({
+      title: '确认',
+      icon: <ExclamationCircleOutlined/>,
+      content: '确定批量删除勾选中的用户吗',
+      okText: '确认',
+      cancelText: '取消',
+      onOk: async () => {
+        const hide = message.loading('正在删除');
+        if (!selectedRowsState) return true;
+        try {
+          await batchDeleteMenu(selectedRowsState.map((selectedRow) => selectedRow.id));
+          hide();
+          message.success('删除成功，即将刷新');
+          setSelectedRows([]);
+          actionRef.current?.reloadAndRest?.();
+          return true;
+        } catch (error) {
+          hide();
+          message.error('删除失败，请重试');
+          return false;
+        }
+      },
+    });
+  };
 
   const columns: ProColumns<MenuVO>[] = [
     {
@@ -143,7 +153,7 @@ const MenuList: React.FC = () => {
           >
             修改
           </a>
-           <Divider type="vertical" />
+          <Divider type="vertical" />
           <Popconfirm
             title="确定删除该菜单节点?"
             onConfirm={async () => {
@@ -207,15 +217,7 @@ const MenuList: React.FC = () => {
             </div>
           }
         >
-          <Button
-            onClick={async () => {
-              await handleDelete(selectedRowsState);
-              setSelectedRows([]);
-              actionRef.current?.reloadAndRest?.();
-            }}
-          >
-            批量删除
-          </Button>
+        <Button onClick={handleDelete}>批量删除</Button>
         </FooterToolbar>
       )}
       <CreateForm

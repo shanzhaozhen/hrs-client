@@ -1,5 +1,5 @@
-import { PlusOutlined } from '@ant-design/icons';
-import { Button, message, Input, Drawer, Tag, Space } from 'antd';
+import {ExclamationCircleOutlined, PlusOutlined} from '@ant-design/icons';
+import {Button, message, Input, Drawer, Tag, Space, Popconfirm, Divider, Modal} from 'antd';
 import React, { useState, useRef } from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
@@ -7,28 +7,9 @@ import ProTable from '@ant-design/pro-table';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
-import { getResourceByResourceId, getAllResourceTree, batchDeleteResource } from '@/services/resource/resource';
+import { getResourceByResourceId, getResourceTree, batchDeleteResource, deleteResource } from '@/services/resource/resource';
 import type { ResourceVO } from '@/services/resource/typings';
 import type { ResourceForm } from '@/services/resource/typings';
-
-/**
- *  删除资源
- * @param selectedRows
- */
-const handleDelete = async (selectedRows: ResourceVO[]) => {
-  const hide = message.loading('正在删除');
-  if (!selectedRows) return true;
-  try {
-    await batchDeleteResource(selectedRows.map((row) => row.id));
-    hide();
-    message.success('删除成功，即将刷新');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('删除失败，请重试');
-    return false;
-  }
-};
 
 const ResourceList: React.FC = () => {
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
@@ -37,6 +18,36 @@ const ResourceList: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const [row, setRow] = useState<ResourceVO>();
   const [selectedRowsState, setSelectedRows] = useState<ResourceVO[]>([]);
+
+  /**
+   *  删除资源
+   * @param selectedRows
+   */
+  const handleDelete = async () => {
+    Modal.confirm({
+      title: '确认',
+      icon: <ExclamationCircleOutlined />,
+      content: '确定批量删除勾选中的用户吗',
+      okText: '确认',
+      cancelText: '取消',
+      onOk: async () => {
+        const hide = message.loading('正在删除');
+        if (!selectedRowsState) return true;
+        try {
+          await batchDeleteResource(selectedRowsState.map((selectedRow) => selectedRow.id));
+          hide();
+          message.success('删除成功，即将刷新');
+          setSelectedRows([]);
+          actionRef.current?.reloadAndRest?.();
+          return true;
+        } catch (error) {
+          hide();
+          message.error('删除失败，请重试');
+          return false;
+        }
+      },
+    });
+  };
 
   const columns: ProColumns<ResourceVO>[] = [
     {
@@ -128,8 +139,27 @@ const ResourceList: React.FC = () => {
           >
             修改
           </a>
-          {/* <Divider type="vertical" /> */}
-          {/* <a href="">订阅警报</a> */}
+          <Divider type="vertical" />
+          <Popconfirm
+            title="确定删除该资源节点?"
+            onConfirm={async () => {
+              if (record && record.id) {
+                if (record.children && record.children.length > 0) {
+                  message.warn('该资源节点存在子节点，删除已被拒绝');
+                  return;
+                }
+                await deleteResource(record.id);
+                message.success('删除成功！');
+                actionRef.current?.reloadAndRest?.();
+              } else {
+                message.warn('没有选中有效的资源');
+              }
+            }}
+            okText="确定"
+            cancelText="取消"
+          >
+            <a href="#">删除</a>
+          </Popconfirm>
         </>
       ),
     },
@@ -150,7 +180,7 @@ const ResourceList: React.FC = () => {
           </Button>,
         ]}
         request={async (params) => {
-          const data = await getAllResourceTree(params);
+          const data = await getResourceTree(params);
           return {
             // success 请返回 true，
             // 不然 table 会停止解析数据，即使有数据
@@ -173,15 +203,7 @@ const ResourceList: React.FC = () => {
             </div>
           }
         >
-          <Button
-            onClick={async () => {
-              await handleDelete(selectedRowsState);
-              setSelectedRows([]);
-              actionRef.current?.reloadAndRest?.();
-            }}
-          >
-            批量删除
-          </Button>
+          <Button onClick={handleDelete}>批量删除</Button>
         </FooterToolbar>
       )}
       <CreateForm

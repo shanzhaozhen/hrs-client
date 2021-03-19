@@ -1,5 +1,5 @@
-import { PlusOutlined } from '@ant-design/icons';
-import { Button, message, Input, Drawer, Divider } from 'antd';
+import {ExclamationCircleOutlined, PlusOutlined} from '@ant-design/icons';
+import {Button, message, Input, Drawer, Divider, Modal, Popconfirm} from 'antd';
 import React, { useState, useRef } from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
@@ -7,28 +7,9 @@ import ProTable from '@ant-design/pro-table';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
-import { batchDeleteDepartment, getDepartmentByDepartmentId, getDepartmentTree } from '@/services/department/department';
+import { batchDeleteDepartment, deleteDepartment, getDepartmentByDepartmentId, getDepartmentTree } from '@/services/department/department';
 import type { DepartmentVO } from '@/services/department/typings';
 import type { DepartmentForm } from '@/services/department/typings';
-
-/**
- *  删除部门
- * @param selectedRows
- */
-const handleDelete = async (selectedRows: DepartmentVO[]) => {
-  const hide = message.loading('正在删除');
-  if (!selectedRows) return true;
-  try {
-    await batchDeleteDepartment(selectedRows.map((row) => row.id));
-    hide();
-    message.success('删除成功，即将刷新');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('删除失败，请重试');
-    return false;
-  }
-};
 
 const DepartmentList: React.FC = () => {
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
@@ -38,6 +19,35 @@ const DepartmentList: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const [row, setRow] = useState<DepartmentVO>();
   const [selectedRowsState, setSelectedRows] = useState<DepartmentVO[]>([]);
+
+  /**
+   *  删除部门
+   */
+  const handleDelete = () => {
+    Modal.confirm({
+      title: '确认',
+      icon: <ExclamationCircleOutlined/>,
+      content: '确定批量删除勾选中的用户吗',
+      okText: '确认',
+      cancelText: '取消',
+      onOk: async () => {
+        const hide = message.loading('正在删除');
+        if (!selectedRowsState) return true;
+        try {
+          await batchDeleteDepartment(selectedRowsState.map((selectedRow) => selectedRow.id));
+          hide();
+          message.success('删除成功，即将刷新');
+          setSelectedRows([]);
+          actionRef.current?.reloadAndRest?.();
+          return true;
+        } catch (error) {
+          hide();
+          message.error('删除失败，请重试');
+          return false;
+        }
+      },
+    });
+  };
 
   const columns: ProColumns<DepartmentVO>[] = [
     {
@@ -127,6 +137,23 @@ const DepartmentList: React.FC = () => {
           >
             分配部门
           </a>
+          <Divider type="vertical" />
+          <Popconfirm
+            title="确定删除该部门?"
+            onConfirm={async () => {
+              if (record && record.id) {
+                await deleteDepartment(record.id);
+                message.success('删除成功！');
+                actionRef.current?.reloadAndRest?.();
+              } else {
+                message.warn('没有选中有效的部门');
+              }
+            }}
+            okText="确定"
+            cancelText="取消"
+          >
+            <a href="#">删除</a>
+          </Popconfirm>
         </>
       ),
     },
@@ -170,15 +197,7 @@ const DepartmentList: React.FC = () => {
             </div>
           }
         >
-          <Button
-            onClick={async () => {
-              await handleDelete(selectedRowsState);
-              setSelectedRows([]);
-              actionRef.current?.reloadAndRest?.();
-            }}
-          >
-            批量删除
-          </Button>
+          <Button onClick={handleDelete}>批量删除</Button>
         </FooterToolbar>
       )}
       <CreateForm

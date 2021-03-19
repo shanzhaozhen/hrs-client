@@ -1,13 +1,13 @@
 import React, { useState, useRef } from 'react';
 import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, message, Input, Drawer, Space, Tag, Modal } from 'antd';
+import {Button, message, Input, Drawer, Space, Tag, Modal, Divider, Popconfirm} from 'antd';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
-import { batchDeleteUser, getUserByUserId, getUserPage } from '@/services/user/user';
+import {batchDeleteUser, deleteUser, getUserByUserId, getUserPage} from '@/services/user/user';
 import type { UserVO } from '@/services/user/typings';
 import type { UserForm } from '@/services/user/typings';
 import { getSortOrder } from "@/utils/common";
@@ -22,9 +22,8 @@ const UserList: React.FC = () => {
 
   /**
    *  删除用户
-   * @param selectedRows
    */
-  const handleDelete = async (selectedRows: UserVO[]) => {
+  const handleDelete = () => {
     Modal.confirm({
       title: '确认',
       icon: <ExclamationCircleOutlined />,
@@ -33,9 +32,9 @@ const UserList: React.FC = () => {
       cancelText: '取消',
       onOk: async () => {
         const hide = message.loading('正在删除');
-        if (!selectedRows) return true;
+        if (!selectedRowsState) return true;
         try {
-          await batchDeleteUser(selectedRows.map((selectedRow) => selectedRow.id));
+          await batchDeleteUser(selectedRowsState.map((selectedRow) => selectedRow.id));
           hide();
           message.success('删除成功，即将刷新');
           setSelectedRows([]);
@@ -48,8 +47,6 @@ const UserList: React.FC = () => {
         }
       },
     });
-
-
   };
 
   const columns: ProColumns<UserVO>[] = [
@@ -201,8 +198,23 @@ const UserList: React.FC = () => {
           >
             修改
           </a>
-          {/* <Divider type="vertical" /> */}
-          {/* <a href="">订阅警报</a> */}
+          <Divider type="vertical" />
+          <Popconfirm
+            title="确定删除该用户?"
+            onConfirm={async () => {
+              if (record && record.id) {
+                await deleteUser(record.id);
+                message.success('删除成功！');
+                actionRef.current?.reloadAndRest?.();
+              } else {
+                message.warn('没有选中有效的用户');
+              }
+            }}
+            okText="确定"
+            cancelText="取消"
+          >
+            <a href="#">删除</a>
+          </Popconfirm>
         </>
       ),
     },
@@ -246,13 +258,7 @@ const UserList: React.FC = () => {
             </div>
           }
         >
-          <Button
-            onClick={async () => {
-              await handleDelete(selectedRowsState);
-            }}
-          >
-            批量删除
-          </Button>
+          <Button onClick={handleDelete}>批量删除</Button>
         </FooterToolbar>
       )}
       <CreateForm
