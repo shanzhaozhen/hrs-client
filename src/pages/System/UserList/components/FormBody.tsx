@@ -1,15 +1,41 @@
-import React from 'react';
-import { Col, Row } from 'antd';
+import React, {useEffect, useState} from 'react';
+import {Col, Form, Row} from 'antd';
 import { ProFormSelect, ProFormSwitch, ProFormText } from '@ant-design/pro-form';
 import { getAllRoles } from '@/services/role/role';
 import type { RoleVO } from '@/services/role/typings';
+import { getDepartmentTree } from "@/services/department/department";
+import type { DepartmentVO } from "@/services/department/typings";
+import FormTreeSelect from "@/components/FormTreeSelect";
 
 interface FormProps {
   isEdit?: boolean;
 }
 
+const loopDepartmentData = (departmentList: DepartmentVO[]): any =>
+  departmentList.map(({ id, name, children }) => ({
+    title: name,
+    key: id,
+    children: children && loopDepartmentData(children),
+  }));
+
 const FormBody: React.FC<FormProps> = (props) => {
   const { isEdit } = props;
+
+  const [departmentTree, setDepartmentTree] = useState<[]>();
+
+  useEffect(() => {
+    getDepartmentTree()
+      .then((res) => {
+        if (res) {
+          setDepartmentTree(loopDepartmentData(res));
+        } else {
+          setDepartmentTree([]);
+        }
+      })
+      .catch(() => {
+        setDepartmentTree([]);
+      });
+  }, []);
 
   return (
     <>
@@ -93,6 +119,15 @@ const FormBody: React.FC<FormProps> = (props) => {
             ]}
             placeholder="请选择您的性别"
           />
+        </Col>
+        <Col xl={12} lg={12} md={24}>
+          <Form.Item
+            name="pid"
+            label="所属部门"
+            rules={[{ required: false, message: '请选择所属部门' }]}
+          >
+            <FormTreeSelect treeData={departmentTree} placeholder="请选择所属部门" />
+          </Form.Item>
         </Col>
         <Col span={24}>
           <ProFormSelect

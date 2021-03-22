@@ -10,13 +10,21 @@ import UpdateForm from './components/UpdateForm';
 import { batchDeleteDepartment, deleteDepartment, getDepartmentByDepartmentId, getDepartmentTree } from '@/services/department/department';
 import type { DepartmentVO } from '@/services/department/typings';
 import type { DepartmentForm } from '@/services/department/typings';
+import type { UserVO } from "@/services/user/typings";
+import { deleteUserRoles } from "@/services/user-role/user-role";
+import UserRelateList from "@/pages/System/UserRelateList";
+import type { PageParams } from "@/services/common/typings";
+import type { SortOrder } from "antd/lib/table/interface";
+import { getSortOrder } from "@/utils/common";
+import { getUserPageByDepartmentId } from "@/services/user/user";
 
 const DepartmentList: React.FC = () => {
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [userDepartmentListVisible, handleUserDepartmentListVisible] = useState<boolean>(false);
-  const [updateFormValues, setUpdateFormValues] = useState({});
+  const [updateFormValues, setUpdateFormValues] = useState({} as DepartmentVO);
   const actionRef = useRef<ActionType>();
+  const userDepartmentActionRef = useRef<ActionType>();
   const [row, setRow] = useState<DepartmentVO>();
   const [selectedRowsState, setSelectedRows] = useState<DepartmentVO[]>([]);
 
@@ -37,12 +45,60 @@ const DepartmentList: React.FC = () => {
           await batchDeleteDepartment(selectedRowsState.map((selectedRow) => selectedRow.id));
           hide();
           message.success('删除成功，即将刷新');
-          setSelectedRows([]);
           actionRef.current?.reloadAndRest?.();
           return true;
         } catch (error) {
           hide();
           message.error('删除失败，请重试');
+          return false;
+        }
+      },
+    });
+  };
+
+  /**
+   * 取消用户部门关联
+   * @param record
+   */
+  const handleDeleteUserDepartment = async (record: UserVO) => {
+    if (record && record.id) {
+      await deleteUserRoles({
+        userIds: [record.id],
+        roleId: updateFormValues.id
+      });
+      message.success('取消关联成功！');
+      userDepartmentActionRef.current?.reloadAndRest?.();
+    } else {
+      message.warn('没有选中有效的部门');
+    }
+  }
+
+  /**
+   * 批量取消用户部门关联
+   * @param selectedUserDepartmentRows
+   */
+  const handleBatchDeleteUserDepartment = (selectedUserDepartmentRows: UserVO[]) => {
+    Modal.confirm({
+      title: '确认',
+      icon: <ExclamationCircleOutlined/>,
+      content: '确定批量取消勾选中的用户与部门的关联关系吗？',
+      okText: '确认',
+      cancelText: '取消',
+      onOk: async () => {
+        const hide = message.loading('正在取消关联成功');
+        if (!selectedUserDepartmentRows) return true;
+        try {
+          await deleteUserRoles({
+            userIds: selectedUserDepartmentRows.map((selectedRow) => selectedRow.id) || [],
+            roleId: updateFormValues.id
+          });
+          hide();
+          message.success('取消关联成功，即将刷新');
+          userDepartmentActionRef.current?.reloadAndRest?.();
+          return true;
+        } catch (error) {
+          hide();
+          message.error('取消关联失败，请重试');
           return false;
         }
       },
@@ -214,18 +270,22 @@ const DepartmentList: React.FC = () => {
           tableActionRef={actionRef}
         />
       ) : null}
-      {/* {updateFormValues && Object.keys(updateFormValues).length ? (
-        <UserDepartmentList
-          userDepartmentListVisible={userDepartmentListVisible}
-          handleUserDepartmentListVisible={handleUserDepartmentListVisible}
+      {updateFormValues && Object.keys(updateFormValues).length ? (
+        <UserRelateList
+          userRelateListVisible={userDepartmentListVisible}
+          handleUserRelateListVisible={handleUserDepartmentListVisible}
+          userRelateActionRef={userDepartmentActionRef}
           onCancel={() => {
             setUpdateFormValues({});
             handleUserDepartmentListVisible(false);
           }}
-          tableActionRef={actionRef}
+          handleBatchAddUserRelate={handleBatchDeleteUserDepartment}
+          handleDeleteUserRelate={handleDeleteUserDepartment}
+          handleBatchDeleteUserRelate={handleBatchDeleteUserDepartment}
+          queryList={async (params: PageParams, sorter: Record<string, SortOrder>) => (await getUserPageByDepartmentId(params, updateFormValues.id, getSortOrder(sorter)))}
           values={updateFormValues}
         />
-      ) : null} */}
+      ) : null}
 
       <Drawer
         width={600}

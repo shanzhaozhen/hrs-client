@@ -3,6 +3,7 @@ import { TreeSelect } from 'antd';
 import type { DataNode } from 'rc-tree/lib/interface';
 
 interface FormTreeSelectProps {
+  placeholder?: string;
   value?: any;
   checkStrictly?: boolean;
   treeData?: DataNode[];
@@ -10,7 +11,7 @@ interface FormTreeSelectProps {
 }
 
 const FormTreeSelect: React.FC<FormTreeSelectProps> = (props) => {
-  const { value, treeData, onChange } = props;
+  const { placeholder, value, treeData, onChange } = props;
 
   const triggerChange = (changeValue: number[]) => {
     onChange?.(changeValue);
@@ -25,6 +26,7 @@ const FormTreeSelect: React.FC<FormTreeSelectProps> = (props) => {
       value={value}
       treeData={treeData}
       onChange={triggerChange}
+      placeholder={placeholder}
     />
   );
 };

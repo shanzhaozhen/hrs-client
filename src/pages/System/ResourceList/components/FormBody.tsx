@@ -88,7 +88,7 @@ const FormBody: React.FC<FormProps> = () => {
               }),
             ]}
           >
-            <FormTreeSelect treeData={resourceTree} />
+            <FormTreeSelect treeData={resourceTree} placeholder="上级资源" />
           </Form.Item>
         </Col>
         <Col xl={12} lg={12} md={24}>

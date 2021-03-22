@@ -37,7 +37,6 @@ const UserList: React.FC = () => {
           await batchDeleteUser(selectedRowsState.map((selectedRow) => selectedRow.id));
           hide();
           message.success('删除成功，即将刷新');
-          setSelectedRows([]);
           actionRef.current?.reloadAndRest?.();
           return true;
         } catch (error) {

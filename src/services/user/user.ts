@@ -74,3 +74,29 @@ export async function batchDeleteUser(body?: (number | undefined)[], options?: R
     ...(options || {}),
   });
 }
+
+/** 通过角色Id获取用户信息（分页） GET /user/role/page */
+export async function getUserPageByRoleId(pageParams: PageParams, roleId?: number, orders?: Orders | undefined | null, options?: Record<string, any>) {
+  return request<Page<UserVO>>('/hrs-api/user/role/page', {
+    method: 'GET',
+    params: {
+      ...pageParams,
+      roleId,
+      ...orders,
+    },
+    ...(options || {}),
+  });
+}
+
+/** 通过角色Id获取用户信息（分页） GET /user/role/page */
+export async function getUserPageByDepartmentId(pageParams: PageParams, departmentId?: number, orders?: Orders | undefined | null, options?: Record<string, any>) {
+  return request<Page<UserVO>>('/hrs-api/user/department/page', {
+    method: 'GET',
+    params: {
+      ...pageParams,
+      departmentId,
+      ...orders,
+    },
+    ...(options || {}),
+  });
+}

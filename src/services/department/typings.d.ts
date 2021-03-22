@@ -22,4 +22,6 @@ export type DepartmentVO = {
   pid?: number;
   /** 排序等级 */
   priority?: number;
+  /** 下级部门 */
+  children?: DepartmentVO[];
 };

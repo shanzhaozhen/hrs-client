@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import {Button, Divider, Drawer, Input, message, Popconfirm} from 'antd';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
@@ -11,31 +11,32 @@ import UpdateForm from '@/pages/System/UserList/components/UpdateForm';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from '@/pages/System/UserList/components/CreateForm';
 import type { RoleVO } from "@/services/role/typings";
-import { getSortOrder } from "@/utils/common";
 import CheckBoxUser from "@/pages/System/UserRelateList/components/CheckBoxUser";
-import { getUserRolePage } from "@/services/user-role/user-role";
+import type { Page } from "@/services/common/typings";
+import type { PageParams } from "@/services/common/typings";
+import type { SortOrder } from "antd/lib/table/interface";
 
 interface UserRelateListProps {
   userRelateListVisible: boolean;
   handleUserRelateListVisible: Dispatch<SetStateAction<boolean>>;
   userRelateActionRef: MutableRefObject<ActionType | undefined>;
-  tableActionRef: MutableRefObject<ActionType | undefined>;
-  selectedUserRoleRows: RoleVO[];
-  setSelectedUserRoleRows: Dispatch<SetStateAction<RoleVO[]>>;
   onCancel: () => void;
-  handleDeleteRoleUser: (record: RoleVO) => void;
-  handleBatchDeleteRoleUser: (selectRows: RoleVO[]) => Promise<boolean | void>;
+  handleBatchAddUserRelate: (selectRows: RoleVO[]) => void;
+  handleDeleteUserRelate: (record: RoleVO) => void;
+  handleBatchDeleteUserRelate: (selectRows: RoleVO[]) => void;
+  queryList: (params: PageParams, sorter: Record<string, SortOrder>) => Promise<Page<UserVO>>;
   values: RoleVO;
 }
 
 const UserRelateList: React.FC<UserRelateListProps> = (props) => {
   const {
     userRelateListVisible,
-    // handleUserRelateListVisible,
     userRelateActionRef: actionRef,
-    handleDeleteRoleUser,
-    handleBatchDeleteRoleUser,
+    handleBatchAddUserRelate,
+    handleDeleteUserRelate,
+    handleBatchDeleteUserRelate,
     onCancel,
+    queryList,
     values
   } = props;
 
@@ -44,7 +45,6 @@ const UserRelateList: React.FC<UserRelateListProps> = (props) => {
   const [checkBoxUserVisible, handleCheckBoxUserVisible] = useState<boolean>(false);
   const [updateFormValues, setUpdateFormValues] = useState({});
 
-  // const actionRef = useRef<ActionType>();
   const [row, setRow] = useState<UserVO>();
   const [selectedRowsState, setSelectedRows] = useState<UserVO[]>([]);
 
@@ -114,8 +114,8 @@ const UserRelateList: React.FC<UserRelateListProps> = (props) => {
           </a>
           <Divider type="vertical" />
           <Popconfirm
-            title="确定删除该角色节点?"
-            onConfirm={() => (handleDeleteRoleUser(record))}
+            title="确定取消该用户与角色的关联关系？"
+            onConfirm={() => (handleDeleteUserRelate(record))}
             okText="确定"
             cancelText="取消"
           >
@@ -154,7 +154,7 @@ const UserRelateList: React.FC<UserRelateListProps> = (props) => {
           </Button>,
         ]}
         request={async (params, sorter) => {
-          const data = await getUserRolePage(params, values.id, getSortOrder(sorter));
+          const data = await queryList(params, sorter);
           return {
             // success 请返回 true，
             // 不然 table 会停止解析数据，即使有数据
@@ -177,12 +177,8 @@ const UserRelateList: React.FC<UserRelateListProps> = (props) => {
             </div>
           }
         >
-          <Button onClick={async () => {
-            handleBatchDeleteRoleUser(selectedRowsState).then(() => {
-              console.log('ddd')
-            }).catch(() => {
-              console.log('dddsss')
-            });
+          <Button onClick={() => {
+            handleBatchDeleteUserRelate(selectedRowsState);
           }}>批量取消关联</Button>
         </FooterToolbar>
       )}
@@ -203,8 +199,8 @@ const UserRelateList: React.FC<UserRelateListProps> = (props) => {
       <CheckBoxUser
         checkBoxUserVisible={checkBoxUserVisible}
         handleCheckBoxUserVisible={handleCheckBoxUserVisible}
+        handleBatchAddUserRelate={handleBatchAddUserRelate}
         values={values}
-        tableActionRef={actionRef}
       />
 
       <Drawer
