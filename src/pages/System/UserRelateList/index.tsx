@@ -1,75 +1,52 @@
 import React, { useRef, useState } from 'react';
 import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
-import {Button, Divider, Drawer, Input, message, Modal} from 'antd';
+import {Button, Divider, Drawer, Input, message, Popconfirm} from 'antd';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import type { UserForm, UserVO } from '@/services/user/typings';
 import { getUserByUserId } from '@/services/user/user';
 import { FooterToolbar } from '@ant-design/pro-layout';
-import {ExclamationCircleOutlined, PlusOutlined} from '@ant-design/icons';
+import { PlusOutlined } from '@ant-design/icons';
 import UpdateForm from '@/pages/System/UserList/components/UpdateForm';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from '@/pages/System/UserList/components/CreateForm';
 import type { RoleVO } from "@/services/role/typings";
 import { getSortOrder } from "@/utils/common";
 import CheckBoxUser from "@/pages/System/UserRelateList/components/CheckBoxUser";
-import { deleteUserRoles, getUserRolePage } from "@/services/user-role/user";
+import { getUserRolePage } from "@/services/user-role/user-role";
 
 interface UserRelateListProps {
   userRelateListVisible: boolean;
   handleUserRelateListVisible: Dispatch<SetStateAction<boolean>>;
+  userRelateActionRef: MutableRefObject<ActionType | undefined>;
   tableActionRef: MutableRefObject<ActionType | undefined>;
+  selectedUserRoleRows: RoleVO[];
+  setSelectedUserRoleRows: Dispatch<SetStateAction<RoleVO[]>>;
   onCancel: () => void;
+  handleDeleteRoleUser: (record: RoleVO) => void;
+  handleBatchDeleteRoleUser: (selectRows: RoleVO[]) => Promise<boolean | void>;
   values: RoleVO;
 }
 
-
 const UserRelateList: React.FC<UserRelateListProps> = (props) => {
-  const { userRelateListVisible,
+  const {
+    userRelateListVisible,
     // handleUserRelateListVisible,
-    onCancel, values } = props;
+    userRelateActionRef: actionRef,
+    handleDeleteRoleUser,
+    handleBatchDeleteRoleUser,
+    onCancel,
+    values
+  } = props;
 
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [checkBoxUserVisible, handleCheckBoxUserVisible] = useState<boolean>(false);
   const [updateFormValues, setUpdateFormValues] = useState({});
 
-  const actionRef = useRef<ActionType>();
+  // const actionRef = useRef<ActionType>();
   const [row, setRow] = useState<UserVO>();
   const [selectedRowsState, setSelectedRows] = useState<UserVO[]>([]);
-
-  /**
-   *  删除用户角色
-   */
-  const handleDeleteUserRole = () => {
-    Modal.confirm({
-      title: '确认',
-      icon: <ExclamationCircleOutlined/>,
-      content: '确定批量删除勾选中的用户吗',
-      okText: '确认',
-      cancelText: '取消',
-      onOk: async () => {
-        const hide = message.loading('正在删除');
-        if (!selectedRowsState) return true;
-        try {
-          await deleteUserRoles({
-            userIds: selectedRowsState.map((selectedRow) => selectedRow.id) || [],
-            roleId: values.id
-          });
-          hide();
-          message.success('删除成功，即将刷新');
-          setSelectedRows([]);
-          actionRef.current?.reloadAndRest?.();
-          return true;
-        } catch (error) {
-          hide();
-          message.error('删除失败，请重试');
-          return false;
-        }
-      },
-    });
-  };
-
 
   const columns: ProColumns<UserVO>[] = [
     {
@@ -136,7 +113,14 @@ const UserRelateList: React.FC<UserRelateListProps> = (props) => {
             修改
           </a>
           <Divider type="vertical" />
-          <a onClick={handleDeleteUserRole}>取消关联</a>
+          <Popconfirm
+            title="确定删除该角色节点?"
+            onConfirm={() => (handleDeleteRoleUser(record))}
+            okText="确定"
+            cancelText="取消"
+          >
+            <a href="#">取消关联</a>
+          </Popconfirm>
         </>
       ),
     },
@@ -193,7 +177,13 @@ const UserRelateList: React.FC<UserRelateListProps> = (props) => {
             </div>
           }
         >
-          <Button onClick={handleDeleteUserRole}>批量删除</Button>
+          <Button onClick={async () => {
+            handleBatchDeleteRoleUser(selectedRowsState).then(() => {
+              console.log('ddd')
+            }).catch(() => {
+              console.log('dddsss')
+            });
+          }}>批量取消关联</Button>
         </FooterToolbar>
       )}
       <CreateForm

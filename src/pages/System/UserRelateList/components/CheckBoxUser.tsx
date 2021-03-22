@@ -8,7 +8,7 @@ import { getUserPage } from '@/services/user/user';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import { getSortOrder } from "@/utils/common";
 import type { RoleVO } from "@/services/role/typings";
-import { addUserRole } from "@/services/user-role/user";
+import { addUserRole } from "@/services/user-role/user-role";
 
 interface CheckBoxUserProps {
   checkBoxUserVisible: boolean;

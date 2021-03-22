@@ -11,21 +11,26 @@ import { batchDeleteRole, deleteRole, getRoleByRoleId, getRolePage } from '@/ser
 import type { RoleVO } from '@/services/role/typings';
 import type { RoleForm } from '@/services/role/typings';
 import UserRelateList from '@/pages/System/UserRelateList';
-import {getSortOrder} from "@/utils/common";
+import { getSortOrder } from "@/utils/common";
+import { deleteUserRoles } from "@/services/user-role/user-role";
+import type { UserVO } from "@/services/user/typings";
 
 const RoleList: React.FC = () => {
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [userRelateListVisible, handleUserRelateListVisible] = useState<boolean>(false);
-  const [updateFormValues, setUpdateFormValues] = useState({});
+  const [updateFormValues, setUpdateFormValues] = useState({} as RoleVO);
   const actionRef = useRef<ActionType>();
+  const userRoleActionRef = useRef<ActionType>();
   const [row, setRow] = useState<RoleVO>();
   const [selectedRowsState, setSelectedRows] = useState<RoleVO[]>([]);
+  const [selectedUserRoleRows, setSelectedUserRoleRows] = useState<UserVO[]>([]);
+
 
   /**
-   * 删除角色
+   * 批量删除角色
    */
-  const handleDelete = () => {
+  const handleDeleteRole = () => {
     Modal.confirm({
       title: '确认',
       icon: <ExclamationCircleOutlined />,
@@ -49,6 +54,60 @@ const RoleList: React.FC = () => {
         }
       },
     });
+  };
+
+  /**
+   * 取消用户角色关联
+   * @param record
+   */
+  const handleDeleteRoleUser = async (record: UserVO) => {
+    if (record && record.id) {
+      await deleteUserRoles({
+        userIds: [record.id],
+        roleId: updateFormValues.id
+      });
+      message.success('删除成功！');
+      userRoleActionRef.current?.reloadAndRest?.();
+    } else {
+      message.warn('没有选中有效的角色');
+    }
+  }
+
+  /**
+   * 批量取消用户角色关联
+   * @param selectedRows
+   */
+  const handleBatchDeleteRoleUser = (selectedRows: UserVO[]): Promise<boolean | void> => {
+    return new Promise((resolve, reject) => {
+      Modal.confirm({
+        title: '确认',
+        icon: <ExclamationCircleOutlined/>,
+        content: '确定批量删除勾选中的用户吗',
+        okText: '确认',
+        cancelText: '取消',
+        onOk: async () => {
+          const hide = message.loading('正在删除');
+          if (!selectedRows) return true;
+          try {
+            await deleteUserRoles({
+              userIds: selectedRows.map((selectedRow) => selectedRow.id) || [],
+              roleId: updateFormValues.id
+            });
+            hide();
+            message.success('删除成功，即将刷新');
+            setSelectedRows([]);
+            userRoleActionRef.current?.reloadAndRest?.();
+            resolve(true);
+            return true;
+          } catch (error) {
+            hide();
+            message.error('删除失败，请重试');
+            reject(error);
+            return false;
+          }
+        },
+      });
+    })
   };
 
   const columns: ProColumns<RoleVO>[] = [
@@ -204,7 +263,7 @@ const RoleList: React.FC = () => {
             </div>
           }
         >
-          <Button onClick={handleDelete}>批量删除</Button>
+          <Button onClick={handleDeleteRole}>批量删除</Button>
         </FooterToolbar>
       )}
       <CreateForm
@@ -225,11 +284,16 @@ const RoleList: React.FC = () => {
         <UserRelateList
           userRelateListVisible={userRelateListVisible}
           handleUserRelateListVisible={handleUserRelateListVisible}
+          userRelateActionRef={userRoleActionRef}
           onCancel={() => {
             setUpdateFormValues({});
             handleUserRelateListVisible(false);
           }}
           tableActionRef={actionRef}
+          selectedUserRoleRows={selectedUserRoleRows}
+          setSelectedUserRoleRows={setSelectedUserRoleRows}
+          handleDeleteRoleUser={handleDeleteRoleUser}
+          handleBatchDeleteRoleUser={handleBatchDeleteRoleUser}
           values={updateFormValues}
         />
       ) : null}
