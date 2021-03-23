@@ -7,31 +7,23 @@ import ProTable from '@ant-design/pro-table';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
-import {batchDeleteRole, deleteRole, getRoleByRoleId, getRolePage} from '@/services/role/role';
-import type {RoleForm, RoleVO} from '@/services/role/typings';
-import UserRelateList from '@/pages/System/UserRelateList';
+import {batchDeleteTask, deleteTask, getTaskByTaskId, getTaskPage} from '@/services/task/task';
+import type { TaskForm, TaskVO } from '@/services/task/typings';
 import {getSortOrder} from "@/utils/common";
-import {addUserRole, deleteUserRoles} from "@/services/user-role/user-role";
-import type {UserVO} from "@/services/user/typings";
-import type { SortOrder } from "antd/lib/table/interface";
-import type { PageParams } from '@/services/common/typings';
-import { getUserPageByRoleId } from '@/services/user/user';
 
-const RoleList: React.FC = () => {
+const TaskList: React.FC = () => {
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-  const [userRelateListVisible, handleUserRelateListVisible] = useState<boolean>(false);
-  const [updateFormValues, setUpdateFormValues] = useState({} as RoleVO);
+  const [updateFormValues, setUpdateFormValues] = useState({} as TaskVO);
   const actionRef = useRef<ActionType>();
-  const userRoleActionRef = useRef<ActionType>();
-  const [row, setRow] = useState<RoleVO>();
-  const [selectedRowsState, setSelectedRows] = useState<RoleVO[]>([]);
+  const [row, setRow] = useState<TaskVO>();
+  const [selectedRowsState, setSelectedRows] = useState<TaskVO[]>([]);
 
 
   /**
-   * 批量删除角色
+   * 批量删除任务
    */
-  const handleDeleteRole = () => {
+  const handleDeleteTask = () => {
     Modal.confirm({
       title: '确认',
       icon: <ExclamationCircleOutlined />,
@@ -42,7 +34,7 @@ const RoleList: React.FC = () => {
         const hide = message.loading('正在删除');
         if (!selectedRowsState) return true;
         try {
-          await batchDeleteRole(selectedRowsState.map((selectedRow) => selectedRow.id));
+          await batchDeleteTask(selectedRowsState.map((selectedRow) => selectedRow.id));
           hide();
           message.success('删除成功，即将刷新');
           actionRef.current?.reloadAndRest?.();
@@ -56,80 +48,7 @@ const RoleList: React.FC = () => {
     });
   };
 
-  /**
-   * 批量添加用户角色关联
-   * @param selectedUserRoleRows
-   */
-  const handleBatchAddUserRole = async (selectedUserRoleRows: UserVO[]) => {
-    const hide = message.loading('正在添加');
-    if (!selectedUserRoleRows) return true;
-    try {
-      const userIds = selectedUserRoleRows.map((user) => user.id);
-      await addUserRole({
-        userIds,
-        roleId: updateFormValues.id,
-      });
-      hide();
-      message.success('添加成功');
-      userRoleActionRef.current?.reloadAndRest?.();
-      return true;
-    } catch (error) {
-      hide();
-      message.error('添加失败，请重试');
-      return false;
-    }
-  }
-
-  /**
-   * 取消用户角色关联
-   * @param record
-   */
-  const handleDeleteUserRole = async (record: UserVO) => {
-    if (record && record.id) {
-      await deleteUserRoles({
-        userIds: [record.id],
-        roleId: updateFormValues.id
-      });
-      message.success('取消关联成功！');
-      userRoleActionRef.current?.reloadAndRest?.();
-    } else {
-      message.warn('没有选中有效的角色');
-    }
-  }
-
-  /**
-   * 批量取消用户角色关联
-   * @param selectedUserRoleRows
-   */
-  const handleBatchDeleteUserRole = (selectedUserRoleRows: UserVO[]) => {
-    Modal.confirm({
-      title: '确认',
-      icon: <ExclamationCircleOutlined/>,
-      content: '确定批量取消勾选中的用户与角色的关联关系吗？',
-      okText: '确认',
-      cancelText: '取消',
-      onOk: async () => {
-        const hide = message.loading('正在取消关联成功');
-        if (!selectedUserRoleRows) return true;
-        try {
-          await deleteUserRoles({
-            userIds: selectedUserRoleRows.map((selectedRow) => selectedRow.id) || [],
-            roleId: updateFormValues.id
-          });
-          hide();
-          message.success('取消关联成功，即将刷新');
-          userRoleActionRef.current?.reloadAndRest?.();
-          return true;
-        } catch (error) {
-          hide();
-          message.error('取消关联失败，请重试');
-          return false;
-        }
-      },
-    });
-  };
-
-  const columns: ProColumns<RoleVO>[] = [
+  const columns: ProColumns<TaskVO>[] = [
     {
       title: '关键字',
       key: 'keyword',
@@ -161,8 +80,15 @@ const RoleList: React.FC = () => {
       },
     },
     {
-      title: '角色代码',
-      dataIndex: 'code',
+      title: 'cron表达式',
+      dataIndex: 'cron',
+      valueType: 'text',
+      sorter: true,
+      hideInSearch: true,
+    },
+    {
+      title: '开启状态',
+      dataIndex: 'open',
       valueType: 'text',
       sorter: true,
       hideInSearch: true,
@@ -197,41 +123,27 @@ const RoleList: React.FC = () => {
           <a
             onClick={async () => {
               if (record && record.id) {
-                const data = await getRoleByRoleId(record.id);
-                setUpdateFormValues(data as RoleForm);
+                const data = await getTaskByTaskId(record.id);
+                setUpdateFormValues(data as TaskForm);
                 handleUpdateModalVisible(true);
-                // message.error(res.message || `没有获取到角色信息（id:${record.id}）`);
+                // message.error(res.message || `没有获取到任务信息（id:${record.id}）`);
               } else {
-                message.warn('没有选中有效的角色');
+                message.warn('没有选中有效的任务');
               }
             }}
           >
             修改
           </a>
           <Divider type="vertical" />
-          <a
-            onClick={async () => {
-              if (record && record.id) {
-                setUpdateFormValues(record);
-                handleUserRelateListVisible(true);
-                // message.error(res.message || `没有获取到角色信息（id:${record.id}）`);
-              } else {
-                message.warn('没有选中有效的角色');
-              }
-            }}
-          >
-            分配角色
-          </a>
-          <Divider type="vertical" />
           <Popconfirm
-            title="确定删除该角色节点?"
+            title="确定删除该任务节点?"
             onConfirm={async () => {
               if (record && record.id) {
-                await deleteRole(record.id);
+                await deleteTask(record.id);
                 message.success('删除成功！');
                 actionRef.current?.reloadAndRest?.();
               } else {
-                message.warn('没有选中有效的角色');
+                message.warn('没有选中有效的任务');
               }
             }}
             okText="确定"
@@ -239,6 +151,7 @@ const RoleList: React.FC = () => {
           >
             <a href="#">删除</a>
           </Popconfirm>
+          <Divider type="vertical" />
         </>
       ),
     },
@@ -246,8 +159,8 @@ const RoleList: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<RoleVO>
-        headerTitle="角色管理"
+      <ProTable<TaskVO>
+        headerTitle="定时任务"
         actionRef={actionRef}
         rowKey="id"
         search={{
@@ -259,7 +172,7 @@ const RoleList: React.FC = () => {
           </Button>,
         ]}
         request={async (params, sorter) => {
-          const data = await getRolePage(params, getSortOrder(sorter));
+          const data = await getTaskPage(params, getSortOrder(sorter));
           return {
             // success 请返回 true，
             // 不然 table 会停止解析数据，即使有数据
@@ -282,7 +195,7 @@ const RoleList: React.FC = () => {
             </div>
           }
         >
-          <Button onClick={handleDeleteRole}>批量删除</Button>
+          <Button onClick={handleDeleteTask}>批量删除</Button>
         </FooterToolbar>
       )}
       <CreateForm
@@ -299,22 +212,6 @@ const RoleList: React.FC = () => {
           tableActionRef={actionRef}
         />
       ) : null}
-      {updateFormValues && Object.keys(updateFormValues).length ? (
-        <UserRelateList
-          userRelateListVisible={userRelateListVisible}
-          handleUserRelateListVisible={handleUserRelateListVisible}
-          userRelateActionRef={userRoleActionRef}
-          onCancel={() => {
-            setUpdateFormValues({});
-            handleUserRelateListVisible(false);
-          }}
-          handleBatchAddUserRelate={handleBatchAddUserRole}
-          handleDeleteUserRelate={handleDeleteUserRole}
-          handleBatchDeleteUserRelate={handleBatchDeleteUserRole}
-          queryList={async (params: PageParams, sorter: Record<string, SortOrder>) => (await getUserPageByRoleId(params, updateFormValues.id, getSortOrder(sorter)))}
-          values={updateFormValues}
-        />
-      ) : null}
 
       <Drawer
         width={600}
@@ -325,7 +222,7 @@ const RoleList: React.FC = () => {
         closable={false}
       >
         {row?.name && (
-          <ProDescriptions<RoleVO>
+          <ProDescriptions<TaskVO>
             column={2}
             title={row?.name}
             request={async () => ({
@@ -342,4 +239,4 @@ const RoleList: React.FC = () => {
   );
 };
 
-export default RoleList;
+export default TaskList;

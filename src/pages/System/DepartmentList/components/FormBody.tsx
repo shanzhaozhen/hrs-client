@@ -11,8 +11,8 @@ interface FormProps {
 
 const loopDepartmentData = (departmentList: DepartmentVO[]): any =>
   departmentList.map(({ id, name, children }) => ({
+    value: id,
     title: name,
-    key: id,
     children: children && loopDepartmentData(children),
   }));
 
@@ -34,8 +34,6 @@ const FormBody: React.FC<FormProps> = () => {
       });
   }, []);
 
-  console.log(departmentTree)
-
   return (
     <>
       <Row gutter={24}>
@@ -45,7 +43,6 @@ const FormBody: React.FC<FormProps> = () => {
             width="md"
             name="name"
             label="部门名称"
-            fieldProps={{ autoComplete: 'off' }}
             rules={[{ required: true, message: '请输入您的部门名称' }]}
           />
         </Col>
@@ -59,8 +56,8 @@ const FormBody: React.FC<FormProps> = () => {
         </Col>
         <Col xl={12} lg={12} md={24}>
           <Form.Item
-            name="depId"
-            label="所属部门"
+            name="pid"
+            label="上级部门"
             rules={[
               ({ getFieldValue }) => ({
                 validator: async (rule, value) => {

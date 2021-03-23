@@ -11,12 +11,11 @@ import { batchDeleteDepartment, deleteDepartment, getDepartmentByDepartmentId, g
 import type { DepartmentVO } from '@/services/department/typings';
 import type { DepartmentForm } from '@/services/department/typings';
 import type { UserVO } from "@/services/user/typings";
-import { deleteUserRoles } from "@/services/user-role/user-role";
 import UserRelateList from "@/pages/System/UserRelateList";
 import type { PageParams } from "@/services/common/typings";
 import type { SortOrder } from "antd/lib/table/interface";
 import { getSortOrder } from "@/utils/common";
-import { getUserPageByDepartmentId } from "@/services/user/user";
+import {batchUpdateUserDepartment, getUserPageByDepartmentId} from "@/services/user/user";
 
 const DepartmentList: React.FC = () => {
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
@@ -57,14 +56,38 @@ const DepartmentList: React.FC = () => {
   };
 
   /**
+   * 批量添加用户部门关联
+   * @param selectedUserRoleRows
+   */
+  const handleBatchAddUserDepartment = async (selectedUserRoleRows: UserVO[]) => {
+    const hide = message.loading('正在添加');
+    if (!selectedUserRoleRows) return true;
+    try {
+      const userIds = selectedUserRoleRows.map((user) => user.id);
+      await batchUpdateUserDepartment({
+        userIds,
+        departmentId: updateFormValues.id,
+      });
+      hide();
+      message.success('添加成功');
+      userDepartmentActionRef.current?.reloadAndRest?.();
+      return true;
+    } catch (error) {
+      hide();
+      message.error('添加失败，请重试');
+      return false;
+    }
+  }
+
+  /**
    * 取消用户部门关联
    * @param record
    */
   const handleDeleteUserDepartment = async (record: UserVO) => {
     if (record && record.id) {
-      await deleteUserRoles({
+      await batchUpdateUserDepartment({
         userIds: [record.id],
-        roleId: updateFormValues.id
+        departmentId: undefined
       });
       message.success('取消关联成功！');
       userDepartmentActionRef.current?.reloadAndRest?.();
@@ -88,9 +111,9 @@ const DepartmentList: React.FC = () => {
         const hide = message.loading('正在取消关联成功');
         if (!selectedUserDepartmentRows) return true;
         try {
-          await deleteUserRoles({
+          await batchUpdateUserDepartment({
             userIds: selectedUserDepartmentRows.map((selectedRow) => selectedRow.id) || [],
-            roleId: updateFormValues.id
+            departmentId: undefined
           });
           hide();
           message.success('取消关联成功，即将刷新');
@@ -279,7 +302,7 @@ const DepartmentList: React.FC = () => {
             setUpdateFormValues({});
             handleUserDepartmentListVisible(false);
           }}
-          handleBatchAddUserRelate={handleBatchDeleteUserDepartment}
+          handleBatchAddUserRelate={handleBatchAddUserDepartment}
           handleDeleteUserRelate={handleDeleteUserDepartment}
           handleBatchDeleteUserRelate={handleBatchDeleteUserDepartment}
           queryList={async (params: PageParams, sorter: Record<string, SortOrder>) => (await getUserPageByDepartmentId(params, updateFormValues.id, getSortOrder(sorter)))}

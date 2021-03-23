@@ -13,8 +13,8 @@ interface FormProps {
 
 const loopDepartmentData = (departmentList: DepartmentVO[]): any =>
   departmentList.map(({ id, name, children }) => ({
+    value: id,
     title: name,
-    key: id,
     children: children && loopDepartmentData(children),
   }));
 
@@ -28,7 +28,6 @@ const FormBody: React.FC<FormProps> = (props) => {
       .then((res) => {
         if (res) {
           setDepartmentTree(loopDepartmentData(res));
-          console.log(departmentTree);
         } else {
           setDepartmentTree([]);
         }

@@ -1,4 +1,4 @@
-import {RoleVO} from "@/services/role/typings";
+import type { RoleVO } from "@/services/role/typings";
 
 export type ResourceForm = {
   /** 主键ID */

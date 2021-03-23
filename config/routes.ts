@@ -63,6 +63,12 @@ export default [
         icon: 'smile',
         component: './System/DepartmentList',
       },
+      {
+        path: '/system/task',
+        name: 'task',
+        icon: 'smile',
+        component: './System/TaskList',
+      },
 
     ],
   },

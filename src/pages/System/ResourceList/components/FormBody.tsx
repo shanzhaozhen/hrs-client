@@ -43,7 +43,6 @@ const FormBody: React.FC<FormProps> = () => {
             width="md"
             name="name"
             label="资源名称"
-            fieldProps={{ autoComplete: 'off' }}
             rules={[{ required: true, message: '请输入您的资源名称' }]}
           />
         </Col>

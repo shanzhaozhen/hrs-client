@@ -1,7 +1,7 @@
 // @ts-ignore
 import { request } from 'umi';
 import type { CurrentUser, UserForm, UserVO } from '@/services/user/typings';
-import type {PageParams, Page, Orders} from '@/services/common/typings';
+import type { PageParams, Page, Orders } from '@/services/common/typings';
 
 /** 获取当前登录用户的个人和权限信息接口 GET /user/current */
 export async function getCurrentUserInfo(options?: Record<string, any>) {
@@ -97,6 +97,19 @@ export async function getUserPageByDepartmentId(pageParams: PageParams, departme
       departmentId,
       ...orders,
     },
+    ...(options || {}),
+  });
+}
+
+
+/** 批量更新用户部门接口 PUT /user/department */
+export async function batchUpdateUserDepartment(body?: { userIds: (number | undefined)[]; departmentId: number | undefined }, options?: Record<string, any>) {
+  return request<number[]>('/hrs-api/user/department', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
     ...(options || {}),
   });
 }

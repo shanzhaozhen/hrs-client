@@ -1,4 +1,4 @@
-import { MenuDataItem } from '@ant-design/pro-layout';
+import type { MenuDataItem } from '@ant-design/pro-layout';
 
 export type CurrentUser = {
   userInfo: UserInfo;
@@ -155,3 +155,4 @@ export type UserVO = {
 export type GrantedAuthority = {
   authority?: string;
 };
+
