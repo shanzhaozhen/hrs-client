@@ -4,14 +4,14 @@ import type { DataNode } from 'rc-tree/lib/interface';
 
 interface FormTreeSelectProps {
   placeholder?: string;
-  value?: any;
   checkStrictly?: boolean;
   treeData?: DataNode[];
   onChange?: (value: any) => void;
+  value?: any;
 }
 
 const FormTreeSelect: React.FC<FormTreeSelectProps> = (props) => {
-  const { placeholder, value, treeData, onChange } = props;
+  const { placeholder, treeData, onChange, value } = props;
 
   const triggerChange = (changeValue: number[]) => {
     onChange?.(changeValue);

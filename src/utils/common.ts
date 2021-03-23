@@ -11,6 +11,10 @@ export const copyObject = (A: any, B: any) => {
   return res;
 };
 
+/**
+ * 生成后端需要的查询排序格式
+ * @param sorter
+ */
 export const getSortOrder = (sorter: Record<string, SortOrder>): Orders | undefined | null => {
   if (sorter) {
     const orders: Orders = {
@@ -29,4 +33,24 @@ export const getSortOrder = (sorter: Record<string, SortOrder>): Orders | undefi
   }
 
   return null;
+}
+
+/**
+ * 翻译字段
+ * @param key
+ * @param options
+ * @param defaultText
+ * @param keyField
+ * @param labelField
+ */
+export const tableFilter = (key: number | undefined, options: any[], defaultText = '',
+                            keyField = 'id', labelField = 'name') => {
+  if (key) {
+    for (let i = 0; i < options.length; i+=1) {
+      if (key === options[i][keyField]) {
+        return options[i][labelField];
+      }
+    }
+  }
+  return defaultText;
 }

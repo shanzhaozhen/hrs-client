@@ -117,6 +117,8 @@ export type UserVO = {
   id?: number;
   /** 用户名 */
   username?: string;
+  /** 部门ID */
+  depId?: number;
   authorities?: GrantedAuthority[];
   /** 账户是否过期,过期无法验证 */
   accountNonExpired?: boolean;

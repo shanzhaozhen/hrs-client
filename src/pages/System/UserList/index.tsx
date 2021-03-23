@@ -1,16 +1,17 @@
-import React, { useState, useRef } from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import {Button, message, Input, Drawer, Space, Tag, Modal, Divider, Popconfirm} from 'antd';
+import { Button, message, Input, Drawer, Space, Tag, Modal, Divider, Popconfirm } from 'antd';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
-import {batchDeleteUser, deleteUser, getUserByUserId, getUserPage} from '@/services/user/user';
+import { batchDeleteUser, deleteUser, getUserByUserId, getUserPage } from '@/services/user/user';
 import type { UserVO } from '@/services/user/typings';
 import type { UserForm } from '@/services/user/typings';
-import { getSortOrder } from "@/utils/common";
+import {getSortOrder, tableFilter} from "@/utils/common";
+import { getAllDepartments } from "@/services/department/department";
 
 const UserList: React.FC = () => {
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
@@ -19,6 +20,22 @@ const UserList: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const [row, setRow] = useState<UserVO>();
   const [selectedRowsState, setSelectedRows] = useState<UserVO[]>([]);
+
+  const [departmentList, setDepartmentList] = useState<any>();
+
+  useEffect(() => {
+    getAllDepartments()
+      .then((res) => {
+        if (res) {
+          setDepartmentList(res);
+        } else {
+          setDepartmentList([]);
+        }
+      })
+      .catch(() => {
+        setDepartmentList([]);
+      });
+  }, []);
 
   /**
    *  删除用户
@@ -91,6 +108,13 @@ const UserList: React.FC = () => {
       dataIndex: 'nickname',
       valueType: 'text',
       hideInSearch: true,
+    },
+    {
+      title: '所属部门',
+      dataIndex: 'depId',
+      hideInSearch: true,
+      valueType: 'select',
+      renderText: (_, record) => (tableFilter(record.depId, departmentList, '未分配'))
     },
     {
       title: '性别',

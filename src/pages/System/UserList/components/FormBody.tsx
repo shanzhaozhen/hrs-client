@@ -28,6 +28,7 @@ const FormBody: React.FC<FormProps> = (props) => {
       .then((res) => {
         if (res) {
           setDepartmentTree(loopDepartmentData(res));
+          console.log(departmentTree);
         } else {
           setDepartmentTree([]);
         }
@@ -122,7 +123,7 @@ const FormBody: React.FC<FormProps> = (props) => {
         </Col>
         <Col xl={12} lg={12} md={24}>
           <Form.Item
-            name="pid"
+            name="depId"
             label="所属部门"
             rules={[{ required: false, message: '请选择所属部门' }]}
           >
