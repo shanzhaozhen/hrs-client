@@ -1,12 +1,64 @@
-import React from 'react';
-import { Col, Row } from 'antd';
-import {ProFormSwitch, ProFormText, ProFormTextArea} from '@ant-design/pro-form';
+import type { MutableRefObject } from 'react';
+import React, { useState } from 'react';
+import type { FormInstance } from 'antd';
+import {Col, Form, Row} from 'antd';
+import { ProFormSelect, ProFormSwitch, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
+import { getBeanInfoByName, getBeanInfoList } from "@/services/bean/bean";
+import MethodParamInfo from "@/pages/System/TaskList/components/MethodParamInfo";
 
 interface FormProps {
   isEdit?: boolean;
+  formRef: MutableRefObject<FormInstance | any>
 }
 
-const FormBody: React.FC<FormProps> = () => {
+const FormBody: React.FC<FormProps> = (props) => {
+  const { formRef } = props;
+
+  const [methodOptions, setMethodOptions] = useState<any[]>();
+
+  const beanSelectOnchange = async (changeValue: string) => {
+    console.log(changeValue)
+    if (changeValue) {
+      const { methods } = await getBeanInfoByName(changeValue);
+      if (methods) {
+        const options = methods.map(method => {
+          return {
+            label: method.methodName,
+            value: JSON.stringify(method),
+          }
+        })
+        setMethodOptions(options);
+      }
+    } else {
+      setMethodOptions([]);
+    }
+    // 清除方法选中的值
+    const value = formRef.current.getFieldsValue();
+    value.methodInfo = null;
+    value.paramInfo = null;
+    formRef.current.setFieldsValue(value)
+  }
+
+  const methodSelectOnchange = (changeValue: string) => {
+    if (changeValue) {
+      const method = JSON.parse(changeValue)
+      if (method) {
+        const { paramTypes } = method;
+        const methodParams = []
+        if (paramTypes && paramTypes.length > 0) {
+          for (let i = 0; i < paramTypes.length; i+=1) {
+            methodParams.push({
+              paramType: paramTypes[i],
+              paramValue: ''
+            })
+          }
+        }
+        const value = formRef.current.getFieldsValue();
+        value.paramInfo = JSON.stringify(methodParams);
+        formRef.current.setFieldsValue(value)
+      }
+    }
+  }
 
   return (
     <>
@@ -31,8 +83,49 @@ const FormBody: React.FC<FormProps> = () => {
           />
         </Col>
         <Col xl={12} lg={12} md={24}>
+          <ProFormSelect
+            name="beanName"
+            label="Bean名称"
+            showSearch={false}
+            placeholder="请选择Bean"
+            request={async () => {
+              const data = await getBeanInfoList();
+              if (data) {
+                return data.map(({beanName}) => {
+                  // let beanNameView = beanName;
+                  // if (className) {
+                  //   const split = className.split('.')
+                  //   beanNameView += `(${split[split.length - 1]})`
+                  // }
+                  return {
+                    label: beanName,
+                    value: beanName,
+                  }
+                });
+              }
+              return [];
+            }}
+            fieldProps={{onChange: beanSelectOnchange}}
+          />
+        </Col>
+        <Col xl={12} lg={12} md={24}>
+          <ProFormSelect
+            name="methodInfo"
+            label="方法名"
+            showSearch={false}
+            placeholder="请选择Bean"
+            options={methodOptions}
+            fieldProps={{onChange: methodSelectOnchange}}
+          />
+        </Col>
+        <Col span={24}>
+          <Form.Item name="paramInfo" label="参数（请以JSON的方式输入）">
+            <MethodParamInfo />
+          </Form.Item>
+        </Col>
+        <Col xl={12} lg={12} md={24}>
           <ProFormSwitch
-            name="accountNonExpired"
+            name="open"
             label="开启状态"
             checkedChildren="开启"
             unCheckedChildren="停止"

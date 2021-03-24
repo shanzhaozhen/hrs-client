@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
-import { message } from 'antd';
+import {FormInstance, message} from 'antd';
 import type { TaskForm, TaskVO } from '@/services/task/typings';
 import FormBody from '@/pages/System/TaskList/components/FormBody';
 import { updateTask } from '@/services/task/task';
@@ -18,6 +18,8 @@ export interface UpdateFormProps {
 const UpdateForm: React.FC<UpdateFormProps> = (props) => {
   const { updateModalVisible, handleUpdateModalVisible, onCancel, tableActionRef, values } = props;
 
+  const formRef = useRef<FormInstance>();
+
   /**
    * 修改任务
    * @param fields
@@ -27,13 +29,11 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
     try {
       await updateTask({
         ...fields,
-        menuIds: fields.menuIds.checked || fields.menuIds,
       });
       hide();
       message.success('修改成功');
       handleUpdateModalVisible(false);
       tableActionRef.current?.reloadAndRest?.();
-      // message.error(res.message || '修改失败请重试！');
     } catch (error) {
       hide();
       message.error('修改失败请重试！');
@@ -51,9 +51,10 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
         onCancel,
         destroyOnClose: true,
       }}
+      formRef={formRef}
       onFinish={handleUpdate}
     >
-      <FormBody isEdit={true} />
+      <FormBody isEdit={true} formRef={formRef} />
     </ModalForm>
   );
 };

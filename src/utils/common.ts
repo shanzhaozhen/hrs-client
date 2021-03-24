@@ -45,7 +45,7 @@ export const getSortOrder = (sorter: Record<string, SortOrder>): Orders | undefi
  */
 export const tableFilter = (key: number | undefined, options: any[], defaultText = '',
                             keyField = 'id', labelField = 'name') => {
-  if (key) {
+  if (key && options) {
     for (let i = 0; i < options.length; i+=1) {
       if (key === options[i][keyField]) {
         return options[i][labelField];

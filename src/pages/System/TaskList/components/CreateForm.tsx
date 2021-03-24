@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
+import type { FormInstance } from 'antd';
 import { message } from 'antd';
 import { addTask } from '@/services/task/task';
 import type { TaskForm } from '@/services/task/typings';
@@ -15,6 +16,8 @@ interface CreateFormProps {
 
 const CreateForm: React.FC<CreateFormProps> = (props) => {
   const { createModalVisible, handleCreateModalVisible, tableActionRef } = props;
+
+  const formRef = useRef<FormInstance>();
 
   /**
    * 添加任务
@@ -43,9 +46,10 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
       modalProps={{
         destroyOnClose: true,
       }}
+      formRef={formRef}
       onFinish={handleAdd}
     >
-      <FormBody />
+      <FormBody formRef={formRef}/>
     </ModalForm>
   );
 };

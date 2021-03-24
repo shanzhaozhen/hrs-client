@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
-import { message } from 'antd';
+import { message} from 'antd';
 import { addUser } from '@/services/user/user';
 import type { UserForm } from '@/services/user/typings';
 import FormBody from '@/pages/System/UserList/components/FormBody';
