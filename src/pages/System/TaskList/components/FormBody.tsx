@@ -5,6 +5,7 @@ import {Col, Form, Row} from 'antd';
 import { ProFormSelect, ProFormSwitch, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
 import { getBeanInfoByName, getBeanInfoList } from "@/services/bean/bean";
 import MethodParamInfo from "@/pages/System/TaskList/components/MethodParamInfo";
+import type { MethodInfo } from "@/services/bean/typings";
 
 interface FormProps {
   isEdit?: boolean;
@@ -16,6 +17,22 @@ const FormBody: React.FC<FormProps> = (props) => {
 
   const [methodOptions, setMethodOptions] = useState<any[]>();
 
+  const toMethodSimpleName = (value: MethodInfo) => {
+    let { methodName } = value
+    const { paramTypes } = value
+    methodName += '('
+    if (paramTypes && paramTypes.length > 0) {
+      paramTypes.forEach((item, index) => {
+        const splits = item.split('.')
+        methodName += splits[splits.length - 1]
+        if (index < paramTypes.length - 1) {
+          methodName += ', '
+        }
+      })
+    }
+    return `${methodName  })`
+  }
+
   const beanSelectOnchange = async (changeValue: string) => {
     console.log(changeValue)
     if (changeValue) {
@@ -23,7 +40,7 @@ const FormBody: React.FC<FormProps> = (props) => {
       if (methods) {
         const options = methods.map(method => {
           return {
-            label: method.methodName,
+            label: toMethodSimpleName(method),
             value: JSON.stringify(method),
           }
         })
@@ -76,7 +93,7 @@ const FormBody: React.FC<FormProps> = (props) => {
         <Col xl={12} lg={12} md={24}>
           <ProFormText
             width="md"
-            name="code"
+            name="cron"
             label="cron表达式"
             placeholder="请输入cron表达式"
             rules={[{ required: true, message: '请输入cron表达式' }]}

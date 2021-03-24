@@ -14,4 +14,6 @@ export type MethodInfo = {
   methodSimpleName?: string;
   /** 方法名（完全） */
   methodFullName?: string;
+  /** 参数类型 */
+  paramTypes?: string[];
 };
