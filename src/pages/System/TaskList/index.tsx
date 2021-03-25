@@ -1,15 +1,15 @@
 import React, {useRef, useState} from 'react';
 import {ExclamationCircleOutlined, PlusOutlined} from '@ant-design/icons';
-import {Button, Divider, Drawer, Input, message, Modal, Popconfirm, Space, Tag} from 'antd';
+import {Button, Divider, Drawer, Input, message, Modal, Space, Tag} from 'antd';
 import {FooterToolbar, PageContainer} from '@ant-design/pro-layout';
 import type {ActionType, ProColumns} from '@ant-design/pro-table';
 import ProTable, {TableDropdown} from '@ant-design/pro-table';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
-import {batchDeleteTask, deleteTask, getTaskByTaskId, getTaskPage} from '@/services/task/task';
+import { batchDeleteTask, deleteTask, getTaskByTaskId, getTaskPage, runTask, startTask, stopTask } from '@/services/task/task';
 import type { TaskForm, TaskVO } from '@/services/task/typings';
-import {getSortOrder} from "@/utils/common";
+import { getSortOrder } from "@/utils/common";
 
 const TaskList: React.FC = () => {
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
@@ -18,7 +18,6 @@ const TaskList: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const [row, setRow] = useState<TaskVO>();
   const [selectedRowsState, setSelectedRows] = useState<TaskVO[]>([]);
-
 
   /**
    * 批量删除任务
@@ -130,17 +129,25 @@ const TaskList: React.FC = () => {
           <a
             onClick={async () => {
               if (record && record.id) {
-                const data = await getTaskByTaskId(record.id);
-                setUpdateFormValues(data as TaskForm);
-                handleUpdateModalVisible(true);
-                // message.error(res.message || `没有获取到任务信息（id:${record.id}）`);
+                const hide = message.loading('正在执行');
+                if (record.open) {
+                  await stopTask(record.id);
+                  hide();
+                  message.success('任务停止成功！')
+                } else {
+                  await startTask(record.id);
+                  hide();
+                  message.success('任务开启成功！')
+                }
+                actionRef.current?.reloadAndRest?.();
               } else {
                 message.warn('没有选中有效的任务');
               }
             }}
           >
-            启动
+            { record.open ? '停止' : '开启' }
           </a>
+          <Divider type="vertical" />
           <a
             onClick={async () => {
               if (record && record.id) {
@@ -156,30 +163,50 @@ const TaskList: React.FC = () => {
             修改
           </a>
           <Divider type="vertical" />
-          <Popconfirm
-            title="确定删除该任务节点?"
-            onConfirm={async () => {
-              if (record && record.id) {
-                await deleteTask(record.id);
-                message.success('删除成功！');
-                actionRef.current?.reloadAndRest?.();
-              } else {
-                message.warn('没有选中有效的任务');
-              }
-            }}
-            okText="确定"
-            cancelText="取消"
-          >
-            <a href="#">删除</a>
-          </Popconfirm>
-          <Divider type="vertical" />
           <TableDropdown
             key="actionGroup"
-            onSelect={(key) => {
-              console.log(key)
+            onSelect={async (key) => {
+              if (key === 'run') {
+                if (record && record.id) {
+                  const hide = message.loading('正在执行');
+                  const data = await runTask(record.id)
+                  hide();
+                  message.success('任务执行成功！返回结果已打印在控制台上。')
+                  // eslint-disable-next-line no-console
+                  console.log(data)
+                } else {
+                  message.warn('没有选中有效的任务');
+                }
+              } else if (key === 'delete') {
+                Modal.confirm({
+                  title: '确认',
+                  icon: <ExclamationCircleOutlined />,
+                  content: '确定该任务？',
+                  okText: '确认',
+                  cancelText: '取消',
+                  onOk: async () => {
+                    const hide = message.loading('正在删除');
+                    try {
+                      if (record && record.id) {
+                        await deleteTask(record.id);
+                        hide();
+                        message.success('删除成功！');
+                        actionRef.current?.reloadAndRest?.();
+                        return true;
+                      }
+                      message.warn('没有选中有效的用户');
+                      return false;
+                    } catch (error) {
+                      hide();
+                      message.error('删除失败，请重试');
+                      return false;
+                    }
+                  },
+                });
+              }
             }}
             menus={[
-              { key: 'copy', name: '复制' },
+              { key: 'run', name: '执行' },
               { key: 'delete', name: '删除' },
             ]}
           />

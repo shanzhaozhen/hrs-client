@@ -1,7 +1,7 @@
 import type { MutableRefObject } from 'react';
 import React, {useEffect, useState} from 'react';
 import type { FormInstance } from 'antd';
-import {Col, Form, Row} from 'antd';
+import { Col, Form, Row } from 'antd';
 import { ProFormSelect, ProFormSwitch, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
 import { getBeanInfoByName, getBeanInfoList } from "@/services/bean/bean";
 import MethodParamInfo from "@/pages/System/TaskList/components/MethodParamInfo";
@@ -9,7 +9,6 @@ import type { MethodInfo } from "@/services/bean/typings";
 
 interface FormProps {
   isEdit?: boolean;
-  formValues?: any;
   formRef: MutableRefObject<FormInstance | any>
 }
 
@@ -34,18 +33,22 @@ const FormBody: React.FC<FormProps> = (props) => {
     return `${methodName})`
   }
 
+  const getMethodOptions = async (beanName: string) => {
+    const { methods } = await getBeanInfoByName(beanName);
+    if (methods) {
+      const options = methods.map(method => {
+        return {
+          label: toMethodSimpleName(method),
+          value: JSON.stringify(method),
+        }
+      })
+      setMethodOptions(options);
+    }
+  }
+
   const beanSelectOnchange = async (changeValue: string) => {
     if (changeValue) {
-      const { methods } = await getBeanInfoByName(changeValue);
-      if (methods) {
-        const options = methods.map(method => {
-          return {
-            label: toMethodSimpleName(method),
-            value: JSON.stringify(method),
-          }
-        })
-        setMethodOptions(options);
-      }
+      await getMethodOptions(changeValue);
     } else {
       setMethodOptions([]);
     }
@@ -77,9 +80,12 @@ const FormBody: React.FC<FormProps> = (props) => {
     }
   }
 
-
   useEffect(() => {
-
+    if (!formRef) return;
+    const fieldValue = formRef.current.getFieldValue('beanName');
+    if (fieldValue) {
+      getMethodOptions(fieldValue).then()
+    }
   }, [])
 
   return (
@@ -113,20 +119,15 @@ const FormBody: React.FC<FormProps> = (props) => {
             request={async () => {
               const data = await getBeanInfoList();
               if (data) {
-                return data.map(({beanName}) => {
-                  // let beanNameView = beanName;
-                  // if (className) {
-                  //   const split = className.split('.')
-                  //   beanNameView += `(${split[split.length - 1]})`
-                  // }
-                  return {
-                    label: beanName,
-                    value: beanName,
-                  }
-                });
+                return data.map(({beanName}) => ({
+                  label: beanName,
+                  value: beanName,
+                }));
               }
               return [];
             }}
+            rules={[{ required: true, message: '请选择Bean名称' }]}
+
             fieldProps={{onChange: beanSelectOnchange}}
           />
         </Col>
@@ -137,6 +138,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             showSearch={false}
             placeholder="请选择Bean"
             options={methodOptions}
+            rules={[{ required: true, message: '请选择方法名' }]}
             fieldProps={{onChange: methodSelectOnchange}}
           />
         </Col>
@@ -151,7 +153,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             label="开启状态"
             checkedChildren="开启"
             unCheckedChildren="停止"
-            fieldProps={{ defaultChecked: true }}
+            fieldProps={{defaultChecked: true}}
           />
         </Col>
         <Col span={24}>
