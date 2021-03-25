@@ -26,18 +26,15 @@ const MethodParamInfo: React.FC<FormProps> = (props) => {
   }, [value]);
 
   const form = () => {
-    // if (value && paramInfo) {
     return (paramInfo && paramInfo.length > 0) ? (
       paramInfo.map((item, index: number) => (
         // eslint-disable-next-line react/no-array-index-key
-        <ProFormText key={index} fieldProps={
+        <ProFormText key={`param-info-${index}`} fieldProps={
           {
             addonBefore: item.paramType,
             defaultValue: item.paramValue,
-            type: "text",
             onChange: ({ target }) => {
               paramInfo[index].paramValue = target.value;
-              console.log(paramInfo);
               onChange?.(JSON.stringify(paramInfo));
             }
           }}

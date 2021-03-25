@@ -1,5 +1,5 @@
 import type { MutableRefObject } from 'react';
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import type { FormInstance } from 'antd';
 import {Col, Form, Row} from 'antd';
 import { ProFormSelect, ProFormSwitch, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
@@ -9,6 +9,7 @@ import type { MethodInfo } from "@/services/bean/typings";
 
 interface FormProps {
   isEdit?: boolean;
+  formValues?: any;
   formRef: MutableRefObject<FormInstance | any>
 }
 
@@ -30,11 +31,10 @@ const FormBody: React.FC<FormProps> = (props) => {
         }
       })
     }
-    return `${methodName  })`
+    return `${methodName})`
   }
 
   const beanSelectOnchange = async (changeValue: string) => {
-    console.log(changeValue)
     if (changeValue) {
       const { methods } = await getBeanInfoByName(changeValue);
       if (methods) {
@@ -70,12 +70,17 @@ const FormBody: React.FC<FormProps> = (props) => {
             })
           }
         }
-        const value = formRef.current.getFieldsValue();
-        value.paramInfo = JSON.stringify(methodParams);
-        formRef.current.setFieldsValue(value)
+        const formValue = formRef.current.getFieldsValue();
+        formValue.paramInfo = JSON.stringify(methodParams);
+        formRef.current.setFieldsValue(formValue)
       }
     }
   }
+
+
+  useEffect(() => {
+
+  }, [])
 
   return (
     <>

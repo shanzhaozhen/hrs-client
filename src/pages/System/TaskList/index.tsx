@@ -1,9 +1,9 @@
 import React, {useRef, useState} from 'react';
 import {ExclamationCircleOutlined, PlusOutlined} from '@ant-design/icons';
-import {Button, Divider, Drawer, Input, message, Modal, Popconfirm} from 'antd';
+import {Button, Divider, Drawer, Input, message, Modal, Popconfirm, Space, Tag} from 'antd';
 import {FooterToolbar, PageContainer} from '@ant-design/pro-layout';
 import type {ActionType, ProColumns} from '@ant-design/pro-table';
-import ProTable from '@ant-design/pro-table';
+import ProTable, {TableDropdown} from '@ant-design/pro-table';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
@@ -92,6 +92,13 @@ const TaskList: React.FC = () => {
       valueType: 'text',
       sorter: true,
       hideInSearch: true,
+      render: (_, record) => (
+        <Space>
+          <Tag color={record.open ? "green" : "red"}>
+            {record.open ? '开启' : '停止'}
+          </Tag>
+        </Space>
+      ),
     },
     {
       title: '描述',
@@ -118,8 +125,22 @@ const TaskList: React.FC = () => {
       title: '操作',
       dataIndex: 'option',
       valueType: 'option',
-      render: (_, record) => (
+      render: (text, record) => (
         <>
+          <a
+            onClick={async () => {
+              if (record && record.id) {
+                const data = await getTaskByTaskId(record.id);
+                setUpdateFormValues(data as TaskForm);
+                handleUpdateModalVisible(true);
+                // message.error(res.message || `没有获取到任务信息（id:${record.id}）`);
+              } else {
+                message.warn('没有选中有效的任务');
+              }
+            }}
+          >
+            启动
+          </a>
           <a
             onClick={async () => {
               if (record && record.id) {
@@ -152,6 +173,16 @@ const TaskList: React.FC = () => {
             <a href="#">删除</a>
           </Popconfirm>
           <Divider type="vertical" />
+          <TableDropdown
+            key="actionGroup"
+            onSelect={(key) => {
+              console.log(key)
+            }}
+            menus={[
+              { key: 'copy', name: '复制' },
+              { key: 'delete', name: '删除' },
+            ]}
+          />
         </>
       ),
     },

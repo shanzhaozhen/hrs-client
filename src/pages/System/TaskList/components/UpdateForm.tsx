@@ -54,7 +54,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
       formRef={formRef}
       onFinish={handleUpdate}
     >
-      <FormBody isEdit={true} formRef={formRef} />
+      <FormBody isEdit={true} formRef={formRef} formValues={values} />
     </ModalForm>
   );
 };
