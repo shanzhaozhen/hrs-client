@@ -1,9 +1,9 @@
 import React from 'react';
 import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import { message } from 'antd';
-import { addResource } from '@/services/resource/resource';
-import type { ResourceForm } from '@/services/resource/typings';
-import FormBody from '@/pages/System/ResourceList/components/FormBody';
+import { addDictionary } from '@/services/dictionary/dictionary';
+import type { DictionaryForm } from '@/services/dictionary/typings';
+import FormBody from '@/pages/System/DictionaryList/components/FormBody';
 import { ModalForm } from '@ant-design/pro-form';
 import type { ActionType } from '@ant-design/pro-table';
 
@@ -17,13 +17,13 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
   const { createModalVisible, handleCreateModalVisible, tableActionRef } = props;
 
   /**
-   * 添加资源
+   * 添加字典
    * @param fields
    */
-  const handleAdd = async (fields: ResourceForm) => {
+  const handleAdd = async (fields: DictionaryForm) => {
     const hide = message.loading('正在添加');
     try {
-      await addResource({ ...fields });
+      await addDictionary({ ...fields });
       hide();
       message.success('添加成功');
       handleCreateModalVisible(false);
@@ -37,7 +37,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
   return (
     <ModalForm
       width={748}
-      title="新建资源"
+      title="新建字典"
       visible={createModalVisible}
       onVisibleChange={handleCreateModalVisible}
       modalProps={{

@@ -69,7 +69,12 @@ export default [
         icon: 'smile',
         component: './System/TaskList',
       },
-
+      {
+        path: '/system/dictionary',
+        name: 'dictionary',
+        icon: 'smile',
+        component: './System/DictionaryList',
+      },
     ],
   },
   {

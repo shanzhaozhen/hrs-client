@@ -7,21 +7,27 @@ import ProTable from '@ant-design/pro-table';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
-import { getResourceByResourceId, getResourceTree, batchDeleteResource, deleteResource } from '@/services/resource/resource';
-import type { ResourceVO } from '@/services/resource/typings';
-import type { ResourceForm } from '@/services/resource/typings';
+import {
+  getDictionaryByDictionaryId,
+  getDictionaryTree,
+  batchDeleteDictionary,
+  deleteDictionary,
+  getDictionaryRootPage
+} from '@/services/dictionary/dictionary';
+import type { DictionaryVO } from '@/services/dictionary/typings';
+import type { DictionaryForm } from '@/services/dictionary/typings';
 
-const ResourceList: React.FC = () => {
+
+const DictionaryList: React.FC = () => {
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [updateFormValues, setUpdateFormValues] = useState({});
   const actionRef = useRef<ActionType>();
-  const [row, setRow] = useState<ResourceVO>();
-  const [selectedRowsState, setSelectedRows] = useState<ResourceVO[]>([]);
+  const [row, setRow] = useState<DictionaryVO>();
+  const [selectedRowsState, setSelectedRows] = useState<DictionaryVO[]>([]);
 
   /**
-   *  删除资源
-   * @param selectedRows
+   *  删除字典
    */
   const handleDelete = async () => {
     Modal.confirm({
@@ -34,7 +40,7 @@ const ResourceList: React.FC = () => {
         const hide = message.loading('正在删除');
         if (!selectedRowsState) return true;
         try {
-          await batchDeleteResource(selectedRowsState.map((selectedRow) => selectedRow.id));
+          await batchDeleteDictionary(selectedRowsState.map((selectedRow) => selectedRow.id));
           hide();
           message.success('删除成功，即将刷新');
           actionRef.current?.reloadAndRest?.();
@@ -48,7 +54,7 @@ const ResourceList: React.FC = () => {
     });
   };
 
-  const columns: ProColumns<ResourceVO>[] = [
+  const columns: ProColumns<DictionaryVO>[] = [
     {
       title: '关键字',
       key: 'keyword',
@@ -75,27 +81,10 @@ const ResourceList: React.FC = () => {
       },
     },
     {
-      title: '资源路由',
+      title: '字典路由',
       dataIndex: 'path',
       valueType: 'text',
       hideInSearch: true,
-    },
-    {
-      title: '资源类型',
-      dataIndex: 'type',
-      valueType: 'text',
-      sorter: true,
-      hideInSearch: true,
-      align: 'center',
-      valueEnum: {
-        0: { text: '分类' },
-        1: { text: 'API' },
-      },
-      render: (_, record) => (
-        <Space>
-          {record.type === 0 ? <Tag color="blue">分类</Tag> : <Tag color="green">API</Tag>}
-        </Space>
-      ),
     },
     {
       title: '排序等级',
@@ -127,12 +116,12 @@ const ResourceList: React.FC = () => {
           <a
             onClick={async () => {
               if (record && record.id) {
-                const data = await getResourceByResourceId(record.id);
-                setUpdateFormValues(data as ResourceForm);
+                const data = await getDictionaryByDictionaryId(record.id);
+                setUpdateFormValues(data as DictionaryForm);
                 handleUpdateModalVisible(true);
-                // message.error(res.message || `没有获取到资源信息（id:${record.id}）`);
+                // message.error(res.message || `没有获取到字典信息（id:${record.id}）`);
               } else {
-                message.warn('没有选中有效的资源');
+                message.warn('没有选中有效的字典');
               }
             }}
           >
@@ -140,18 +129,18 @@ const ResourceList: React.FC = () => {
           </a>
           <Divider type="vertical" />
           <Popconfirm
-            title="确定删除该资源节点?"
+            title="确定删除该字典节点?"
             onConfirm={async () => {
               if (record && record.id) {
                 if (record.children && record.children.length > 0) {
-                  message.warn('该资源节点存在子节点，删除已被拒绝');
+                  message.warn('该字典节点存在子节点，删除已被拒绝');
                   return;
                 }
-                await deleteResource(record.id);
+                await deleteDictionary(record.id);
                 message.success('删除成功！');
                 actionRef.current?.reloadAndRest?.();
               } else {
-                message.warn('没有选中有效的资源');
+                message.warn('没有选中有效的字典');
               }
             }}
             okText="确定"
@@ -166,8 +155,8 @@ const ResourceList: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<ResourceVO>
-        headerTitle="资源管理"
+      <ProTable<DictionaryVO>
+        headerTitle="字典管理"
         actionRef={actionRef}
         rowKey="id"
         search={{
@@ -179,14 +168,14 @@ const ResourceList: React.FC = () => {
           </Button>,
         ]}
         request={async (params) => {
-          const data = await getResourceTree(params);
+          const { records } = await getDictionaryRootPage(params);
           return {
             // success 请返回 true，
             // 不然 table 会停止解析数据，即使有数据
             success: true,
-            data: data || [],
+            data: records.records || [],
             // 不传会使用 data 的长度，如果是分页一定要传
-            total: (data && data.length) || 0,
+            total: (records && records.length) || 0,
           };
         }}
         columns={columns}
@@ -229,7 +218,7 @@ const ResourceList: React.FC = () => {
         closable={false}
       >
         {row?.name && (
-          <ProDescriptions<ResourceVO>
+          <ProDescriptions<DictionaryVO>
             column={2}
             title={row?.name}
             request={async () => ({
@@ -246,4 +235,4 @@ const ResourceList: React.FC = () => {
   );
 };
 
-export default ResourceList;
+export default DictionaryList;
