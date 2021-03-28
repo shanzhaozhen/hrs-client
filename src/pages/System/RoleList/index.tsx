@@ -7,7 +7,7 @@ import ProTable from '@ant-design/pro-table';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
-import {batchDeleteRole, deleteRole, getRoleByRoleId, getRolePage} from '@/services/role/role';
+import {batchDeleteRole, deleteRole, getRoleById, getRolePage} from '@/services/role/role';
 import type {RoleForm, RoleVO} from '@/services/role/typings';
 import UserRelateList from '@/pages/System/UserRelateList';
 import {getSortOrder} from "@/utils/common";
@@ -197,7 +197,7 @@ const RoleList: React.FC = () => {
           <a
             onClick={async () => {
               if (record && record.id) {
-                const data = await getRoleByRoleId(record.id);
+                const data = await getRoleById(record.id);
                 setUpdateFormValues(data as RoleForm);
                 handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到角色信息（id:${record.id}）`);

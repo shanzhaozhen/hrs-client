@@ -24,7 +24,7 @@ export async function getUserPage(pageParams: PageParams, orders?: Orders | unde
 }
 
 /** 获取用户信息（通过用户id） GET /user/${userId} */
-export async function getUserByUserId(userId: number, options?: Record<string, any>) {
+export async function getUserById(userId: number, options?: Record<string, any>) {
   return request<UserVO>(`/hrs-api/user/${userId}`, {
     method: 'GET',
     ...(options || {}),

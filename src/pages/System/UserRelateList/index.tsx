@@ -4,7 +4,7 @@ import {Button, Divider, Drawer, Input, message, Popconfirm} from 'antd';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import type { UserForm, UserVO } from '@/services/user/typings';
-import { getUserByUserId } from '@/services/user/user';
+import { getUserById } from '@/services/user/user';
 import { FooterToolbar } from '@ant-design/pro-layout';
 import { PlusOutlined } from '@ant-design/icons';
 import UpdateForm from '@/pages/System/UserList/components/UpdateForm';
@@ -124,7 +124,7 @@ const UserRelateList: React.FC<UserRelateListProps> = (props) => {
           <a
             onClick={async () => {
               if (record && record.id) {
-                const data = await getUserByUserId(record.id);
+                const data = await getUserById(record.id);
                 setUpdateFormValues(data as UserForm);
                 handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到用户信息（id:${record.id}）`);

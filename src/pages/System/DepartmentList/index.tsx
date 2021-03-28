@@ -7,7 +7,7 @@ import ProTable from '@ant-design/pro-table';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
-import { batchDeleteDepartment, deleteDepartment, getDepartmentByDepartmentId, getDepartmentTree } from '@/services/department/department';
+import { batchDeleteDepartment, deleteDepartment, getDepartmentById, getDepartmentTree } from '@/services/department/department';
 import type { DepartmentVO } from '@/services/department/typings';
 import type { DepartmentForm } from '@/services/department/typings';
 import type { UserVO } from "@/services/user/typings";
@@ -191,7 +191,7 @@ const DepartmentList: React.FC = () => {
           <a
             onClick={async () => {
               if (record && record.id) {
-                const data = await getDepartmentByDepartmentId(record.id);
+                const data = await getDepartmentById(record.id);
                 setUpdateFormValues(data as DepartmentForm);
                 handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到部门信息（id:${record.id}）`);

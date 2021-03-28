@@ -7,7 +7,7 @@ import ProTable from '@ant-design/pro-table';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
-import { batchDeleteUser, deleteUser, getUserByUserId, getUserPage } from '@/services/user/user';
+import { batchDeleteUser, deleteUser, getUserById, getUserPage } from '@/services/user/user';
 import type { UserVO } from '@/services/user/typings';
 import type { UserForm } from '@/services/user/typings';
 import {getSortOrder, tableFilter} from "@/utils/common";
@@ -210,7 +210,7 @@ const UserList: React.FC = () => {
           <a
             onClick={async () => {
               if (record && record.id) {
-                const data = await getUserByUserId(record.id);
+                const data = await getUserById(record.id);
                 setUpdateFormValues(data as UserForm);
                 handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到用户信息（id:${record.id}）`);

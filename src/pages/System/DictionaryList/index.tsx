@@ -1,21 +1,20 @@
-import React, { useState, useRef } from 'react';
+import React, {useRef, useState} from 'react';
 import {ExclamationCircleOutlined, PlusOutlined} from '@ant-design/icons';
-import {Button, message, Input, Drawer, Tag, Space, Popconfirm, Divider, Modal} from 'antd';
-import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
-import type { ProColumns, ActionType } from '@ant-design/pro-table';
+import {Button, Divider, Drawer, Input, message, Modal, Popconfirm} from 'antd';
+import {FooterToolbar, PageContainer} from '@ant-design/pro-layout';
+import type {ActionType, ProColumns} from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
 import {
-  getDictionaryByDictionaryId,
-  getDictionaryTree,
   batchDeleteDictionary,
   deleteDictionary,
+  getDictionaryById,
+  getDictionaryChildrenById,
   getDictionaryRootPage
 } from '@/services/dictionary/dictionary';
-import type { DictionaryVO } from '@/services/dictionary/typings';
-import type { DictionaryForm } from '@/services/dictionary/typings';
+import type {DictionaryForm, DictionaryVO} from '@/services/dictionary/typings';
 
 
 const DictionaryList: React.FC = () => {
@@ -24,7 +23,11 @@ const DictionaryList: React.FC = () => {
   const [updateFormValues, setUpdateFormValues] = useState({});
   const actionRef = useRef<ActionType>();
   const [row, setRow] = useState<DictionaryVO>();
-  const [selectedRowsState, setSelectedRows] = useState<DictionaryVO[]>([]);
+  const [
+    selectedRowsState,
+    // setSelectedRows
+  ] = useState<DictionaryVO[]>([]);
+  const [childrenDictionary, setChildrenDictionary] = useState<any>({});
 
   /**
    *  删除字典
@@ -81,14 +84,21 @@ const DictionaryList: React.FC = () => {
       },
     },
     {
-      title: '字典路由',
-      dataIndex: 'path',
+      title: '字典编码',
+      dataIndex: 'code',
       valueType: 'text',
       hideInSearch: true,
     },
     {
       title: '排序等级',
       dataIndex: 'priority',
+      valueType: 'text',
+      align: 'center',
+      hideInSearch: true,
+    },
+    {
+      title: '字典描述',
+      dataIndex: 'description',
       valueType: 'text',
       align: 'center',
       hideInSearch: true,
@@ -116,7 +126,7 @@ const DictionaryList: React.FC = () => {
           <a
             onClick={async () => {
               if (record && record.id) {
-                const data = await getDictionaryByDictionaryId(record.id);
+                const data = await getDictionaryById(record.id);
                 setUpdateFormValues(data as DictionaryForm);
                 handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到字典信息（id:${record.id}）`);
@@ -153,6 +163,39 @@ const DictionaryList: React.FC = () => {
     },
   ];
 
+  const handleExpand = async (expanded: boolean, record: DictionaryVO) => {
+    if (expanded && record && record.id) {
+      const data = await getDictionaryChildrenById(record.id);
+      setChildrenDictionary({
+        ...childrenDictionary,
+        [record.id]: data
+      })
+    }
+  }
+
+  const expandedRowRender = (record: DictionaryVO) => {
+    return (
+      (record.id && childrenDictionary[record.id] && childrenDictionary[record.id].length > 0) ? (
+        <ProTable
+          key={record.id}
+          rowKey="id"
+          columns={columns}
+          headerTitle={false}
+          search={false}
+          options={false}
+          dataSource={childrenDictionary[record.id]}
+          pagination={false}
+          // showHeader={false}
+          expandedRowRender={expandedRowRender}
+          onExpand={handleExpand}
+        />
+      ) : (
+        <p style={{textAlign: "center"}}>（无子节点）</p>
+      )
+    );
+  };
+
+
   return (
     <PageContainer>
       <ProTable<DictionaryVO>
@@ -167,21 +210,23 @@ const DictionaryList: React.FC = () => {
             <PlusOutlined /> 新建
           </Button>,
         ]}
+        expandedRowRender={expandedRowRender}
+        onExpand={handleExpand}
         request={async (params) => {
           const { records } = await getDictionaryRootPage(params);
           return {
             // success 请返回 true，
             // 不然 table 会停止解析数据，即使有数据
             success: true,
-            data: records.records || [],
+            data: records || [],
             // 不传会使用 data 的长度，如果是分页一定要传
             total: (records && records.length) || 0,
           };
         }}
         columns={columns}
-        rowSelection={{
-          onChange: (_, selectedRows) => setSelectedRows(selectedRows),
-        }}
+        // rowSelection={{
+        //   onChange: (_, selectedRows) => setSelectedRows(selectedRows),
+        // }}
       />
       {selectedRowsState?.length > 0 && (
         <FooterToolbar

@@ -50,7 +50,7 @@ const FormBody: React.FC<FormProps> = () => {
             width="md"
             name="name"
             label="菜单名称"
-            rules={[{ required: true, message: '请输入您的菜单名称' }]}
+            rules={[{ required: true, message: '请输入菜单名称' }]}
           />
         </Col>
         <Col xl={12} lg={12} md={24}>
@@ -61,7 +61,7 @@ const FormBody: React.FC<FormProps> = () => {
             width="md"
             name="path"
             label="菜单路径"
-            rules={[{ required: true, message: '请输入您的菜单路径' }]}
+            rules={[{ required: true, message: '请输入菜单路径' }]}
           />
         </Col>
         <Col xl={12} lg={12} md={24}>

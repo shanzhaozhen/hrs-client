@@ -1,17 +1,19 @@
 import React from 'react';
 import { TreeSelect } from 'antd';
 import type { DataNode } from 'rc-tree/lib/interface';
+import type { LegacyDataNode } from "rc-tree-select/lib/interface";
 
 interface FormTreeSelectProps {
   placeholder?: string;
   checkStrictly?: boolean;
+  loadData?: (dataNode: LegacyDataNode) => Promise<unknown>;
   treeData?: DataNode[];
   onChange?: (value: any) => void;
   value?: any;
 }
 
 const FormTreeSelect: React.FC<FormTreeSelectProps> = (props) => {
-  const { placeholder, treeData, onChange, value } = props;
+  const { placeholder, loadData, treeData, onChange, value } = props;
 
   const triggerChange = (changeValue: number[]) => {
     onChange?.(changeValue);
@@ -24,6 +26,7 @@ const FormTreeSelect: React.FC<FormTreeSelectProps> = (props) => {
       style={{ width: '100%' }}
       dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
       value={value}
+      loadData={loadData}
       treeData={treeData}
       onChange={triggerChange}
       placeholder={placeholder}

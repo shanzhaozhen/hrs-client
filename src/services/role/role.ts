@@ -25,7 +25,7 @@ export async function getAllRoles(options?: Record<string, any>) {
 }
 
 /** 获取角色信息（通过角色id） GET /role/${roleId} */
-export async function getRoleByRoleId(roleId: number, options?: Record<string, any>) {
+export async function getRoleById(roleId: number, options?: Record<string, any>) {
   return request<RoleVO>(`/hrs-api/role/${roleId}`, {
     method: 'GET',
     ...(options || {}),

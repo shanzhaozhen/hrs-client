@@ -19,7 +19,7 @@ export async function getAllResourceRootTree(options?: Record<string, any>) {
 }
 
 /** 获取资源（通过资源id） GET /resource/${resourceId} */
-export async function getResourceByResourceId(resourceId: number, options?: Record<string, any>) {
+export async function getResourceById(resourceId: number, options?: Record<string, any>) {
   return request<ResourceVO>(`/hrs-api/resource/${resourceId}`, {
     method: 'GET',
     ...(options || {}),

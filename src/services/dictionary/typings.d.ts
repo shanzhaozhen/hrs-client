@@ -1,5 +1,3 @@
-import type { RoleVO } from "@/services/role/typings";
-
 export type DictionaryForm = {
   /** 主键ID */
   id?: number;

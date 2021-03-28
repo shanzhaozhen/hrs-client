@@ -7,7 +7,7 @@ import ProTable from '@ant-design/pro-table';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
-import {batchDeleteMenu, deleteMenu, getMenuByMenuId, getMenuTree} from '@/services/menu/menu';
+import {batchDeleteMenu, deleteMenu, getMenuById, getMenuTree} from '@/services/menu/menu';
 import type { MenuVO } from '@/services/menu/typings';
 import type { MenuForm } from '@/services/menu/typings';
 import * as iconMap from '@ant-design/icons';
@@ -141,7 +141,7 @@ const MenuList: React.FC = () => {
           <a
             onClick={async () => {
               if (record && record.id) {
-                const data = await getMenuByMenuId(record.id);
+                const data = await getMenuById(record.id);
                 setUpdateFormValues(data as MenuForm);
                 handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到菜单信息（id:${record.id}）`);

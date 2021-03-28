@@ -44,7 +44,7 @@ export async function updateMenu(menuForm: MenuForm, options?: Record<string, an
 }
 
 /** 获取菜单信息（通过菜单id） GET /menu/${menuId} */
-export async function getMenuByMenuId(menuId: number, options?: Record<string, any>) {
+export async function getMenuById(menuId: number, options?: Record<string, any>) {
   return request<MenuVO>(`/hrs-api/menu/${menuId}`, {
     method: 'GET',
     ...(options || {}),

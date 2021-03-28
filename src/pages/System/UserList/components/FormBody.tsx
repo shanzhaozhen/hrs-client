@@ -48,7 +48,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             label="用户名"
             disabled={isEdit}
             fieldProps={{ autoComplete: 'off' }}
-            rules={[{ required: true, message: '请输入您的用户名' }]}
+            rules={[{ required: true, message: '请输入用户名' }]}
           />
         </Col>
         <Col xl={12} lg={12} md={24}>
@@ -117,7 +117,7 @@ const FormBody: React.FC<FormProps> = (props) => {
               { label: '男', value: 0 },
               { label: '女', value: 1 },
             ]}
-            placeholder="请选择您的性别"
+            placeholder="请选择性别"
           />
         </Col>
         <Col xl={12} lg={12} md={24}>

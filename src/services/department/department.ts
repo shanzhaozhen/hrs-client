@@ -3,7 +3,7 @@ import { request } from 'umi';
 import type { DepartmentForm, DepartmentVO } from "@/services/department/typings";
 
 /** 获取部门信息（通过部门id） GET /department/${departmentId} */
-export async function getDepartmentByDepartmentId(departmentId: number, options?: Record<string, any>) {
+export async function getDepartmentById(departmentId: number, options?: Record<string, any>) {
   return request<DepartmentVO>(`/hrs-api/department/${departmentId}`, {
     method: 'GET',
     ...(options || {}),

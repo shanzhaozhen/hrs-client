@@ -56,7 +56,7 @@ const FormBody: React.FC<FormProps> = () => {
             width="md"
             name="name"
             label="角色名称"
-            rules={[{ required: true, message: '请输入您的角色名称' }]}
+            rules={[{ required: true, message: '请输入角色名称' }]}
           />
         </Col>
         <Col xl={12} lg={12} md={24}>
@@ -64,7 +64,7 @@ const FormBody: React.FC<FormProps> = () => {
             width="md"
             name="code"
             label="角色代码"
-            rules={[{ required: true, message: '请输入您的角色代码' }]}
+            rules={[{ required: true, message: '请输入角色代码' }]}
           />
         </Col>
         <Col span={24}>

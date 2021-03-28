@@ -1,29 +1,28 @@
 import React, {useEffect, useState} from 'react';
-import { Col, Form, Row } from 'antd';
-import { ProFormDigit, ProFormSelect, ProFormText } from '@ant-design/pro-form';
-import { getDictionaryTree } from '@/services/dictionary/dictionary';
+import {Col, Form, Row} from 'antd';
+import {ProFormDigit, ProFormText, ProFormTextArea} from '@ant-design/pro-form';
 import FormTreeSelect from "@/components/FormTreeSelect";
-import type { DictionaryVO } from "@/services/dictionary/typings";
+import {getDictionaryChildrenById, getDictionaryRootList} from "@/services/dictionary/dictionary";
+import type {DataNode} from "rc-tree/lib/interface";
 
 interface FormProps {
   isEdit?: boolean;
 }
 
 const FormBody: React.FC<FormProps> = () => {
-  const [dictionaryTree, setDictionaryTree] = useState<[]>();
 
-  const loopDictionaryData = (dictionaryData: DictionaryVO[]): any =>
-    dictionaryData.map(({ id, name, path, children }) => ({
-      title: name + (path ? `(${path})` : ''),
-      value: id,
-      children: children && loopDictionaryData(children),
-    }));
+  const [dictionaryTree, setDictionaryTree] = useState<any[]>([]);
 
   useEffect(() => {
-    getDictionaryTree()
-      .then((res) => {
+    getDictionaryRootList()
+      .then(res => {
         if (res) {
-          setDictionaryTree(loopDictionaryData(res));
+          setDictionaryTree(res.map(({ id, name }) => ({
+            key: id,
+            value: id,
+            title: name,
+            isLeaf: false
+          })));
         } else {
           setDictionaryTree([]);
         }
@@ -33,6 +32,40 @@ const FormBody: React.FC<FormProps> = () => {
       });
   }, []);
 
+  const updateDictionaryTreeData = (list: DataNode[], key: React.Key, children: any[]): DataNode[] => {
+    return list.map(node => {
+      if (node.key === key) {
+        if (children && children.length > 0) {
+          return {
+            ...node,
+            children,
+          };
+        }
+        return {
+          ...node,
+          isLeaf: true,
+        };
+      }
+      if (node.children) {
+        return {
+          ...node,
+          children: updateDictionaryTreeData(node.children, key, children),
+        };
+      }
+      return node;
+    });
+  }
+
+  const onLoadDictionaryTreeData = async ({ key }: any) => {
+    const data = await getDictionaryChildrenById(key);
+
+    setDictionaryTree(origin => updateDictionaryTreeData(origin, key, data.map(({ id, name }) => ({
+      key: id,
+      value: id,
+      title: name,
+      isLeaf: false
+    }))));
+  }
 
   return (
     <>
@@ -43,33 +76,15 @@ const FormBody: React.FC<FormProps> = () => {
             width="md"
             name="name"
             label="字典名称"
-            rules={[{ required: true, message: '请输入您的字典名称' }]}
-          />
-        </Col>
-        <Col xl={12} lg={12} md={24}>
-          <ProFormSelect
-            width="md"
-            name="type"
-            label="字典类型"
-            options={[
-              { label: '分类', value: 0 },
-              { label: 'API', value: 1 },
-            ]}
-            placeholder="请选择字典类型"
-            rules={[{ required: true, message: '请选择字典类型' }]}
+            rules={[{ required: true, message: '请输入字典名称' }]}
           />
         </Col>
         <Col xl={12} lg={12} md={24}>
           <ProFormText
             width="md"
-            name="path"
-            label="字典路由"
-            rules={[
-              ({ getFieldValue }) => ({
-                required: getFieldValue('type') === 1,
-                message: '请输入字典路由'
-              }),
-            ]}
+            name="code"
+            label="字典编码"
+            rules={[{ required: true, message: '请输入字典编码' }]}
           />
         </Col>
         <Col xl={12} lg={12} md={24}>
@@ -87,11 +102,14 @@ const FormBody: React.FC<FormProps> = () => {
               }),
             ]}
           >
-            <FormTreeSelect treeData={dictionaryTree} placeholder="上级字典" />
+            <FormTreeSelect loadData={onLoadDictionaryTreeData} treeData={dictionaryTree} placeholder="上级字典" />
           </Form.Item>
         </Col>
         <Col xl={12} lg={12} md={24}>
           <ProFormDigit width="md" name="priority" label="排序等级" min={1} />
+        </Col>
+        <Col span={24}>
+          <ProFormTextArea name="description" label="描述" />
         </Col>
       </Row>
     </>

@@ -7,7 +7,7 @@ import ProTable from '@ant-design/pro-table';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
-import { getResourceByResourceId, getResourceTree, batchDeleteResource, deleteResource } from '@/services/resource/resource';
+import { getResourceById, getResourceTree, batchDeleteResource, deleteResource } from '@/services/resource/resource';
 import type { ResourceVO } from '@/services/resource/typings';
 import type { ResourceForm } from '@/services/resource/typings';
 
@@ -127,7 +127,7 @@ const ResourceList: React.FC = () => {
           <a
             onClick={async () => {
               if (record && record.id) {
-                const data = await getResourceByResourceId(record.id);
+                const data = await getResourceById(record.id);
                 setUpdateFormValues(data as ResourceForm);
                 handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到资源信息（id:${record.id}）`);

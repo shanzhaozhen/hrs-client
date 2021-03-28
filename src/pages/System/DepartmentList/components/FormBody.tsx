@@ -43,7 +43,7 @@ const FormBody: React.FC<FormProps> = () => {
             width="md"
             name="name"
             label="部门名称"
-            rules={[{ required: true, message: '请输入您的部门名称' }]}
+            rules={[{ required: true, message: '请输入部门名称' }]}
           />
         </Col>
         <Col xl={12} lg={12} md={24}>
@@ -51,7 +51,7 @@ const FormBody: React.FC<FormProps> = () => {
             width="md"
             name="code"
             label="部门代码"
-            placeholder="请输入您的部门代码"
+            placeholder="请输入部门代码"
           />
         </Col>
         <Col xl={12} lg={12} md={24}>
