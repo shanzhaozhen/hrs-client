@@ -15,7 +15,7 @@ import CheckBoxUser from "@/pages/System/UserRelateList/components/CheckBoxUser"
 import type { Page } from "@/services/common/typings";
 import type { PageParams } from "@/services/common/typings";
 import type { SortOrder } from "antd/lib/table/interface";
-import {tableFilter} from "@/utils/common";
+import {getPageParams, tableFilter} from "@/utils/common";
 import {getAllDepartments} from "@/services/department/department";
 
 interface UserRelateListProps {
@@ -177,7 +177,7 @@ const UserRelateList: React.FC<UserRelateListProps> = (props) => {
           </Button>,
         ]}
         request={async (params, sorter) => {
-          const data = await queryList(params, sorter);
+          const data = await queryList(getPageParams(params), sorter);
           return {
             // success 请返回 true，
             // 不然 table 会停止解析数据，即使有数据

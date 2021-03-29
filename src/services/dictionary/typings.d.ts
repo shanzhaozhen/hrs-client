@@ -28,6 +28,8 @@ export type DictionaryVO = {
   description?: string;
   /** 子成员 */
   children?: DictionaryVO[];
+  /** 是否有子成员 */
+  hasChildren?: boolean;
   /** 创建人 */
   createdBy?: string;
   /** 创建人名称 */

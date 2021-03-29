@@ -9,7 +9,7 @@ import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
 import { batchDeleteTask, deleteTask, getTaskByTaskId, getTaskPage, runTask, startTask, stopTask } from '@/services/task/task';
 import type { TaskForm, TaskVO } from '@/services/task/typings';
-import { getSortOrder } from "@/utils/common";
+import {getPageParams, getSortOrder} from "@/utils/common";
 
 const TaskList: React.FC = () => {
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
@@ -230,7 +230,7 @@ const TaskList: React.FC = () => {
           </Button>,
         ]}
         request={async (params, sorter) => {
-          const data = await getTaskPage(params, getSortOrder(sorter));
+          const data = await getTaskPage(getPageParams(params), getSortOrder(sorter));
           return {
             // success 请返回 true，
             // 不然 table 会停止解析数据，即使有数据

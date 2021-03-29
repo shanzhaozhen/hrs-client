@@ -10,6 +10,7 @@ import UpdateForm from './components/UpdateForm';
 import { getResourceById, getResourceTree, batchDeleteResource, deleteResource } from '@/services/resource/resource';
 import type { ResourceVO } from '@/services/resource/typings';
 import type { ResourceForm } from '@/services/resource/typings';
+import {getPageParams} from "@/utils/common";
 
 const ResourceList: React.FC = () => {
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
@@ -179,7 +180,7 @@ const ResourceList: React.FC = () => {
           </Button>,
         ]}
         request={async (params) => {
-          const data = await getResourceTree(params);
+          const data = await getResourceTree(getPageParams(params));
           return {
             // success 请返回 true，
             // 不然 table 会停止解析数据，即使有数据

@@ -160,7 +160,7 @@ const afterResponseInterceptors = async (response: Response, options: RequestOpt
     if (res.code === 2000) {
       return res;
     }
-    return res.data;
+    return res.data || res;
   }
 
   const error = {

@@ -10,7 +10,7 @@ import UpdateForm from './components/UpdateForm';
 import {batchDeleteRole, deleteRole, getRoleById, getRolePage} from '@/services/role/role';
 import type {RoleForm, RoleVO} from '@/services/role/typings';
 import UserRelateList from '@/pages/System/UserRelateList';
-import {getSortOrder} from "@/utils/common";
+import {getPageParams, getSortOrder} from "@/utils/common";
 import {addUserRole, deleteUserRoles} from "@/services/user-role/user-role";
 import type {UserVO} from "@/services/user/typings";
 import type { SortOrder } from "antd/lib/table/interface";
@@ -259,7 +259,7 @@ const RoleList: React.FC = () => {
           </Button>,
         ]}
         request={async (params, sorter) => {
-          const data = await getRolePage(params, getSortOrder(sorter));
+          const data = await getRolePage(getPageParams(params), getSortOrder(sorter));
           return {
             // success 请返回 true，
             // 不然 table 会停止解析数据，即使有数据
@@ -311,7 +311,7 @@ const RoleList: React.FC = () => {
           handleBatchAddUserRelate={handleBatchAddUserRole}
           handleDeleteUserRelate={handleDeleteUserRole}
           handleBatchDeleteUserRelate={handleBatchDeleteUserRole}
-          queryList={async (params: PageParams, sorter: Record<string, SortOrder>) => (await getUserPageByRoleId(params, updateFormValues.id, getSortOrder(sorter)))}
+          queryList={async (params: PageParams, sorter: Record<string, SortOrder>) => (await getUserPageByRoleId(getPageParams(params), updateFormValues.id, getSortOrder(sorter)))}
           values={updateFormValues}
         />
       ) : null}

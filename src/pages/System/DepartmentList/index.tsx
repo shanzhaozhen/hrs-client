@@ -14,7 +14,7 @@ import type { UserVO } from "@/services/user/typings";
 import UserRelateList from "@/pages/System/UserRelateList";
 import type { PageParams } from "@/services/common/typings";
 import type { SortOrder } from "antd/lib/table/interface";
-import { getSortOrder } from "@/utils/common";
+import {getPageParams, getSortOrder} from "@/utils/common";
 import {batchUpdateUserDepartment, getUserPageByDepartmentId} from "@/services/user/user";
 
 const DepartmentList: React.FC = () => {
@@ -305,7 +305,7 @@ const DepartmentList: React.FC = () => {
           handleBatchAddUserRelate={handleBatchAddUserDepartment}
           handleDeleteUserRelate={handleDeleteUserDepartment}
           handleBatchDeleteUserRelate={handleBatchDeleteUserDepartment}
-          queryList={async (params: PageParams, sorter: Record<string, SortOrder>) => (await getUserPageByDepartmentId(params, updateFormValues.id, getSortOrder(sorter)))}
+          queryList={async (params: PageParams, sorter: Record<string, SortOrder>) => (await getUserPageByDepartmentId(getPageParams(params), updateFormValues.id, getSortOrder(sorter)))}
           values={updateFormValues}
         />
       ) : null}

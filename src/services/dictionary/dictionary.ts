@@ -2,6 +2,7 @@
 import { request } from 'umi';
 import type { DictionaryForm, DictionaryVO } from "@/services/dictionary/typings";
 import type { Page } from "@/services/common/typings";
+import type { Orders, PageParams } from "@/services/common/typings";
 
 /** 获取所有根部字典 GET /dictionary/root */
 export async function getDictionaryRootList(options?: Record<string, any>) {
@@ -12,9 +13,13 @@ export async function getDictionaryRootList(options?: Record<string, any>) {
 }
 
 /** 获取所有根部字典 GET /dictionary/page/root */
-export async function getDictionaryRootPage(options?: Record<string, any>) {
+export async function getDictionaryRootPage(pageParams: PageParams, orders?: Orders | undefined | null, options?: Record<string, any>) {
   return request<Page<DictionaryVO>>('/hrs-api/dictionary/page/root', {
     method: 'GET',
+    params: {
+      ...pageParams,
+      ...orders,
+    },
     ...(options || {}),
   });
 }
@@ -30,6 +35,14 @@ export async function getDictionaryById(dictionaryId: number, options?: Record<s
 /** 获取字典树（通过父级字典id） GET /dictionary/${dictionaryId}/tree */
 export async function getDictionaryTreeById(dictionaryId: number, options?: Record<string, any>) {
   return request<DictionaryVO>(`/hrs-api/dictionary/${dictionaryId}/tree`, {
+    method: 'GET',
+    ...(options || {}),
+  });
+}
+
+/** 通过ID获取所在的树 GET /dictionary/${dictionaryId}/tree/parent */
+export async function getDictionaryParentTreeById(dictionaryId: number, options?: Record<string, any>,) {
+  return request<DictionaryVO>(`/hrs-api/dictionary/${dictionaryId}/tree/parent`, {
     method: 'GET',
     ...(options || {}),
   });

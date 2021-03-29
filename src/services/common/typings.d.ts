@@ -15,7 +15,7 @@ export type PageParams = {
   /** 当前的页码 */
   current?: number;
   /** 分页大小 */
-  pageSize?: number;
+  size?: number;
 };
 
 export type Page<T> = {
