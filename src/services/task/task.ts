@@ -5,8 +5,7 @@ import type { Orders, PageParams } from "@/services/common/typings";
 import type { TaskForm, TaskVO } from "@/services/task/typings";
 
 /** 获取任务信息（分页） GET /task/page */
-export async function getTaskPage(
-  pageParams: PageParams, orders?: Orders | undefined | null, options?: Record<string, any>) {
+export async function getTaskPage(pageParams: PageParams, orders?: Orders | undefined | null, options?: Record<string, any>) {
   return request<Page<TaskVO>>('/hrs-api/task/page', {
     method: 'GET',
     params: {

@@ -34,7 +34,7 @@ const DepartmentList: React.FC = () => {
     Modal.confirm({
       title: '确认',
       icon: <ExclamationCircleOutlined/>,
-      content: '确定批量删除勾选中的用户吗',
+      content: '确定批量删除勾选中的部门吗',
       okText: '确认',
       cancelText: '取消',
       onOk: async () => {

@@ -57,4 +57,5 @@ export default {
   'menu.system.department': '部门管理',
   'menu.system.dictionary': '字典管理',
   'menu.system.task': '定时任务',
+  'menu.system.region': '区域管理',
 };

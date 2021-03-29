@@ -26,7 +26,7 @@ const TaskList: React.FC = () => {
     Modal.confirm({
       title: '确认',
       icon: <ExclamationCircleOutlined />,
-      content: '确定批量删除勾选中的任务吗',
+      content: '确定批量删除勾选中的文件吗',
       okText: '确认',
       cancelText: '取消',
       onOk: async () => {

@@ -82,7 +82,8 @@ const FormBody: React.FC<FormProps> = () => {
             width="md"
             name="code"
             label="字典编码"
-            rules={[{ required: true, message: '请输入字典编码' }]}
+            placeholder="请输入字典编码"
+            // rules={[{ required: true, message: '请输入字典编码' }]}
           />
         </Col>
         {/* <Col xl={12} lg={12} md={24}>

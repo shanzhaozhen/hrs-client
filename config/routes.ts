@@ -75,6 +75,18 @@ export default [
         icon: 'smile',
         component: './System/DictionaryList',
       },
+      {
+        path: '/system/region',
+        name: 'region',
+        icon: 'smile',
+        component: './System/RegionList',
+      },
+      {
+        path: '/system/file',
+        name: 'file',
+        icon: 'smile',
+        component: './System/FileList',
+      },
     ],
   },
   {

@@ -1,40 +1,41 @@
-import {ExclamationCircleOutlined, PlusOutlined} from '@ant-design/icons';
-import {Button, message, Input, Drawer, Space, Divider, Popconfirm, Modal} from 'antd';
 import React, { useState, useRef } from 'react';
+import {ExclamationCircleOutlined, PlusOutlined} from '@ant-design/icons';
+import {Button, message, Input, Drawer, Popconfirm, Divider, Modal} from 'antd';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
-import {batchDeleteMenu, deleteMenu, getMenuById, getMenuTree} from '@/services/menu/menu';
-import type { MenuVO } from '@/services/menu/typings';
-import type { MenuForm } from '@/services/menu/typings';
-import * as iconMap from '@ant-design/icons';
+import { getRegionById, getRegionTree, batchDeleteRegion, deleteRegion } from '@/services/region/region';
+import type { RegionVO } from '@/services/region/typings';
+import type { RegionForm } from '@/services/region/typings';
+import {getPageParams} from "@/utils/common";
 
-const MenuList: React.FC = () => {
+const RegionList: React.FC = () => {
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [updateFormValues, setUpdateFormValues] = useState({});
   const actionRef = useRef<ActionType>();
-  const [row, setRow] = useState<MenuVO>();
-  const [selectedRowsState, setSelectedRows] = useState<MenuVO[]>([]);
+  const [row, setRow] = useState<RegionVO>();
+  const [selectedRowsState, setSelectedRows] = useState<RegionVO[]>([]);
 
   /**
-   *  删除菜单
+   *  删除资源
+   * @param selectedRows
    */
-  const handleDelete = () => {
+  const handleDelete = async () => {
     Modal.confirm({
       title: '确认',
-      icon: <ExclamationCircleOutlined/>,
-      content: '确定批量删除勾选中的菜单吗',
+      icon: <ExclamationCircleOutlined />,
+      content: '确定批量删除勾选中的区域吗',
       okText: '确认',
       cancelText: '取消',
       onOk: async () => {
         const hide = message.loading('正在删除');
         if (!selectedRowsState) return true;
         try {
-          await batchDeleteMenu(selectedRowsState.map((selectedRow) => selectedRow.id));
+          await batchDeleteRegion(selectedRowsState.map((selectedRow) => selectedRow.id));
           hide();
           message.success('删除成功，即将刷新');
           actionRef.current?.reloadAndRest?.();
@@ -48,7 +49,7 @@ const MenuList: React.FC = () => {
     });
   };
 
-  const columns: ProColumns<MenuVO>[] = [
+  const columns: ProColumns<RegionVO>[] = [
     {
       title: '关键字',
       key: 'keyword',
@@ -60,7 +61,7 @@ const MenuList: React.FC = () => {
       },
     },
     {
-      title: '菜单名称',
+      title: '名称',
       dataIndex: 'name',
       valueType: 'text',
       sorter: true,
@@ -75,48 +76,17 @@ const MenuList: React.FC = () => {
       },
     },
     {
-      title: '菜单名称（本地化）',
-      dataIndex: 'locale',
-      valueType: 'text',
-      sorter: true,
-      hideInSearch: true,
-    },
-    {
-      title: '菜单路径',
-      dataIndex: 'path',
+      title: '区域编号',
+      dataIndex: 'code',
       valueType: 'text',
       hideInSearch: true,
     },
     {
-      title: '图标',
-      dataIndex: 'icon',
+      title: '层级',
+      dataIndex: 'level',
       valueType: 'text',
       align: 'center',
       hideInSearch: true,
-      render: (_, record) => (
-        <Space>{record.icon && React.createElement(iconMap[record.icon])}</Space>
-      ),
-    },
-    {
-      title: '排序等级',
-      dataIndex: 'priority',
-      valueType: 'text',
-      align: 'center',
-      hideInSearch: true,
-    },
-    {
-      title: '菜单是否隐藏',
-      dataIndex: 'hideInMenu',
-      align: 'center',
-      hideInSearch: true,
-      render: (_, record) => <Space>{record.hideInMenu ? '是' : '否'}</Space>,
-    },
-    {
-      title: '隐藏子节点',
-      dataIndex: 'hideChildrenInMenu',
-      align: 'center',
-      hideInSearch: true,
-      render: (_, record) => <Space>{record.hideChildrenInMenu ? '是' : '否'}</Space>,
     },
     {
       title: '创建时间',
@@ -141,12 +111,12 @@ const MenuList: React.FC = () => {
           <a
             onClick={async () => {
               if (record && record.id) {
-                const data = await getMenuById(record.id);
-                setUpdateFormValues(data as MenuForm);
+                const data = await getRegionById(record.id);
+                setUpdateFormValues(data as RegionForm);
                 handleUpdateModalVisible(true);
-                // message.error(res.message || `没有获取到菜单信息（id:${record.id}）`);
+                // message.error(res.message || `没有获取到资源信息（id:${record.id}）`);
               } else {
-                message.warn('没有选中有效的菜单');
+                message.warn('没有选中有效的资源');
               }
             }}
           >
@@ -154,18 +124,18 @@ const MenuList: React.FC = () => {
           </a>
           <Divider type="vertical" />
           <Popconfirm
-            title="确定删除该菜单节点?"
+            title="确定删除该资源节点?"
             onConfirm={async () => {
               if (record && record.id) {
                 if (record.children && record.children.length > 0) {
-                  message.warn('该菜单节点存在子节点，删除已被拒绝');
+                  message.warn('该资源节点存在子节点，删除已被拒绝');
                   return;
                 }
-                await deleteMenu(record.id);
+                await deleteRegion(record.id);
                 message.success('删除成功！');
                 actionRef.current?.reloadAndRest?.();
               } else {
-                message.warn('没有选中有效的菜单');
+                message.warn('没有选中有效的资源');
               }
             }}
             okText="确定"
@@ -180,8 +150,8 @@ const MenuList: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<MenuVO>
-        headerTitle="菜单管理"
+      <ProTable<RegionVO>
+        headerTitle="资源管理"
         actionRef={actionRef}
         rowKey="id"
         search={{
@@ -192,15 +162,15 @@ const MenuList: React.FC = () => {
             <PlusOutlined /> 新建
           </Button>,
         ]}
-        request={async () => {
-          const data = await getMenuTree();
+        request={async (params) => {
+          const data = await getRegionTree(getPageParams(params));
           return {
             // success 请返回 true，
             // 不然 table 会停止解析数据，即使有数据
             success: true,
-            data,
+            data: data || [],
             // 不传会使用 data 的长度，如果是分页一定要传
-            total: data.length,
+            total: (data && data.length) || 0,
           };
         }}
         columns={columns}
@@ -216,7 +186,7 @@ const MenuList: React.FC = () => {
             </div>
           }
         >
-        <Button onClick={handleDelete}>批量删除</Button>
+          <Button onClick={handleDelete}>批量删除</Button>
         </FooterToolbar>
       )}
       <CreateForm
@@ -243,7 +213,7 @@ const MenuList: React.FC = () => {
         closable={false}
       >
         {row?.name && (
-          <ProDescriptions<MenuVO>
+          <ProDescriptions<RegionVO>
             column={2}
             title={row?.name}
             request={async () => ({
@@ -260,4 +230,4 @@ const MenuList: React.FC = () => {
   );
 };
 
-export default MenuList;
+export default RegionList;
