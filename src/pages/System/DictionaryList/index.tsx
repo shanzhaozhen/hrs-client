@@ -22,9 +22,9 @@ const DictionaryList: React.FC = () => {
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [updateFormValues, setUpdateFormValues] = useState({});
   const actionRef = useRef<ActionType>();
+  const [dictionaryData, setDictionaryData] = useState<DictionaryVO[]>([]);
   const [row, setRow] = useState<DictionaryVO>();
   const [selectedRowsState, setSelectedRows] = useState<DictionaryVO[]>([]);
-  const [dictionaryData, setDictionaryData] = useState<DictionaryVO[]>([]);
 
   /**
    *  删除字典
@@ -169,7 +169,7 @@ const DictionaryList: React.FC = () => {
     },
   ];
 
-  const updateDictionaryData = (list: DictionaryVO[], key: number | undefined, children: any[]): DictionaryVO[] => {
+  const updateDictionaryData = (list: DictionaryVO[], key: number | undefined, children: DictionaryVO[]): DictionaryVO[] => {
     return list.map(node => {
       if (node.id === key) {
         if (children && children.length > 0) {

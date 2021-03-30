@@ -24,6 +24,8 @@ export type RegionVO = {
   level?: number;
   /** 下级区域 */
   children?: RegionVO[];
+  /** 是否有子成员 */
+  hasChildren?: boolean;
   /** 创建人 */
   createdBy?: string;
   /** 创建人名称 */

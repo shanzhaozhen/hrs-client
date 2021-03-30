@@ -7,16 +7,23 @@ import ProTable from '@ant-design/pro-table';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
-import { getRegionById, getRegionTree, batchDeleteRegion, deleteRegion } from '@/services/region/region';
+import {
+  getRegionById,
+  batchDeleteRegion,
+  deleteRegion,
+  getRegionRootPage, getRegionChildrenById
+} from '@/services/region/region';
 import type { RegionVO } from '@/services/region/typings';
 import type { RegionForm } from '@/services/region/typings';
-import {getPageParams} from "@/utils/common";
+import {getPageParams, getSortOrder} from "@/utils/common";
+import type {DictionaryVO} from "@/services/dictionary/typings";
 
 const RegionList: React.FC = () => {
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [updateFormValues, setUpdateFormValues] = useState({});
   const actionRef = useRef<ActionType>();
+  const [regionData, setRegionData] = useState<RegionVO[]>([]);
   const [row, setRow] = useState<RegionVO>();
   const [selectedRowsState, setSelectedRows] = useState<RegionVO[]>([]);
 
@@ -148,6 +155,37 @@ const RegionList: React.FC = () => {
     },
   ];
 
+  const updateRegionData = (list: DictionaryVO[], key: number | undefined, children: DictionaryVO[]): DictionaryVO[] => {
+    return list.map(node => {
+      if (node.id === key) {
+        if (children && children.length > 0) {
+          return {
+            ...node,
+            children,
+          };
+        }
+        return {
+          ...node,
+          children: undefined
+        };
+      }
+      if (node.children) {
+        return {
+          ...node,
+          children: updateRegionData(node.children, key, children),
+        };
+      }
+      return node;
+    });
+  }
+
+  const onLoadRegionChildren = async (expanded: boolean, record: DictionaryVO) => {
+    if (expanded && record && record.id) {
+      const data = await getRegionChildrenById(record.id);
+      setRegionData(origin => updateRegionData(origin, record.id, data.map(item => ({ ...item, children: item.hasChildren ? [] : undefined }))));
+    }
+  }
+
   return (
     <PageContainer>
       <ProTable<RegionVO>
@@ -162,17 +200,16 @@ const RegionList: React.FC = () => {
             <PlusOutlined /> 新建
           </Button>,
         ]}
-        request={async (params) => {
-          const data = await getRegionTree(getPageParams(params));
+        onExpand={onLoadRegionChildren}
+        request={async (params, sort) => {
+          const res = await getRegionRootPage(getPageParams(params), getSortOrder(sort));
+          const data = res.records ? res.records.map(item => ({ ...item, children: item.hasChildren ? [] : undefined })) : []
+          setRegionData(data);
           return {
-            // success 请返回 true，
-            // 不然 table 会停止解析数据，即使有数据
-            success: true,
-            data: data || [],
-            // 不传会使用 data 的长度，如果是分页一定要传
-            total: (data && data.length) || 0,
+            total: res.total,
           };
         }}
+        dataSource={regionData}
         columns={columns}
         rowSelection={{
           onChange: (_, selectedRows) => setSelectedRows(selectedRows),
