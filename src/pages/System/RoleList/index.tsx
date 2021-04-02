@@ -324,7 +324,7 @@ const RoleList: React.FC = () => {
         }}
         closable={false}
       >
-        {row?.name && (
+        {row?.id && (
           <ProDescriptions<RoleVO>
             column={2}
             title={row?.name}
@@ -332,7 +332,7 @@ const RoleList: React.FC = () => {
               data: row || {},
             })}
             params={{
-              id: row?.name,
+              id: row?.id,
             }}
             columns={columns}
           />

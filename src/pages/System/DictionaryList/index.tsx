@@ -264,7 +264,7 @@ const DictionaryList: React.FC = () => {
         }}
         closable={false}
       >
-        {row?.name && (
+        {row?.id && (
           <ProDescriptions<DictionaryVO>
             column={2}
             title={row?.name}
@@ -272,7 +272,7 @@ const DictionaryList: React.FC = () => {
               data: row || {},
             })}
             params={{
-              id: row?.name,
+              id: row?.id,
             }}
             columns={columns}
           />

@@ -166,7 +166,7 @@ const CheckBoxUser: React.FC<CheckBoxUserProps> = (props) => {
         }}
         closable={false}
       >
-        {row?.name && (
+        {row?.id && (
           <ProDescriptions<UserVO>
             column={2}
             title={row?.name}
@@ -174,7 +174,7 @@ const CheckBoxUser: React.FC<CheckBoxUserProps> = (props) => {
               data: row || {},
             })}
             params={{
-              id: row?.name,
+              id: row?.id,
             }}
             columns={columns}
           />

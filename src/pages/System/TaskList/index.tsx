@@ -7,7 +7,7 @@ import ProTable, {TableDropdown} from '@ant-design/pro-table';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
-import { batchDeleteTask, deleteTask, getTaskByTaskId, getTaskPage, runTask, startTask, stopTask } from '@/services/task/task';
+import { batchDeleteTask, deleteTask, getTaskById, getTaskPage, runTask, startTask, stopTask } from '@/services/task/task';
 import type { TaskForm, TaskVO } from '@/services/task/typings';
 import {getPageParams, getSortOrder} from "@/utils/common";
 
@@ -151,7 +151,7 @@ const TaskList: React.FC = () => {
           <a
             onClick={async () => {
               if (record && record.id) {
-                const data = await getTaskByTaskId(record.id);
+                const data = await getTaskById(record.id);
                 setUpdateFormValues(data as TaskForm);
                 handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到任务信息（id:${record.id}）`);
@@ -279,7 +279,7 @@ const TaskList: React.FC = () => {
         }}
         closable={false}
       >
-        {row?.name && (
+        {row?.id && (
           <ProDescriptions<TaskVO>
             column={2}
             title={row?.name}
@@ -287,7 +287,7 @@ const TaskList: React.FC = () => {
               data: row || {},
             })}
             params={{
-              id: row?.name,
+              id: row?.id,
             }}
             columns={columns}
           />

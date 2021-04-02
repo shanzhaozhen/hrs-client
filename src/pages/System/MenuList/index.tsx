@@ -242,7 +242,7 @@ const MenuList: React.FC = () => {
         }}
         closable={false}
       >
-        {row?.name && (
+        {row?.id && (
           <ProDescriptions<MenuVO>
             column={2}
             title={row?.name}
@@ -250,7 +250,7 @@ const MenuList: React.FC = () => {
               data: row || {},
             })}
             params={{
-              id: row?.name,
+              id: row?.id,
             }}
             columns={columns}
           />

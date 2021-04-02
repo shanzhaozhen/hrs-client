@@ -249,7 +249,7 @@ const RegionList: React.FC = () => {
         }}
         closable={false}
       >
-        {row?.name && (
+        {row?.id && (
           <ProDescriptions<RegionVO>
             column={2}
             title={row?.name}
@@ -257,7 +257,7 @@ const RegionList: React.FC = () => {
               data: row || {},
             })}
             params={{
-              id: row?.name,
+              id: row?.id,
             }}
             columns={columns}
           />

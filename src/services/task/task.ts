@@ -61,7 +61,7 @@ export async function deleteTask(taskId: number, options?: Record<string, any>) 
 }
 
 /** 获取任务信息（通过任务id） GET /task/${taskId} */
-export async function getTaskByTaskId(taskId: number, options?: Record<string, any>,) {
+export async function getTaskById(taskId: number, options?: Record<string, any>,) {
   return request<TaskVO>(`/hrs-api/task/${taskId}`, {
     method: 'GET',
     ...(options || {}),

@@ -12,7 +12,7 @@ export async function getRegionRootList(options?: Record<string, any>) {
 }
 
 /** 获取区域信息信息（分页） GET /region/page */
-export async function getRegionRootPage(pageParams: PageParams, orders?: Orders | undefined | null, options?: Record<string, any>,) {
+export async function getRegionRootPage(pageParams: PageParams, orders?: Orders | undefined | null, options?: Record<string, any>) {
   return request<Page<RegionVO>>('/hrs-api/region/page/root', {
     method: 'GET',
     params: {

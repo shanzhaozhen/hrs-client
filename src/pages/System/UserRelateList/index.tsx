@@ -234,7 +234,7 @@ const UserRelateList: React.FC<UserRelateListProps> = (props) => {
         }}
         closable={false}
       >
-        {row?.name && (
+        {row?.id && (
           <ProDescriptions<UserVO>
             column={2}
             title={row?.name}
@@ -242,7 +242,7 @@ const UserRelateList: React.FC<UserRelateListProps> = (props) => {
               data: row || {},
             })}
             params={{
-              id: row?.name,
+              id: row?.id,
             }}
             columns={columns}
           />
