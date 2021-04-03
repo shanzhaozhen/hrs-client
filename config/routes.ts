@@ -90,6 +90,19 @@ export default [
     ],
   },
   {
+    path: '/hr',
+    name: 'hr',
+    icon: 'crown',
+    routes: [
+      {
+        path: '/hr/staff',
+        name: 'user',
+        icon: 'smile',
+        component: './HR/StaffList',
+      },
+    ]
+  },
+  {
     path: '/',
     redirect: '/index',
   },
