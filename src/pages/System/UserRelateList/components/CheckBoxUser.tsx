@@ -21,7 +21,7 @@ const CheckBoxUser: React.FC<CheckBoxUserProps> = (props) => {
   const { checkBoxUserVisible, handleCheckBoxUserVisible, handleBatchAddUserRelate } = props;
 
   const actionRef = useRef<ActionType>();
-  const [row, setRow] = useState<UserVO>();
+  const [currentRow, setCurrentRow] = useState<UserVO>();
   const [selectedRowsState, setSelectedRows] = useState<UserVO[]>([]);
   const [departmentList, setDepartmentList] = useState<any>();
 
@@ -160,21 +160,21 @@ const CheckBoxUser: React.FC<CheckBoxUserProps> = (props) => {
       />
       <Drawer
         width={600}
-        visible={!!row}
+        visible={!!currentRow}
         onClose={() => {
-          setRow(undefined);
+          setCurrentRow(undefined);
         }}
         closable={false}
       >
-        {row?.name && (
+        {currentRow?.id && (
           <ProDescriptions<UserVO>
             column={2}
-            title={row?.name}
+            title={currentRow?.name}
             request={async () => ({
-              data: row || {},
+              data: currentRow || {},
             })}
             params={{
-              id: row?.name,
+              id: currentRow?.id,
             }}
             columns={columns}
           />

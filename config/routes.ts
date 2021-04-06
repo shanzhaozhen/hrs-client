@@ -96,11 +96,24 @@ export default [
     routes: [
       {
         path: '/hr/staff',
-        name: 'user',
+        name: 'staff',
         icon: 'smile',
         component: './HR/StaffList',
       },
-    ]
+    ],
+  },
+  {
+    path: '/recruitment',
+    name: 'recruitment',
+    icon: 'crown',
+    routes: [
+      {
+        path: '/recruitment/resume',
+        name: 'staff',
+        icon: 'smile',
+        component: './Recruitment/ResumeList',
+      },
+    ],
   },
   {
     path: '/',

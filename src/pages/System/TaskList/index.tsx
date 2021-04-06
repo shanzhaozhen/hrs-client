@@ -7,7 +7,7 @@ import ProTable, {TableDropdown} from '@ant-design/pro-table';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
-import { batchDeleteTask, deleteTask, getTaskByTaskId, getTaskPage, runTask, startTask, stopTask } from '@/services/task/task';
+import { batchDeleteTask, deleteTask, getTaskById, getTaskPage, runTask, startTask, stopTask } from '@/services/task/task';
 import type { TaskForm, TaskVO } from '@/services/task/typings';
 import {getPageParams, getSortOrder} from "@/utils/common";
 
@@ -16,7 +16,7 @@ const TaskList: React.FC = () => {
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [updateFormValues, setUpdateFormValues] = useState({} as TaskVO);
   const actionRef = useRef<ActionType>();
-  const [row, setRow] = useState<TaskVO>();
+  const [currentRow, setCurrentRow] = useState<TaskVO>();
   const [selectedRowsState, setSelectedRows] = useState<TaskVO[]>([]);
 
   /**
@@ -151,7 +151,7 @@ const TaskList: React.FC = () => {
           <a
             onClick={async () => {
               if (record && record.id) {
-                const data = await getTaskByTaskId(record.id);
+                const data = await getTaskById(record.id);
                 setUpdateFormValues(data as TaskForm);
                 handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到任务信息（id:${record.id}）`);
@@ -273,21 +273,21 @@ const TaskList: React.FC = () => {
 
       <Drawer
         width={600}
-        visible={!!row}
+        visible={!!currentRow}
         onClose={() => {
-          setRow(undefined);
+          setCurrentRow(undefined);
         }}
         closable={false}
       >
-        {row?.name && (
+        {currentRow?.id && (
           <ProDescriptions<TaskVO>
             column={2}
-            title={row?.name}
+            title={currentRow?.name}
             request={async () => ({
-              data: row || {},
+              data: currentRow || {},
             })}
             params={{
-              id: row?.name,
+              id: currentRow?.id,
             }}
             columns={columns}
           />

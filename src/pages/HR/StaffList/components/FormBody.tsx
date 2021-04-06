@@ -1,189 +1,97 @@
 import React, {useEffect, useState} from 'react';
-import {Col, Form, Row} from 'antd';
-import { ProFormSelect, ProFormSwitch, ProFormText } from '@ant-design/pro-form';
-import { getAllRoles } from '@/services/role/role';
-import type { RoleVO } from '@/services/role/typings';
-import { getDepartmentTree } from "@/services/department/department";
-import type { DepartmentVO } from "@/services/department/typings";
+import { Col, Form, Row } from 'antd';
+import { ProFormDigit, ProFormSelect, ProFormText } from '@ant-design/pro-form';
+import { getStaffTree } from '@/services/staff/staff';
 import FormTreeSelect from "@/components/FormTreeSelect";
+import type { StaffVO } from "@/services/staff/typings";
 
 interface FormProps {
   isEdit?: boolean;
 }
 
-const loopDepartmentData = (departmentList: DepartmentVO[]): any =>
-  departmentList.map(({ id, name, children }) => ({
-    value: id,
-    title: name,
-    children: children && loopDepartmentData(children),
-  }));
+const FormBody: React.FC<FormProps> = () => {
+  const [staffTree, setStaffTree] = useState<[]>();
 
-const FormBody: React.FC<FormProps> = (props) => {
-  const { isEdit } = props;
-
-  const [departmentTree, setDepartmentTree] = useState<[]>();
+  const loopStaffData = (staffData: StaffVO[]): any =>
+    staffData.map(({ id, name, path, children }) => ({
+      title: name + (path ? `(${path})` : ''),
+      value: id,
+      children: children && loopStaffData(children),
+    }));
 
   useEffect(() => {
-    getDepartmentTree()
+    getStaffTree()
       .then((res) => {
         if (res) {
-          setDepartmentTree(loopDepartmentData(res));
+          setStaffTree(loopStaffData(res));
         } else {
-          setDepartmentTree([]);
+          setStaffTree([]);
         }
       })
       .catch(() => {
-        setDepartmentTree([]);
+        setStaffTree([]);
       });
   }, []);
+
 
   return (
     <>
       <Row gutter={24}>
-        <ProFormText name="id" label="用户id" hidden={true} />
+        <ProFormText name="id" label="员工id" hidden={true} />
         <Col xl={12} lg={12} md={24}>
           <ProFormText
             width="md"
-            name="username"
-            label="用户名"
-            disabled={isEdit}
-            fieldProps={{ autoComplete: 'off' }}
-            rules={[{ required: true, message: '请输入用户名' }]}
+            name="name"
+            label="员工名称"
+            rules={[{ required: true, message: '请输入员工名称' }]}
           />
         </Col>
         <Col xl={12} lg={12} md={24}>
-          <ProFormText width="md" name="name" label="姓名" />
-        </Col>
-        <Col xl={12} lg={12} md={24}>
-          <ProFormText.Password
+          <ProFormSelect
             width="md"
-            label="密码"
-            name="password"
-            fieldProps={{ autoComplete: 'off' }}
-            rules={[
-              {
-                required: !isEdit,
-                validator: async (rule, value) => {
-                  // 编辑模式时不为空才判断
-                  if (isEdit && !value) return;
-
-                  // 密码不能小于六位，至少含字母、数字、特殊字符其中的2种！
-                  const regExp = new RegExp(
-                    /^.*(?=.{6,16})(?=.*\d)(?=.*[A-Za-z])(?=.*[/\\?.,~!@#$%^&*()_+={}|:<>[\]]).*$/,
-                  );
-                  if (!regExp.test(value)) {
-                    throw new Error('密码长度为6-20位，且含字母、数字、特殊字符！');
-                  }
-                },
-              },
+            name="type"
+            label="员工类型"
+            options={[
+              { label: '分类', value: 0 },
+              { label: 'API', value: 1 },
             ]}
+            placeholder="请选择员工类型"
+            rules={[{ required: true, message: '请选择员工类型' }]}
           />
         </Col>
         <Col xl={12} lg={12} md={24}>
-          <ProFormText.Password
+          <ProFormText
             width="md"
-            label="确认密码"
-            name="re-password"
+            name="path"
+            label="员工路由"
             rules={[
-              { required: !isEdit },
               ({ getFieldValue }) => ({
-                validator: async (rule, value) => {
-                  const password = getFieldValue('password');
-
-                  // 编辑状态时，如果密码为空不进行校验
-                  if (isEdit && !password) return;
-
-                  if (!value) {
-                    throw new Error('确认密码不能为空');
-                  }
-
-                  if (password !== value) {
-                    throw new Error('两次输入的密码不一致');
-                  }
-                },
+                required: getFieldValue('type') === 1,
+                message: '请输入员工路由'
               }),
             ]}
           />
         </Col>
         <Col xl={12} lg={12} md={24}>
-          <ProFormText width="md" name="nickname" label="昵称" />
-        </Col>
-        <Col xl={12} lg={12} md={24}>
-          <ProFormSelect
-            width="md"
-            name="sex"
-            label="性别"
-            options={[
-              { label: '男', value: 0 },
-              { label: '女', value: 1 },
-            ]}
-            placeholder="请选择性别"
-          />
-        </Col>
-        <Col xl={12} lg={12} md={24}>
           <Form.Item
-            name="depId"
-            label="所属部门"
-            rules={[{ required: false, message: '请选择所属部门' }]}
+            name="pid"
+            label="上级员工"
+            rules={[
+              ({ getFieldValue }) => ({
+                validator: async (rule, value) => {
+                  const menuId = getFieldValue('id');
+                  if (value && value === menuId) {
+                    throw new Error('上级员工不能选择自己');
+                  }
+                },
+              }),
+            ]}
           >
-            <FormTreeSelect treeData={departmentTree} placeholder="请选择所属部门" />
+            <FormTreeSelect treeData={staffTree} placeholder="上级员工" />
           </Form.Item>
         </Col>
-        <Col span={24}>
-          <ProFormSelect
-            mode="multiple"
-            name="roleIds"
-            label="角色"
-            params={{}}
-            showSearch={false}
-            placeholder="请选择用户角色"
-            request={async () => {
-              const data = await getAllRoles();
-              if (data) {
-                return data.map((item: RoleVO) => ({
-                  label: item.name,
-                  value: item.id,
-                }));
-              }
-              return [];
-            }}
-          />
-        </Col>
-        <Col xl={6} md={12} sm={24}>
-          <ProFormSwitch
-            name="accountNonExpired"
-            label="是否过期"
-            checkedChildren="未过期"
-            unCheckedChildren="已过期"
-            fieldProps={{ defaultChecked: true }}
-          />
-        </Col>
-        <Col xl={6} md={12} sm={24}>
-          <ProFormSwitch
-            name="accountNonLocked"
-            label="是否锁定"
-            checkedChildren="开启"
-            unCheckedChildren="锁定"
-            fieldProps={{ defaultChecked: true }}
-          />
-        </Col>
-        <Col xl={6} md={12} sm={24}>
-          <ProFormSwitch
-            name="credentialsNonExpired"
-            label="密码过期"
-            checkedChildren="未过期"
-            unCheckedChildren="已过期"
-            fieldProps={{ defaultChecked: true }}
-          />
-        </Col>
-        <Col xl={6} md={12} sm={24}>
-          <ProFormSwitch
-            name="enabled"
-            label="是否禁用"
-            checkedChildren="可用"
-            unCheckedChildren="禁用"
-            fieldProps={{ defaultChecked: true }}
-          />
+        <Col xl={12} lg={12} md={24}>
+          <ProFormDigit width="md" name="priority" label="排序等级" min={1} />
         </Col>
       </Row>
     </>

@@ -10,6 +10,7 @@ export async function getFilePage(pageParams: PageParams, orders?: Orders | unde
     method: 'GET',
     params: {
       ...pageParams,
+      ...orders
     },
     ...(options || {}),
   });

@@ -1,9 +1,9 @@
 import React from 'react';
 import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
-import { message} from 'antd';
-import { addUser } from '@/services/user/user';
-import type { UserForm } from '@/services/user/typings';
-import FormBody from '@/pages/System/UserList/components/FormBody';
+import { message } from 'antd';
+import { addStaff } from '@/services/staff/staff';
+import type { StaffForm } from '@/services/staff/typings';
+import FormBody from '@/pages/HR/StaffList/components/FormBody';
 import { ModalForm } from '@ant-design/pro-form';
 import type { ActionType } from '@ant-design/pro-table';
 
@@ -17,13 +17,13 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
   const { createModalVisible, handleCreateModalVisible, tableActionRef } = props;
 
   /**
-   * 添加用户
+   * 添加员工
    * @param fields
    */
-  const handleAdd = async (fields: UserForm) => {
+  const handleAdd = async (fields: StaffForm) => {
     const hide = message.loading('正在添加');
     try {
-      await addUser({ ...fields });
+      await addStaff({ ...fields });
       hide();
       message.success('添加成功');
       handleCreateModalVisible(false);
@@ -37,7 +37,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
   return (
     <ModalForm
       width={748}
-      title="新建用户"
+      title="新建员工"
       visible={createModalVisible}
       onVisibleChange={handleCreateModalVisible}
       modalProps={{

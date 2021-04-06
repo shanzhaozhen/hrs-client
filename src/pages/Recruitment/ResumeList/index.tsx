@@ -5,21 +5,22 @@ import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import type {ActionType, ProColumns} from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import ProDescriptions from '@ant-design/pro-descriptions';
-import { getStaffById, getStaffPage } from '@/services/staff/staff';
-import type { StaffForm, StaffVO } from '@/services/staff/typings';
+import { getResumeById, getResumePage } from '@/services/resume/resume';
+import type { ResumeForm, ResumeVO } from '@/services/resume/typings';
 import {getPageParams, getSortOrder} from "@/utils/common";
 
-const StaffList: React.FC = () => {
-
+const ResumeList: React.FC = () => {
+  const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
+  const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
+  const [updateFormValues, setUpdateFormValues] = useState({} as ResumeVO);
   const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<StaffVO>();
-  const [showDetail, setShowDetail] = useState<boolean>(false);
-  const [selectedRowsState, setSelectedRows] = useState<StaffVO[]>([]);
+  const [currentRow, setCurrentRow] = useState<ResumeVO>();
+  const [selectedRowsState, setSelectedRows] = useState<ResumeVO[]>([]);
 
   // /**
   //  * 批量删除简历
   //  */
-  // const handleDeleteStaff = () => {
+  // const handleDeleteResume = () => {
   //   Modal.confirm({
   //     title: '确认',
   //     icon: <ExclamationCircleOutlined />,
@@ -30,7 +31,7 @@ const StaffList: React.FC = () => {
   //       const hide = message.loading('正在删除');
   //       if (!selectedRowsState) return true;
   //       try {
-  //         await batchDeleteStaff(selectedRowsState.map((selectedRow) => selectedRow.id));
+  //         await batchDeleteResume(selectedRowsState.map((selectedRow) => selectedRow.id));
   //         hide();
   //         message.success('删除成功，即将刷新');
   //         actionRef.current?.reloadAndRest?.();
@@ -44,7 +45,7 @@ const StaffList: React.FC = () => {
   //   });
   // };
 
-  const columns: ProColumns<StaffVO>[] = [
+  const columns: ProColumns<ResumeVO>[] = [
     {
       title: '关键字',
       key: 'keyword',
@@ -61,15 +62,8 @@ const StaffList: React.FC = () => {
       width: 48,
     },
     {
-      title: '部门',
-      dataIndex: 'depId',
-      valueType: 'text',
-      sorter: true,
-      hideInSearch: true,
-    },
-    {
-      title: '员工编号',
-      dataIndex: 'staffCode',
+      title: '名称',
+      dataIndex: 'name',
       valueType: 'text',
       sorter: true,
       hideInSearch: true,
@@ -83,57 +77,16 @@ const StaffList: React.FC = () => {
       },
     },
     {
-      title: '姓名',
-      dataIndex: 'staffCode',
+      title: 'cron表达式',
+      dataIndex: 'cron',
       valueType: 'text',
       sorter: true,
       hideInSearch: true,
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: '此项为必填项',
-          },
-        ],
-      },
-      render: (dom, entity) => {
-        return (
-          <a
-            onClick={() => {
-              setCurrentRow(entity);
-              setShowDetail(true);
-            }}
-          >
-            {dom}
-          </a>
-        );
-      },
     },
     {
-      title: '性别',
-      dataIndex: 'sex',
+      title: '描述',
+      dataIndex: 'description',
       valueType: 'text',
-      hideInSearch: true,
-      hideInTable: true,
-    },
-    {
-      title: '职务',
-      dataIndex: 'duty',
-      valueType: 'text',
-      hideInSearch: true,
-      hideInTable: true,
-    },
-    {
-      title: '岗位',
-      dataIndex: 'post',
-      valueType: 'text',
-      hideInSearch: true,
-      hideInTable: true,
-    },
-    {
-      title: '入职日期',
-      dataIndex: 'entryDate',
-      valueType: 'date',
       hideInSearch: true,
       hideInTable: true,
     },
@@ -160,9 +113,9 @@ const StaffList: React.FC = () => {
           <a
             onClick={async () => {
               if (record && record.id) {
-                // const data = await getStaffById(record.id);
-                // setUpdateFormValues(data as StaffForm);
-                // handleUpdateModalVisible(true);
+                const data = await getResumeById(record.id);
+                setUpdateFormValues(data as ResumeForm);
+                handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到简历信息（id:${record.id}）`);
               } else {
                 message.warn('没有选中有效的简历');
@@ -175,9 +128,9 @@ const StaffList: React.FC = () => {
           <a
             onClick={async () => {
               if (record && record.id) {
-                // const data = await getStaffById(record.id);
-                // setUpdateFormValues(data as StaffForm);
-                // handleUpdateModalVisible(true);
+                const data = await getResumeById(record.id);
+                setUpdateFormValues(data as ResumeForm);
+                handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到简历信息（id:${record.id}）`);
               } else {
                 message.warn('没有选中有效的简历');
@@ -193,7 +146,7 @@ const StaffList: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<StaffVO>
+      <ProTable<ResumeVO>
         headerTitle="简历"
         actionRef={actionRef}
         rowKey="id"
@@ -201,12 +154,12 @@ const StaffList: React.FC = () => {
           labelWidth: 120,
         }}
         toolBarRender={() => [
-          // <Button type="primary" onClick={() => handleCreateModalVisible(true)}>
-          //   <PlusOutlined /> 新建
-          // </Button>,
+          <Button type="primary" onClick={() => handleCreateModalVisible(true)}>
+            <PlusOutlined /> 新建
+          </Button>,
         ]}
         request={async (params, sorter) => {
-          const data = await getStaffPage(getPageParams(params), getSortOrder(sorter));
+          const data = await getResumePage(getPageParams(params), getSortOrder(sorter));
           return {
             // success 请返回 true，
             // 不然 table 会停止解析数据，即使有数据
@@ -229,23 +182,36 @@ const StaffList: React.FC = () => {
             </div>
           }
         >
-          {/* <Button onClick={handleDeleteStaff}>批量删除</Button> */}
+          {/* <Button onClick={handleDeleteResume}>批量删除</Button> */}
         </FooterToolbar>
       )}
+      {/* <CreateForm
+        createModalVisible={createModalVisible}
+        handleCreateModalVisible={handleCreateModalVisible}
+        tableActionRef={actionRef}
+      />
+      {updateFormValues && Object.keys(updateFormValues).length ? (
+        <UpdateForm
+          updateModalVisible={updateModalVisible}
+          handleUpdateModalVisible={handleUpdateModalVisible}
+          values={updateFormValues}
+          onCancel={() => setUpdateFormValues({})}
+          tableActionRef={actionRef}
+        />
+      ) : null} */}
 
       <Drawer
-        width={'100%'}
-        visible={showDetail}
+        width={600}
+        visible={!!currentRow}
         onClose={() => {
           setCurrentRow(undefined);
-          setShowDetail(false);
         }}
         closable={false}
       >
-        {currentRow?.staffName && (
-          <ProDescriptions<StaffVO>
+        {currentRow?.id && (
+          <ProDescriptions<ResumeVO>
             column={2}
-            title={currentRow?.staffName}
+            title={currentRow?.name}
             request={async () => ({
               data: currentRow || {},
             })}
@@ -260,4 +226,4 @@ const StaffList: React.FC = () => {
   );
 };
 
-export default StaffList;
+export default ResumeList;

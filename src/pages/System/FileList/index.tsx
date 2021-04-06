@@ -11,7 +11,7 @@ import {getPageParams, getSortOrder} from "@/utils/common";
 
 const FileList: React.FC = () => {
   const actionRef = useRef<ActionType>();
-  const [row, setRow] = useState<FileVO>();
+  const [currentRow, setCurrentRow] = useState<FileVO>();
   const [selectedRowsState, setSelectedRows] = useState<FileVO[]>([]);
 
   /**
@@ -184,21 +184,21 @@ const FileList: React.FC = () => {
 
       <Drawer
         width={600}
-        visible={!!row}
+        visible={!!currentRow}
         onClose={() => {
-          setRow(undefined);
+          setCurrentRow(undefined);
         }}
         closable={false}
       >
-        {row?.name && (
+        {currentRow?.id && (
           <ProDescriptions<FileVO>
             column={2}
-            title={row?.name}
+            title={currentRow?.name}
             request={async () => ({
-              data: row || {},
+              data: currentRow || {},
             })}
             params={{
-              id: row?.name,
+              id: currentRow?.id,
             }}
             columns={columns}
           />
