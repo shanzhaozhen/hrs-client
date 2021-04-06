@@ -12,7 +12,8 @@ import {getPageParams, getSortOrder} from "@/utils/common";
 const StaffList: React.FC = () => {
 
   const actionRef = useRef<ActionType>();
-  const [row, setRow] = useState<StaffVO>();
+  const [currentRow, setCurrentRow] = useState<StaffVO>();
+  const [showDetail, setShowDetail] = useState<boolean>(false);
   const [selectedRowsState, setSelectedRows] = useState<StaffVO[]>([]);
 
   // /**
@@ -94,6 +95,18 @@ const StaffList: React.FC = () => {
             message: '此项为必填项',
           },
         ],
+      },
+      render: (dom, entity) => {
+        return (
+          <a
+            onClick={() => {
+              setCurrentRow(entity);
+              setShowDetail(true);
+            }}
+          >
+            {dom}
+          </a>
+        );
       },
     },
     {
@@ -221,22 +234,23 @@ const StaffList: React.FC = () => {
       )}
 
       <Drawer
-        width={600}
-        visible={!!row}
+        width={'100%'}
+        visible={showDetail}
         onClose={() => {
-          setRow(undefined);
+          setCurrentRow(undefined);
+          setShowDetail(false);
         }}
         closable={false}
       >
-        {row?.staffName && (
+        {currentRow?.staffName && (
           <ProDescriptions<StaffVO>
             column={2}
-            title={row?.staffName}
+            title={currentRow?.staffName}
             request={async () => ({
-              data: row || {},
+              data: currentRow || {},
             })}
             params={{
-              id: row?.id,
+              id: currentRow?.id,
             }}
             columns={columns}
           />
