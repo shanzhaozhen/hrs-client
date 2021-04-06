@@ -2,7 +2,7 @@ import React from 'react';
 import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import { message } from 'antd';
 import type { StaffForm, StaffVO } from '@/services/staff/typings';
-import FormBody from '@/pages/HRBusiness/StaffList/components/FormBody';
+import FormBody from '@/pages/HR/StaffList/components/FormBody';
 import { updateStaff } from '@/services/staff/staff';
 import { ModalForm } from '@ant-design/pro-form';
 import type { ActionType } from '@ant-design/pro-table';

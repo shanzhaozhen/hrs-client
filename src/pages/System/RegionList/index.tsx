@@ -24,7 +24,7 @@ const RegionList: React.FC = () => {
   const [updateFormValues, setUpdateFormValues] = useState({});
   const actionRef = useRef<ActionType>();
   const [regionData, setRegionData] = useState<RegionVO[]>([]);
-  const [row, setRow] = useState<RegionVO>();
+  const [currentRow, setCurrentRow] = useState<RegionVO>();
   const [selectedRowsState, setSelectedRows] = useState<RegionVO[]>([]);
 
   /**
@@ -243,21 +243,21 @@ const RegionList: React.FC = () => {
 
       <Drawer
         width={600}
-        visible={!!row}
+        visible={!!currentRow}
         onClose={() => {
-          setRow(undefined);
+          setCurrentRow(undefined);
         }}
         closable={false}
       >
-        {row?.id && (
+        {currentRow?.id && (
           <ProDescriptions<RegionVO>
             column={2}
-            title={row?.name}
+            title={currentRow?.name}
             request={async () => ({
-              data: row || {},
+              data: currentRow || {},
             })}
             params={{
-              id: row?.id,
+              id: currentRow?.id,
             }}
             columns={columns}
           />

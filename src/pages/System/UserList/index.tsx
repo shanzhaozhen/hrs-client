@@ -18,7 +18,7 @@ const UserList: React.FC = () => {
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [updateFormValues, setUpdateFormValues] = useState({});
   const actionRef = useRef<ActionType>();
-  const [row, setRow] = useState<UserVO>();
+  const [currentRow, setCurrentRow] = useState<UserVO>();
   const [selectedRowsState, setSelectedRows] = useState<UserVO[]>([]);
 
   const [departmentList, setDepartmentList] = useState<any>();
@@ -301,21 +301,21 @@ const UserList: React.FC = () => {
 
       <Drawer
         width={600}
-        visible={!!row}
+        visible={!!currentRow}
         onClose={() => {
-          setRow(undefined);
+          setCurrentRow(undefined);
         }}
         closable={false}
       >
-        {row?.id && (
+        {currentRow?.id && (
           <ProDescriptions<UserVO>
             column={2}
-            title={row?.name}
+            title={currentRow?.name}
             request={async () => ({
-              data: row || {},
+              data: currentRow || {},
             })}
             params={{
-              id: row?.id,
+              id: currentRow?.id,
             }}
             columns={columns}
           />

@@ -17,7 +17,7 @@ const MenuList: React.FC = () => {
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [updateFormValues, setUpdateFormValues] = useState({});
   const actionRef = useRef<ActionType>();
-  const [row, setRow] = useState<MenuVO>();
+  const [currentRow, setCurrentRow] = useState<MenuVO>();
   const [selectedRowsState, setSelectedRows] = useState<MenuVO[]>([]);
 
   /**
@@ -236,21 +236,21 @@ const MenuList: React.FC = () => {
 
       <Drawer
         width={600}
-        visible={!!row}
+        visible={!!currentRow}
         onClose={() => {
-          setRow(undefined);
+          setCurrentRow(undefined);
         }}
         closable={false}
       >
-        {row?.id && (
+        {currentRow?.id && (
           <ProDescriptions<MenuVO>
             column={2}
-            title={row?.name}
+            title={currentRow?.name}
             request={async () => ({
-              data: row || {},
+              data: currentRow || {},
             })}
             params={{
-              id: row?.id,
+              id: currentRow?.id,
             }}
             columns={columns}
           />

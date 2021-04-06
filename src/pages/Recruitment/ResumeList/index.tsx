@@ -14,7 +14,7 @@ const ResumeList: React.FC = () => {
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [updateFormValues, setUpdateFormValues] = useState({} as ResumeVO);
   const actionRef = useRef<ActionType>();
-  const [row, setRow] = useState<ResumeVO>();
+  const [currentRow, setCurrentRow] = useState<ResumeVO>();
   const [selectedRowsState, setSelectedRows] = useState<ResumeVO[]>([]);
 
   // /**
@@ -202,21 +202,21 @@ const ResumeList: React.FC = () => {
 
       <Drawer
         width={600}
-        visible={!!row}
+        visible={!!currentRow}
         onClose={() => {
-          setRow(undefined);
+          setCurrentRow(undefined);
         }}
         closable={false}
       >
-        {row?.id && (
+        {currentRow?.id && (
           <ProDescriptions<ResumeVO>
             column={2}
-            title={row?.name}
+            title={currentRow?.name}
             request={async () => ({
-              data: row || {},
+              data: currentRow || {},
             })}
             params={{
-              id: row?.id,
+              id: currentRow?.id,
             }}
             columns={columns}
           />

@@ -98,13 +98,13 @@ export default [
         path: '/hr/staff',
         name: 'staff',
         icon: 'smile',
-        component: './HRBusiness/StaffList',
+        component: './HR/StaffList',
       },
     ],
   },
   {
     path: '/recruitment',
-    name: 'hr',
+    name: 'recruitment',
     icon: 'crown',
     routes: [
       {
@@ -118,12 +118,6 @@ export default [
   {
     path: '/',
     redirect: '/index',
-  },
-  {
-    name: '高级详情页',
-    icon: 'smile',
-    path: '/test/profileadvanced',
-    component: './HRBusiness/StaffList/components/ProfileAdvanced',
   },
   {
     component: './ErrorPage/500',

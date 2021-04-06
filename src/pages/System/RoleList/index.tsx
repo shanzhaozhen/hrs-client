@@ -25,7 +25,7 @@ const RoleList: React.FC = () => {
   const [updateFormValues, setUpdateFormValues] = useState({} as RoleVO);
   const actionRef = useRef<ActionType>();
   const userRoleActionRef = useRef<ActionType>();
-  const [row, setRow] = useState<RoleVO>();
+  const [currentRow, setCurrentRow] = useState<RoleVO>();
   const [selectedRowsState, setSelectedRows] = useState<RoleVO[]>([]);
 
   /**
@@ -318,21 +318,21 @@ const RoleList: React.FC = () => {
 
       <Drawer
         width={600}
-        visible={!!row}
+        visible={!!currentRow}
         onClose={() => {
-          setRow(undefined);
+          setCurrentRow(undefined);
         }}
         closable={false}
       >
-        {row?.id && (
+        {currentRow?.id && (
           <ProDescriptions<RoleVO>
             column={2}
-            title={row?.name}
+            title={currentRow?.name}
             request={async () => ({
-              data: row || {},
+              data: currentRow || {},
             })}
             params={{
-              id: row?.id,
+              id: currentRow?.id,
             }}
             columns={columns}
           />

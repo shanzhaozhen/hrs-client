@@ -16,7 +16,7 @@ const TaskList: React.FC = () => {
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [updateFormValues, setUpdateFormValues] = useState({} as TaskVO);
   const actionRef = useRef<ActionType>();
-  const [row, setRow] = useState<TaskVO>();
+  const [currentRow, setCurrentRow] = useState<TaskVO>();
   const [selectedRowsState, setSelectedRows] = useState<TaskVO[]>([]);
 
   /**
@@ -273,21 +273,21 @@ const TaskList: React.FC = () => {
 
       <Drawer
         width={600}
-        visible={!!row}
+        visible={!!currentRow}
         onClose={() => {
-          setRow(undefined);
+          setCurrentRow(undefined);
         }}
         closable={false}
       >
-        {row?.id && (
+        {currentRow?.id && (
           <ProDescriptions<TaskVO>
             column={2}
-            title={row?.name}
+            title={currentRow?.name}
             request={async () => ({
-              data: row || {},
+              data: currentRow || {},
             })}
             params={{
-              id: row?.id,
+              id: currentRow?.id,
             }}
             columns={columns}
           />

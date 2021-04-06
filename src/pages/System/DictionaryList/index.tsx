@@ -23,7 +23,7 @@ const DictionaryList: React.FC = () => {
   const [updateFormValues, setUpdateFormValues] = useState({});
   const actionRef = useRef<ActionType>();
   const [dictionaryData, setDictionaryData] = useState<DictionaryVO[]>([]);
-  const [row, setRow] = useState<DictionaryVO>();
+  const [currentRow, setCurrentRow] = useState<DictionaryVO>();
   const [selectedRowsState, setSelectedRows] = useState<DictionaryVO[]>([]);
 
   /**
@@ -258,21 +258,21 @@ const DictionaryList: React.FC = () => {
 
       <Drawer
         width={600}
-        visible={!!row}
+        visible={!!currentRow}
         onClose={() => {
-          setRow(undefined);
+          setCurrentRow(undefined);
         }}
         closable={false}
       >
-        {row?.id && (
+        {currentRow?.id && (
           <ProDescriptions<DictionaryVO>
             column={2}
-            title={row?.name}
+            title={currentRow?.name}
             request={async () => ({
-              data: row || {},
+              data: currentRow || {},
             })}
             params={{
-              id: row?.id,
+              id: currentRow?.id,
             }}
             columns={columns}
           />
