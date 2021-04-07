@@ -1,5 +1,4 @@
 import React, {useRef, useState} from 'react';
-import { PlusOutlined } from '@ant-design/icons';
 import { Button, Divider, Drawer, Input, message } from 'antd';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import type {ActionType, ProColumns} from '@ant-design/pro-table';
@@ -8,6 +7,8 @@ import ProDescriptions from '@ant-design/pro-descriptions';
 import { getStaffById, getStaffPage } from '@/services/staff/staff';
 import type { StaffForm, StaffVO } from '@/services/staff/typings';
 import {getPageParams, getSortOrder} from "@/utils/common";
+import ViewForm from "@/pages/HR/StaffList/components/ViewForm";
+import {HistoryOutlined} from "@ant-design/icons";
 
 const StaffList: React.FC = () => {
 
@@ -17,13 +18,13 @@ const StaffList: React.FC = () => {
   const [selectedRowsState, setSelectedRows] = useState<StaffVO[]>([]);
 
   // /**
-  //  * 批量删除简历
+  //  * 批量删除员工
   //  */
   // const handleDeleteStaff = () => {
   //   Modal.confirm({
   //     title: '确认',
   //     icon: <ExclamationCircleOutlined />,
-  //     content: '确定批量删除勾选中的简历吗',
+  //     content: '确定批量删除勾选中的员工吗',
   //     okText: '确认',
   //     cancelText: '取消',
   //     onOk: async () => {
@@ -50,6 +51,7 @@ const StaffList: React.FC = () => {
       key: 'keyword',
       hideInTable: true,
       hideInForm: true,
+      hideInDescriptions: true,
       dataIndex: 'keyword',
       renderFormItem: () => {
         return <Input placeholder="请输入关键字" />;
@@ -66,6 +68,27 @@ const StaffList: React.FC = () => {
       valueType: 'text',
       sorter: true,
       hideInSearch: true,
+      hideInDescriptions: true,
+    },
+    {
+      title: '部门变更历史',
+      dataIndex: 'depId',
+      valueType: 'radioButton',
+      sorter: true,
+      hideInSearch: true,
+      hideInTable: true,
+      hideInForm: true,
+      render: (a, b, c) => {
+        console.log(a)
+        console.log(b)
+        console.log(c)
+        return (
+          <>
+            <span>{b.depId}</span>
+            <Button shape="circle" icon={<HistoryOutlined />} />
+          </>
+        );
+      },
     },
     {
       title: '员工编号',
@@ -163,9 +186,9 @@ const StaffList: React.FC = () => {
                 // const data = await getStaffById(record.id);
                 // setUpdateFormValues(data as StaffForm);
                 // handleUpdateModalVisible(true);
-                // message.error(res.message || `没有获取到简历信息（id:${record.id}）`);
+                // message.error(res.message || `没有获取到员工信息（id:${record.id}）`);
               } else {
-                message.warn('没有选中有效的简历');
+                message.warn('没有选中有效的员工');
               }
             }}
           >
@@ -178,9 +201,9 @@ const StaffList: React.FC = () => {
                 // const data = await getStaffById(record.id);
                 // setUpdateFormValues(data as StaffForm);
                 // handleUpdateModalVisible(true);
-                // message.error(res.message || `没有获取到简历信息（id:${record.id}）`);
+                // message.error(res.message || `没有获取到员工信息（id:${record.id}）`);
               } else {
-                message.warn('没有选中有效的简历');
+                message.warn('没有选中有效的员工');
               }
             }}
           >
@@ -194,7 +217,7 @@ const StaffList: React.FC = () => {
   return (
     <PageContainer>
       <ProTable<StaffVO>
-        headerTitle="简历"
+        headerTitle="员工"
         actionRef={actionRef}
         rowKey="id"
         search={{
@@ -234,15 +257,15 @@ const StaffList: React.FC = () => {
       )}
 
       <Drawer
-        width={'100%'}
+        width={'75%'}
         visible={showDetail}
         onClose={() => {
           setCurrentRow(undefined);
           setShowDetail(false);
         }}
-        closable={false}
+        closable={true}
       >
-        {currentRow?.staffName && (
+       {currentRow?.id && (
           <ProDescriptions<StaffVO>
             column={2}
             title={currentRow?.staffName}
@@ -255,6 +278,9 @@ const StaffList: React.FC = () => {
             columns={columns}
           />
         )}
+        {/* {currentRow?.id && (
+          <ViewForm />
+        )} */}
       </Drawer>
     </PageContainer>
   );
