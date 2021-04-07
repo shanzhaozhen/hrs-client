@@ -2,6 +2,8 @@ import React, {useEffect, useState} from 'react';
 import { Col, Form, Row } from 'antd';
 import { ProFormDigit, ProFormSelect, ProFormText } from '@ant-design/pro-form';
 import type { StaffVO } from "@/services/staff/typings";
+import {iconOption} from "@/components/Common/icon";
+import {getDictionaryChildrenByCode, getDictionaryChildrenById} from "@/services/dictionary/dictionary";
 
 interface FormProps {
   isEdit?: boolean;
@@ -17,7 +19,7 @@ const FormBody: React.FC<FormProps> = () => {
     <>
       <Row gutter={24}>
         <ProFormText name="id" label="员工id" hidden={true} />
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="staffCode"
@@ -26,7 +28,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入员工编号' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="staffName"
@@ -34,7 +36,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入员工名称' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="depId"
@@ -42,15 +44,22 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
-          <ProFormText
+        <Col xl={7} lg={12} md={24}>
+          <ProFormSelect
             width="md"
             name="companyState"
             label="在司状态"
             rules={[{ required: true, message: '请输入在司状态' }]}
+            request={async ({ keyWords }) => {
+              const data = await getDictionaryChildrenByCode('111', keyWords);
+              return data.map(item => ({
+                label: item.name,
+                value: item.code
+              }))
+            }}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="duty"
@@ -58,7 +67,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="post"
@@ -66,7 +75,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="postType"
@@ -74,7 +83,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="sex"
@@ -82,7 +91,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="nation"
@@ -90,7 +99,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="birthday"
@@ -98,7 +107,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="workDate"
@@ -106,7 +115,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="entryDate"
@@ -114,7 +123,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="politics"
@@ -126,7 +135,7 @@ const FormBody: React.FC<FormProps> = () => {
 
 
 
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="education"
@@ -134,7 +143,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="degree"
@@ -142,7 +151,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="maritalStatus"
@@ -150,7 +159,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="spouseName"
@@ -158,7 +167,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="marriageCertificate"
@@ -166,7 +175,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="marriageDate"
@@ -174,7 +183,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="childrenNumber"
@@ -182,7 +191,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="idNumber"
@@ -190,7 +199,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="phone"
@@ -198,7 +207,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="socialSecurityNumber"
@@ -206,7 +215,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="birthAddressProvince"
@@ -214,7 +223,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="birthAddressCity"
@@ -222,7 +231,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="nativeAddressProvince"
@@ -230,7 +239,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="nativeAddressCity"
@@ -238,7 +247,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="householdType"
@@ -246,7 +255,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="registeredAddressProvince"
@@ -254,7 +263,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="registeredAddressCity"
@@ -262,7 +271,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="registeredAddressArea"
@@ -270,7 +279,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="registeredAddressDetail"
@@ -278,7 +287,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="homeAddressProvince"
@@ -286,7 +295,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="homeAddressCity"
@@ -294,7 +303,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="homeAddressArea"
@@ -302,7 +311,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="homeAddressDetail"
@@ -310,7 +319,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="currentAddressProvince"
@@ -318,7 +327,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="currentAddressCity"
@@ -326,7 +335,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="currentAddressArea"
@@ -334,7 +343,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="currentAddressDetail"
@@ -342,7 +351,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="postalAddressProvince"
@@ -350,7 +359,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="postalAddressCity"
@@ -358,7 +367,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="postalAddressArea"
@@ -366,7 +375,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="postalAddressDetail"
@@ -374,7 +383,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="contactName"
@@ -382,7 +391,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="contactRelation"
@@ -390,7 +399,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[{ required: true, message: '请输入部门ID' }]}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={7} lg={12} md={24}>
           <ProFormText
             width="md"
             name="contactPhone"

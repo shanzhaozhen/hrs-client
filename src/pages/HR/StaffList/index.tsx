@@ -7,12 +7,17 @@ import ProDescriptions from '@ant-design/pro-descriptions';
 import { getStaffById, getStaffPage } from '@/services/staff/staff';
 import type { StaffForm, StaffVO } from '@/services/staff/typings';
 import {getPageParams, getSortOrder} from "@/utils/common";
-import ViewForm from "@/pages/HR/StaffList/components/ViewForm";
 import {HistoryOutlined} from "@ant-design/icons";
+import CreateForm from "@/pages/HR/StaffList/components/CreateForm";
+import UpdateForm from "@/pages/HR/StaffList/components/UpdateForm";
+import {DepartmentVO} from "@/services/department/typings";
 
 const StaffList: React.FC = () => {
 
   const actionRef = useRef<ActionType>();
+  const [updateFormValues, setUpdateFormValues] = useState({} as DepartmentVO);
+  const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
+  const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [currentRow, setCurrentRow] = useState<StaffVO>();
   const [showDetail, setShowDetail] = useState<boolean>(false);
   const [selectedRowsState, setSelectedRows] = useState<StaffVO[]>([]);
@@ -71,24 +76,19 @@ const StaffList: React.FC = () => {
       hideInDescriptions: true,
     },
     {
-      title: '部门变更历史',
+      title: '部门',
       dataIndex: 'depId',
       valueType: 'radioButton',
       sorter: true,
       hideInSearch: true,
       hideInTable: true,
       hideInForm: true,
-      render: (a, b, c) => {
-        console.log(a)
-        console.log(b)
-        console.log(c)
-        return (
-          <>
-            <span>{b.depId}</span>
-            <Button shape="circle" icon={<HistoryOutlined />} />
-          </>
-        );
-      },
+      render: (_, entity) => (
+        <>
+          <span>{entity.depId}</span>
+          <Button shape="circle" icon={<HistoryOutlined />} />
+        </>
+      ),
     },
     {
       title: '员工编号',
@@ -106,7 +106,7 @@ const StaffList: React.FC = () => {
       },
     },
     {
-      title: '姓名',
+      title: '员工姓名',
       dataIndex: 'staffCode',
       valueType: 'text',
       sorter: true,
@@ -140,6 +140,13 @@ const StaffList: React.FC = () => {
       hideInTable: true,
     },
     {
+      title: '在司状态',
+      dataIndex: 'companyState',
+      valueType: 'text',
+      hideInSearch: true,
+      hideInTable: true,
+    },
+    {
       title: '职务',
       dataIndex: 'duty',
       valueType: 'text',
@@ -149,6 +156,41 @@ const StaffList: React.FC = () => {
     {
       title: '岗位',
       dataIndex: 'post',
+      valueType: 'text',
+      hideInSearch: true,
+      hideInTable: true,
+    },
+    {
+      title: '岗位类型',
+      dataIndex: 'postType',
+      valueType: 'text',
+      hideInSearch: true,
+      hideInTable: true,
+    },
+    {
+      title: '民族',
+      dataIndex: 'nation',
+      valueType: 'text',
+      hideInSearch: true,
+      hideInTable: true,
+    },
+    {
+      title: '出生日期',
+      dataIndex: 'birthday',
+      valueType: 'text',
+      hideInSearch: true,
+      hideInTable: true,
+    },
+    {
+      title: '开始工作时间',
+      dataIndex: 'workDate',
+      valueType: 'text',
+      hideInSearch: true,
+      hideInTable: true,
+    },
+    {
+      title: '入职日期',
+      dataIndex: 'entryDate',
       valueType: 'text',
       hideInSearch: true,
       hideInTable: true,
@@ -198,9 +240,9 @@ const StaffList: React.FC = () => {
           <a
             onClick={async () => {
               if (record && record.id) {
-                // const data = await getStaffById(record.id);
-                // setUpdateFormValues(data as StaffForm);
-                // handleUpdateModalVisible(true);
+                const data = await getStaffById(record.id);
+                setUpdateFormValues(data as StaffForm);
+                handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到员工信息（id:${record.id}）`);
               } else {
                 message.warn('没有选中有效的员工');
@@ -255,6 +297,22 @@ const StaffList: React.FC = () => {
           {/* <Button onClick={handleDeleteStaff}>批量删除</Button> */}
         </FooterToolbar>
       )}
+
+      <CreateForm
+        createModalVisible={createModalVisible}
+        handleCreateModalVisible={handleCreateModalVisible}
+        tableActionRef={actionRef}
+      />
+      {updateFormValues && Object.keys(updateFormValues).length ? (
+        <UpdateForm
+          updateModalVisible={updateModalVisible}
+          handleUpdateModalVisible={handleUpdateModalVisible}
+          values={updateFormValues}
+          onCancel={() => setUpdateFormValues({})}
+          tableActionRef={actionRef}
+        />
+      ) : null}
+
 
       <Drawer
         width={'75%'}

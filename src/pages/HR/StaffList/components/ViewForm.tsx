@@ -2,7 +2,6 @@ import React from 'react';
 import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import FormBody from '@/pages/HR/StaffList/components/FormBody';
 import type { ActionType } from '@ant-design/pro-table';
-import {Button} from "antd";
 import ProDescriptions from '@ant-design/pro-descriptions';
 import ProForm from '@ant-design/pro-form';
 

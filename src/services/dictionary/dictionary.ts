@@ -32,26 +32,38 @@ export async function getDictionaryById(dictionaryId: number, options?: Record<s
   });
 }
 
-/** 获取字典树（通过父级字典id） GET /dictionary/${dictionaryId}/tree */
+/** 获取字典树（通过父级字典id） GET /dictionary/tree/${dictionaryId} */
 export async function getDictionaryTreeById(dictionaryId: number, options?: Record<string, any>) {
-  return request<DictionaryVO>(`/hrs-api/dictionary/${dictionaryId}/tree`, {
+  return request<DictionaryVO>(`/hrs-api/dictionary/tree/${dictionaryId}`, {
     method: 'GET',
     ...(options || {}),
   });
 }
 
-/** 通过ID获取所在的树 GET /dictionary/${dictionaryId}/tree/parent */
+/** 通过ID获取所在的树 GET /dictionary/tree/parent/${dictionaryId} */
 export async function getDictionaryParentTreeById(dictionaryId: number, options?: Record<string, any>,) {
-  return request<DictionaryVO>(`/hrs-api/dictionary/${dictionaryId}/tree/parent`, {
+  return request<DictionaryVO>(`/hrs-api/dictionary/tree/parent/${dictionaryId}`, {
     method: 'GET',
     ...(options || {}),
   });
 }
 
-/** 通过父级ID获取字典子节点 GET /dictionary/${dictionaryId}/children */
+/** 通过父级ID获取字典子节点 GET /dictionary/children/${dictionaryId} */
 export async function getDictionaryChildrenById(dictionaryId: number, options?: Record<string, any>) {
-  return request<DictionaryVO[]>(`/hrs-api/dictionary/${dictionaryId}/children`, {
+  return request<DictionaryVO[]>(`/hrs-api/dictionary/children/${dictionaryId}`, {
     method: 'GET',
+    ...(options || {}),
+  });
+}
+
+/** 通过父级ID获取字典子节点 GET /dictionary/children/code */
+export async function getDictionaryChildrenByCode(code: string, keyword: string, options?: Record<string, any>) {
+  return request<DictionaryVO[]>(`/hrs-api/dictionary/children/code`, {
+    method: 'GET',
+    params: {
+      code,
+      keyword
+    },
     ...(options || {}),
   });
 }

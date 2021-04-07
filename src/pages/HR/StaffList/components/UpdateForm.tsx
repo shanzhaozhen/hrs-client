@@ -4,7 +4,7 @@ import { message } from 'antd';
 import type { StaffForm, StaffVO } from '@/services/staff/typings';
 import FormBody from '@/pages/HR/StaffList/components/FormBody';
 import { updateStaff } from '@/services/staff/staff';
-import { ModalForm } from '@ant-design/pro-form';
+import {DrawerForm, ModalForm} from '@ant-design/pro-form';
 import type { ActionType } from '@ant-design/pro-table';
 
 export interface UpdateFormProps {
@@ -38,20 +38,20 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
   };
 
   return (
-    <ModalForm
-      width={748}
+    <DrawerForm
+      width={'75%'}
       title="修改员工"
       visible={updateModalVisible}
       onVisibleChange={handleUpdateModalVisible}
       initialValues={values}
-      modalProps={{
-        onCancel,
+      drawerProps={{
+        onClose: onCancel,
         destroyOnClose: true,
       }}
       onFinish={handleUpdate}
     >
       <FormBody isEdit={true} />
-    </ModalForm>
+    </DrawerForm>
   );
 };
 

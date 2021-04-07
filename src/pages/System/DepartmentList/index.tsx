@@ -18,13 +18,13 @@ import {getPageParams, getSortOrder} from "@/utils/common";
 import {batchUpdateUserDepartment, getUserPageByDepartmentId} from "@/services/user/user";
 
 const DepartmentList: React.FC = () => {
+  const actionRef = useRef<ActionType>();
+  const [currentRow, setCurrentRow] = useState<DepartmentVO>();
+  const [updateFormValues, setUpdateFormValues] = useState({} as DepartmentVO);
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [userDepartmentListVisible, handleUserDepartmentListVisible] = useState<boolean>(false);
-  const [updateFormValues, setUpdateFormValues] = useState({} as DepartmentVO);
-  const actionRef = useRef<ActionType>();
   const userDepartmentActionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<DepartmentVO>();
   const [selectedRowsState, setSelectedRows] = useState<DepartmentVO[]>([]);
 
   /**
