@@ -48,9 +48,12 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
         onClose: onCancel,
         destroyOnClose: true,
       }}
-      onFinish={handleUpdate}
+      // onFinish={handleUpdate}
+      onFinish={async (formData) => {
+        console.log(formData)
+      }}
     >
-      <FormBody isEdit={true} />
+      <FormBody isEdit={true} values={values} />
     </DrawerForm>
   );
 };
