@@ -1,10 +1,9 @@
 import {ExclamationCircleOutlined, PlusOutlined} from '@ant-design/icons';
-import {Button, message, Input, Drawer, Divider, Modal, Popconfirm} from 'antd';
+import {Button, message, Input, Divider, Modal, Popconfirm} from 'antd';
 import React, { useState, useRef } from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
 import { batchDeleteDepartment, deleteDepartment, getDepartmentById, getDepartmentTree } from '@/services/department/department';
@@ -19,7 +18,6 @@ import {batchUpdateUserDepartment, getUserPageByDepartmentId} from "@/services/u
 
 const DepartmentList: React.FC = () => {
   const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<DepartmentVO>();
   const [updateFormValues, setUpdateFormValues] = useState({} as DepartmentVO);
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
@@ -310,28 +308,6 @@ const DepartmentList: React.FC = () => {
         />
       ) : null}
 
-      <Drawer
-        width={600}
-        visible={!!currentRow}
-        onClose={() => {
-          setCurrentRow(undefined);
-        }}
-        closable={false}
-      >
-        {currentRow?.id && (
-          <ProDescriptions<DepartmentVO>
-            column={2}
-            title={currentRow?.name}
-            request={async () => ({
-              data: currentRow || {},
-            })}
-            params={{
-              id: currentRow?.id,
-            }}
-            columns={columns}
-          />
-        )}
-      </Drawer>
     </PageContainer>
   );
 };

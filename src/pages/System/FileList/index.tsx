@@ -1,17 +1,15 @@
 import React, {useRef, useState} from 'react';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
-import { Button, Divider, Drawer, Input, message, Modal } from 'antd';
+import { Button, Divider, Input, message, Modal } from 'antd';
 import {FooterToolbar, PageContainer} from '@ant-design/pro-layout';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import ProDescriptions from '@ant-design/pro-descriptions';
 import { getFilePage } from '@/services/file/file';
 import type { FileVO } from '@/services/file/typings';
 import {getPageParams, getSortOrder} from "@/utils/common";
 
 const FileList: React.FC = () => {
   const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<FileVO>();
   const [selectedRowsState, setSelectedRows] = useState<FileVO[]>([]);
 
   /**
@@ -182,28 +180,6 @@ const FileList: React.FC = () => {
         </FooterToolbar>
       )}
 
-      <Drawer
-        width={600}
-        visible={!!currentRow}
-        onClose={() => {
-          setCurrentRow(undefined);
-        }}
-        closable={false}
-      >
-        {currentRow?.id && (
-          <ProDescriptions<FileVO>
-            column={2}
-            title={currentRow?.name}
-            request={async () => ({
-              data: currentRow || {},
-            })}
-            params={{
-              id: currentRow?.id,
-            }}
-            columns={columns}
-          />
-        )}
-      </Drawer>
     </PageContainer>
   );
 };

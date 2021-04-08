@@ -1,10 +1,9 @@
 import React, {useState, useRef, useEffect} from 'react';
 import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, message, Input, Drawer, Space, Tag, Modal, Divider, Popconfirm } from 'antd';
+import { Button, message, Input, Space, Tag, Modal, Divider, Popconfirm } from 'antd';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
 import { batchDeleteUser, deleteUser, getUserById, getUserPage } from '@/services/user/user';
@@ -18,7 +17,6 @@ const UserList: React.FC = () => {
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [updateFormValues, setUpdateFormValues] = useState({});
   const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<UserVO>();
   const [selectedRowsState, setSelectedRows] = useState<UserVO[]>([]);
 
   const [departmentList, setDepartmentList] = useState<any>();
@@ -299,28 +297,6 @@ const UserList: React.FC = () => {
         />
       ) : null}
 
-      <Drawer
-        width={600}
-        visible={!!currentRow}
-        onClose={() => {
-          setCurrentRow(undefined);
-        }}
-        closable={false}
-      >
-        {currentRow?.id && (
-          <ProDescriptions<UserVO>
-            column={2}
-            title={currentRow?.name}
-            request={async () => ({
-              data: currentRow || {},
-            })}
-            params={{
-              id: currentRow?.id,
-            }}
-            columns={columns}
-          />
-        )}
-      </Drawer>
     </PageContainer>
   );
 };

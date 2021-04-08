@@ -1,10 +1,9 @@
 import React, {useRef, useState} from 'react';
 import {ExclamationCircleOutlined, PlusOutlined} from '@ant-design/icons';
-import {Button, Divider, Drawer, Input, message, Modal, Popconfirm} from 'antd';
+import {Button, Divider, Input, message, Modal, Popconfirm} from 'antd';
 import {FooterToolbar, PageContainer} from '@ant-design/pro-layout';
 import type {ActionType, ProColumns} from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
 import {batchDeleteRole, deleteRole, getRoleById, getRolePage} from '@/services/role/role';
@@ -25,7 +24,6 @@ const RoleList: React.FC = () => {
   const [updateFormValues, setUpdateFormValues] = useState({} as RoleVO);
   const actionRef = useRef<ActionType>();
   const userRoleActionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<RoleVO>();
   const [selectedRowsState, setSelectedRows] = useState<RoleVO[]>([]);
 
   /**
@@ -316,28 +314,6 @@ const RoleList: React.FC = () => {
         />
       ) : null}
 
-      <Drawer
-        width={600}
-        visible={!!currentRow}
-        onClose={() => {
-          setCurrentRow(undefined);
-        }}
-        closable={false}
-      >
-        {currentRow?.id && (
-          <ProDescriptions<RoleVO>
-            column={2}
-            title={currentRow?.name}
-            request={async () => ({
-              data: currentRow || {},
-            })}
-            params={{
-              id: currentRow?.id,
-            }}
-            columns={columns}
-          />
-        )}
-      </Drawer>
     </PageContainer>
   );
 };

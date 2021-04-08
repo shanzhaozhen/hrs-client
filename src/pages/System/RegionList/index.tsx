@@ -1,10 +1,9 @@
 import React, { useState, useRef } from 'react';
 import {ExclamationCircleOutlined, PlusOutlined} from '@ant-design/icons';
-import {Button, message, Input, Drawer, Popconfirm, Divider, Modal} from 'antd';
+import {Button, message, Input, Popconfirm, Divider, Modal} from 'antd';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
 import {
@@ -24,7 +23,6 @@ const RegionList: React.FC = () => {
   const [updateFormValues, setUpdateFormValues] = useState({});
   const actionRef = useRef<ActionType>();
   const [regionData, setRegionData] = useState<RegionVO[]>([]);
-  const [currentRow, setCurrentRow] = useState<RegionVO>();
   const [selectedRowsState, setSelectedRows] = useState<RegionVO[]>([]);
 
   /**
@@ -241,28 +239,6 @@ const RegionList: React.FC = () => {
         />
       ) : null}
 
-      <Drawer
-        width={600}
-        visible={!!currentRow}
-        onClose={() => {
-          setCurrentRow(undefined);
-        }}
-        closable={false}
-      >
-        {currentRow?.id && (
-          <ProDescriptions<RegionVO>
-            column={2}
-            title={currentRow?.name}
-            request={async () => ({
-              data: currentRow || {},
-            })}
-            params={{
-              id: currentRow?.id,
-            }}
-            columns={columns}
-          />
-        )}
-      </Drawer>
     </PageContainer>
   );
 };

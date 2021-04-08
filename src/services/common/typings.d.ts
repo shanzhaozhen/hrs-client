@@ -62,10 +62,15 @@ export type LoginResult = {
   data?: string;
 };
 
-type BaseSearchForm = {
+export type BaseSearchForm = {
   keyword?: string;
   pageSize?: number;
   current?: number;
   orders?: OrderItem[];
   page?: PageUserDTO;
+};
+
+export type OptionType = {
+  value: string | number;
+  label: string | number;
 };

@@ -8,7 +8,6 @@ import { getUserById } from '@/services/user/user';
 import { FooterToolbar } from '@ant-design/pro-layout';
 import { PlusOutlined } from '@ant-design/icons';
 import UpdateForm from '@/pages/System/UserList/components/UpdateForm';
-import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from '@/pages/System/UserList/components/CreateForm';
 import type { RoleVO } from "@/services/role/typings";
 import CheckBoxUser from "@/pages/System/UserRelateList/components/CheckBoxUser";
@@ -46,7 +45,6 @@ const UserRelateList: React.FC<UserRelateListProps> = (props) => {
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [checkBoxUserVisible, handleCheckBoxUserVisible] = useState<boolean>(false);
   const [updateFormValues, setUpdateFormValues] = useState({});
-  const [currentRow, setCurrentRow] = useState<UserVO>();
   const [selectedRowsState, setSelectedRows] = useState<UserVO[]>([]);
   const [departmentList, setDepartmentList] = useState<any>();
 
@@ -226,28 +224,6 @@ const UserRelateList: React.FC<UserRelateListProps> = (props) => {
         values={values}
       />
 
-      <Drawer
-        width={600}
-        visible={!!currentRow}
-        onClose={() => {
-          setCurrentRow(undefined);
-        }}
-        closable={false}
-      >
-        {currentRow?.id && (
-          <ProDescriptions<UserVO>
-            column={2}
-            title={currentRow?.name}
-            request={async () => ({
-              data: currentRow || {},
-            })}
-            params={{
-              id: currentRow?.id,
-            }}
-            columns={columns}
-          />
-        )}
-      </Drawer>
     </Drawer>
   );
 };

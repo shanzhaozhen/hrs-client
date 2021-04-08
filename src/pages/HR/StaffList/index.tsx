@@ -1,16 +1,15 @@
 import React, {useRef, useState} from 'react';
-import { Button, Divider, Drawer, Input, message } from 'antd';
+import { Button, Divider, Input, message } from 'antd';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import type {ActionType, ProColumns} from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import ProDescriptions from '@ant-design/pro-descriptions';
 import { getStaffById, getStaffPage } from '@/services/staff/staff';
 import type { StaffForm, StaffVO } from '@/services/staff/typings';
 import {getPageParams, getSortOrder} from "@/utils/common";
 import {HistoryOutlined} from "@ant-design/icons";
 import CreateForm from "@/pages/HR/StaffList/components/CreateForm";
 import UpdateForm from "@/pages/HR/StaffList/components/UpdateForm";
-import {DepartmentVO} from "@/services/department/typings";
+import type { DepartmentVO } from "@/services/department/typings";
 
 const StaffList: React.FC = () => {
 
@@ -18,8 +17,6 @@ const StaffList: React.FC = () => {
   const [updateFormValues, setUpdateFormValues] = useState({} as DepartmentVO);
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-  const [currentRow, setCurrentRow] = useState<StaffVO>();
-  const [showDetail, setShowDetail] = useState<boolean>(false);
   const [selectedRowsState, setSelectedRows] = useState<StaffVO[]>([]);
 
   // /**
@@ -118,18 +115,6 @@ const StaffList: React.FC = () => {
             message: '此项为必填项',
           },
         ],
-      },
-      render: (dom, entity) => {
-        return (
-          <a
-            onClick={() => {
-              setCurrentRow(entity);
-              setShowDetail(true);
-            }}
-          >
-            {dom}
-          </a>
-        );
       },
     },
     {
@@ -313,33 +298,6 @@ const StaffList: React.FC = () => {
         />
       ) : null}
 
-
-      <Drawer
-        width={'75%'}
-        visible={showDetail}
-        onClose={() => {
-          setCurrentRow(undefined);
-          setShowDetail(false);
-        }}
-        closable={true}
-      >
-       {currentRow?.id && (
-          <ProDescriptions<StaffVO>
-            column={2}
-            title={currentRow?.staffName}
-            request={async () => ({
-              data: currentRow || {},
-            })}
-            params={{
-              id: currentRow?.id,
-            }}
-            columns={columns}
-          />
-        )}
-        {/* {currentRow?.id && (
-          <ViewForm />
-        )} */}
-      </Drawer>
     </PageContainer>
   );
 };

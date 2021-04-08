@@ -1,10 +1,9 @@
 import {ExclamationCircleOutlined, PlusOutlined} from '@ant-design/icons';
-import {Button, message, Input, Drawer, Space, Divider, Popconfirm, Modal} from 'antd';
+import {Button, message, Input, Space, Divider, Popconfirm, Modal} from 'antd';
 import React, { useState, useRef } from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import ProDescriptions from '@ant-design/pro-descriptions';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
 import {batchDeleteMenu, deleteMenu, getMenuById, getMenuTree} from '@/services/menu/menu';
@@ -17,7 +16,6 @@ const MenuList: React.FC = () => {
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [updateFormValues, setUpdateFormValues] = useState({});
   const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<MenuVO>();
   const [selectedRowsState, setSelectedRows] = useState<MenuVO[]>([]);
 
   /**
@@ -234,28 +232,6 @@ const MenuList: React.FC = () => {
         />
       ) : null}
 
-      <Drawer
-        width={600}
-        visible={!!currentRow}
-        onClose={() => {
-          setCurrentRow(undefined);
-        }}
-        closable={false}
-      >
-        {currentRow?.id && (
-          <ProDescriptions<MenuVO>
-            column={2}
-            title={currentRow?.name}
-            request={async () => ({
-              data: currentRow || {},
-            })}
-            params={{
-              id: currentRow?.id,
-            }}
-            columns={columns}
-          />
-        )}
-      </Drawer>
     </PageContainer>
   );
 };

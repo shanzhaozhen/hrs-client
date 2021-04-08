@@ -103,15 +103,15 @@ export default [
     ],
   },
   {
-    path: '/recruitment',
-    name: 'recruitment',
+    path: '/recruit',
+    name: 'recruit',
     icon: 'crown',
     routes: [
       {
-        path: '/recruitment/resume',
+        path: '/recruit/resume',
         name: 'staff',
         icon: 'smile',
-        component: './Recruitment/ResumeList',
+        component: './Recruit/ResumeList',
       },
     ],
   },

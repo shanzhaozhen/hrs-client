@@ -51,9 +51,9 @@ export async function getRegionTreeByLevel(level: number, type: number, options?
   });
 }
 
-/** 通过父级ID获取字典子节点 GET /region/${regionId}/children */
+/** 通过父级ID获取字典子节点 GET /region/children/${regionId} */
 export async function getRegionChildrenById(regionId: number, options?: Record<string, any>) {
-  return request<RegionVO[]>(`/hrs-api/region/${regionId}/children`, {
+  return request<RegionVO[]>(`/hrs-api/region/children/${regionId}`, {
     method: 'GET',
     ...(options || {}),
   });
