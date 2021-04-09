@@ -17,7 +17,7 @@ export async function getStaffPage(pageParams: PageParams, orders?: Orders | und
 
 /** 获取员工信息（通过员工id） GET /staff/${staffId} */
 export async function getStaffById(staffId: number, options?: Record<string, any>) {
-  return request<API.ResultBodyStaffVO>(`/hrs-api/staff/${staffId}`, {
+  return request<StaffVO>(`/hrs-api/staff/${staffId}`, {
     method: 'GET',
     ...(options || {}),
   });
@@ -36,7 +36,7 @@ export async function addStaff(body: StaffForm, options?: Record<string, any>) {
 }
 
 /** 更新员工接口 PUT /staff */
-export async function updateStaff(body: API.StaffForm, options?: Record<string, any>) {
+export async function updateStaff(body: StaffForm, options?: Record<string, any>) {
   return request<number>('/hrs-api/staff', {
     method: 'PUT',
     headers: {

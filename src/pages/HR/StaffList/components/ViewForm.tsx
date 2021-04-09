@@ -1,31 +1,49 @@
 import React from 'react';
-import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import FormBody from '@/pages/HR/StaffList/components/FormBody';
-import type { ActionType } from '@ant-design/pro-table';
-import ProDescriptions from '@ant-design/pro-descriptions';
-import ProForm from '@ant-design/pro-form';
+import { DrawerForm } from '@ant-design/pro-form';
+import type { StaffVO } from "@/services/staff/typings";
 
 interface ViewFormProps {
-  createModalVisible: boolean;
-  handleCreateModalVisible: Dispatch<SetStateAction<boolean>>;
-  tableActionRef: MutableRefObject<ActionType | undefined>;
+  viewDrawerVisible: boolean;
+  handleViewDrawerVisible: Dispatch<SetStateAction<boolean>>;
+  onCancel: () => void;
+  values?: StaffVO;
 }
 
-const ViewForm: React.FC<ViewFormProps> = () => {
+const ViewForm: React.FC<ViewFormProps> = (props) => {
+  const { viewDrawerVisible, handleViewDrawerVisible, onCancel, values } = props
 
   return (
     <>
-      <ProDescriptions>
-        <ProDescriptions.Item label={"dfdf"}>ddd</ProDescriptions.Item>
-        <ProDescriptions.Item label={"dfdf"}>ddd</ProDescriptions.Item>
-        <ProDescriptions.Item label={"dfdf"}>ddd</ProDescriptions.Item>
-        <ProDescriptions.Item label={"dfdf"}>ddd</ProDescriptions.Item>
-        <ProDescriptions.Item label={"dfdf"}>ddd</ProDescriptions.Item>
-        <ProDescriptions.Item label={"dfdf"}>ddd</ProDescriptions.Item>
-      </ProDescriptions>
-      <ProForm>
-        <FormBody />
-      </ProForm>
+      <DrawerForm
+        width={'75%'}
+        title="查看员工"
+        visible={viewDrawerVisible}
+        onVisibleChange={handleViewDrawerVisible}
+        initialValues={values}
+        drawerProps={{
+          onClose: onCancel,
+          destroyOnClose: true,
+        }}
+        // onFinish={handleUpdate}
+        onFinish={async (formData) => {
+          console.log(formData)
+        }}
+        submitter={{
+          resetButtonProps: {
+            type: 'dashed',
+            name: '提交'
+          },
+          submitButtonProps: {
+            title: '提交'
+          },
+        }}
+      >
+        {values && Object.keys(values).length ? (
+          <FormBody isEdit={true} values={values} />
+        ) : null}
+      </DrawerForm>
     </>
   );
 };

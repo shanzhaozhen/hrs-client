@@ -4,17 +4,17 @@ import { message } from 'antd';
 import { addStaff } from '@/services/staff/staff';
 import type { StaffForm } from '@/services/staff/typings';
 import FormBody from '@/pages/HR/StaffList/components/FormBody';
-import { ModalForm } from '@ant-design/pro-form';
+import { DrawerForm } from '@ant-design/pro-form';
 import type { ActionType } from '@ant-design/pro-table';
 
 interface CreateFormProps {
-  createModalVisible: boolean;
-  handleCreateModalVisible: Dispatch<SetStateAction<boolean>>;
+  createDrawerVisible: boolean;
+  handleCreateDrawerVisible: Dispatch<SetStateAction<boolean>>;
   tableActionRef: MutableRefObject<ActionType | undefined>;
 }
 
 const CreateForm: React.FC<CreateFormProps> = (props) => {
-  const { createModalVisible, handleCreateModalVisible, tableActionRef } = props;
+  const { createDrawerVisible, handleCreateDrawerVisible, tableActionRef } = props;
 
   /**
    * 添加员工
@@ -26,7 +26,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
       await addStaff({ ...fields });
       hide();
       message.success('添加成功');
-      handleCreateModalVisible(false);
+      handleCreateDrawerVisible(false);
       tableActionRef.current?.reloadAndRest?.();
     } catch (error) {
       hide();
@@ -35,18 +35,18 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
   };
 
   return (
-    <ModalForm
+    <DrawerForm
       width={748}
       title="新建员工"
-      visible={createModalVisible}
-      onVisibleChange={handleCreateModalVisible}
-      modalProps={{
+      visible={createDrawerVisible}
+      onVisibleChange={handleCreateDrawerVisible}
+      drawerProps={{
         destroyOnClose: true,
       }}
       onFinish={handleAdd}
     >
       <FormBody />
-    </ModalForm>
+    </DrawerForm>
   );
 };
 

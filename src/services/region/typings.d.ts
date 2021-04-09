@@ -39,3 +39,14 @@ export type RegionVO = {
   /** 修改时间 */
   lastModifiedDate?: string;
 };
+
+export type RegionType = {
+  /** 省 */
+  province?: string | number;
+  /** 市 */
+  city?: string | number;
+  /** 区 */
+  area?: string | number;
+  /** 详细地址 */
+  detail?: string | number;
+}

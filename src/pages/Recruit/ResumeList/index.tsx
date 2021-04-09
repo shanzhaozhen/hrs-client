@@ -4,7 +4,6 @@ import { Button, Divider, Drawer, Input, message } from 'antd';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import type {ActionType, ProColumns} from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import ProDescriptions from '@ant-design/pro-descriptions';
 import { getResumeById, getResumePage } from '@/services/resume/resume';
 import type { ResumeForm, ResumeVO } from '@/services/resume/typings';
 import {getPageParams, getSortOrder} from "@/utils/common";

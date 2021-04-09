@@ -6,17 +6,19 @@ import ProTable from '@ant-design/pro-table';
 import { getStaffById, getStaffPage } from '@/services/staff/staff';
 import type { StaffForm, StaffVO } from '@/services/staff/typings';
 import {getPageParams, getSortOrder} from "@/utils/common";
-import {HistoryOutlined} from "@ant-design/icons";
+import {ExportOutlined, HistoryOutlined, ImportOutlined, PlusOutlined} from "@ant-design/icons";
 import CreateForm from "@/pages/HR/StaffList/components/CreateForm";
 import UpdateForm from "@/pages/HR/StaffList/components/UpdateForm";
 import type { DepartmentVO } from "@/services/department/typings";
+import ViewForm from "@/pages/HR/StaffList/components/ViewForm";
 
 const StaffList: React.FC = () => {
 
   const actionRef = useRef<ActionType>();
   const [updateFormValues, setUpdateFormValues] = useState({} as DepartmentVO);
-  const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
-  const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
+  const [viewDrawerVisible, handleViewDrawerVisible] = useState<boolean>(false);
+  const [createDrawerVisible, handleCreateDrawerVisible] = useState<boolean>(false);
+  const [updateDrawerVisible, handleUpdateDrawerVisible] = useState<boolean>(false);
   const [selectedRowsState, setSelectedRows] = useState<StaffVO[]>([]);
 
   // /**
@@ -210,10 +212,9 @@ const StaffList: React.FC = () => {
           <a
             onClick={async () => {
               if (record && record.id) {
-                // const data = await getStaffById(record.id);
-                // setUpdateFormValues(data as StaffForm);
-                // handleUpdateModalVisible(true);
-                // message.error(res.message || `没有获取到员工信息（id:${record.id}）`);
+                const data = await getStaffById(record.id);
+                setUpdateFormValues(data as StaffForm);
+                handleViewDrawerVisible(true);
               } else {
                 message.warn('没有选中有效的员工');
               }
@@ -227,8 +228,7 @@ const StaffList: React.FC = () => {
               if (record && record.id) {
                 const data = await getStaffById(record.id);
                 setUpdateFormValues(data as StaffForm);
-                handleUpdateModalVisible(true);
-                // message.error(res.message || `没有获取到员工信息（id:${record.id}）`);
+                handleUpdateDrawerVisible(true);
               } else {
                 message.warn('没有选中有效的员工');
               }
@@ -251,9 +251,15 @@ const StaffList: React.FC = () => {
           labelWidth: 120,
         }}
         toolBarRender={() => [
-          // <Button type="primary" onClick={() => handleCreateModalVisible(true)}>
-          //   <PlusOutlined /> 新建
-          // </Button>,
+          <Button type="primary" onClick={() => handleCreateDrawerVisible(true)}>
+            <PlusOutlined /> 新建
+          </Button>,
+          <Button type="primary" onClick={() => handleCreateDrawerVisible(true)}>
+            <ImportOutlined /> 导入
+          </Button>,
+          <Button type="primary" onClick={() => handleCreateDrawerVisible(true)}>
+            <ExportOutlined /> 导出
+          </Button>,
         ]}
         request={async (params, sorter) => {
           const data = await getStaffPage(getPageParams(params), getSortOrder(sorter));
@@ -283,20 +289,23 @@ const StaffList: React.FC = () => {
         </FooterToolbar>
       )}
 
+      <ViewForm
+        viewDrawerVisible={viewDrawerVisible}
+        handleViewDrawerVisible={handleViewDrawerVisible}
+        onCancel={() => setUpdateFormValues({})}
+      />
       <CreateForm
-        createModalVisible={createModalVisible}
-        handleCreateModalVisible={handleCreateModalVisible}
+        createDrawerVisible={createDrawerVisible}
+        handleCreateDrawerVisible={handleCreateDrawerVisible}
         tableActionRef={actionRef}
       />
-      {updateFormValues && Object.keys(updateFormValues).length ? (
-        <UpdateForm
-          updateModalVisible={updateModalVisible}
-          handleUpdateModalVisible={handleUpdateModalVisible}
-          values={updateFormValues}
-          onCancel={() => setUpdateFormValues({})}
-          tableActionRef={actionRef}
-        />
-      ) : null}
+      <UpdateForm
+        updateDrawerVisible={updateDrawerVisible}
+        handleUpdateDrawerVisible={handleUpdateDrawerVisible}
+        values={updateFormValues}
+        onCancel={() => setUpdateFormValues({})}
+        tableActionRef={actionRef}
+      />
 
     </PageContainer>
   );

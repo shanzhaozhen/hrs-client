@@ -5,7 +5,7 @@ import type { Orders, Page, PageParams } from "@/services/common/typings";
 
 /** 获取所有区域信息根部 GET /region/root */
 export async function getRegionRootList(options?: Record<string, any>) {
-  return request<API.ResultBodyListRegionVO>('/hrs-api/region/root', {
+  return request<RegionVO[]>('/hrs-api/region/root', {
     method: 'GET',
     ...(options || {}),
   });
