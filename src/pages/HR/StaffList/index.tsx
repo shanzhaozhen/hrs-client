@@ -292,6 +292,7 @@ const StaffList: React.FC = () => {
       <ViewForm
         viewDrawerVisible={viewDrawerVisible}
         handleViewDrawerVisible={handleViewDrawerVisible}
+        values={updateFormValues}
         onCancel={() => setUpdateFormValues({})}
       />
       <CreateForm

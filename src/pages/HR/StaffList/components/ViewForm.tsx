@@ -26,22 +26,21 @@ const ViewForm: React.FC<ViewFormProps> = (props) => {
           onClose: onCancel,
           destroyOnClose: true,
         }}
-        // onFinish={handleUpdate}
-        onFinish={async (formData) => {
-          console.log(formData)
-        }}
         submitter={{
           resetButtonProps: {
-            type: 'dashed',
-            name: '提交'
+            style: {
+              display: 'none',
+            },
           },
           submitButtonProps: {
-            title: '提交'
+            style: {
+              display: 'none',
+            },
           },
         }}
       >
         {values && Object.keys(values).length ? (
-          <FormBody isEdit={true} values={values} />
+          <FormBody isView={true} values={values} />
         ) : null}
       </DrawerForm>
     </>

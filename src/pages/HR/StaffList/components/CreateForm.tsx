@@ -3,7 +3,7 @@ import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import { message } from 'antd';
 import { addStaff } from '@/services/staff/staff';
 import type { StaffForm } from '@/services/staff/typings';
-import FormBody from '@/pages/HR/StaffList/components/FormBody';
+import FormBody, { convertStaffForm } from '@/pages/HR/StaffList/components/FormBody';
 import { DrawerForm } from '@ant-design/pro-form';
 import type { ActionType } from '@ant-design/pro-table';
 
@@ -23,7 +23,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
   const handleAdd = async (fields: StaffForm) => {
     const hide = message.loading('正在添加');
     try {
-      await addStaff({ ...fields });
+      await addStaff(convertStaffForm(fields));
       hide();
       message.success('添加成功');
       handleCreateDrawerVisible(false);
@@ -36,7 +36,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
 
   return (
     <DrawerForm
-      width={748}
+      width={'75%'}
       title="新建员工"
       visible={createDrawerVisible}
       onVisibleChange={handleCreateDrawerVisible}

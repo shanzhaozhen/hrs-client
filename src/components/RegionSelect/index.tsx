@@ -11,11 +11,12 @@ interface RegionSelectProps {
   level: number,
   hasDetail?: boolean,
   customValue?: RegionType,
+  disabled?: boolean,
   onChange?: (value: any) => void;
 }
 
 const RegionSelect: React.FC<RegionSelectProps> = (props) => {
-  const { size, level, hasDetail, customValue, onChange } = props;
+  const { size, level, hasDetail, customValue, disabled, onChange } = props;
 
   const [regionOptions, setRegionOptions] = useState<CascaderOptionType[]>([]);
   const [currentValue, setCurrentValue] = useState<RegionType>({});
@@ -68,11 +69,11 @@ const RegionSelect: React.FC<RegionSelectProps> = (props) => {
       {
         hasDetail ? (
           <Input.Group compact>
-            <Cascader style={{ width: '45%' }} size={size} options={regionOptions} defaultValue={selectValue} onChange={onRegionChange} />
-            <Input style={{ width: '55%' }} placeholder="请输入详细地址" onChange={onDetailChange} defaultValue={inputValue} />
+            <Cascader style={{ width: '45%' }} disabled={disabled} size={size} options={regionOptions} defaultValue={selectValue} onChange={onRegionChange} />
+            <Input style={{ width: '55%' }} placeholder="请输入详细地址" onChange={onDetailChange} defaultValue={inputValue} disabled={disabled} />
           </Input.Group>
         ) : (
-          <Cascader size={size} options={regionOptions} defaultValue={selectValue} onChange={onRegionChange} />
+          <Cascader size={size} options={regionOptions} defaultValue={selectValue} onChange={onRegionChange} disabled={disabled} />
         )
       }
     </>
