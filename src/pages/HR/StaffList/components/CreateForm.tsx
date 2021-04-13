@@ -3,9 +3,10 @@ import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import { message } from 'antd';
 import { addStaff } from '@/services/staff/staff';
 import type { StaffForm } from '@/services/staff/typings';
-import FormBody, { convertStaffForm } from '@/pages/HR/StaffList/components/FormBody';
+import FormBody from '@/pages/HR/StaffList/components/FormBody';
 import { DrawerForm } from '@ant-design/pro-form';
 import type { ActionType } from '@ant-design/pro-table';
+import { convertStaffForm } from "@/utils/staff";
 
 interface CreateFormProps {
   createDrawerVisible: boolean;
