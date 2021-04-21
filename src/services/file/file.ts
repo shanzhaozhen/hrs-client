@@ -24,9 +24,8 @@ export async function getFileById(fileId: number, options?: Record<string, any>)
   });
 }
 
-/** 此处后端没有提供注释 POST /upload */
-export async function upload(files: string[], options?: Record<string, any>,
-) {
+/** 文件上传 POST /upload */
+export async function upload(files: FormData, options?: Record<string, any>,) {
   return request<FileVO[]>('/hrs-api/upload', {
     method: 'POST',
     data: files,

@@ -151,7 +151,7 @@ export type StaffVO = {
   /** 配偶名字 */
   spouseName?: string;
   /** 结婚证件 */
-  marriageCertificate?: string;
+  marriageCertificate?: number;
   /** 结婚日期 */
   marriageDate?: string;
   /** 子女人数 */

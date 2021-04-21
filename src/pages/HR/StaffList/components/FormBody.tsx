@@ -12,6 +12,9 @@ import { getDictionaryChildrenByCode } from "@/services/dictionary/dictionary";
 import RegionSelect from "@/components/RegionSelect";
 import DepartmentHistory from "@/pages/HR/StaffList/components/DepartmentHistory";
 import type { RegionType } from "@/services/region/typings";
+import { FileVO } from '@/services/file/typings';
+import {getFileById, upload} from '@/services/file/file';
+import {UploadFile} from "antd/lib/upload/interface";
 
 interface FormProps {
   isView?: boolean;
@@ -28,6 +31,12 @@ const FormBody: React.FC<FormProps> = (props) => {
   const [homeAddress, setHomeAddress] = useState<RegionType>({})
   const [currentAddress, setCurrentAddress] = useState<RegionType>({})
   const [postalAddress, setPostalAddress] = useState<RegionType>({})
+  const [marriageFile, setMarriageFile] = useState<UploadFile[]>([{
+    uid: '-1',
+    name: 'xxx.png',
+    status: 'done',
+    url: 'http://www.baidu.com/xxx.png',
+  }])
 
   useEffect(() => {
     if (values) {
@@ -65,6 +74,16 @@ const FormBody: React.FC<FormProps> = (props) => {
       })
     }
   }, []);
+
+  useEffect(() => {
+    if (values && values.marriageCertificate) {
+      getFileById(values.marriageCertificate).then(res => {
+        console.log(res)
+      });
+    }
+  }, [])
+
+
 
   return (
     <>
@@ -566,7 +585,24 @@ const FormBody: React.FC<FormProps> = (props) => {
             label="结婚证件"
             placeholder="请上传结婚证件"
           /> */}
-          <ProFormUploadDragger max={1} label="结婚证件" name="marriageCertificate" readonly={isView} />
+          <ProFormUploadDragger
+            label="结婚证件"
+            name="marriageCertificateFile"
+            max={1}
+            fieldProps={{
+              listType: "picture",
+              fileList: marriageFile,
+              customRequest: async (data) => {
+                console.log(data)
+                const fileData = new FormData();
+                fileData.append('files', data.file)
+                // delete options.headers['Content-Type'];
+                const res = await upload(fileData);
+                console.log(res)
+              }
+            }}
+            readonly={isView}
+          />
         </Col>
       </Row>
     </>
