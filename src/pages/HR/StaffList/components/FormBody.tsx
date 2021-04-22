@@ -619,38 +619,6 @@ const FormBody: React.FC<FormProps> = (props) => {
               max={1}
             />
           </ProForm.Item>
-          <Upload
-            defaultFileList={[
-              {
-                uid: '1384330907235241986',
-                name: 'd',
-                size: 11,
-                type: '',
-                originFileObj: {
-                  uid: '',
-                  lastModifiedDate: new Date(),
-                  lastModified: 11,
-                  name: 'd',
-                  size: 11,
-                  type: '',
-                },
-                url: '/',
-              }
-            ]}
-            onDownload={
-              async (file: UploadFile) => {
-                download(file.uid).then(res => {
-                  console.log(res)
-                  const blob = new Blob([res]);
-                  const objectURL = URL.createObjectURL(blob);
-                  let btn = document.createElement('a');
-                  btn.download = '文件名.pdf';
-                  btn.href = objectURL;
-                  btn.click();
-                  URL.revokeObjectURL(objectURL);
-                })
-            }}
-          />
         </Col>
       </Row>
     </>

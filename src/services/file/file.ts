@@ -42,6 +42,7 @@ export async function download(fileId: number | string, options?: Record<string,
       fileId
     },
     ...(options || {}),
+    skipErrorHandler: true,
   });
 }
 

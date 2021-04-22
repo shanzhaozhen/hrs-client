@@ -155,6 +155,9 @@ const jwtInterceptor = (url: string, options: RequestOptionsInit) => {
 
 // 响应后拦截器
 const afterResponseInterceptors = async (response: Response, options: RequestOptionsInit) => {
+  if (options.responseType === 'blob') {
+    return response;
+  }
   if (response.status === 200) {
     const res = await response.clone().json();
     if (res.code === 2000) {
