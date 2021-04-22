@@ -11,12 +11,12 @@ interface RegionSelectProps {
   level: number,
   hasDetail?: boolean,
   customValue?: RegionType,
-  disabled?: boolean,
+  readonly?: boolean,
   onChange?: (value: any) => void;
 }
 
 const RegionSelect: React.FC<RegionSelectProps> = (props) => {
-  const { size, level, hasDetail, customValue, disabled, onChange } = props;
+  const { size, level, hasDetail, customValue, readonly, onChange } = props;
 
   const [regionOptions, setRegionOptions] = useState<CascaderOptionType[]>([]);
   const [currentValue, setCurrentValue] = useState<RegionType>({});
@@ -64,18 +64,32 @@ const RegionSelect: React.FC<RegionSelectProps> = (props) => {
     onChange?.(currentValue);
   };
 
+  const renderBody = () => {
+    if (readonly) {
+      let readValue: any = selectValue.join('');
+      if (hasDetail) {
+        readValue = inputValue
+      }
+      return (
+        <div>{readValue}</div>
+      )
+    }
+    if (hasDetail) {
+      return (
+        <Input.Group compact>
+          <Cascader style={{ width: '45%' }} size={size} options={regionOptions} defaultValue={selectValue} onChange={onRegionChange} />
+          <Input style={{ width: '55%' }} placeholder="请输入详细地址" onChange={onDetailChange} defaultValue={inputValue} />
+        </Input.Group>
+      )
+    }
+    return (
+      <Cascader size={size} options={regionOptions} defaultValue={selectValue} onChange={onRegionChange} />
+    )
+  }
+
   return (
     <>
-      {
-        hasDetail ? (
-          <Input.Group compact>
-            <Cascader style={{ width: '45%' }} disabled={disabled} size={size} options={regionOptions} defaultValue={selectValue} onChange={onRegionChange} />
-            <Input style={{ width: '55%' }} placeholder="请输入详细地址" onChange={onDetailChange} defaultValue={inputValue} disabled={disabled} />
-          </Input.Group>
-        ) : (
-          <Cascader size={size} options={regionOptions} defaultValue={selectValue} onChange={onRegionChange} disabled={disabled} />
-        )
-      }
+      {renderBody()}
     </>
   );
 };

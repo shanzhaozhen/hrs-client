@@ -254,10 +254,10 @@ const StaffList: React.FC = () => {
           <Button type="primary" onClick={() => handleCreateDrawerVisible(true)}>
             <PlusOutlined /> 新建
           </Button>,
-          <Button type="primary" onClick={() => handleCreateDrawerVisible(true)}>
+          <Button type="primary">
             <ImportOutlined /> 导入
           </Button>,
-          <Button type="primary" onClick={() => handleCreateDrawerVisible(true)}>
+          <Button type="primary">
             <ExportOutlined /> 导出
           </Button>,
         ]}

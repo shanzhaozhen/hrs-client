@@ -33,4 +33,16 @@ export async function upload(files: FormData, options?: Record<string, any>,) {
   });
 }
 
+/** 文件下载 POST /download */
+export async function download(fileId: number | string, options?: Record<string, any>,) {
+  return request('/hrs-api/download', {
+    method: 'GET',
+    responseType: 'blob',
+    params: {
+      fileId
+    },
+    ...(options || {}),
+  });
+}
+
 

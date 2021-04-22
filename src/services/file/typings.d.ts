@@ -9,6 +9,10 @@ export type FileVO = {
   type?: string;
   /** 文件路径 */
   path?: string;
+  /** 访问路径 */
+  urlPath?: string;
+  /** md5 */
+  md5?: string;
   /** 文件分组 */
   group?: number;
   /** 创建人 */

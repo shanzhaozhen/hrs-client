@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { Col, Row } from 'antd';
+import {Col, Row, Upload} from 'antd';
 import ProForm, {
   ProFormDatePicker,
   ProFormDigit,
@@ -12,9 +12,10 @@ import { getDictionaryChildrenByCode } from "@/services/dictionary/dictionary";
 import RegionSelect from "@/components/RegionSelect";
 import DepartmentHistory from "@/pages/HR/StaffList/components/DepartmentHistory";
 import type { RegionType } from "@/services/region/typings";
-import { FileVO } from '@/services/file/typings';
-import {getFileById, upload} from '@/services/file/file';
+import CustomUpload from "@/components/CustomUpload";
 import {UploadFile} from "antd/lib/upload/interface";
+import {download} from "@/services/file/file";
+// import {getFileById, upload} from '@/services/file/file';
 
 interface FormProps {
   isView?: boolean;
@@ -31,12 +32,7 @@ const FormBody: React.FC<FormProps> = (props) => {
   const [homeAddress, setHomeAddress] = useState<RegionType>({})
   const [currentAddress, setCurrentAddress] = useState<RegionType>({})
   const [postalAddress, setPostalAddress] = useState<RegionType>({})
-  const [marriageFile, setMarriageFile] = useState<UploadFile[]>([{
-    uid: '-1',
-    name: 'xxx.png',
-    status: 'done',
-    url: 'http://www.baidu.com/xxx.png',
-  }])
+  // const [marriageFile, setMarriageFile] = useState<any[]>([])
 
   useEffect(() => {
     if (values) {
@@ -75,15 +71,24 @@ const FormBody: React.FC<FormProps> = (props) => {
     }
   }, []);
 
-  useEffect(() => {
-    if (values && values.marriageCertificate) {
-      getFileById(values.marriageCertificate).then(res => {
-        console.log(res)
-      });
-    }
-  }, [])
-
-
+  // useEffect(() => {
+  //   if (values && values.marriageCertificate) {
+  //     getFileById(values.marriageCertificate).then(res => {
+  //       console.log(res)
+  //     });
+  //   } else {
+  //     setMarriageFile([
+  //       {
+  //         uid: '-1',
+  //         name: 'xxx.png',
+  //         status: 'done',
+  //         size: 121,
+  //         type: '',
+  //         url: 'http://www.baidu.com/xxx.png',
+  //       }
+  //     ])
+  //   }
+  // }, [])
 
   return (
     <>
@@ -303,7 +308,7 @@ const FormBody: React.FC<FormProps> = (props) => {
         </Col>
         <Col xl={7} lg={12} md={24}>
           <ProForm.Item name="birthAddress" label="出生地">
-            <RegionSelect level={2} customValue={birthAddress} disabled={isView} />
+            <RegionSelect level={2} customValue={birthAddress} readonly={isView} />
           </ProForm.Item>
         </Col>
         {/* <Col xl={7} lg={12} md={24}>
@@ -324,7 +329,7 @@ const FormBody: React.FC<FormProps> = (props) => {
         </Col> */}
         <Col xl={7} lg={12} md={24}>
           <ProForm.Item name="nativeAddress" label="籍贯">
-            <RegionSelect level={2} customValue={nativeAddress} disabled={isView} />
+            <RegionSelect level={2} customValue={nativeAddress} readonly={isView} />
           </ProForm.Item>
         </Col>
         {/* <Col xl={7} lg={12} md={24}>
@@ -361,7 +366,7 @@ const FormBody: React.FC<FormProps> = (props) => {
         </Col>
         <Col xl={12} lg={12} md={24}>
           <ProForm.Item name="registeredAddress" label="户口地址">
-            <RegionSelect level={3} customValue={registeredAddress} hasDetail disabled={isView} />
+            <RegionSelect level={3} customValue={registeredAddress} hasDetail readonly={isView} />
           </ProForm.Item>
         </Col>
         {/* <Col xl={7} lg={12} md={24}>
@@ -398,7 +403,7 @@ const FormBody: React.FC<FormProps> = (props) => {
         </Col> */}
         <Col xl={12} lg={12} md={24}>
           <ProForm.Item name="homeAddress" label="家庭住址">
-            <RegionSelect level={3} customValue={homeAddress} hasDetail disabled={isView} />
+            <RegionSelect level={3} customValue={homeAddress} hasDetail readonly={isView} />
           </ProForm.Item>
         </Col>
         {/*
@@ -436,7 +441,7 @@ const FormBody: React.FC<FormProps> = (props) => {
         </Col> */}
         <Col xl={12} lg={12} md={24}>
           <ProForm.Item name="currentAddress" label="现住地址">
-            <RegionSelect level={3} customValue={currentAddress} hasDetail disabled={isView} />
+            <RegionSelect level={3} customValue={currentAddress} hasDetail readonly={isView} />
           </ProForm.Item>
         </Col>
         {/* <Col xl={7} lg={12} md={24}>
@@ -473,7 +478,7 @@ const FormBody: React.FC<FormProps> = (props) => {
         </Col> */}
         <Col xl={12} lg={12} md={24}>
           <ProForm.Item name="postalAddress" label="邮递地址">
-            <RegionSelect level={3} customValue={postalAddress} hasDetail disabled={isView} />
+            <RegionSelect level={3} customValue={postalAddress} hasDetail readonly={isView} />
           </ProForm.Item>
         </Col>
         {/* <Col xl={7} lg={12} md={24}>
@@ -585,7 +590,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             label="结婚证件"
             placeholder="请上传结婚证件"
           /> */}
-          <ProFormUploadDragger
+          {/* <ProFormUploadDragger
             label="结婚证件"
             name="marriageCertificateFile"
             max={1}
@@ -602,6 +607,49 @@ const FormBody: React.FC<FormProps> = (props) => {
               }
             }}
             readonly={isView}
+          /> */}
+          <ProForm.Item
+            label="结婚证件"
+            name="marriageCertificate"
+          >
+            <CustomUpload
+              type="ProFormUploadDragger"
+              listType="picture"
+              readonly={isView}
+              max={1}
+            />
+          </ProForm.Item>
+          <Upload
+            defaultFileList={[
+              {
+                uid: '1384330907235241986',
+                name: 'd',
+                size: 11,
+                type: '',
+                originFileObj: {
+                  uid: '',
+                  lastModifiedDate: new Date(),
+                  lastModified: 11,
+                  name: 'd',
+                  size: 11,
+                  type: '',
+                },
+                url: '/',
+              }
+            ]}
+            onDownload={
+              async (file: UploadFile) => {
+                download(file.uid).then(res => {
+                  console.log(res)
+                  const blob = new Blob([res]);
+                  const objectURL = URL.createObjectURL(blob);
+                  let btn = document.createElement('a');
+                  btn.download = '文件名.pdf';
+                  btn.href = objectURL;
+                  btn.click();
+                  URL.revokeObjectURL(objectURL);
+                })
+            }}
           />
         </Col>
       </Row>
