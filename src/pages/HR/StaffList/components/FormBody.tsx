@@ -617,6 +617,8 @@ const FormBody: React.FC<FormProps> = (props) => {
               listType="picture"
               readonly={isView}
               max={1}
+              maxCount={1}
+              description="仅能保存单文件"
             />
           </ProForm.Item>
         </Col>

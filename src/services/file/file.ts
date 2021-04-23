@@ -1,6 +1,6 @@
 // @ts-ignore
 import { request } from 'umi';
-import type { Page } from "@/services/common/typings";
+import type {Page, ResultBody} from "@/services/common/typings";
 import type { FileVO } from "@/services/file/typings";
 import type { Orders, PageParams } from "@/services/common/typings";
 

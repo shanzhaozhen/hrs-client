@@ -6,20 +6,23 @@ import type { UploadListType } from "antd/es/upload/interface";
 import type { UploadFile } from "antd/lib/upload/interface";
 import {DownloadOutlined} from "@ant-design/icons";
 import proxy from "../../../config/proxy";
+import {request} from "umi";
 
 interface RegionSelectProps {
   type: 'ProFormUploadDragger' | 'ProFormUploadButton';
   label?: string;
   name?: string;
+  description?: string;
   readonly?: boolean;
   max?: number;
+  maxCount?: number;
   value?: any;
   listType: UploadListType,
   onChange?: (value: any) => void;
 }
 
 const CustomUpload: React.FC<RegionSelectProps> = (props) => {
-  const { type, value, onChange } = props;
+  const { type, maxCount, value, onChange } = props;
 
   const [fileList, setFileList] = useState<any[]>([])
 
@@ -38,25 +41,72 @@ const CustomUpload: React.FC<RegionSelectProps> = (props) => {
         setFileList([{
           uid: res.id,
           name: res.name,
+          status: 'done',
           url: targetUrl + res.urlPath
         }])
       });
     }
   }, [])
 
-  const customRequest = async (data: RcCustomRequestOptions) => {
-    console.log(data)
-    const { onSuccess } = data
+  const customRequest = async (options: RcCustomRequestOptions) => {
+    console.log(options)
+
+    const timestamp = new Date().getTime();
+
+    setFileList(origins => {
+      if (maxCount && maxCount > 1) {
+        return [...origins, {
+          uid: timestamp,
+          name: options.filename,
+          status: 'uploading',
+          percent: 0
+        }]
+      }
+      return [{
+        uid: timestamp,
+        name: options.filename,
+        status: 'uploading',
+        percent: 0
+      }]
+    })
+
     const fileData = new FormData();
-    fileData.append('files', data.file)
+    fileData.append('files', options.file)
     // delete options.headers['Content-Type'];
-    const res = await upload(fileData);
-    console.log(res)
+    const data = await upload(fileData);
+
+    console.log(data)
+
+    setFileList(origins => {
+      return origins.map(item => {
+        if (item.id === timestamp) {
+          return {
+            ...item,
+            uid: item.id,
+            name: item.name,
+            status: 'done',
+          }
+        }
+        return { ...item }
+      })
+    })
+
+    if (options.onSuccess) {
+      options.onSuccess(data, options.file);
+    }
+
+    // setFileList(
+    //   data.map(item => ({
+    //   uid: item.id,
+    //   name: item.name,
+    //   status: 'done',
+    // })))
+
+    console.log(data)
   }
 
-  const onChangeUpload = (data, bbb) => {
+  const onChangeUpload = (data) => {
     console.log(data)
-    console.log(bbb)
   }
 
   const onPreview = async (file: UploadFile) => {
@@ -79,15 +129,25 @@ const CustomUpload: React.FC<RegionSelectProps> = (props) => {
 
   return (
     <>
+      <ProFormUploadDragger
+        action={`${targetUrl}/upload`}
+        fieldProps={{
+          method: "POST",
+          maxCount: props.maxCount,
+          onChange: onChangeUpload,
+          onPreview,
+        }} />
       <FormComponents
         label={props.label}
         name={props.name}
+        description={props.description}
         max={props.max}
         readonly={props.readonly}
         onChange={onChangeUpload}
         fieldProps={{
           listType: 'picture',
           fileList,
+          maxCount: props.maxCount,
           customRequest,
           onPreview,
         }}
@@ -95,6 +155,5 @@ const CustomUpload: React.FC<RegionSelectProps> = (props) => {
     </>
   );
 };
-
 
 export default CustomUpload;
