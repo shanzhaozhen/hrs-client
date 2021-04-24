@@ -7,7 +7,7 @@ import Footer from '@/components/Footer';
 import { login } from '@/services/common/login';
 
 import styles from './index.less';
-import type { LoginParams, LoginResult } from '@/services/common/typings';
+import type { LoginParams } from '@/services/common/typings';
 
 const LoginMessage: React.FC<{
   content: string;
@@ -34,7 +34,7 @@ const goto = () => {
 
 const Login: React.FC = () => {
   const [submitting, setSubmitting] = useState(false);
-  const [userLoginState, setUserLoginState] = useState<LoginResult>({});
+  const [userLoginState, setUserLoginState] = useState<any>({});
   const { initialState, setInitialState } = useModel('@@initialState');
 
   const intl = useIntl();

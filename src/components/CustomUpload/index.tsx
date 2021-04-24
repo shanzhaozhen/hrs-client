@@ -1,14 +1,12 @@
-import React, {useEffect, useState} from 'react';
-import {ProFormUploadButton, ProFormUploadDragger} from "@ant-design/pro-form";
-import {download, getFileById, upload} from "@/services/file/file";
-import type { UploadRequestOption as RcCustomRequestOptions } from "rc-upload/lib/interface";
+import React, { useEffect, useState } from 'react';
+import { ProFormUploadButton, ProFormUploadDragger } from "@ant-design/pro-form";
+import { download, getFileById } from "@/services/file/file";
 import type { UploadListType } from "antd/es/upload/interface";
 import type { UploadFile } from "antd/lib/upload/interface";
-import {DownloadOutlined} from "@ant-design/icons";
 import proxy from "../../../config/proxy";
-import {request} from "umi";
+import type { UploadChangeParam } from "antd/lib/upload/interface";
 
-interface RegionSelectProps {
+interface CustomUploadProps {
   type: 'ProFormUploadDragger' | 'ProFormUploadButton';
   label?: string;
   name?: string;
@@ -17,12 +15,12 @@ interface RegionSelectProps {
   max?: number;
   maxCount?: number;
   value?: any;
-  listType: UploadListType,
+  listType?: UploadListType,
   onChange?: (value: any) => void;
 }
 
-const CustomUpload: React.FC<RegionSelectProps> = (props) => {
-  const { type, maxCount, value, onChange } = props;
+const CustomUpload: React.FC<CustomUploadProps> = (props) => {
+  const { type, value, onChange } = props;
 
   const [fileList, setFileList] = useState<any[]>([])
 
@@ -37,77 +35,37 @@ const CustomUpload: React.FC<RegionSelectProps> = (props) => {
 
   useEffect(() => {
     if (value) {
-      getFileById(value).then(res => {
-        setFileList([{
-          uid: res.id,
-          name: res.name,
+      getFileById(value).then(({ data }) => {
+        setFileList(data ? [{
+          uid: data.id,
+          name: data.name,
           status: 'done',
-          url: targetUrl + res.urlPath
-        }])
+          url: targetUrl + data.urlPath
+        }] : [])
       });
     }
   }, [])
 
-  const customRequest = async (options: RcCustomRequestOptions) => {
-    console.log(options)
-
-    const timestamp = new Date().getTime();
-
-    setFileList(origins => {
-      if (maxCount && maxCount > 1) {
-        return [...origins, {
-          uid: timestamp,
-          name: options.filename,
-          status: 'uploading',
-          percent: 0
-        }]
-      }
-      return [{
-        uid: timestamp,
-        name: options.filename,
-        status: 'uploading',
-        percent: 0
-      }]
-    })
-
-    const fileData = new FormData();
-    fileData.append('files', options.file)
-    // delete options.headers['Content-Type'];
-    const data = await upload(fileData);
-
-    console.log(data)
-
-    setFileList(origins => {
-      return origins.map(item => {
-        if (item.id === timestamp) {
+  const onUploadChange = (info: UploadChangeParam) => {
+    // console.log("onUploadChange: ", info);
+    if (!info.event) {
+      let uploadValue;
+      setFileList(info.fileList.map(item => {
+        if (item.status === 'done') {
+          const { data } = item.response;
+          uploadValue = data[0].id;
           return {
             ...item,
-            uid: item.id,
-            name: item.name,
-            status: 'done',
-          }
+            uid: data[0].id,
+            // url: `/hrs-api/download?fileId=${data[0].id}`
+          };
         }
-        return { ...item }
-      })
-    })
-
-    if (options.onSuccess) {
-      options.onSuccess(data, options.file);
+        return item;
+      }));
+      onChange?.(uploadValue);
     }
 
-    // setFileList(
-    //   data.map(item => ({
-    //   uid: item.id,
-    //   name: item.name,
-    //   status: 'done',
-    // })))
-
-    console.log(data)
-  }
-
-  const onChangeUpload = (data) => {
-    console.log(data)
-  }
+  };
 
   const onPreview = async (file: UploadFile) => {
     download(file.uid).then(data => {
@@ -129,27 +87,25 @@ const CustomUpload: React.FC<RegionSelectProps> = (props) => {
 
   return (
     <>
-      <ProFormUploadDragger
-        action={`${targetUrl}/upload`}
-        fieldProps={{
-          method: "POST",
-          maxCount: props.maxCount,
-          onChange: onChangeUpload,
-          onPreview,
-        }} />
       <FormComponents
         label={props.label}
         name={props.name}
         description={props.description}
         max={props.max}
         readonly={props.readonly}
-        onChange={onChangeUpload}
+        action={'/hrs-api/upload'}
         fieldProps={{
-          listType: 'picture',
+          headers: {
+            // @ts-ignore
+            Authorization: localStorage.getItem('ACCESS_TOKEN'),
+          },
+          listType: props.listType,
+          // defaultFileList,
           fileList,
           maxCount: props.maxCount,
-          customRequest,
+          // customRequest,
           onPreview,
+          onChange: onUploadChange
         }}
       />
     </>

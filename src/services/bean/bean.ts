@@ -2,10 +2,11 @@
 import { request } from 'umi';
 import type { BeanInfo } from "@/services/bean/typings";
 import type { TaskVO } from "@/services/task/typings";
+import {ResultBody} from "@/services/common/typings";
 
 /** 获取Bean列表 GET /bean/list */
 export async function getBeanInfoList(options?: Record<string, any>) {
-  return request<BeanInfo[]>('/hrs-api/bean/list', {
+  return request<ResultBody<BeanInfo[]>>('/hrs-api/bean/list', {
     method: 'GET',
     ...(options || {}),
   });
@@ -13,7 +14,7 @@ export async function getBeanInfoList(options?: Record<string, any>) {
 
 /** 获取Bean列表 GET /bean/${beanName} */
 export async function getBeanInfoByName(beanName: string, options?: Record<string, any>) {
-  return request<BeanInfo>(`/hrs-api/bean/${beanName}`, {
+  return request<ResultBody<BeanInfo>>(`/hrs-api/bean/${beanName}`, {
     method: 'GET',
     ...(options || {}),
   });
@@ -25,7 +26,7 @@ export async function getBeanMethod(
     beanName?: string;
     methodName?: string;
   }, options?: Record<string, any>) {
-  return request<TaskVO>('/hrs-api/bean/method', {
+  return request<ResultBody<TaskVO>>('/hrs-api/bean/method', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

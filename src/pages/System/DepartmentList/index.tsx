@@ -13,7 +13,7 @@ import type { UserVO } from "@/services/user/typings";
 import UserRelateList from "@/pages/System/UserRelateList";
 import type { PageParams } from "@/services/common/typings";
 import type { SortOrder } from "antd/lib/table/interface";
-import {getPageParams, getSortOrder} from "@/utils/common";
+import { getPageParams, getSortOrder } from "@/utils/common";
 import {batchUpdateUserDepartment, getUserPageByDepartmentId} from "@/services/user/user";
 
 const DepartmentList: React.FC = () => {
@@ -189,7 +189,7 @@ const DepartmentList: React.FC = () => {
           <a
             onClick={async () => {
               if (record && record.id) {
-                const data = await getDepartmentById(record.id);
+                const { data } = await getDepartmentById(record.id);
                 setUpdateFormValues(data as DepartmentForm);
                 handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到部门信息（id:${record.id}）`);
@@ -251,14 +251,14 @@ const DepartmentList: React.FC = () => {
           </Button>,
         ]}
         request={async () => {
-          const data = await getDepartmentTree();
+          const { data } = await getDepartmentTree();
           return {
             // success 请返回 true，
             // 不然 table 会停止解析数据，即使有数据
             success: true,
-            data,
+            data: data || [],
             // 不传会使用 data 的长度，如果是分页一定要传
-            total: data.length,
+            total: (data && data.length) || 0,
           };
         }}
         columns={columns}

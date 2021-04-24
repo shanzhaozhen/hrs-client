@@ -138,7 +138,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             showSearch={false}
             placeholder="请选择用户角色"
             request={async () => {
-              const data = await getAllRoles();
+              const { data } = await getAllRoles();
               if (data) {
                 return data.map((item: RoleVO) => ({
                   label: item.name,

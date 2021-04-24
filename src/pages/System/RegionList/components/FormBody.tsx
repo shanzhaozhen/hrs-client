@@ -21,12 +21,8 @@ const FormBody: React.FC<FormProps> = () => {
 
   useEffect(() => {
     getRegionTree()
-      .then(res => {
-        if (res) {
-          setRegionTree(loopRegionData(res));
-        } else {
-          setRegionTree([]);
-        }
+      .then(({ data }) => {
+        setRegionTree(data ? loopRegionData(data) : []);
       })
       .catch(() => {
         setRegionTree([]);

@@ -54,7 +54,7 @@ const FormBody: React.FC<FormProps> = () => {
   // }
   //
   // const onLoadDictionaryTreeData = async ({ key }: any) => {
-  //   const data = await getDictionaryChildrenById(key);
+  //   const { data } = await getDictionaryChildrenById(key);
   //
   //   setDictionaryTree(origin => updateDictionaryTreeData(origin, key, data.map(({ id, name }) => ({
   //     key: id,

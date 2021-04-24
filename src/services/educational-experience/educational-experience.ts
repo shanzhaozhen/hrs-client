@@ -1,11 +1,11 @@
 // @ts-ignore
 import { request } from 'umi';
-import type { Orders, Page, PageParams } from "@/services/common/typings";
+import type {Orders, Page, PageParams, ResultBody} from "@/services/common/typings";
 import type { EducationalExperienceForm, EducationalExperienceVO } from "@/services/educational-experience/typings";
 
 /** 获取教育经历（分页） GET /educational-experience/page */
 export async function getEducationalExperiencePage(pageParams: PageParams, roleId?: number, orders?: Orders | undefined | null, options?: Record<string, any>) {
-  return request<Page<EducationalExperienceVO>>('/educational-experience/page', {
+  return request<ResultBody<Page<EducationalExperienceVO>>>('/educational-experience/page', {
     method: 'GET',
     params: {
       ...pageParams,
@@ -16,7 +16,7 @@ export async function getEducationalExperiencePage(pageParams: PageParams, roleI
 
 /** 获取教育经历（通过教育经历id） GET /educational-experience/${educationalExperienceId} */
 export async function getEducationalExperienceById(educationalExperienceId: number, options?: Record<string, any>) {
-  return request<EducationalExperienceVO>(`/educational-experience/${educationalExperienceId}`, {
+  return request<ResultBody<EducationalExperienceVO>>(`/educational-experience/${educationalExperienceId}`, {
     method: 'GET',
     ...(options || {}),
   });
@@ -24,7 +24,7 @@ export async function getEducationalExperienceById(educationalExperienceId: numb
 
 /** 获取教育经历（通过教育经历id） GET /educational-experience/pid/${pid} */
 export async function getEducationalExperienceListByPid(pid: number, options?: Record<string, any>) {
-  return request<API.ResultBodyListEducationalExperienceVO>(
+  return request<ResultBody<Page<EducationalExperienceVO>>>(
     `/educational-experience/pid/${pid}`,
     {
       method: 'GET',
@@ -35,7 +35,7 @@ export async function getEducationalExperienceListByPid(pid: number, options?: R
 
 /** 添加教育经历接口 POST /educational-experience */
 export async function addEducationalExperience(body: EducationalExperienceForm, options?: Record<string, any>) {
-  return request<number>('/educational-experience', {
+  return request<ResultBody<number>>('/educational-experience', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -47,7 +47,7 @@ export async function addEducationalExperience(body: EducationalExperienceForm, 
 
 /** 更新教育经历接口 PUT /educational-experience */
 export async function updateEducationalExperience(body: EducationalExperienceForm, options?: Record<string, any>) {
-  return request<number>('/educational-experience', {
+  return request<ResultBody<number>>('/educational-experience', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -59,7 +59,7 @@ export async function updateEducationalExperience(body: EducationalExperienceFor
 
 /** 删除教育经历接口 DELETE /educational-experience/${educationalExperienceId} */
 export async function deleteEducationalExperience(educationalExperienceId: number, options?: Record<string, any>) {
-  return request<API.ResultBodyLong>(`/educational-experience/${educationalExperienceId}`, {
+  return request<ResultBody<number>>(`/educational-experience/${educationalExperienceId}`, {
     method: 'DELETE',
     ...(options || {}),
   });
@@ -67,7 +67,7 @@ export async function deleteEducationalExperience(educationalExperienceId: numbe
 
 /** 批量删除教育经历接口 DELETE /educational-experience */
 export async function batchDeleteEducationalExperience(body: number[], options?: Record<string, any>) {
-  return request<number[]>('/educational-experience', {
+  return request<ResultBody<number[]>>('/educational-experience', {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',

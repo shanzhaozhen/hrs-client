@@ -6,7 +6,7 @@ import type {ActionType, ProColumns} from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { getResumeById, getResumePage } from '@/services/resume/resume';
 import type { ResumeForm, ResumeVO } from '@/services/resume/typings';
-import {getPageParams, getSortOrder} from "@/utils/common";
+import { getPageParams, getSortOrder } from "@/utils/common";
 
 const ResumeList: React.FC = () => {
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
@@ -112,7 +112,7 @@ const ResumeList: React.FC = () => {
           <a
             onClick={async () => {
               if (record && record.id) {
-                const data = await getResumeById(record.id);
+                const { data } = await getResumeById(record.id);
                 setUpdateFormValues(data as ResumeForm);
                 handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到简历信息（id:${record.id}）`);
@@ -127,7 +127,7 @@ const ResumeList: React.FC = () => {
           <a
             onClick={async () => {
               if (record && record.id) {
-                const data = await getResumeById(record.id);
+                const { data } = await getResumeById(record.id);
                 setUpdateFormValues(data as ResumeForm);
                 handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到简历信息（id:${record.id}）`);
@@ -158,14 +158,14 @@ const ResumeList: React.FC = () => {
           </Button>,
         ]}
         request={async (params, sorter) => {
-          const data = await getResumePage(getPageParams(params), getSortOrder(sorter));
+          const { data } = await getResumePage(getPageParams(params), getSortOrder(sorter));
           return {
             // success 请返回 true，
             // 不然 table 会停止解析数据，即使有数据
             success: true,
-            data: data.records,
+            data: data ? data.records : [],
             // 不传会使用 data 的长度，如果是分页一定要传
-            total: data.total,
+            total: data ? data.total : 0,
           };
         }}
         columns={columns}

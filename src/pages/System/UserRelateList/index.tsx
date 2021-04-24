@@ -11,10 +11,10 @@ import UpdateForm from '@/pages/System/UserList/components/UpdateForm';
 import CreateForm from '@/pages/System/UserList/components/CreateForm';
 import type { RoleVO } from "@/services/role/typings";
 import CheckBoxUser from "@/pages/System/UserRelateList/components/CheckBoxUser";
-import type { Page } from "@/services/common/typings";
+import type {Page, ResultBody} from "@/services/common/typings";
 import type { PageParams } from "@/services/common/typings";
 import type { SortOrder } from "antd/lib/table/interface";
-import {getPageParams, tableFilter} from "@/utils/common";
+import { getPageParams, tableFilter } from "@/utils/common";
 import {getAllDepartments} from "@/services/department/department";
 
 interface UserRelateListProps {
@@ -25,7 +25,7 @@ interface UserRelateListProps {
   handleBatchAddUserRelate: (selectRows: RoleVO[]) => void;
   handleDeleteUserRelate: (record: RoleVO) => void;
   handleBatchDeleteUserRelate: (selectRows: RoleVO[]) => void;
-  queryList: (params: PageParams, sorter: Record<string, SortOrder>) => Promise<Page<UserVO>>;
+  queryList: (params: PageParams, sorter: Record<string, SortOrder>) => Promise<ResultBody<Page<UserVO>>>;
   values: RoleVO;
 }
 
@@ -122,7 +122,7 @@ const UserRelateList: React.FC<UserRelateListProps> = (props) => {
           <a
             onClick={async () => {
               if (record && record.id) {
-                const data = await getUserById(record.id);
+                const { data } = await getUserById(record.id);
                 setUpdateFormValues(data as UserForm);
                 handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到用户信息（id:${record.id}）`);
@@ -175,14 +175,14 @@ const UserRelateList: React.FC<UserRelateListProps> = (props) => {
           </Button>,
         ]}
         request={async (params, sorter) => {
-          const data = await queryList(getPageParams(params), sorter);
+          const { data } = await queryList(getPageParams(params), sorter);
           return {
             // success 请返回 true，
             // 不然 table 会停止解析数据，即使有数据
             success: true,
-            data: data.records,
+            data: data ? data.records : [],
             // 不传会使用 data 的长度，如果是分页一定要传
-            total: data.total,
+            total: data ? data.total : 0,
           };
         }}
         columns={columns}

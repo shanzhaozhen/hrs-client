@@ -1,5 +1,5 @@
 import type { SortOrder } from "antd/lib/table/interface";
-import type {Orders, PageParams} from "@/services/common/typings";
+import type { Orders, PageParams } from "@/services/common/typings";
 
 export const copyObject = (A: any, B: any) => {
   const res = {};
@@ -15,7 +15,7 @@ export const copyObject = (A: any, B: any) => {
  * 生成后端需要的分页查询格式
  * @param sorter
  */
-export const getPageParams = ({ keyword, current, pageSize }: any): PageParams => {
+export const getPageParams = ({keyword, current, pageSize}: any): PageParams => {
   return {
     keyword,
     current,

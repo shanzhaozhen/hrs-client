@@ -5,8 +5,8 @@ import type {ActionType, ProColumns} from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { getStaffById, getStaffPage } from '@/services/staff/staff';
 import type { StaffForm, StaffVO } from '@/services/staff/typings';
-import {getPageParams, getSortOrder} from "@/utils/common";
-import {ExportOutlined, HistoryOutlined, ImportOutlined, PlusOutlined} from "@ant-design/icons";
+import { getPageParams, getSortOrder } from "@/utils/common";
+import {ExportOutlined, ImportOutlined, PlusOutlined} from "@ant-design/icons";
 import CreateForm from "@/pages/HR/StaffList/components/CreateForm";
 import UpdateForm from "@/pages/HR/StaffList/components/UpdateForm";
 import type { DepartmentVO } from "@/services/department/typings";
@@ -72,22 +72,6 @@ const StaffList: React.FC = () => {
       valueType: 'text',
       sorter: true,
       hideInSearch: true,
-      hideInDescriptions: true,
-    },
-    {
-      title: '部门',
-      dataIndex: 'depId',
-      valueType: 'radioButton',
-      sorter: true,
-      hideInSearch: true,
-      hideInTable: true,
-      hideInForm: true,
-      render: (_, entity) => (
-        <>
-          <span>{entity.depId}</span>
-          <Button shape="circle" icon={<HistoryOutlined />} />
-        </>
-      ),
     },
     {
       title: '员工编号',
@@ -212,7 +196,7 @@ const StaffList: React.FC = () => {
           <a
             onClick={async () => {
               if (record && record.id) {
-                const data = await getStaffById(record.id);
+                const { data } = await getStaffById(record.id);
                 setUpdateFormValues(data as StaffForm);
                 handleViewDrawerVisible(true);
               } else {
@@ -226,7 +210,7 @@ const StaffList: React.FC = () => {
           <a
             onClick={async () => {
               if (record && record.id) {
-                const data = await getStaffById(record.id);
+                const { data } = await getStaffById(record.id);
                 setUpdateFormValues(data as StaffForm);
                 handleUpdateDrawerVisible(true);
               } else {
@@ -262,14 +246,14 @@ const StaffList: React.FC = () => {
           </Button>,
         ]}
         request={async (params, sorter) => {
-          const data = await getStaffPage(getPageParams(params), getSortOrder(sorter));
+          const { data } = await getStaffPage(getPageParams(params), getSortOrder(sorter));
           return {
             // success 请返回 true，
             // 不然 table 会停止解析数据，即使有数据
             success: true,
-            data: data.records,
+            data: data ? data.records : [],
             // 不传会使用 data 的长度，如果是分页一定要传
-            total: data.total,
+            total: data ? data.total : 0,
           };
         }}
         columns={columns}

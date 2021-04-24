@@ -1,12 +1,13 @@
 import React from 'react';
 import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
-import { message } from 'antd';
+import {Button, message} from 'antd';
 import type { StaffForm, StaffVO } from '@/services/staff/typings';
 import FormBody from '@/pages/HR/StaffList/components/FormBody';
 import { updateStaff } from '@/services/staff/staff';
 import { DrawerForm } from '@ant-design/pro-form';
 import type { ActionType } from '@ant-design/pro-table';
 import {convertStaffForm} from "@/utils/staff";
+import {HistoryOutlined} from "@ant-design/icons";
 
 export interface UpdateFormProps {
   updateDrawerVisible: boolean;
@@ -41,7 +42,17 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
   return (
     <DrawerForm
       width={'75%'}
-      title="修改员工"
+      title={
+        <>
+          <span style={{ marginRight: 15 }}>修改员工</span>
+          <Button
+            type="primary"
+            icon={<HistoryOutlined />}
+          >
+            调动记录
+          </Button>
+        </>
+      }
       visible={updateDrawerVisible}
       onVisibleChange={handleUpdateDrawerVisible}
       initialValues={values}
@@ -61,7 +72,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
       // }}
     >
       {values && Object.keys(values).length ? (
-        <FormBody values={values} />
+        <FormBody values={values} isEdit />
       ) : null}
     </DrawerForm>
   );

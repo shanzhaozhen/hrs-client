@@ -31,8 +31,8 @@ const RegionSelect: React.FC<RegionSelectProps> = (props) => {
     }));
 
   useEffect(() => {
-    getRegionTreeByLevel(level, -1).then(res => {
-      setRegionOptions(loopRegionOptions(res))
+    getRegionTreeByLevel(level, -1).then(({ data }) => {
+      setRegionOptions(loopRegionOptions(data || []))
     });
 
     if (customValue) {

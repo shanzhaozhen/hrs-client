@@ -1,12 +1,12 @@
 // @ts-ignore
 import { request } from 'umi';
-import type { PageParams, Page, Orders } from '@/services/common/typings';
+import type {PageParams, Page, Orders, ResultBody} from '@/services/common/typings';
 import type { UserVO } from "@/services/user/typings";
 
 
 /** 获取用户信息（分页） GET /user-role */
 export async function getUserRolePage(pageParams: PageParams, roleId?: number, orders?: Orders | undefined | null, options?: Record<string, any>) {
-  return request<Page<UserVO>>('/hrs-api/user-role', {
+  return request<ResultBody<Page<UserVO>>>('/hrs-api/user-role', {
     method: 'GET',
     params: {
       ...pageParams,
@@ -20,7 +20,7 @@ export async function getUserRolePage(pageParams: PageParams, roleId?: number, o
 
 /** 添加用户角色 POST /user-role */
 export async function addUserRole(body?: { userIds?: (number | undefined)[]; roleId?: number; }, options?: Record<string, any>) {
-  return request<number[]>('/hrs-api/user-role', {
+  return request<ResultBody<number[]>>('/hrs-api/user-role', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -31,8 +31,8 @@ export async function addUserRole(body?: { userIds?: (number | undefined)[]; rol
 }
 
 /** 删除用户角色 DELETE /user-role */
-export async function deleteUserRoles(body?: { userIds?: (number | undefined)[]; roleId?: number; }, options?: Record<string, any>,) {
-  return request<number>('/hrs-api/user-role', {
+export async function deleteUserRoles(body?: { userIds?: (number | undefined)[]; roleId?: number; }, options?: Record<string, any>) {
+  return request<ResultBody<number>>('/hrs-api/user-role', {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',

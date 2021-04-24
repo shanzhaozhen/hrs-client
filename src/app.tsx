@@ -42,7 +42,8 @@ export async function getInitialState(): Promise<{
 }> {
   const fetchUserInfo = async () => {
     try {
-      return await getCurrentUserInfo();
+      const { data } = await getCurrentUserInfo();
+      return data;
     } catch (error) {
       history.push('/login');
     }
@@ -154,17 +155,20 @@ const jwtInterceptor = (url: string, options: RequestOptionsInit) => {
 };
 
 // 响应后拦截器
-const afterResponseInterceptors = async (response: Response, options: RequestOptionsInit) => {
+/* const afterResponseInterceptors = async (response: Response, options: RequestOptionsInit) => {
   if (options.responseType === 'blob') {
     return response;
   }
+
   if (response.status === 200) {
     const res = await response.clone().json();
     if (res.code === 2000) {
       return res;
     }
-    return res.data || res;
+    return res.data;
   }
+
+  console.log(response, options)
 
   const error = {
     name: response.statusText,
@@ -177,13 +181,17 @@ const afterResponseInterceptors = async (response: Response, options: RequestOpt
   }
 
   return Promise.reject(error)
-};
+}; */
 
 
 /** 异常处理程序
  * @see https://beta-pro.ant.design/docs/request-cn
  */
 const errorHandler = async (error: ResponseError) => {
+  if (error.message === 'Failed to fetch') {
+    throw error;
+  }
+
   const { response } = error;
 
   if (!response) {
@@ -193,11 +201,11 @@ const errorHandler = async (error: ResponseError) => {
     });
   }
 
-  const res = await response.clone().json();
-
   if (response.status) {
     const errorText = codeMessage[response.status] || response.statusText;
     const { status, url } = response;
+
+    const res = await response.clone().json();
 
     if (status === 401) {
       /**
@@ -244,5 +252,5 @@ const errorHandler = async (error: ResponseError) => {
 export const request: RequestConfig = {
   requestInterceptors: [jwtInterceptor],
   errorHandler,
-  responseInterceptors: [afterResponseInterceptors],
+  // responseInterceptors: [afterResponseInterceptors],
 };

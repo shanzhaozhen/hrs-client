@@ -3,6 +3,8 @@ import type { Dispatch, SetStateAction } from 'react';
 import FormBody from '@/pages/HR/StaffList/components/FormBody';
 import { DrawerForm } from '@ant-design/pro-form';
 import type { StaffVO } from "@/services/staff/typings";
+import {HistoryOutlined} from "@ant-design/icons";
+import {Button} from "antd";
 
 interface ViewFormProps {
   viewDrawerVisible: boolean;
@@ -18,7 +20,17 @@ const ViewForm: React.FC<ViewFormProps> = (props) => {
     <>
       <DrawerForm
         width={'75%'}
-        title="查看员工"
+        title={
+          <>
+            <span style={{ marginRight: 15 }}>查看员工</span>
+            <Button
+              type="primary"
+              icon={<HistoryOutlined />}
+            >
+              调动记录
+            </Button>
+          </>
+        }
         visible={viewDrawerVisible}
         onVisibleChange={handleViewDrawerVisible}
         initialValues={values}
@@ -46,5 +58,6 @@ const ViewForm: React.FC<ViewFormProps> = (props) => {
     </>
   );
 };
+
 
 export default ViewForm;

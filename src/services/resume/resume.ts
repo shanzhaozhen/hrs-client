@@ -1,11 +1,11 @@
 // @ts-ignore
 import { request } from 'umi';
-import type { Orders, Page, PageParams } from "@/services/common/typings";
-import type { ResumeVO } from "@/services/resume/typings";
+import type {Orders, Page, PageParams, ResultBody} from "@/services/common/typings";
+import type {ResumeForm, ResumeVO} from "@/services/resume/typings";
 
 /** 获取简历（分页） GET /resume/page */
 export async function getResumePage(pageParams: PageParams, orders?: Orders | undefined | null, options?: Record<string, any>) {
-  return request<Page<ResumeVO>>('/hrs-api/resume/page', {
+  return request<ResultBody<Page<ResumeVO>>>('/hrs-api/resume/page', {
     method: 'GET',
     params: {
       ...pageParams,
@@ -17,15 +17,15 @@ export async function getResumePage(pageParams: PageParams, orders?: Orders | un
 
 /** 获取简历（通过简历id） GET /resume/${resumeId} */
 export async function getResumeById(resumeId: number, options?: Record<string, any>) {
-  return request<ResumeVO>(`/hrs-api/resume/${resumeId}`, {
+  return request<ResultBody<ResumeVO>>(`/hrs-api/resume/${resumeId}`, {
     method: 'GET',
     ...(options || {}),
   });
 }
 
 /** 添加简历接口 POST /resume */
-export async function addResume(body: API.ResumeForm, options?: Record<string, any>) {
-  return request<number>('/hrs-api/resume', {
+export async function addResume(body: ResumeForm, options?: Record<string, any>) {
+  return request<ResultBody<number>>('/hrs-api/resume', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -36,8 +36,8 @@ export async function addResume(body: API.ResumeForm, options?: Record<string, a
 }
 
 /** 更新简历接口 PUT /resume */
-export async function updateResume(body: API.ResumeForm, options?: Record<string, any>) {
-  return request<number>('/hrs-api/resume', {
+export async function updateResume(body: ResumeForm, options?: Record<string, any>) {
+  return request<ResultBody<number>>('/hrs-api/resume', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ export async function updateResume(body: API.ResumeForm, options?: Record<string
 
 /** 批量删除简历接口 DELETE /resume */
 export async function batchDeleteResume(body: (number | undefined)[], options?: Record<string, any>) {
-  return request<number[]>('/hrs-api/resume', {
+  return request<ResultBody<number[]>>('/hrs-api/resume', {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ export async function batchDeleteResume(body: (number | undefined)[], options?: 
 
 /** 删除简历接口 DELETE /resume/${resumeId} */
 export async function deleteResume(resumeId: number, options?: Record<string, any>) {
-  return request<number>(`/hrs-api/resumeId/${resumeId}`, {
+  return request<ResultBody<number>>(`/hrs-api/resumeId/${resumeId}`, {
     method: 'DELETE',
     ...(options || {}),
   });

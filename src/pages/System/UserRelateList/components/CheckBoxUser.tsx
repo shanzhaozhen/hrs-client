@@ -143,7 +143,7 @@ const CheckBoxUser: React.FC<CheckBoxUserProps> = (props) => {
           );
         }}
         request={async (params, sorter) => {
-          const data = await getUserPage(getPageParams(params), getSortOrder(sorter));
+          const { data } = await getUserPage(getPageParams(params), getSortOrder(sorter));
           return {
             // success 请返回 true，
             // 不然 table 会停止解析数据，即使有数据

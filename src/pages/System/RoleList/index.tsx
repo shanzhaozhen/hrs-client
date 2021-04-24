@@ -195,7 +195,7 @@ const RoleList: React.FC = () => {
           <a
             onClick={async () => {
               if (record && record.id) {
-                const data = await getRoleById(record.id);
+                const { data } = await getRoleById(record.id);
                 setUpdateFormValues(data as RoleForm);
                 handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到角色信息（id:${record.id}）`);
@@ -257,14 +257,14 @@ const RoleList: React.FC = () => {
           </Button>,
         ]}
         request={async (params, sorter) => {
-          const data = await getRolePage(getPageParams(params), getSortOrder(sorter));
+          const { data } = await getRolePage(getPageParams(params), getSortOrder(sorter));
           return {
             // success 请返回 true，
             // 不然 table 会停止解析数据，即使有数据
             success: true,
-            data: data.records,
+            data: data ? data.records : [],
             // 不传会使用 data 的长度，如果是分页一定要传
-            total: data.total,
+            total: data ? data.total : 0,
           };
         }}
         columns={columns}

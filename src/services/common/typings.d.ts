@@ -55,12 +55,12 @@ export type LoginParams = {
   autoLogin?: boolean;
 };
 
-export type LoginResult = {
-  /** 返回的状态码 */
-  code?: number;
-  /** 返回的数据 */
-  data?: string;
-};
+// export type LoginResult = {
+//   /** 返回的状态码 */
+//   code?: number;
+//   /** 返回的数据 */
+//   data?: string;
+// };
 
 export type BaseSearchForm = {
   keyword?: string;

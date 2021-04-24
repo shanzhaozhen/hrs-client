@@ -121,7 +121,7 @@ const DictionaryList: React.FC = () => {
           <a
             onClick={async () => {
               if (record && record.id) {
-                const data = await getDictionaryById(record.id);
+                const { data } = await getDictionaryById(record.id);
                 setUpdateFormValues(data as DictionaryForm);
                 handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到字典信息（id:${record.id}）`);
@@ -193,8 +193,10 @@ const DictionaryList: React.FC = () => {
 
   const onLoadDictionaryChildren = async (expanded: boolean, record: DictionaryVO) => {
     if (expanded && record && record.id) {
-      const data = await getDictionaryChildrenById(record.id);
-      setDictionaryData(origin => updateDictionaryData(origin, record.id, data.map(item => ({ ...item, children: item.hasChildren ? [] : undefined }))));
+      const { data } = await getDictionaryChildrenById(record.id);
+      if (data) {
+        setDictionaryData(origin => updateDictionaryData(origin, record.id, data.map(item => ({ ...item, children: item.hasChildren ? [] : undefined }))));
+      }
     }
   }
 
@@ -214,11 +216,10 @@ const DictionaryList: React.FC = () => {
         ]}
         onExpand={onLoadDictionaryChildren}
         request={async (params, sort) => {
-          const res = await getDictionaryRootPage(getPageParams(params), getSortOrder(sort));
-          const data = res.records ? res.records.map(item => ({ ...item, children: item.hasChildren ? [] : undefined })) : []
-          setDictionaryData(data)
+          const { data } = await getDictionaryRootPage(getPageParams(params), getSortOrder(sort));
+          setDictionaryData(data && data.records ? data.records.map(item => ({ ...item, children: item.hasChildren ? [] : undefined })) : [])
           return {
-            total: res.total
+            total: data ? data.total : 0
           };
         }}
         dataSource={dictionaryData}

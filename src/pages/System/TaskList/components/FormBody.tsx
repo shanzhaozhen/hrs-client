@@ -117,7 +117,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             showSearch={false}
             placeholder="请选择Bean"
             request={async () => {
-              const data = await getBeanInfoList();
+              const { data } = await getBeanInfoList();
               if (data) {
                 return data.map(({beanName}) => ({
                   label: beanName,

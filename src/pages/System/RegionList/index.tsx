@@ -116,7 +116,7 @@ const RegionList: React.FC = () => {
           <a
             onClick={async () => {
               if (record && record.id) {
-                const data = await getRegionById(record.id);
+                const { data } = await getRegionById(record.id);
                 setUpdateFormValues(data as RegionForm);
                 handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到资源信息（id:${record.id}）`);
@@ -179,8 +179,10 @@ const RegionList: React.FC = () => {
 
   const onLoadRegionChildren = async (expanded: boolean, record: DictionaryVO) => {
     if (expanded && record && record.id) {
-      const data = await getRegionChildrenById(record.id);
-      setRegionData(origin => updateRegionData(origin, record.id, data.map(item => ({ ...item, children: item.hasChildren ? [] : undefined }))));
+      const { data } = await getRegionChildrenById(record.id);
+      if (data) {
+        setRegionData(origin => updateRegionData(origin, record.id, data.map(item => ({ ...item, children: item.hasChildren ? [] : undefined }))));
+      }
     }
   }
 
@@ -200,11 +202,10 @@ const RegionList: React.FC = () => {
         ]}
         onExpand={onLoadRegionChildren}
         request={async (params, sort) => {
-          const res = await getRegionRootPage(getPageParams(params), getSortOrder(sort));
-          const data = res.records ? res.records.map(item => ({ ...item, children: item.hasChildren ? [] : undefined })) : []
-          setRegionData(data);
+          const { data } = await getRegionRootPage(getPageParams(params), getSortOrder(sort));
+          setRegionData(data && data.records ? data.records.map(item => ({ ...item, children: item.hasChildren ? [] : undefined })) : []);
           return {
-            total: res.total,
+            total: data ? data.total : 0,
           };
         }}
         dataSource={regionData}

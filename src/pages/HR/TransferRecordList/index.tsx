@@ -18,13 +18,13 @@ const TaskList: React.FC = () => {
   const [selectedRowsState, setSelectedRows] = useState<TaskVO[]>([]);
 
   /**
-   * 批量删除任务
+   * 批量删除调动记录
    */
   const handleDeleteTask = () => {
     Modal.confirm({
       title: '确认',
       icon: <ExclamationCircleOutlined />,
-      content: '确定批量删除勾选中的任务吗',
+      content: '确定批量删除勾选中的调动记录吗',
       okText: '确认',
       cancelText: '取消',
       onOk: async () => {
@@ -62,19 +62,11 @@ const TaskList: React.FC = () => {
       width: 48,
     },
     {
-      title: '名称',
-      dataIndex: 'name',
+      title: '姓名',
+      dataIndex: 'staffName',
       valueType: 'text',
       sorter: true,
       hideInSearch: true,
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: '此项为必填项',
-          },
-        ],
-      },
     },
     {
       title: 'cron表达式',
@@ -131,15 +123,15 @@ const TaskList: React.FC = () => {
                 if (record.open) {
                   await stopTask(record.id);
                   hide();
-                  message.success('任务停止成功！')
+                  message.success('调动记录停止成功！')
                 } else {
                   await startTask(record.id);
                   hide();
-                  message.success('任务开启成功！')
+                  message.success('调动记录开启成功！')
                 }
                 actionRef.current?.reloadAndRest?.();
               } else {
-                message.warn('没有选中有效的任务');
+                message.warn('没有选中有效的调动记录');
               }
             }}
           >
@@ -152,9 +144,9 @@ const TaskList: React.FC = () => {
                 const { data } = await getTaskById(record.id);
                 setUpdateFormValues(data as TaskForm);
                 handleUpdateModalVisible(true);
-                // message.error(res.message || `没有获取到任务信息（id:${record.id}）`);
+                // message.error(res.message || `没有获取到调动记录信息（id:${record.id}）`);
               } else {
-                message.warn('没有选中有效的任务');
+                message.warn('没有选中有效的调动记录');
               }
             }}
           >
@@ -169,17 +161,17 @@ const TaskList: React.FC = () => {
                   const hide = message.loading('正在执行');
                   const { data } = await runTask(record.id)
                   hide();
-                  message.success('任务执行成功！返回结果已打印在控制台上。')
+                  message.success('调动记录执行成功！返回结果已打印在控制台上。')
                   // eslint-disable-next-line no-console
                   console.log(data)
                 } else {
-                  message.warn('没有选中有效的任务');
+                  message.warn('没有选中有效的调动记录');
                 }
               } else if (key === 'delete') {
                 Modal.confirm({
                   title: '确认',
                   icon: <ExclamationCircleOutlined />,
-                  content: '确定该任务？',
+                  content: '确定该调动记录？',
                   okText: '确认',
                   cancelText: '取消',
                   onOk: async () => {
@@ -216,7 +208,7 @@ const TaskList: React.FC = () => {
   return (
     <PageContainer>
       <ProTable<TaskVO>
-        headerTitle="定时任务"
+        headerTitle="定时调动记录"
         actionRef={actionRef}
         rowKey="id"
         search={{

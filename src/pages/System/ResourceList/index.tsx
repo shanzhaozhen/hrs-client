@@ -126,7 +126,7 @@ const ResourceList: React.FC = () => {
           <a
             onClick={async () => {
               if (record && record.id) {
-                const data = await getResourceById(record.id);
+                const { data } = await getResourceById(record.id);
                 setUpdateFormValues(data as ResourceForm);
                 handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到资源信息（id:${record.id}）`);
@@ -178,7 +178,7 @@ const ResourceList: React.FC = () => {
           </Button>,
         ]}
         request={async (params) => {
-          const data = await getResourceTree(getPageParams(params));
+          const { data } = await getResourceTree(getPageParams(params));
           return {
             // success 请返回 true，
             // 不然 table 会停止解析数据，即使有数据
