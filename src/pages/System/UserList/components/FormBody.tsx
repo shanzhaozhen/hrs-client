@@ -4,19 +4,13 @@ import { ProFormSelect, ProFormSwitch, ProFormText } from '@ant-design/pro-form'
 import { getAllRoles } from '@/services/role/role';
 import type { RoleVO } from '@/services/role/typings';
 import { getDepartmentTree } from "@/services/department/department";
-import type { DepartmentVO } from "@/services/department/typings";
 import FormTreeSelect from "@/components/FormTreeSelect";
+import { loopDepartmentData } from "@/utils/department";
 
 interface FormProps {
   isEdit?: boolean;
 }
 
-const loopDepartmentData = (departmentList: DepartmentVO[]): any =>
-  departmentList.map(({ id, name, children }) => ({
-    value: id,
-    title: name,
-    children: children && loopDepartmentData(children),
-  }));
 
 const FormBody: React.FC<FormProps> = (props) => {
   const { isEdit } = props;
@@ -25,12 +19,8 @@ const FormBody: React.FC<FormProps> = (props) => {
 
   useEffect(() => {
     getDepartmentTree()
-      .then((res) => {
-        if (res) {
-          setDepartmentTree(loopDepartmentData(res));
-        } else {
-          setDepartmentTree([]);
-        }
+      .then(({ data }) => {
+        setDepartmentTree(loopDepartmentData(data || []));
       })
       .catch(() => {
         setDepartmentTree([]);

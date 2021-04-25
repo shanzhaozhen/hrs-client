@@ -125,13 +125,10 @@ const FormBody: React.FC<FormProps> = (props) => {
             rules={[{ required: false, message: '请选择部门' }]}
             request={async () => {
               const { data } = await getAllDepartments();
-              if (data) {
-                return data.map(item => ({
-                  value: item.id,
-                  label: item.name
-                }))
-              }
-              return []
+              return data ? data.map(item => ({
+                value: item.id,
+                label: item.name
+              })) : []
             }}
             readonly={isView}
             disabled={isEdit}
@@ -143,21 +140,35 @@ const FormBody: React.FC<FormProps> = (props) => {
           </ProForm.Item>
         </Col> */}
         <Col xl={7} lg={12} md={24}>
-          <ProFormText
+          <ProFormSelect
             width="sm"
             name="duty"
             label="职务"
-            rules={[{ required: false, message: '请输入职务' }]}
+            rules={[{ required: false, message: '请选择职务' }]}
+            request={async ({ keyWords }) => {
+              const { data } = await getDictionaryChildrenByCode('Duty', keyWords);
+              return data ? data.map(item => ({
+                value: item.name,
+                label: item.name
+              })) : []
+            }}
             readonly={isView}
             disabled={isEdit}
           />
         </Col>
         <Col xl={7} lg={12} md={24}>
-          <ProFormText
+          <ProFormSelect
             width="sm"
             name="post"
             label="岗位"
-            rules={[{ required: false, message: '请输入岗位' }]}
+            rules={[{ required: false, message: '请选择岗位' }]}
+            request={async ({ keyWords }) => {
+              const { data } = await getDictionaryChildrenByCode('Post', keyWords);
+              return data ? data.map(item => ({
+                value: item.name,
+                label: item.name
+              })) : []
+            }}
             readonly={isView}
             disabled={isEdit}
           />

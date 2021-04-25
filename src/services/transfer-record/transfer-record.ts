@@ -4,7 +4,7 @@ import type { TransferRecordForm, TransferRecordVO } from "@/services/transfer-r
 import type { Orders, Page, PageParams, ResultBody } from "@/services/common/typings";
 
 /** 获取调动记录信息（分页） GET /transfer-record/page */
-export async function getTransferRecordPageByStaffId(pageParams: PageParams, staffId: number, orders?: Orders | undefined | null, options?: Record<string, any>) {
+export async function getTransferRecordPage(pageParams: PageParams, staffId: number | undefined | null, orders?: Orders | undefined | null, options?: Record<string, any>) {
   return request<ResultBody<Page<TransferRecordVO>>>('/hrs-api/transfer-record/page', {
     method: 'GET',
     params: {
@@ -57,7 +57,7 @@ export async function deleteTransferRecord(transferRecordId: number, options?: R
 }
 
 /** 批量删除调动记录接口 DELETE /transfer-record */
-export async function batchDeleteTransferRecorde(body: number[], options?: Record<string, any>) {
+export async function batchDeleteTransferRecorde(body: (number | undefined)[], options?: Record<string, any>) {
   return request<ResultBody<number[]>>('/hrs-api/transfer-record', {
     method: 'DELETE',
     headers: {
@@ -70,7 +70,7 @@ export async function batchDeleteTransferRecorde(body: number[], options?: Recor
 
 /** 执行调动记录信息 GET /transfer-record/run/${transferRecordId} */
 export async function runTransfer(transferRecordId: number, options?: Record<string, any>) {
-  return request<API.ResultBodyLong>(`/hrs-api/transfer-record/run/${transferRecordId}`, {
+  return request<ResultBody<number>>(`/hrs-api/transfer-record/run/${transferRecordId}`, {
     method: 'GET',
     ...(options || {}),
   });

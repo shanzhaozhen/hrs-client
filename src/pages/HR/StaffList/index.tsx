@@ -1,25 +1,37 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import { Button, Divider, Input, message } from 'antd';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import type {ActionType, ProColumns} from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { getStaffById, getStaffPage } from '@/services/staff/staff';
 import type { StaffForm, StaffVO } from '@/services/staff/typings';
-import { getPageParams, getSortOrder } from "@/utils/common";
+import {getPageParams, getSortOrder, tableFilter} from "@/utils/common";
 import {ExportOutlined, ImportOutlined, PlusOutlined} from "@ant-design/icons";
 import CreateForm from "@/pages/HR/StaffList/components/CreateForm";
 import UpdateForm from "@/pages/HR/StaffList/components/UpdateForm";
 import type { DepartmentVO } from "@/services/department/typings";
 import ViewForm from "@/pages/HR/StaffList/components/ViewForm";
+import {getAllDepartments} from "@/services/department/department";
 
 const StaffList: React.FC = () => {
-
   const actionRef = useRef<ActionType>();
   const [updateFormValues, setUpdateFormValues] = useState({} as DepartmentVO);
   const [viewDrawerVisible, handleViewDrawerVisible] = useState<boolean>(false);
   const [createDrawerVisible, handleCreateDrawerVisible] = useState<boolean>(false);
   const [updateDrawerVisible, handleUpdateDrawerVisible] = useState<boolean>(false);
   const [selectedRowsState, setSelectedRows] = useState<StaffVO[]>([]);
+
+  const [departmentList, setDepartmentList] = useState<any>();
+
+  useEffect(() => {
+    getAllDepartments()
+      .then(({ data }) => {
+        setDepartmentList(data || []);
+      })
+      .catch(() => {
+        setDepartmentList([]);
+      });
+  }, []);
 
   // /**
   //  * 批量删除员工
@@ -72,6 +84,7 @@ const StaffList: React.FC = () => {
       valueType: 'select',
       sorter: true,
       hideInSearch: true,
+      renderText: (_, record) => (tableFilter(record.depId, departmentList, '未分配'))
     },
     {
       title: '员工编号',

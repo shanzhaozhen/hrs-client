@@ -61,6 +61,7 @@ export default {
   'menu.system.file': '文件管理',
   'menu.hr': '人事业务',
   'menu.hr.staff': '员工管理',
+  'menu.hr.transfer-record': '调动记录',
   'menu.recruit': '招聘业务',
   'menu.recruit.resume': '简历库',
   'menu.recruit.staff': '111222'

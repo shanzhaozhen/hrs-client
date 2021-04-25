@@ -8,18 +8,18 @@ interface FormProps {
 }
 
 const DepartmentHistory: React.FC<FormProps> = (props) => {
-  const { value } = props
+  const { value } = props;
 
-  const [departmentOptions, setDepartmentOptions] = useState<any[]>([])
+  const [departmentOptions, setDepartmentOptions] = useState<any[]>([]);
 
   useEffect(() => {
-    getAllDepartments().then(res => {
-      setDepartmentOptions(res.map(item => ({
+    getAllDepartments().then(({ data }) => {
+      setDepartmentOptions(data ? data.map(item => ({
         value: item.id,
         label: item.name
-      })))
+      })): []);
     })
-  }, [])
+  }, []);
 
   return (
     <>

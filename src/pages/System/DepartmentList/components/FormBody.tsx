@@ -22,12 +22,8 @@ const FormBody: React.FC<FormProps> = () => {
 
   useEffect(() => {
     getDepartmentTree()
-      .then(res => {
-        if (res) {
-          setDepartmentTree(loopDepartmentData(res));
-        } else {
-          setDepartmentTree([]);
-        }
+      .then(({ data }) => {
+        setDepartmentTree(loopDepartmentData(data || []));
       })
       .catch(() => {
         setDepartmentTree([]);

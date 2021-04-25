@@ -148,9 +148,9 @@ const CheckBoxUser: React.FC<CheckBoxUserProps> = (props) => {
             // success 请返回 true，
             // 不然 table 会停止解析数据，即使有数据
             success: true,
-            data: data.records,
+            data: data ? data.records : [],
             // 不传会使用 data 的长度，如果是分页一定要传
-            total: data.total,
+            total: data ? data.total : 0,
           };
         }}
         columns={columns}

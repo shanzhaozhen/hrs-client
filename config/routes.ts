@@ -100,6 +100,12 @@ export default [
         icon: 'smile',
         component: './HR/StaffList',
       },
+      {
+        path: '/hr/transfer-record',
+        name: 'transfer-record',
+        icon: 'smile',
+        component: './HR/TransferRecordList',
+      },
     ],
   },
   {

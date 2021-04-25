@@ -1,23 +1,29 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, message, Input, Space, Tag, Modal, Divider, Popconfirm } from 'antd';
-import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
-import type { ProColumns, ActionType } from '@ant-design/pro-table';
+import { Button, Divider, Input, message, Modal, Popconfirm } from 'antd';
+import { FooterToolbar } from '@ant-design/pro-layout';
+import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import CreateForm from './components/CreateForm';
-import UpdateForm from './components/UpdateForm';
-import { batchDeleteUser, deleteUser, getUserById, getUserPage } from '@/services/user/user';
-import type { UserVO } from '@/services/user/typings';
-import type { UserForm } from '@/services/user/typings';
-import {getSortOrder, tableFilter} from "@/utils/common";
+import CreateForm from './CreateForm';
+import UpdateForm from './UpdateForm';
+import { getTransferRecordPage, getTransferRecordById, deleteTransferRecord, batchDeleteTransferRecorde, runTransfer } from '@/services/transfer-record/transfer-record';
+import type { TransferRecordForm, TransferRecordVO } from '@/services/transfer-record/typings';
+import {getPageParams, getSortOrder, tableFilter} from "@/utils/common";
 import { getAllDepartments } from "@/services/department/department";
 
-const UserList: React.FC = () => {
+interface ListBodyProps {
+  staffId?: number;
+}
+
+const TransferRecordListBody: React.FC<ListBodyProps> = (props) => {
+  const { staffId } = props;
+
+
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-  const [updateFormValues, setUpdateFormValues] = useState({});
+  const [updateFormValues, setUpdateFormValues] = useState({} as TransferRecordVO);
   const actionRef = useRef<ActionType>();
-  const [selectedRowsState, setSelectedRows] = useState<UserVO[]>([]);
+  const [selectedRowsState, setSelectedRows] = useState<TransferRecordVO[]>([]);
 
   const [departmentList, setDepartmentList] = useState<any>();
 
@@ -32,20 +38,20 @@ const UserList: React.FC = () => {
   }, []);
 
   /**
-   *  删除用户
+   * 批量删除调动记录
    */
-  const handleDelete = () => {
+  const handleDeleteTransferRecord = () => {
     Modal.confirm({
       title: '确认',
       icon: <ExclamationCircleOutlined />,
-      content: '确定批量删除勾选中的用户吗',
+      content: '确定批量删除勾选中的调动记录吗',
       okText: '确认',
       cancelText: '取消',
       onOk: async () => {
         const hide = message.loading('正在删除');
         if (!selectedRowsState) return true;
         try {
-          await batchDeleteUser(selectedRowsState.map((selectedRow) => selectedRow.id));
+          await batchDeleteTransferRecorde(selectedRowsState.map((selectedRow) => selectedRow.id));
           hide();
           message.success('删除成功，即将刷新');
           actionRef.current?.reloadAndRest?.();
@@ -59,7 +65,7 @@ const UserList: React.FC = () => {
     });
   };
 
-  const columns: ProColumns<UserVO>[] = [
+  const columns: ProColumns<TransferRecordVO>[] = [
     {
       title: '关键字',
       key: 'keyword',
@@ -71,115 +77,66 @@ const UserList: React.FC = () => {
       },
     },
     {
-      dataIndex: 'index',
-      valueType: 'indexBorder',
-      width: 48,
-    },
-    {
-      title: '用户名',
-      dataIndex: 'username',
-      valueType: 'text',
-      sorter: true,
-      hideInSearch: true,
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: '此项为必填项',
-          },
-        ],
-      },
-    },
-    {
-      title: '姓名',
-      dataIndex: 'name',
+      title: '员工编号',
+      dataIndex: 'staffCode',
       valueType: 'text',
       sorter: true,
       hideInSearch: true,
     },
     {
-      title: '昵称',
-      dataIndex: 'nickname',
+      title: '员工姓名',
+      dataIndex: 'staffName',
       valueType: 'text',
+      sorter: true,
       hideInSearch: true,
     },
     {
-      title: '所属部门',
+      title: '部门',
       dataIndex: 'depId',
+      valueType: 'text',
+      sorter: true,
       hideInSearch: true,
-      valueType: 'select',
-      renderText: (_, record) => (tableFilter(record.depId, departmentList, '未分配'))
+      renderText: (_, record) => {
+        if (record.preDepId === record.postDepId) {
+          return tableFilter(record.preDepId, departmentList, '未分配');
+        }
+        return ''.concat(tableFilter(record.preDepId, departmentList, '未分配'), '=>', tableFilter(record.preDepId, departmentList, '未分配'));
+      }
     },
     {
-      title: '性别',
-      dataIndex: 'sex',
+      title: '职务',
+      dataIndex: 'duty',
       valueType: 'text',
       hideInSearch: true,
-      valueEnum: {
-        0: { text: '男' },
-        1: { text: '女' },
-      },
+      renderText: (_, record) => (record.preDuty === record.postDuty ? record.preDuty : ''.concat(record.preDuty || '(无)', '=>', record.postDuty || '(无)'))
     },
     {
-      title: '头像',
-      dataIndex: 'avatar',
+      title: '岗位',
+      dataIndex: 'prePost',
       valueType: 'text',
       hideInSearch: true,
+      renderText: (_, record) => (record.prePost === record.postPost ? record.postPost : ''.concat(record.prePost || '(无)', '=>', record.postPost || '(无)'))
     },
     {
-      title: '角色',
-      dataIndex: 'roleIds',
+      title: '岗位类型',
+      dataIndex: 'postType',
       valueType: 'text',
       hideInSearch: true,
-      // hideInTable: true,
+      renderText: (_, record) => (record.prePostType === record.postPostType ? record.postPostType : ''.concat(record.prePostType || '(无)', '=>', record.postPostType || '(无)'))
     },
     {
-      title: '是否过期',
-      dataIndex: 'accountNonExpired',
+      title: '岗位等级',
+      dataIndex: 'postLevel',
+      valueType: 'text',
       hideInSearch: true,
-      render: (_, record) => (
-        <Space>
-          {record.accountNonExpired ? (
-            <Tag color="green">未过期</Tag>
-          ) : (
-            <Tag color="red">已过期</Tag>
-          )}
-        </Space>
-      ),
+      renderText: (_, record) => (record.prePostLevel === record.postPostLevel ? record.postPostLevel : ''.concat(record.prePostLevel || '(无)', '=>', record.postPostLevel || '(无)'))
     },
     {
-      title: '是否锁定',
-      dataIndex: 'accountNonLocked',
+      title: '生效日期',
+      dataIndex: 'effectiveDate',
+      valueType: 'dateTime',
       hideInSearch: true,
-      render: (_, record) => (
-        <Space>
-          {record.accountNonLocked ? <Tag color="green">开启</Tag> : <Tag color="red">锁定</Tag>}
-        </Space>
-      ),
-    },
-    {
-      title: '密码过期',
-      dataIndex: 'credentialsNonExpired',
-      hideInSearch: true,
-      render: (_, record) => (
-        <Space>
-          {record.credentialsNonExpired ? (
-            <Tag color="green">未过期</Tag>
-          ) : (
-            <Tag color="red">已过期</Tag>
-          )}
-        </Space>
-      ),
-    },
-    {
-      title: '是否禁用',
-      dataIndex: 'enabled',
-      hideInSearch: true,
-      render: (_, record) => (
-        <Space>
-          {record.enabled ? <Tag color="green">可用</Tag> : <Tag color="red">禁用</Tag>}
-        </Space>
-      ),
+      hideInTable: true,
     },
     {
       title: '创建时间',
@@ -199,17 +156,33 @@ const UserList: React.FC = () => {
       title: '操作',
       dataIndex: 'option',
       valueType: 'option',
-      render: (_, record) => (
+      render: (text, record) => (
         <>
           <a
             onClick={async () => {
               if (record && record.id) {
-                const { data } = await getUserById(record.id);
-                setUpdateFormValues(data as UserForm);
-                handleUpdateModalVisible(true);
-                // message.error(res.message || `没有获取到用户信息（id:${record.id}）`);
+                const hide = message.loading('正在执行');
+                await runTransfer(record.id);
+                hide();
+                message.success('调动执行成功！')
+                actionRef.current?.reloadAndRest?.();
               } else {
-                message.warn('没有选中有效的用户');
+                message.warn('没有选中有效的调动记录');
+              }
+            }}
+          >
+            执行
+          </a>
+          <Divider type="vertical" />
+          <a
+            onClick={async () => {
+              if (record && record.id) {
+                const { data } = await getTransferRecordById(record.id);
+                setUpdateFormValues(data as TransferRecordForm);
+                handleUpdateModalVisible(true);
+                // message.error(res.message || `没有获取到调动记录信息（id:${record.id}）`);
+              } else {
+                message.warn('没有选中有效的调动记录');
               }
             }}
           >
@@ -217,14 +190,14 @@ const UserList: React.FC = () => {
           </a>
           <Divider type="vertical" />
           <Popconfirm
-            title="确定删除该用户?"
+            title="确定删除该调动记录?"
             onConfirm={async () => {
               if (record && record.id) {
-                await deleteUser(record.id);
+                await deleteTransferRecord(record.id);
                 message.success('删除成功！');
                 actionRef.current?.reloadAndRest?.();
               } else {
-                message.warn('没有选中有效的用户');
+                message.warn('没有选中有效的调动记录');
               }
             }}
             okText="确定"
@@ -238,9 +211,9 @@ const UserList: React.FC = () => {
   ];
 
   return (
-    <PageContainer>
-      <ProTable<UserVO>
-        headerTitle="用户管理"
+    <>
+      <ProTable<TransferRecordVO>
+        headerTitle="调动记录"
         actionRef={actionRef}
         rowKey="id"
         search={{
@@ -251,8 +224,8 @@ const UserList: React.FC = () => {
             <PlusOutlined /> 新建
           </Button>,
         ]}
-        request={async (pageParams, sorter) => {
-          const { data } = await getUserPage(pageParams, getSortOrder(sorter));
+        request={async (params, sorter) => {
+          const { data } = await getTransferRecordPage(getPageParams(params), staffId, getSortOrder(sorter));
           return {
             // success 请返回 true，
             // 不然 table 会停止解析数据，即使有数据
@@ -275,7 +248,7 @@ const UserList: React.FC = () => {
             </div>
           }
         >
-          <Button onClick={handleDelete}>批量删除</Button>
+          <Button onClick={handleDeleteTransferRecord}>批量删除</Button>
         </FooterToolbar>
       )}
       <CreateForm
@@ -292,9 +265,8 @@ const UserList: React.FC = () => {
           tableActionRef={actionRef}
         />
       ) : null}
-
-    </PageContainer>
+    </>
   );
 };
 
-export default UserList;
+export default TransferRecordListBody;

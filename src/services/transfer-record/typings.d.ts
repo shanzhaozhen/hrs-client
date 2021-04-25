@@ -28,18 +28,6 @@ export type TransferRecordForm = {
 };
 
 export type TransferRecordVO = {
-  /** 创建人 */
-  createdBy?: number;
-  /** 创建人名称 */
-  createdByName?: string;
-  /** 创建时间 */
-  createdDate?: string;
-  /** 修改人 */
-  lastModifiedBy?: number;
-  /** 修改人名称 */
-  lastModifiedByName?: string;
-  /** 修改时间 */
-  lastModifiedDate?: string;
   /** 主键ID */
   id?: number;
   /** 员工id */
@@ -70,4 +58,16 @@ export type TransferRecordVO = {
   postPostLevel?: string;
   /** 生效日期 */
   effectiveDate?: string;
+  /** 创建人 */
+  createdBy?: number;
+  /** 创建人名称 */
+  createdByName?: string;
+  /** 创建时间 */
+  createdDate?: string;
+  /** 修改人 */
+  lastModifiedBy?: number;
+  /** 修改人名称 */
+  lastModifiedByName?: string;
+  /** 修改时间 */
+  lastModifiedDate?: string;
 };
