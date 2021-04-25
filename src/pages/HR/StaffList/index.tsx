@@ -69,7 +69,7 @@ const StaffList: React.FC = () => {
     {
       title: '部门',
       dataIndex: 'depId',
-      valueType: 'text',
+      valueType: 'select',
       sorter: true,
       hideInSearch: true,
     },

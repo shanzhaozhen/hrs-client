@@ -6,21 +6,21 @@ import type {ActionType, ProColumns} from '@ant-design/pro-table';
 import ProTable, {TableDropdown} from '@ant-design/pro-table';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
-import { batchDeleteTask, deleteTask, getTaskById, getTaskPage, runTask, startTask, stopTask } from '@/services/task/task';
-import type { TaskForm, TaskVO } from '@/services/task/typings';
+import { batchDeleteTransferRecord, deleteTransferRecord, getTransferRecordById, getTransferRecordPage, runTransferRecord, startTransferRecord, stopTransferRecord } from '@/services/transfer-record/transfer-record';
+import type { TransferRecordForm, TransferRecordVO } from '@/services/transfer-record/typings';
 import {getPageParams, getSortOrder} from "@/utils/common";
 
-const TaskList: React.FC = () => {
+const TransferRecordList: React.FC = () => {
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-  const [updateFormValues, setUpdateFormValues] = useState({} as TaskVO);
+  const [updateFormValues, setUpdateFormValues] = useState({} as TransferRecordVO);
   const actionRef = useRef<ActionType>();
-  const [selectedRowsState, setSelectedRows] = useState<TaskVO[]>([]);
+  const [selectedRowsState, setSelectedRows] = useState<TransferRecordVO[]>([]);
 
   /**
    * 批量删除调动记录
    */
-  const handleDeleteTask = () => {
+  const handleDeleteTransferRecord = () => {
     Modal.confirm({
       title: '确认',
       icon: <ExclamationCircleOutlined />,
@@ -31,7 +31,7 @@ const TaskList: React.FC = () => {
         const hide = message.loading('正在删除');
         if (!selectedRowsState) return true;
         try {
-          await batchDeleteTask(selectedRowsState.map((selectedRow) => selectedRow.id));
+          await batchDeleteTransferRecord(selectedRowsState.map((selectedRow) => selectedRow.id));
           hide();
           message.success('删除成功，即将刷新');
           actionRef.current?.reloadAndRest?.();
@@ -45,7 +45,7 @@ const TaskList: React.FC = () => {
     });
   };
 
-  const columns: ProColumns<TaskVO>[] = [
+  const columns: ProColumns<TransferRecordVO>[] = [
     {
       title: '关键字',
       key: 'keyword',
@@ -57,20 +57,29 @@ const TaskList: React.FC = () => {
       },
     },
     {
-      dataIndex: 'index',
-      valueType: 'indexBorder',
-      width: 48,
+      title: '员工编号',
+      dataIndex: 'staffCode',
+      valueType: 'text',
+      sorter: true,
+      hideInSearch: true,
     },
     {
-      title: '姓名',
+      title: '员工姓名',
       dataIndex: 'staffName',
       valueType: 'text',
       sorter: true,
       hideInSearch: true,
     },
     {
-      title: 'cron表达式',
-      dataIndex: 'cron',
+      title: '变更前部门',
+      dataIndex: 'preDepId',
+      valueType: 'text',
+      sorter: true,
+      hideInSearch: true,
+    },
+    {
+      title: '变更后部门',
+      dataIndex: 'postDepId',
       valueType: 'text',
       sorter: true,
       hideInSearch: true,
@@ -121,11 +130,11 @@ const TaskList: React.FC = () => {
               if (record && record.id) {
                 const hide = message.loading('正在执行');
                 if (record.open) {
-                  await stopTask(record.id);
+                  await stopTransferRecord(record.id);
                   hide();
                   message.success('调动记录停止成功！')
                 } else {
-                  await startTask(record.id);
+                  await startTransferRecord(record.id);
                   hide();
                   message.success('调动记录开启成功！')
                 }
@@ -141,8 +150,8 @@ const TaskList: React.FC = () => {
           <a
             onClick={async () => {
               if (record && record.id) {
-                const { data } = await getTaskById(record.id);
-                setUpdateFormValues(data as TaskForm);
+                const { data } = await getTransferRecordById(record.id);
+                setUpdateFormValues(data as TransferRecordForm);
                 handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到调动记录信息（id:${record.id}）`);
               } else {
@@ -159,7 +168,7 @@ const TaskList: React.FC = () => {
               if (key === 'run') {
                 if (record && record.id) {
                   const hide = message.loading('正在执行');
-                  const { data } = await runTask(record.id)
+                  const { data } = await runTransferRecord(record.id)
                   hide();
                   message.success('调动记录执行成功！返回结果已打印在控制台上。')
                   // eslint-disable-next-line no-console
@@ -178,7 +187,7 @@ const TaskList: React.FC = () => {
                     const hide = message.loading('正在删除');
                     try {
                       if (record && record.id) {
-                        await deleteTask(record.id);
+                        await deleteTransferRecord(record.id);
                         hide();
                         message.success('删除成功！');
                         actionRef.current?.reloadAndRest?.();
@@ -207,7 +216,7 @@ const TaskList: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<TaskVO>
+      <ProTable<TransferRecordVO>
         headerTitle="定时调动记录"
         actionRef={actionRef}
         rowKey="id"
@@ -220,7 +229,7 @@ const TaskList: React.FC = () => {
           </Button>,
         ]}
         request={async (params, sorter) => {
-          const { data } = await getTaskPage(getPageParams(params), getSortOrder(sorter));
+          const { data } = await getTransferRecordPage(getPageParams(params), getSortOrder(sorter));
           return {
             // success 请返回 true，
             // 不然 table 会停止解析数据，即使有数据
@@ -243,7 +252,7 @@ const TaskList: React.FC = () => {
             </div>
           }
         >
-          <Button onClick={handleDeleteTask}>批量删除</Button>
+          <Button onClick={handleDeleteTransferRecord}>批量删除</Button>
         </FooterToolbar>
       )}
       <CreateForm
@@ -265,4 +274,4 @@ const TaskList: React.FC = () => {
   );
 };
 
-export default TaskList;
+export default TransferRecordList;

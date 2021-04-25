@@ -15,6 +15,7 @@ interface FormProps {
 const FormBody: React.FC<FormProps> = (props) => {
   const { formRef } = props;
 
+  const [beanNameOptions, setBeanNameOptions] = useState<any[]>();
   const [methodOptions, setMethodOptions] = useState<any[]>();
 
   const toMethodSimpleName = (value: MethodInfo) => {
@@ -34,9 +35,9 @@ const FormBody: React.FC<FormProps> = (props) => {
   }
 
   const getMethodOptions = async (beanName: string) => {
-    const { methods } = await getBeanInfoByName(beanName);
-    if (methods) {
-      const options = methods.map(method => {
+    const { data } = await getBeanInfoByName(beanName);
+    if (data && data.methods) {
+      const options = data.methods.map(method => {
         return {
           label: toMethodSimpleName(method),
           value: JSON.stringify(method),
@@ -81,10 +82,18 @@ const FormBody: React.FC<FormProps> = (props) => {
   }
 
   useEffect(() => {
-    if (!formRef) return;
-    const fieldValue = formRef.current.getFieldValue('beanName');
-    if (fieldValue) {
-      getMethodOptions(fieldValue).then()
+    getBeanInfoList().then(({ data }) => {
+      setBeanNameOptions(data ? data.map(({beanName}) => ({
+        label: beanName,
+        value: beanName,
+      })) : [])
+    });
+
+    if (formRef) {
+      const fieldValue = formRef.current.getFieldValue('beanName');
+      if (fieldValue) {
+        getMethodOptions(fieldValue).then()
+      }
     }
   }, [])
 
@@ -114,20 +123,10 @@ const FormBody: React.FC<FormProps> = (props) => {
           <ProFormSelect
             name="beanName"
             label="Bean名称"
-            showSearch={false}
+            showSearch={true}
             placeholder="请选择Bean"
-            request={async () => {
-              const { data } = await getBeanInfoList();
-              if (data) {
-                return data.map(({beanName}) => ({
-                  label: beanName,
-                  value: beanName,
-                }));
-              }
-              return [];
-            }}
+            options={beanNameOptions}
             rules={[{ required: true, message: '请选择Bean名称' }]}
-
             fieldProps={{onChange: beanSelectOnchange}}
           />
         </Col>
@@ -135,7 +134,7 @@ const FormBody: React.FC<FormProps> = (props) => {
           <ProFormSelect
             name="methodInfo"
             label="方法名"
-            showSearch={false}
+            showSearch={true}
             placeholder="请选择Bean"
             options={methodOptions}
             rules={[{ required: true, message: '请选择方法名' }]}
