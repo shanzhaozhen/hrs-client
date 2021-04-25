@@ -21,7 +21,7 @@ const TransferRecordListBody: React.FC<ListBodyProps> = (props) => {
 
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-  const [updateFormValues, setUpdateFormValues] = useState({} as TransferRecordVO);
+  const [updateFormValues, setUpdateFormValues] = useState<TransferRecordVO>({});
   const actionRef = useRef<ActionType>();
   const [selectedRowsState, setSelectedRows] = useState<TransferRecordVO[]>([]);
 
