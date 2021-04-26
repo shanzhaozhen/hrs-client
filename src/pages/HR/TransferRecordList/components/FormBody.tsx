@@ -1,26 +1,30 @@
 import React, { useEffect, useState } from 'react';
+import type { MutableRefObject } from 'react';
+import type { FormInstance } from 'antd';
 import { Button, Col, Input, Row } from 'antd';
-import ProForm, { ProFormSelect, ProFormText } from '@ant-design/pro-form';
+import ProForm, {ProFormDatePicker, ProFormSelect, ProFormText} from '@ant-design/pro-form';
 import {getAllDepartments, getDepartmentTree} from "@/services/department/department";
 import { getDictionaryChildrenByCode } from "@/services/dictionary/dictionary";
 import FormTreeSelect from "@/components/FormTreeSelect";
 import {loopDepartmentData} from "@/utils/department";
 import { ContactsOutlined } from "@ant-design/icons";
 import StaffSelect from "@/pages/HR/StaffList/components/StaffSelect";
-import type { StaffVO } from "@/services/staff/typings";
+import {tableFilter} from "@/utils/common";
+import type {DepartmentVO} from "@/services/department/typings";
+import type {DataNode} from "rc-tree/lib/interface";
 
 interface FormProps {
   isEdit?: boolean;
+  formRef?: MutableRefObject<FormInstance | any>;
 }
 
 const FormBody: React.FC<FormProps> = (props) => {
-  const { isEdit } = props;
+  const { isEdit, formRef } = props;
 
   const [staffSelectVisible, setStaffSelectVisible] = useState<boolean>(false);
-  const [selectStaffValues, setSelectStaffValues] = useState<StaffVO>({});
 
-  const [departmentList, setDepartmentList] = useState<any[]>();
-  const [departmentTree, setDepartmentTree] = useState<any[]>();
+  const [departmentList, setDepartmentList] = useState<DepartmentVO[]>([]);
+  const [departmentTree, setDepartmentTree] = useState<DataNode[]>([]);
 
   useEffect(() => {
     getAllDepartments()
@@ -31,7 +35,6 @@ const FormBody: React.FC<FormProps> = (props) => {
         setDepartmentList([]);
       });
   }, []);
-
 
   useEffect(() => {
     getDepartmentTree()
@@ -54,6 +57,7 @@ const FormBody: React.FC<FormProps> = (props) => {
               <Input
                 style={{ width: '60%' }}
                 name="staffCode"
+                placeholder="请选择员工"
                 disabled
               />
               <Button
@@ -72,15 +76,16 @@ const FormBody: React.FC<FormProps> = (props) => {
             width="md"
             name="staffName"
             label="员工姓名"
+            placeholder="请选择员工"
             disabled
           />
         </Col>
         <Col xl={12} lg={12} md={24}>
           <ProFormSelect
             width="md"
-            name="depId"
+            name="preDepId"
             label="变更前部门"
-            options={departmentList}
+            options={departmentList.map(item => ({value: item.id || '', label: item.name}))}
             disabled
           />
         </Col>
@@ -104,7 +109,7 @@ const FormBody: React.FC<FormProps> = (props) => {
         <Col xl={12} lg={12} md={24}>
           <ProFormSelect
             width="md"
-            name="duty"
+            name="postDuty"
             label="变更后职务"
             rules={[{ required: false, message: '请选择职务' }]}
             request={async ({ keyWords }) => {
@@ -185,12 +190,33 @@ const FormBody: React.FC<FormProps> = (props) => {
             }}
           />
         </Col>
+        <Col xl={12} lg={12} md={24}>
+          <ProFormDatePicker
+            width="md"
+            name="effectiveDate"
+            label="生效日期"
+          />
+        </Col>
       </Row>
 
       <StaffSelect
         staffSelectVisible={staffSelectVisible}
         handleStaffSelectVisible={setStaffSelectVisible}
-        setSelectStaffValues={setSelectStaffValues}
+        onSelectAction={(selectValue) => {
+          const currentFormValue = formRef?.current.getFieldsValue();
+          formRef?.current.setFieldsValue({
+            ...currentFormValue,
+            staffId: selectValue.id,
+            staffCode: selectValue.staffCode,
+            staffName: selectValue.staffName,
+            preDepId: selectValue.depId,
+            preDuty: selectValue.duty,
+            prePost: selectValue.post,
+            prePostType: selectValue.postType,
+            prePostLevel: selectValue.postLevel
+          })
+          setStaffSelectVisible(false);
+        }}
       />
     </>
   );

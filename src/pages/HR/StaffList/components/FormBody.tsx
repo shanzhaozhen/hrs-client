@@ -194,8 +194,8 @@ const FormBody: React.FC<FormProps> = (props) => {
           <ProFormSelect
             width="sm"
             name="postLevel"
-            label="岗位类型"
-            rules={[{ required: false, message: '请选择岗位类型' }]}
+            label="岗位等级"
+            rules={[{ required: false, message: '请选择岗位等级' }]}
             request={async ({ keyWords }) => {
               const { data } = await getDictionaryChildrenByCode('PostLevel', keyWords);
               return data ? data.map(item => ({

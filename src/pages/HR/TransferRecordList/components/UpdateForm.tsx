@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
+import type { FormInstance } from 'antd';
 import { message } from 'antd';
 import type { TransferRecordForm, TransferRecordVO } from '@/services/transfer-record/typings';
 import FormBody from '@/pages/HR/TransferRecordList/components/FormBody';
@@ -18,6 +19,8 @@ export interface UpdateFormProps {
 
 const UpdateForm: React.FC<UpdateFormProps> = (props) => {
   const { updateModalVisible, handleUpdateModalVisible, onCancel, tableActionRef, values, staffId } = props;
+
+  const formRef = useRef<FormInstance>();
 
   /**
    * 修改调动记录
@@ -52,7 +55,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
       }}
       onFinish={handleUpdate}
     >
-      <FormBody isEdit={true} />
+      <FormBody isEdit={true} formRef={formRef} />
     </ModalForm>
   );
 };

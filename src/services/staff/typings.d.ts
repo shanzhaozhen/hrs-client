@@ -17,6 +17,8 @@ export type StaffForm = {
   post?: string;
   /** 岗位类型 */
   postType?: string;
+  /** 岗位等级 */
+  postLevel?: string;
   /** 性别 */
   sex?: number;
   /** 民族 */
@@ -130,6 +132,8 @@ export type StaffVO = {
   post?: string;
   /** 岗位类型 */
   postType?: string;
+  /** 岗位等级 */
+  postLevel?: string;
   /** 性别 */
   sex?: number;
   /** 民族 */

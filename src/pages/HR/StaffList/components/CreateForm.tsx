@@ -36,18 +36,20 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
   };
 
   return (
-    <DrawerForm
-      width={'75%'}
-      title="新建员工"
-      visible={createDrawerVisible}
-      onVisibleChange={handleCreateDrawerVisible}
-      drawerProps={{
-        destroyOnClose: true,
-      }}
-      onFinish={handleAdd}
-    >
-      <FormBody />
-    </DrawerForm>
+    <>
+      <DrawerForm
+        width={'75%'}
+        title="新建员工"
+        visible={createDrawerVisible}
+        onVisibleChange={handleCreateDrawerVisible}
+        drawerProps={{
+          destroyOnClose: true,
+        }}
+        onFinish={handleAdd}
+      >
+        <FormBody />
+      </DrawerForm>
+    </>
   );
 };
 

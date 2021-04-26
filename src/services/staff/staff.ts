@@ -4,7 +4,7 @@ import type {StaffForm, StaffVO} from "@/services/staff/typings";
 import type {Orders, Page, PageParams, ResultBody} from "@/services/common/typings";
 
 /** 获取员工信息（分页） GET /staff/page */
-export async function getStaffPage(pageParams: PageParams, orders?: Orders | undefined | null, options?: Record<string, any>) {
+export async function getStaffPage(pageParams: PageParams & any, orders?: Orders | undefined | null, options?: Record<string, any>) {
   return request<ResultBody<Page<StaffVO>>>('/hrs-api/staff/page', {
     method: 'GET',
     params: {

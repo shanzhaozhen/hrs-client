@@ -178,7 +178,7 @@ const TransferRecordListBody: React.FC<ListBodyProps> = (props) => {
             onClick={async () => {
               if (record && record.id) {
                 const { data } = await getTransferRecordById(record.id);
-                setUpdateFormValues(data as TransferRecordForm);
+                setUpdateFormValues(data || {});
                 handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到调动记录信息（id:${record.id}）`);
               } else {

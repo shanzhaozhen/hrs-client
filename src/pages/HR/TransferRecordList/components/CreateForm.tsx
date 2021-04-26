@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
+import type { FormInstance } from 'antd';
 import { message } from 'antd';
 import { addTransferRecord } from '@/services/transfer-record/transfer-record';
 import type { TransferRecordForm } from '@/services/transfer-record/typings';
@@ -16,6 +17,8 @@ interface CreateFormProps {
 
 const CreateForm: React.FC<CreateFormProps> = (props) => {
   const { createModalVisible, handleCreateModalVisible, tableActionRef, staffId } = props;
+
+  const formRef = useRef<FormInstance>();
 
   /**
    * 添加调动记录
@@ -41,12 +44,13 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
       title="新建调动"
       visible={createModalVisible}
       onVisibleChange={handleCreateModalVisible}
+      formRef={formRef}
       modalProps={{
         destroyOnClose: true,
       }}
       onFinish={handleAdd}
     >
-      <FormBody />
+      <FormBody formRef={formRef} />
     </ModalForm>
   );
 };

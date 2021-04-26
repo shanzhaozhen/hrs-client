@@ -74,3 +74,9 @@ export type OptionType = {
   value: string | number;
   label: string | number;
 };
+
+export type TreeSelectOption = {
+  value?: number | string,
+  title?: number | string,
+  children: TreeSelectOption[],
+}

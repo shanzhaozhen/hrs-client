@@ -4,21 +4,24 @@ import { Input, message, Modal } from 'antd';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { getPageParams, getSortOrder, tableFilter } from "@/utils/common";
-import { getAllDepartments } from "@/services/department/department";
+import {getAllDepartments, getDepartmentTree} from "@/services/department/department";
 import type { StaffVO } from "@/services/staff/typings";
 import { getStaffPage } from "@/services/staff/staff";
+import FormTreeSelect from "@/components/FormTreeSelect";
+import {loopDepartmentData} from "@/utils/department";
 
 interface StaffSelectProps {
   staffSelectVisible: boolean;
   handleStaffSelectVisible: Dispatch<SetStateAction<boolean>>;
-  setSelectStaffValues: Dispatch<SetStateAction<StaffVO>>;
+  onSelectAction: (selectValue: StaffVO) => void;
 }
 
 const StaffSelect: React.FC<StaffSelectProps> = (props) => {
-  const { staffSelectVisible, handleStaffSelectVisible, setSelectStaffValues } = props;
+  const { staffSelectVisible, handleStaffSelectVisible, onSelectAction } = props;
 
   const actionRef = useRef<ActionType>();
   const [departmentList, setDepartmentList] = useState<any>();
+  const [departmentTree, setDepartmentTree] = useState<any[]>();
 
   useEffect(() => {
     getAllDepartments()
@@ -27,6 +30,16 @@ const StaffSelect: React.FC<StaffSelectProps> = (props) => {
       })
       .catch(() => {
         setDepartmentList([]);
+      });
+  }, []);
+
+  useEffect(() => {
+    getDepartmentTree()
+      .then(({ data }) => {
+        setDepartmentTree(loopDepartmentData(data || []));
+      })
+      .catch(() => {
+        setDepartmentTree([]);
       });
   }, []);
 
@@ -51,12 +64,14 @@ const StaffSelect: React.FC<StaffSelectProps> = (props) => {
       dataIndex: 'depId',
       valueType: 'text',
       sorter: true,
-      hideInSearch: true,
-      renderText: (_, record) => (tableFilter(record.depId, departmentList, '未分配'))
+      renderText: (_, record) => (tableFilter(record.depId, departmentList, '未分配')),
+      renderFormItem: () => {
+        return <FormTreeSelect treeData={departmentTree} placeholder="请选择所属部门" />
+      }
     },
     {
       title: '员工编号',
-      dataIndex: 'nickname',
+      dataIndex: 'staffCode',
       valueType: 'text',
       hideInSearch: true,
     },
@@ -76,7 +91,7 @@ const StaffSelect: React.FC<StaffSelectProps> = (props) => {
           <a
             onClick={async () => {
               if (record && record.id) {
-                setSelectStaffValues(record);
+                onSelectAction(record);
               } else {
                 message.warn('没有选中有效的用户');
               }
@@ -92,7 +107,7 @@ const StaffSelect: React.FC<StaffSelectProps> = (props) => {
   return (
     <Modal
       title="员工选择"
-      width={820}
+      width={940}
       visible={staffSelectVisible}
       onCancel={() => {
         handleStaffSelectVisible(false);

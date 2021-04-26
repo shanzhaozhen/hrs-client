@@ -13,13 +13,12 @@ export const copyObject = (A: any, B: any) => {
 
 /**
  * 生成后端需要的分页查询格式
- * @param sorter
+ * @param params
  */
-export const getPageParams = ({keyword, current, pageSize}: any): PageParams => {
+export const getPageParams = (params: any): PageParams => {
   return {
-    keyword,
-    current,
-    size: pageSize
+    ...params,
+    size: params.pageSize
   };
 }
 

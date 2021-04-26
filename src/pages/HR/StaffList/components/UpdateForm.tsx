@@ -40,41 +40,34 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
   };
 
   return (
-    <DrawerForm
-      width={'75%'}
-      title={
-        <>
-          <span style={{ marginRight: 15 }}>修改员工</span>
-          <Button
-            type="primary"
-            icon={<HistoryOutlined />}
-          >
-            调动记录
-          </Button>
-        </>
-      }
-      visible={updateDrawerVisible}
-      onVisibleChange={handleUpdateDrawerVisible}
-      initialValues={values}
-      drawerProps={{
-        onClose: onCancel,
-        destroyOnClose: true,
-      }}
-      onFinish={handleUpdate}
-      // onFinish={async (formData) => {
-      //   console.log(formData)
-      // }}
-      // submitter={{
-      //   searchConfig: {
-      //     submitText: '提交',
-      //     resetText: '取消',
-      //   },
-      // }}
-    >
-      {values && Object.keys(values).length ? (
-        <FormBody values={values} isEdit />
-      ) : null}
-    </DrawerForm>
+    <>
+      <DrawerForm
+        width={'75%'}
+        title={
+          <>
+            <span style={{ marginRight: 15 }}>修改员工</span>
+            <Button
+              type="primary"
+              icon={<HistoryOutlined />}
+            >
+              调动记录
+            </Button>
+          </>
+        }
+        visible={updateDrawerVisible}
+        onVisibleChange={handleUpdateDrawerVisible}
+        initialValues={values}
+        drawerProps={{
+          onClose: onCancel,
+          destroyOnClose: true,
+        }}
+        onFinish={handleUpdate}
+      >
+        {values && Object.keys(values).length ? (
+          <FormBody values={values} isEdit />
+        ) : null}
+      </DrawerForm>
+    </>
   );
 };
 
