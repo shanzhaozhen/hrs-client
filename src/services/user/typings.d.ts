@@ -21,7 +21,7 @@ export type Role = {
 
 export type UserForm = {
   /** 主键ID */
-  id: number;
+  id?: number;
   /** 用户名 */
   username?: string;
   /** 密码 */

@@ -13,10 +13,11 @@ export interface UpdateFormProps {
   onCancel: () => void;
   tableActionRef: MutableRefObject<ActionType | undefined>;
   values?: TransferRecordVO;
+  staffId?: number;
 }
 
 const UpdateForm: React.FC<UpdateFormProps> = (props) => {
-  const { updateModalVisible, handleUpdateModalVisible, onCancel, tableActionRef, values } = props;
+  const { updateModalVisible, handleUpdateModalVisible, onCancel, tableActionRef, values, staffId } = props;
 
   /**
    * 修改调动记录

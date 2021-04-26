@@ -20,7 +20,7 @@ import type {DictionaryVO} from "@/services/dictionary/typings";
 const RegionList: React.FC = () => {
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-  const [updateFormValues, setUpdateFormValues] = useState({});
+  const [updateFormValues, setUpdateFormValues] = useState<RegionVO | RegionForm>({});
   const actionRef = useRef<ActionType>();
   const [regionData, setRegionData] = useState<RegionVO[]>([]);
   const [selectedRowsState, setSelectedRows] = useState<RegionVO[]>([]);
@@ -117,7 +117,7 @@ const RegionList: React.FC = () => {
             onClick={async () => {
               if (record && record.id) {
                 const { data } = await getRegionById(record.id);
-                setUpdateFormValues(data as RegionForm);
+                setUpdateFormValues(data || {});
                 handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到资源信息（id:${record.id}）`);
               } else {

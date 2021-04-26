@@ -2,7 +2,7 @@ import React from 'react';
 import type { Dispatch, SetStateAction } from 'react';
 import FormBody from '@/pages/HR/StaffList/components/FormBody';
 import { DrawerForm } from '@ant-design/pro-form';
-import type { StaffVO } from "@/services/staff/typings";
+import type {StaffForm, StaffVO} from "@/services/staff/typings";
 import {HistoryOutlined} from "@ant-design/icons";
 import {Button} from "antd";
 
@@ -10,7 +10,7 @@ interface ViewFormProps {
   viewDrawerVisible: boolean;
   handleViewDrawerVisible: Dispatch<SetStateAction<boolean>>;
   onCancel: () => void;
-  values?: StaffVO;
+  values?: StaffVO | StaffForm;
 }
 
 const ViewForm: React.FC<ViewFormProps> = (props) => {

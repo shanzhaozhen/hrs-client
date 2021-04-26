@@ -14,7 +14,7 @@ import {getPageParams} from "@/utils/common";
 const ResourceList: React.FC = () => {
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-  const [updateFormValues, setUpdateFormValues] = useState({});
+  const [updateFormValues, setUpdateFormValues] = useState<ResourceForm>({});
   const actionRef = useRef<ActionType>();
   const [selectedRowsState, setSelectedRows] = useState<ResourceVO[]>([]);
 
@@ -127,7 +127,7 @@ const ResourceList: React.FC = () => {
             onClick={async () => {
               if (record && record.id) {
                 const { data } = await getResourceById(record.id);
-                setUpdateFormValues(data as ResourceForm);
+                setUpdateFormValues(data || {});
                 handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到资源信息（id:${record.id}）`);
               } else {

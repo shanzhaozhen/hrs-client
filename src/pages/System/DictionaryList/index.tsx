@@ -156,7 +156,7 @@ const DictionaryList: React.FC = () => {
           <Divider type="vertical" />
           <a
             onClick={async () => {
-              setUpdateFormValues({ pid: record.id } as DictionaryForm);
+              setUpdateFormValues({ pid: record.id });
               handleCreateModalVisible(true);
             }}
           >

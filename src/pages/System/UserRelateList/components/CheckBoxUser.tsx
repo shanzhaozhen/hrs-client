@@ -27,12 +27,8 @@ const CheckBoxUser: React.FC<CheckBoxUserProps> = (props) => {
 
   useEffect(() => {
     getAllDepartments()
-      .then((res) => {
-        if (res) {
-          setDepartmentList(res);
-        } else {
-          setDepartmentList([]);
-        }
+      .then(({ data }) => {
+        setDepartmentList(data || []);
       })
       .catch(() => {
         setDepartmentList([]);

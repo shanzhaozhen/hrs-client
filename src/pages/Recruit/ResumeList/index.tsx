@@ -1,6 +1,6 @@
 import React, {useRef, useState} from 'react';
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, Divider, Drawer, Input, message } from 'antd';
+import { Button, Divider, Input, message } from 'antd';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import type {ActionType, ProColumns} from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
@@ -11,7 +11,7 @@ import { getPageParams, getSortOrder } from "@/utils/common";
 const ResumeList: React.FC = () => {
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-  const [updateFormValues, setUpdateFormValues] = useState({} as ResumeVO);
+  const [updateFormValues, setUpdateFormValues] = useState<ResumeVO | ResumeForm>({});
   const actionRef = useRef<ActionType>();
   const [currentRow, setCurrentRow] = useState<ResumeVO>();
   const [selectedRowsState, setSelectedRows] = useState<ResumeVO[]>([]);
@@ -113,7 +113,7 @@ const ResumeList: React.FC = () => {
             onClick={async () => {
               if (record && record.id) {
                 const { data } = await getResumeById(record.id);
-                setUpdateFormValues(data as ResumeForm);
+                setUpdateFormValues(data || {});
                 handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到简历信息（id:${record.id}）`);
               } else {
@@ -128,7 +128,7 @@ const ResumeList: React.FC = () => {
             onClick={async () => {
               if (record && record.id) {
                 const { data } = await getResumeById(record.id);
-                setUpdateFormValues(data as ResumeForm);
+                setUpdateFormValues(data || {});
                 handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到简历信息（id:${record.id}）`);
               } else {

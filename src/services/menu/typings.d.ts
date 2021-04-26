@@ -2,9 +2,9 @@ import type { RoleVO } from '@/services/role/typings';
 
 export type MenuForm = {
   /** 主键ID */
-  id: number;
-  /** 权限名称 */
-  name: string;
+  id?: number;
+  /** 菜单名称 */
+  name?: string;
   /** 菜单路由 */
   path?: string;
   /** 上级ID */

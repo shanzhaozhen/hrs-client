@@ -11,10 +11,11 @@ interface CreateFormProps {
   createModalVisible: boolean;
   handleCreateModalVisible: Dispatch<SetStateAction<boolean>>;
   tableActionRef: MutableRefObject<ActionType | undefined>;
+  staffId?: number;
 }
 
 const CreateForm: React.FC<CreateFormProps> = (props) => {
-  const { createModalVisible, handleCreateModalVisible, tableActionRef } = props;
+  const { createModalVisible, handleCreateModalVisible, tableActionRef, staffId } = props;
 
   /**
    * 添加调动记录

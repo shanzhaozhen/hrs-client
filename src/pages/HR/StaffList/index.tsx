@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import { Button, Divider, Input, message } from 'antd';
+import {Button, Divider, Form, Input, message} from 'antd';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import type {ActionType, ProColumns} from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
@@ -9,19 +9,21 @@ import {getPageParams, getSortOrder, tableFilter} from "@/utils/common";
 import {ExportOutlined, ImportOutlined, PlusOutlined} from "@ant-design/icons";
 import CreateForm from "@/pages/HR/StaffList/components/CreateForm";
 import UpdateForm from "@/pages/HR/StaffList/components/UpdateForm";
-import type { DepartmentVO } from "@/services/department/typings";
 import ViewForm from "@/pages/HR/StaffList/components/ViewForm";
-import {getAllDepartments} from "@/services/department/department";
+import {getAllDepartments, getDepartmentTree} from "@/services/department/department";
+import {loopDepartmentData} from "@/utils/department";
+import FormTreeSelect from "@/components/FormTreeSelect";
 
 const StaffList: React.FC = () => {
   const actionRef = useRef<ActionType>();
-  const [updateFormValues, setUpdateFormValues] = useState({} as DepartmentVO);
+  const [updateFormValues, setUpdateFormValues] = useState<StaffVO | StaffForm>({});
   const [viewDrawerVisible, handleViewDrawerVisible] = useState<boolean>(false);
   const [createDrawerVisible, handleCreateDrawerVisible] = useState<boolean>(false);
   const [updateDrawerVisible, handleUpdateDrawerVisible] = useState<boolean>(false);
   const [selectedRowsState, setSelectedRows] = useState<StaffVO[]>([]);
 
   const [departmentList, setDepartmentList] = useState<any>();
+  const [departmentTree, setDepartmentTree] = useState<any[]>();
 
   useEffect(() => {
     getAllDepartments()
@@ -30,6 +32,16 @@ const StaffList: React.FC = () => {
       })
       .catch(() => {
         setDepartmentList([]);
+      });
+  }, []);
+
+  useEffect(() => {
+    getDepartmentTree()
+      .then(({ data }) => {
+        setDepartmentTree(loopDepartmentData(data || []));
+      })
+      .catch(() => {
+        setDepartmentTree([]);
       });
   }, []);
 
@@ -83,8 +95,10 @@ const StaffList: React.FC = () => {
       dataIndex: 'depId',
       valueType: 'select',
       sorter: true,
-      hideInSearch: true,
-      renderText: (_, record) => (tableFilter(record.depId, departmentList, '未分配'))
+      renderText: (_, record) => (tableFilter(record.depId, departmentList, '未分配')),
+      renderFormItem: () => {
+        return <FormTreeSelect treeData={departmentTree} placeholder="请选择所属部门" />
+      }
     },
     {
       title: '员工编号',
@@ -210,7 +224,7 @@ const StaffList: React.FC = () => {
             onClick={async () => {
               if (record && record.id) {
                 const { data } = await getStaffById(record.id);
-                setUpdateFormValues(data as StaffForm);
+                setUpdateFormValues(data || {});
                 handleViewDrawerVisible(true);
               } else {
                 message.warn('没有选中有效的员工');
@@ -224,7 +238,7 @@ const StaffList: React.FC = () => {
             onClick={async () => {
               if (record && record.id) {
                 const { data } = await getStaffById(record.id);
-                setUpdateFormValues(data as StaffForm);
+                setUpdateFormValues(data || {});
                 handleUpdateDrawerVisible(true);
               } else {
                 message.warn('没有选中有效的员工');
@@ -238,6 +252,7 @@ const StaffList: React.FC = () => {
     },
   ];
 
+  // @ts-ignore
   return (
     <PageContainer>
       <ProTable<StaffVO>

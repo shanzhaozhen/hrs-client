@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import {Col, Form, Row} from 'antd';
-import { ProFormSelect, ProFormText } from '@ant-design/pro-form';
+import { Button, Col, Input, Row } from 'antd';
+import ProForm, { ProFormSelect, ProFormText } from '@ant-design/pro-form';
 import {getAllDepartments, getDepartmentTree} from "@/services/department/department";
 import { getDictionaryChildrenByCode } from "@/services/dictionary/dictionary";
 import FormTreeSelect from "@/components/FormTreeSelect";
 import {loopDepartmentData} from "@/utils/department";
+import { ContactsOutlined } from "@ant-design/icons";
+import StaffSelect from "@/pages/HR/StaffList/components/StaffSelect";
+import type { StaffVO } from "@/services/staff/typings";
 
 interface FormProps {
   isEdit?: boolean;
@@ -13,8 +16,11 @@ interface FormProps {
 const FormBody: React.FC<FormProps> = (props) => {
   const { isEdit } = props;
 
-  const [departmentList, setDepartmentList] = useState<any>();
-  const [departmentTree, setDepartmentTree] = useState<[]>();
+  const [staffSelectVisible, setStaffSelectVisible] = useState<boolean>(false);
+  const [selectStaffValues, setSelectStaffValues] = useState<StaffVO>({});
+
+  const [departmentList, setDepartmentList] = useState<any[]>();
+  const [departmentTree, setDepartmentTree] = useState<any[]>();
 
   useEffect(() => {
     getAllDepartments()
@@ -42,14 +48,24 @@ const FormBody: React.FC<FormProps> = (props) => {
       <Row gutter={24}>
         <ProFormText name="id" label="调动记录id" hidden={true} />
         <ProFormText name="staffId" label="员工id" hidden={true} />
-        <ProFormText name="preDepId" label="变更前部门" hidden={true} />
         <Col xl={12} lg={12} md={24}>
-          <ProFormText
-            width="md"
-            name="staffCode"
-            label="员工编号"
-            disabled
-          />
+          <ProForm.Item label="员工编号">
+            <Input.Group compact>
+              <Input
+                style={{ width: '60%' }}
+                name="staffCode"
+                disabled
+              />
+              <Button
+                type="primary"
+                icon={<ContactsOutlined />}
+                style={{ width: '40%' }}
+                onClick={() => setStaffSelectVisible(true)}
+              >
+                选择员工
+              </Button>
+            </Input.Group>
+          </ProForm.Item>
         </Col>
         <Col xl={12} lg={12} md={24}>
           <ProFormText
@@ -60,21 +76,22 @@ const FormBody: React.FC<FormProps> = (props) => {
           />
         </Col>
         <Col xl={12} lg={12} md={24}>
-          <ProFormText
+          <ProFormSelect
             width="md"
             name="depId"
             label="变更前部门"
+            options={departmentList}
             disabled
           />
         </Col>
         <Col xl={12} lg={12} md={24}>
-          <Form.Item
+          <ProForm.Item
             name="postDepId"
             label="变更后部门"
             rules={[{ required: false, message: '请选择部门' }]}
           >
             <FormTreeSelect treeData={departmentTree} placeholder="请选择部门" />
-          </Form.Item>
+          </ProForm.Item>
         </Col>
         <Col xl={12} lg={12} md={24}>
           <ProFormText
@@ -169,6 +186,12 @@ const FormBody: React.FC<FormProps> = (props) => {
           />
         </Col>
       </Row>
+
+      <StaffSelect
+        staffSelectVisible={staffSelectVisible}
+        handleStaffSelectVisible={setStaffSelectVisible}
+        setSelectStaffValues={setSelectStaffValues}
+      />
     </>
   );
 };

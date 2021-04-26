@@ -15,7 +15,7 @@ import { getAllDepartments } from "@/services/department/department";
 const UserList: React.FC = () => {
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-  const [updateFormValues, setUpdateFormValues] = useState({});
+  const [updateFormValues, setUpdateFormValues] = useState<UserForm>({});
   const actionRef = useRef<ActionType>();
   const [selectedRowsState, setSelectedRows] = useState<UserVO[]>([]);
 
@@ -205,7 +205,7 @@ const UserList: React.FC = () => {
             onClick={async () => {
               if (record && record.id) {
                 const { data } = await getUserById(record.id);
-                setUpdateFormValues(data as UserForm);
+                setUpdateFormValues(data || {});
                 handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到用户信息（id:${record.id}）`);
               } else {

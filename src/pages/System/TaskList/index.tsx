@@ -13,7 +13,7 @@ import {getPageParams, getSortOrder} from "@/utils/common";
 const TaskList: React.FC = () => {
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-  const [updateFormValues, setUpdateFormValues] = useState({} as TaskVO);
+  const [updateFormValues, setUpdateFormValues] = useState<TaskVO | TaskForm>({});
   const actionRef = useRef<ActionType>();
   const [selectedRowsState, setSelectedRows] = useState<TaskVO[]>([]);
 
@@ -150,7 +150,7 @@ const TaskList: React.FC = () => {
             onClick={async () => {
               if (record && record.id) {
                 const { data } = await getTaskById(record.id);
-                setUpdateFormValues(data as TaskForm);
+                setUpdateFormValues(data || {});
                 handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到任务信息（id:${record.id}）`);
               } else {

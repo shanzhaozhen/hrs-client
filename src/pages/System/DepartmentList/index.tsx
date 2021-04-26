@@ -18,7 +18,7 @@ import {batchUpdateUserDepartment, getUserPageByDepartmentId} from "@/services/u
 
 const DepartmentList: React.FC = () => {
   const actionRef = useRef<ActionType>();
-  const [updateFormValues, setUpdateFormValues] = useState({} as DepartmentVO);
+  const [updateFormValues, setUpdateFormValues] = useState<DepartmentVO | DepartmentForm>({});
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [userDepartmentListVisible, handleUserDepartmentListVisible] = useState<boolean>(false);
@@ -190,7 +190,7 @@ const DepartmentList: React.FC = () => {
             onClick={async () => {
               if (record && record.id) {
                 const { data } = await getDepartmentById(record.id);
-                setUpdateFormValues(data as DepartmentForm);
+                setUpdateFormValues(data || {});
                 handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到部门信息（id:${record.id}）`);
               } else {

@@ -21,7 +21,7 @@ const RoleList: React.FC = () => {
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [userRelateListVisible, handleUserRelateListVisible] = useState<boolean>(false);
-  const [updateFormValues, setUpdateFormValues] = useState({} as RoleVO);
+  const [updateFormValues, setUpdateFormValues] = useState<RoleVO | RoleForm>({});
   const actionRef = useRef<ActionType>();
   const userRoleActionRef = useRef<ActionType>();
   const [selectedRowsState, setSelectedRows] = useState<RoleVO[]>([]);
@@ -196,7 +196,7 @@ const RoleList: React.FC = () => {
             onClick={async () => {
               if (record && record.id) {
                 const { data } = await getRoleById(record.id);
-                setUpdateFormValues(data as RoleForm);
+                setUpdateFormValues(data || {});
                 handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到角色信息（id:${record.id}）`);
               } else {

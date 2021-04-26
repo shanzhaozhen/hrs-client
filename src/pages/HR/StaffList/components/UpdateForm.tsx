@@ -14,7 +14,7 @@ export interface UpdateFormProps {
   handleUpdateDrawerVisible: Dispatch<SetStateAction<boolean>>;
   onCancel: () => void;
   tableActionRef: MutableRefObject<ActionType | undefined>;
-  values?: StaffVO;
+  values?: StaffForm | StaffVO;
 }
 
 const UpdateForm: React.FC<UpdateFormProps> = (props) => {

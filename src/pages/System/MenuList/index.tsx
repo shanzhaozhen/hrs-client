@@ -14,7 +14,7 @@ import * as iconMap from '@ant-design/icons';
 const MenuList: React.FC = () => {
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-  const [updateFormValues, setUpdateFormValues] = useState({});
+  const [updateFormValues, setUpdateFormValues] = useState<MenuForm>({});
   const actionRef = useRef<ActionType>();
   const [selectedRowsState, setSelectedRows] = useState<MenuVO[]>([]);
 
@@ -140,7 +140,7 @@ const MenuList: React.FC = () => {
             onClick={async () => {
               if (record && record.id) {
                 const { data } = await getMenuById(record.id);
-                setUpdateFormValues(data as MenuForm);
+                setUpdateFormValues(data || {});
                 handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到菜单信息（id:${record.id}）`);
               } else {

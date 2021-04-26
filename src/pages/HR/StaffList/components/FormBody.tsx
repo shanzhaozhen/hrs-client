@@ -6,7 +6,7 @@ import ProForm, {
   ProFormSelect,
   ProFormText,
 } from '@ant-design/pro-form';
-import type { StaffVO } from "@/services/staff/typings";
+import type {StaffForm, StaffVO} from "@/services/staff/typings";
 import { getDictionaryChildrenByCode } from "@/services/dictionary/dictionary";
 import RegionSelect from "@/components/RegionSelect";
 import type { RegionType } from "@/services/region/typings";
@@ -16,7 +16,7 @@ import {getAllDepartments} from "@/services/department/department";
 interface FormProps {
   isView?: boolean;
   isEdit?: boolean;
-  values?: StaffVO;
+  values?: StaffVO | StaffForm;
 }
 
 const FormBody: React.FC<FormProps> = (props) => {

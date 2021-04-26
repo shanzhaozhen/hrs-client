@@ -2,9 +2,9 @@ import type { RoleVO } from "@/services/role/typings";
 
 export type ResourceForm = {
   /** 主键ID */
-  id: number;
+  id?: number;
   /** 权限名称 */
-  name: string;
+  name?: string;
   /** 资源路由 */
   path?: string;
   /** 资源类型 */
