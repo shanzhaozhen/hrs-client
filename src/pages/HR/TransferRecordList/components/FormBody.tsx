@@ -9,7 +9,6 @@ import FormTreeSelect from "@/components/FormTreeSelect";
 import {loopDepartmentData} from "@/utils/department";
 import { ContactsOutlined } from "@ant-design/icons";
 import StaffSelect from "@/pages/HR/StaffList/components/StaffSelect";
-import {tableFilter} from "@/utils/common";
 import type {DepartmentVO} from "@/services/department/typings";
 import type {DataNode} from "rc-tree/lib/interface";
 
