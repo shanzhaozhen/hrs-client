@@ -52,11 +52,10 @@ const FormBody: React.FC<FormProps> = (props) => {
         <ProFormText name="id" label="调动记录id" hidden={true} />
         <ProFormText name="staffId" label="员工id" hidden={true} />
         <Col xl={12} lg={12} md={24}>
-          <ProForm.Item label="员工编号">
+          <ProForm.Item label="员工编号" name="staffCode">
             <Input.Group compact>
               <Input
                 style={{ width: '60%' }}
-                name="staffCode"
                 placeholder="请选择员工"
                 disabled
               />
