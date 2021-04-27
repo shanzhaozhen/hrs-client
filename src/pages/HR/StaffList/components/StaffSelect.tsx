@@ -4,11 +4,11 @@ import { Input, message, Modal } from 'antd';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { getPageParams, getSortOrder, tableFilter } from "@/utils/common";
-import {getAllDepartments, getDepartmentTree} from "@/services/department/department";
+import { getAllDepartments, getDepartmentTree } from "@/services/department/department";
 import type { StaffVO } from "@/services/staff/typings";
 import { getStaffPage } from "@/services/staff/staff";
 import FormTreeSelect from "@/components/FormTreeSelect";
-import {loopDepartmentData} from "@/utils/department";
+import { loopDepartmentData } from "@/utils/department";
 
 interface StaffSelectProps {
   staffSelectVisible: boolean;

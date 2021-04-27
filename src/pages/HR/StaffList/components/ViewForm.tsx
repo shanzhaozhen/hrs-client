@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {useState} from 'react';
 import type { Dispatch, SetStateAction } from 'react';
 import FormBody from '@/pages/HR/StaffList/components/FormBody';
 import { DrawerForm } from '@ant-design/pro-form';
 import type {StaffForm, StaffVO} from "@/services/staff/typings";
 import {HistoryOutlined} from "@ant-design/icons";
 import {Button} from "antd";
+import TransferRecordModal from "@/pages/HR/TransferRecordList/components/ModalBody";
 
 interface ViewFormProps {
   viewDrawerVisible: boolean;
@@ -16,6 +17,8 @@ interface ViewFormProps {
 const ViewForm: React.FC<ViewFormProps> = (props) => {
   const { viewDrawerVisible, handleViewDrawerVisible, onCancel, values } = props
 
+  const [transferRecordModalVisible, setTransferRecordModalVisible] = useState<boolean>(false);
+
   return (
     <>
       <DrawerForm
@@ -26,6 +29,7 @@ const ViewForm: React.FC<ViewFormProps> = (props) => {
             <Button
               type="primary"
               icon={<HistoryOutlined />}
+              onClick={() => setTransferRecordModalVisible(true)}
             >
               调动记录
             </Button>
@@ -55,6 +59,8 @@ const ViewForm: React.FC<ViewFormProps> = (props) => {
           <FormBody isView={true} values={values} />
         ) : null}
       </DrawerForm>
+
+      <TransferRecordModal transferRecordModalVisible={transferRecordModalVisible} handleTransferRecordModalVisible={setTransferRecordModalVisible} staffId={values?.id}/>
     </>
   );
 };

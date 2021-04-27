@@ -49,13 +49,14 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
       visible={updateModalVisible}
       onVisibleChange={handleUpdateModalVisible}
       initialValues={values}
+      formRef={formRef}
       modalProps={{
         onCancel,
         destroyOnClose: true,
       }}
       onFinish={handleUpdate}
     >
-      <FormBody isEdit={true} formRef={formRef} />
+      <FormBody isEdit formRef={formRef} />
     </ModalForm>
   );
 };

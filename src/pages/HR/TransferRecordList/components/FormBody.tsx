@@ -14,11 +14,12 @@ import type {DataNode} from "rc-tree/lib/interface";
 
 interface FormProps {
   isEdit?: boolean;
+  staffId?: number;
   formRef?: MutableRefObject<FormInstance | any>;
 }
 
 const FormBody: React.FC<FormProps> = (props) => {
-  const { isEdit, formRef } = props;
+  const { isEdit, staffId, formRef } = props;
 
   const [staffSelectVisible, setStaffSelectVisible] = useState<boolean>(false);
 
@@ -51,30 +52,41 @@ const FormBody: React.FC<FormProps> = (props) => {
         <ProFormText name="id" label="调动记录id" hidden={true} />
         <ProFormText name="staffId" label="员工id" hidden={true} />
         <Col xl={12} lg={12} md={24}>
-          <ProForm.Item label="员工编号" name="staffCode">
-            <Input.Group compact>
-              <Input
-                style={{ width: '60%' }}
-                placeholder="请选择员工"
-                disabled
-              />
-              <Button
-                type="primary"
-                icon={<ContactsOutlined />}
-                style={{ width: '40%' }}
-                onClick={() => setStaffSelectVisible(true)}
-              >
-                选择员工
-              </Button>
-            </Input.Group>
-          </ProForm.Item>
+          {staffId ? (
+            <ProForm.Item label="员工编号">
+              <Input.Group compact>
+                <ProForm.Item name="staffCode">
+                  <Input
+                    placeholder="请选择员工"
+                    name="staffCode"
+                    disabled
+                  />
+                </ProForm.Item>
+                <Button
+                  type="primary"
+                  icon={<ContactsOutlined />}
+                  onClick={() => setStaffSelectVisible(true)}
+                >
+                  选择员工
+                </Button>
+              </Input.Group>
+            </ProForm.Item>
+          ) : (
+            <ProFormText
+              width="md"
+              name="staffCode"
+              label="员工编号"
+              placeholder="员工编号"
+              disabled
+            />
+          )}
         </Col>
         <Col xl={12} lg={12} md={24}>
           <ProFormText
             width="md"
             name="staffName"
             label="员工姓名"
-            placeholder="请选择员工"
+            placeholder="员工姓名"
             disabled
           />
         </Col>
@@ -193,6 +205,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             width="md"
             name="effectiveDate"
             label="生效日期"
+            rules={[{ required: true, message: '请选择生效日期' }]}
           />
         </Col>
       </Row>
@@ -202,6 +215,16 @@ const FormBody: React.FC<FormProps> = (props) => {
         handleStaffSelectVisible={setStaffSelectVisible}
         onSelectAction={(selectValue) => {
           const currentFormValue = formRef?.current.getFieldsValue();
+          let addFields = {};
+          if (!isEdit) {
+            addFields = {
+              postDepId: selectValue.depId,
+              postDuty: selectValue.duty,
+              postPost: selectValue.post,
+              postPostType: selectValue.postType,
+              postPostLevel: selectValue.postLevel,
+            }
+          }
           formRef?.current.setFieldsValue({
             ...currentFormValue,
             staffId: selectValue.id,
@@ -211,7 +234,8 @@ const FormBody: React.FC<FormProps> = (props) => {
             preDuty: selectValue.duty,
             prePost: selectValue.post,
             prePostType: selectValue.postType,
-            prePostLevel: selectValue.postLevel
+            prePostLevel: selectValue.postLevel,
+            ...addFields
           })
           setStaffSelectVisible(false);
         }}

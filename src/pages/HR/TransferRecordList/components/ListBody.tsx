@@ -7,7 +7,7 @@ import ProTable from '@ant-design/pro-table';
 import CreateForm from './CreateForm';
 import UpdateForm from './UpdateForm';
 import { getTransferRecordPage, getTransferRecordById, deleteTransferRecord, batchDeleteTransferRecorde, runTransfer } from '@/services/transfer-record/transfer-record';
-import type { TransferRecordForm, TransferRecordVO } from '@/services/transfer-record/typings';
+import type { TransferRecordVO } from '@/services/transfer-record/typings';
 import {getPageParams, getSortOrder, tableFilter} from "@/utils/common";
 import { getAllDepartments } from "@/services/department/department";
 
@@ -255,6 +255,7 @@ const TransferRecordListBody: React.FC<ListBodyProps> = (props) => {
         createModalVisible={createModalVisible}
         handleCreateModalVisible={handleCreateModalVisible}
         tableActionRef={actionRef}
+        staffId={staffId}
       />
       {updateFormValues && Object.keys(updateFormValues).length ? (
         <UpdateForm
@@ -263,6 +264,7 @@ const TransferRecordListBody: React.FC<ListBodyProps> = (props) => {
           values={updateFormValues}
           onCancel={() => setUpdateFormValues({})}
           tableActionRef={actionRef}
+          staffId={staffId}
         />
       ) : null}
     </>

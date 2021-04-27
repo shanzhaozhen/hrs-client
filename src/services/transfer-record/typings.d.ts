@@ -1,12 +1,12 @@
 export type TransferRecordForm = {
   /** 主键ID */
-  id: number;
+  id?: number;
   /** 员工id */
-  staffId: number;
+  staffId?: number;
   /** 变更前部门id */
-  preDepId: number;
+  preDepId?: number;
   /** 变更后部门id */
-  postDepId: number;
+  postDepId?: number;
   /** 变更前职务 */
   preDuty?: string;
   /** 变更后职务 */
