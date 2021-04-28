@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Divider, Input, message, Modal, Popconfirm } from 'antd';
 import { FooterToolbar } from '@ant-design/pro-layout';
@@ -9,7 +9,7 @@ import UpdateForm from './UpdateForm';
 import { getTransferRecordPage, getTransferRecordById, deleteTransferRecord, batchDeleteTransferRecorde, runTransfer } from '@/services/transfer-record/transfer-record';
 import type { TransferRecordVO } from '@/services/transfer-record/typings';
 import {getPageParams, getSortOrder, tableFilter} from "@/utils/common";
-import { getAllDepartments } from "@/services/department/department";
+import { useDepartmentList } from "@/utils/department";
 
 interface ListBodyProps {
   staffId?: number;
@@ -18,24 +18,13 @@ interface ListBodyProps {
 const TransferRecordListBody: React.FC<ListBodyProps> = (props) => {
   const { staffId } = props;
 
-
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [updateFormValues, setUpdateFormValues] = useState<TransferRecordVO>({});
   const actionRef = useRef<ActionType>();
   const [selectedRowsState, setSelectedRows] = useState<TransferRecordVO[]>([]);
 
-  const [departmentList, setDepartmentList] = useState<any>();
-
-  useEffect(() => {
-    getAllDepartments()
-      .then(({ data }) => {
-        setDepartmentList(data || []);
-      })
-      .catch(() => {
-        setDepartmentList([]);
-      });
-  }, []);
+  const departmentList = useDepartmentList();
 
   /**
    * 批量删除调动记录
@@ -78,17 +67,21 @@ const TransferRecordListBody: React.FC<ListBodyProps> = (props) => {
     },
     {
       title: '员工编号',
-      dataIndex: 'staffCode',
+      // dataIndex: 'staffCode',
+      dataIndex: 's.staff_code',
       valueType: 'text',
       sorter: true,
       hideInSearch: true,
+      renderText: (_, record) => record.staffCode,
     },
     {
       title: '员工姓名',
-      dataIndex: 'staffName',
+      // dataIndex: 'staffName',
+      dataIndex: 's.staff_name',
       valueType: 'text',
       sorter: true,
       hideInSearch: true,
+      renderText: (_, record) => record.staffName,
     },
     {
       title: '部门',

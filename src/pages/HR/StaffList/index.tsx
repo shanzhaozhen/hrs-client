@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useRef, useState } from 'react';
 import {Button, Divider, Input, message} from 'antd';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import type {ActionType, ProColumns} from '@ant-design/pro-table';
@@ -10,8 +10,7 @@ import {ExportOutlined, ImportOutlined, PlusOutlined} from "@ant-design/icons";
 import CreateForm from "@/pages/HR/StaffList/components/CreateForm";
 import UpdateForm from "@/pages/HR/StaffList/components/UpdateForm";
 import ViewForm from "@/pages/HR/StaffList/components/ViewForm";
-import {getAllDepartments, getDepartmentTree} from "@/services/department/department";
-import {loopDepartmentData} from "@/utils/department";
+import { useDepartmentList, useDepartmentTree } from "@/utils/department";
 import FormTreeSelect from "@/components/FormTreeSelect";
 
 const StaffList: React.FC = () => {
@@ -22,28 +21,8 @@ const StaffList: React.FC = () => {
   const [updateDrawerVisible, handleUpdateDrawerVisible] = useState<boolean>(false);
   const [selectedRowsState, setSelectedRows] = useState<StaffVO[]>([]);
 
-  const [departmentList, setDepartmentList] = useState<any>();
-  const [departmentTree, setDepartmentTree] = useState<any[]>();
-
-  useEffect(() => {
-    getAllDepartments()
-      .then(({ data }) => {
-        setDepartmentList(data || []);
-      })
-      .catch(() => {
-        setDepartmentList([]);
-      });
-  }, []);
-
-  useEffect(() => {
-    getDepartmentTree()
-      .then(({ data }) => {
-        setDepartmentTree(loopDepartmentData(data || []));
-      })
-      .catch(() => {
-        setDepartmentTree([]);
-      });
-  }, []);
+  const departmentList = useDepartmentList();
+  const departmentTree = useDepartmentTree();
 
   // /**
   //  * 批量删除员工

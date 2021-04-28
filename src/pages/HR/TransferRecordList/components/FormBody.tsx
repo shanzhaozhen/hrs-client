@@ -1,16 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import type { MutableRefObject } from 'react';
 import type { FormInstance } from 'antd';
 import { Button, Col, Input, Row } from 'antd';
 import ProForm, {ProFormDatePicker, ProFormSelect, ProFormText} from '@ant-design/pro-form';
-import {getAllDepartments, getDepartmentTree} from "@/services/department/department";
 import { getDictionaryChildrenByCode } from "@/services/dictionary/dictionary";
 import FormTreeSelect from "@/components/FormTreeSelect";
-import {loopDepartmentData} from "@/utils/department";
+import { useDepartmentList, useDepartmentTree } from "@/utils/department";
 import { ContactsOutlined } from "@ant-design/icons";
 import StaffSelect from "@/pages/HR/StaffList/components/StaffSelect";
-import type {DepartmentVO} from "@/services/department/typings";
-import type {DataNode} from "rc-tree/lib/interface";
 
 interface FormProps {
   isEdit?: boolean;
@@ -23,28 +20,8 @@ const FormBody: React.FC<FormProps> = (props) => {
 
   const [staffSelectVisible, setStaffSelectVisible] = useState<boolean>(false);
 
-  const [departmentList, setDepartmentList] = useState<DepartmentVO[]>([]);
-  const [departmentTree, setDepartmentTree] = useState<DataNode[]>([]);
-
-  useEffect(() => {
-    getAllDepartments()
-      .then(({ data }) => {
-        setDepartmentList(data || []);
-      })
-      .catch(() => {
-        setDepartmentList([]);
-      });
-  }, []);
-
-  useEffect(() => {
-    getDepartmentTree()
-      .then(({ data }) => {
-        setDepartmentTree(loopDepartmentData(data || []));
-      })
-      .catch(() => {
-        setDepartmentTree([]);
-      });
-  }, []);
+  const departmentList = useDepartmentList();
+  const departmentTree = useDepartmentTree();
 
   return (
     <>
@@ -53,6 +30,14 @@ const FormBody: React.FC<FormProps> = (props) => {
         <ProFormText name="staffId" label="员工id" hidden={true} />
         <Col xl={12} lg={12} md={24}>
           {staffId ? (
+            <ProFormText
+              width="md"
+              name="staffCode"
+              label="员工编号"
+              placeholder="员工编号"
+              disabled
+            />
+          ) : (
             <ProForm.Item label="员工编号">
               <Input.Group compact>
                 <ProForm.Item name="staffCode">
@@ -71,14 +56,6 @@ const FormBody: React.FC<FormProps> = (props) => {
                 </Button>
               </Input.Group>
             </ProForm.Item>
-          ) : (
-            <ProFormText
-              width="md"
-              name="staffCode"
-              label="员工编号"
-              placeholder="员工编号"
-              disabled
-            />
           )}
         </Col>
         <Col xl={12} lg={12} md={24}>

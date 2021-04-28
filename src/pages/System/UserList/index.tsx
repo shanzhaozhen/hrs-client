@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, { useState, useRef } from 'react';
 import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, message, Input, Space, Tag, Modal, Divider, Popconfirm } from 'antd';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
@@ -10,7 +10,7 @@ import { batchDeleteUser, deleteUser, getUserById, getUserPage } from '@/service
 import type { UserVO } from '@/services/user/typings';
 import type { UserForm } from '@/services/user/typings';
 import {getSortOrder, tableFilter} from "@/utils/common";
-import { getAllDepartments } from "@/services/department/department";
+import {useDepartmentList} from "@/utils/department";
 
 const UserList: React.FC = () => {
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
@@ -19,17 +19,7 @@ const UserList: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const [selectedRowsState, setSelectedRows] = useState<UserVO[]>([]);
 
-  const [departmentList, setDepartmentList] = useState<any>();
-
-  useEffect(() => {
-    getAllDepartments()
-      .then(({ data }) => {
-        setDepartmentList(data || []);
-      })
-      .catch(() => {
-        setDepartmentList([]);
-      });
-  }, []);
+  const departmentList= useDepartmentList();
 
   /**
    *  删除用户

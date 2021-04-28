@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useState } from 'react';
 import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import {Button, Divider, Drawer, Input, message, Popconfirm} from 'antd';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
@@ -15,7 +15,7 @@ import type {Page, ResultBody} from "@/services/common/typings";
 import type { PageParams } from "@/services/common/typings";
 import type { SortOrder } from "antd/lib/table/interface";
 import { getPageParams, tableFilter } from "@/utils/common";
-import {getAllDepartments} from "@/services/department/department";
+import {useDepartmentList} from "@/utils/department";
 
 interface UserRelateListProps {
   userRelateListVisible: boolean;
@@ -46,21 +46,8 @@ const UserRelateList: React.FC<UserRelateListProps> = (props) => {
   const [checkBoxUserVisible, handleCheckBoxUserVisible] = useState<boolean>(false);
   const [updateFormValues, setUpdateFormValues] = useState<UserForm>({});
   const [selectedRowsState, setSelectedRows] = useState<UserVO[]>([]);
-  const [departmentList, setDepartmentList] = useState<any>();
 
-  useEffect(() => {
-    getAllDepartments()
-      .then((res) => {
-        if (res) {
-          setDepartmentList(res);
-        } else {
-          setDepartmentList([]);
-        }
-      })
-      .catch(() => {
-        setDepartmentList([]);
-      });
-  }, []);
+  const departmentList = useDepartmentList();
 
   const columns: ProColumns<UserVO>[] = [
     {

@@ -1,14 +1,13 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useRef } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
 import { Input, message, Modal } from 'antd';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { getPageParams, getSortOrder, tableFilter } from "@/utils/common";
-import { getAllDepartments, getDepartmentTree } from "@/services/department/department";
 import type { StaffVO } from "@/services/staff/typings";
 import { getStaffPage } from "@/services/staff/staff";
 import FormTreeSelect from "@/components/FormTreeSelect";
-import { loopDepartmentData } from "@/utils/department";
+import { useDepartmentList, useDepartmentTree } from "@/utils/department";
 
 interface StaffSelectProps {
   staffSelectVisible: boolean;
@@ -20,28 +19,9 @@ const StaffSelect: React.FC<StaffSelectProps> = (props) => {
   const { staffSelectVisible, handleStaffSelectVisible, onSelectAction } = props;
 
   const actionRef = useRef<ActionType>();
-  const [departmentList, setDepartmentList] = useState<any>();
-  const [departmentTree, setDepartmentTree] = useState<any[]>();
 
-  useEffect(() => {
-    getAllDepartments()
-      .then(({ data }) => {
-        setDepartmentList(data || []);
-      })
-      .catch(() => {
-        setDepartmentList([]);
-      });
-  }, []);
-
-  useEffect(() => {
-    getDepartmentTree()
-      .then(({ data }) => {
-        setDepartmentTree(loopDepartmentData(data || []));
-      })
-      .catch(() => {
-        setDepartmentTree([]);
-      });
-  }, []);
+  const departmentList= useDepartmentList();
+  const departmentTree= useDepartmentTree();
 
   const columns: ProColumns<StaffVO>[] = [
     {

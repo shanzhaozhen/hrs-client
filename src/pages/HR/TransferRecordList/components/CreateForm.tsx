@@ -19,34 +19,29 @@ interface CreateFormProps {
 const CreateForm: React.FC<CreateFormProps> = (props) => {
   const { createModalVisible, handleCreateModalVisible, tableActionRef, staffId } = props;
 
-  const [loading, setLoading] = useState<boolean>(true);
   const [transferRecordInitialValues, setTransferRecordInitialValues] = useState<TransferRecordVO>({});
 
   useEffect(() => {
-    try {
-      if (staffId) {
-        getStaffById(staffId).then(({ data }) => {
-          setTransferRecordInitialValues(data ? {
-            ...data,
-            staffId: data.id,
-            staffCode: data.staffCode,
-            staffName: data.staffName,
-            preDepId: data.depId,
-            preDuty: data.duty,
-            prePost: data.post,
-            prePostType: data.postType,
-            prePostLevel: data.postLevel,
-            postDepId: data.depId,
-            postDuty: data.duty,
-            postPost: data.post,
-            postPostType: data.postType,
-            postPostLevel: data.postLevel,
-          } : {});
-          setLoading(false);
-        })
-      }
-    } finally {
-      setLoading(false);
+    if (staffId) {
+      getStaffById(staffId).then(({ data }) => {
+        setTransferRecordInitialValues(data ? {
+          ...data,
+          id: undefined,
+          staffId: data.id,
+          staffCode: data.staffCode,
+          staffName: data.staffName,
+          preDepId: data.depId,
+          preDuty: data.duty,
+          prePost: data.post,
+          prePostType: data.postType,
+          prePostLevel: data.postLevel,
+          postDepId: data.depId,
+          postDuty: data.duty,
+          postPost: data.post,
+          postPostType: data.postType,
+          postPostLevel: data.postLevel,
+        } : {});
+      })
     }
   }, [])
 
@@ -73,23 +68,22 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
 
   return (
     <>
-      {
-        !loading &&
-        <ModalForm
-          width={748}
-          title="新建调动"
-          visible={createModalVisible}
-          onVisibleChange={handleCreateModalVisible}
-          formRef={formRef}
-          initialValues={transferRecordInitialValues}
-          modalProps={{
-            destroyOnClose: true,
-          }}
-          onFinish={handleAdd}
-        >
+      <ModalForm
+        width={748}
+        title="新建调动"
+        visible={createModalVisible}
+        onVisibleChange={handleCreateModalVisible}
+        formRef={formRef}
+        initialValues={transferRecordInitialValues}
+        modalProps={{
+          destroyOnClose: true,
+        }}
+        onFinish={handleAdd}
+      >
+        {!staffId || transferRecordInitialValues && Object.keys(transferRecordInitialValues).length ? (
           <FormBody staffId={staffId} formRef={formRef} />
-        </ModalForm>
-      }
+        ) : null}
+      </ModalForm>
     </>
   );
 };

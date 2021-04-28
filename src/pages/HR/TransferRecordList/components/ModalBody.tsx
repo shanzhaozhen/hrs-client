@@ -19,6 +19,7 @@ const TransferRecordModal: React.FC<TransferRecordProps> = (props) => {
     <Modal
       title="调动记录"
       width={980}
+      destroyOnClose
       visible={transferRecordModalVisible}
       onCancel={() => {
         handleTransferRecordModalVisible(false);

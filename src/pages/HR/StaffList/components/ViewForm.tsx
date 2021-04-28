@@ -29,7 +29,9 @@ const ViewForm: React.FC<ViewFormProps> = (props) => {
             <Button
               type="primary"
               icon={<HistoryOutlined />}
-              onClick={() => setTransferRecordModalVisible(true)}
+              onClick={() => {
+                setTransferRecordModalVisible(true);
+              }}
             >
               调动记录
             </Button>
@@ -60,10 +62,13 @@ const ViewForm: React.FC<ViewFormProps> = (props) => {
         ) : null}
       </DrawerForm>
 
-      <TransferRecordModal transferRecordModalVisible={transferRecordModalVisible} handleTransferRecordModalVisible={setTransferRecordModalVisible} staffId={values?.id}/>
+      <TransferRecordModal
+        transferRecordModalVisible={transferRecordModalVisible}
+        handleTransferRecordModalVisible={setTransferRecordModalVisible}
+        staffId={values?.id}
+      />
     </>
   );
 };
-
 
 export default ViewForm;

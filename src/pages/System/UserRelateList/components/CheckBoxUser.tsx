@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useRef, useState } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
 import { Drawer, Input, message, Modal, Space } from 'antd';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
@@ -8,7 +8,7 @@ import { getUserPage } from '@/services/user/user';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import {getPageParams, getSortOrder, tableFilter} from "@/utils/common";
 import type { RoleVO } from "@/services/role/typings";
-import {getAllDepartments} from "@/services/department/department";
+import { useDepartmentList } from "@/utils/department";
 
 interface CheckBoxUserProps {
   checkBoxUserVisible: boolean;
@@ -23,17 +23,8 @@ const CheckBoxUser: React.FC<CheckBoxUserProps> = (props) => {
   const actionRef = useRef<ActionType>();
   const [currentRow, setCurrentRow] = useState<UserVO>();
   const [selectedRowsState, setSelectedRows] = useState<UserVO[]>([]);
-  const [departmentList, setDepartmentList] = useState<any>();
 
-  useEffect(() => {
-    getAllDepartments()
-      .then(({ data }) => {
-        setDepartmentList(data || []);
-      })
-      .catch(() => {
-        setDepartmentList([]);
-      });
-  }, []);
+  const departmentList = useDepartmentList();
 
   const columns: ProColumns<UserVO>[] = [
     {
