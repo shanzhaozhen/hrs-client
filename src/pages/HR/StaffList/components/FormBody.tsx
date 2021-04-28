@@ -12,8 +12,7 @@ import RegionSelect from "@/components/RegionSelect";
 import type { RegionType } from "@/services/region/typings";
 import CustomUpload from "@/components/CustomUpload";
 import {getAllDepartments} from "@/services/department/department";
-import {EditableProTable} from "@ant-design/pro-table";
-import {EducationalExperienceForm} from "@/services/educational-experience/typings";
+import EducationalExperienceList from "@/pages/HR/StaffList/components/EducationalExperienceList";
 
 interface FormProps {
   isView?: boolean;
@@ -69,25 +68,6 @@ const FormBody: React.FC<FormProps> = (props) => {
       })
     }
   }, []);
-
-  // useEffect(() => {
-  //   if (values && values.marriageCertificate) {
-  //     getFileById(values.marriageCertificate).then(res => {
-  //       console.log(res)
-  //     });
-  //   } else {
-  //     setMarriageFile([
-  //       {
-  //         uid: '-1',
-  //         name: 'xxx.png',
-  //         status: 'done',
-  //         size: 121,
-  //         type: '',
-  //         url: 'http://www.baidu.com/xxx.png',
-  //       }
-  //     ])
-  //   }
-  // }, [])
 
   return (
     <>
@@ -499,32 +479,14 @@ const FormBody: React.FC<FormProps> = (props) => {
           </Row>
         </Tabs.TabPane>
         <Tabs.TabPane tab="学习经历" key="2">
-          <ProForm.Item
+           {/* <ProForm.Item
             label="学习经历"
-            name="dataSource"
+            name="educationalExperienceList"
             trigger="onValuesChange"
           >
-            <EditableProTable<EducationalExperienceForm>
-              rowKey="id"
-              toolBarRender={false}
-              columns={columns}
-              recordCreatorProps={{
-                newRecordType: 'dataSource',
-                position: 'top',
-                record: () => ({
-                  id: Date.now(),
-                }),
-              }}
-              editable={{
-                type: 'multiple',
-                editableKeys,
-                onChange: setEditableRowKeys,
-                actionRender: (row, _, dom) => {
-                  return [dom.delete];
-                },
-              }}
-            />
-          </ProForm.Item>
+            <EducationalExperienceList readonly={isView} />
+          </ProForm.Item> */}
+          <EducationalExperienceList readonly={isView} value={values.education} />
         </Tabs.TabPane>
         <Tabs.TabPane tab="工作履历" key="3">
           工作履历

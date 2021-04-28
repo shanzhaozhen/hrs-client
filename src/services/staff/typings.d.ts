@@ -1,4 +1,6 @@
 import type { RegionType } from "@/services/region/typings";
+import type { WorkExperienceVO } from "@/services/work-experience/typings";
+import type { EducationalExperienceVO } from "@/services/educational-experience/typings";
 
 export type StaffForm = {
   /** 主键ID */
@@ -105,17 +107,17 @@ export type StaffForm = {
   homeAddress: RegionType;
   currentAddress: RegionType;
   postalAddress: RegionType;
+  /** 工作履历 */
+  workExperienceList?: WorkExperienceVO[];
+  /** 教育经历 */
+  educationalExperienceList?: EducationalExperienceVO[];
+  /** 证件信息 */
+  certificateList?: CertificateVO[];
+  /** 家庭成员 */
+  familyList?: FamilyVO[];
 };
 
 export type StaffVO = {
-  /** 创建人 */
-  createdBy?: number;
-  /** 创建时间 */
-  createdDate?: string;
-  /** 修改人 */
-  lastModifiedBy?: number;
-  /** 修改时间 */
-  lastModifiedDate?: string;
   /** 主键ID */
   id?: number;
   /** 员工编号 */
@@ -214,4 +216,20 @@ export type StaffVO = {
   contactRelation?: string;
   /** 紧急联系人电话 */
   contactPhone?: string;
+  /** 工作履历 */
+  workExperienceList?: WorkExperienceVO[];
+  /** 教育经历 */
+  educationalExperienceList?: EducationalExperienceVO[];
+  /** 证件信息 */
+  certificateList?: CertificateVO[];
+  /** 家庭成员 */
+  familyList?: FamilyVO[];
+  /** 创建人 */
+  createdBy?: number;
+  /** 创建时间 */
+  createdDate?: string;
+  /** 修改人 */
+  lastModifiedBy?: number;
+  /** 修改时间 */
+  lastModifiedDate?: string;
 };

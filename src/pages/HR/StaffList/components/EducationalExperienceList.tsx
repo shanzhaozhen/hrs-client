@@ -1,67 +1,106 @@
-import React, {useEffect, useState} from 'react';
-import {Col, Row, Tabs} from 'antd';
-import ProForm, {
-  ProFormDatePicker,
-  ProFormDigit,
-  ProFormSelect,
-  ProFormText,
-} from '@ant-design/pro-form';
-import { getDictionaryChildrenByCode } from "@/services/dictionary/dictionary";
-import RegionSelect from "@/components/RegionSelect";
-import type { RegionType } from "@/services/region/typings";
-import CustomUpload from "@/components/CustomUpload";
-import {getAllDepartments} from "@/services/department/department";
-import {EditableProTable} from "@ant-design/pro-table";
-import {EducationalExperienceForm} from "@/services/educational-experience/typings";
+import React, {useState} from 'react';
+import type { ProColumns } from "@ant-design/pro-table";
+import { EditableProTable } from "@ant-design/pro-table";
+import type { EducationalExperienceForm, EducationalExperienceVO } from "@/services/educational-experience/typings";
+import ProForm from "@ant-design/pro-form";
 
 interface EducationalExperienceListProps {
-  values?: any;
+  staffId?: number;
+  readonly?: boolean;
+  value?: EducationalExperienceVO[];
 }
 
 const EducationalExperienceList: React.FC<EducationalExperienceListProps> = (props) => {
-  const { values } = props;
+  const { readonly, value } = props;
+
+  const [editableKeys, setEditableRowKeys] = useState<React.Key[]>(() =>
+    !readonly && value ? value.map((item) => item.id) : []
+  );
+
+  const columns: ProColumns<EducationalExperienceForm>[] = [
+    {
+      title: '学校',
+      dataIndex: 'schoolName',
+      valueType: 'text',
+    },
+    {
+      title: '开始日期',
+      dataIndex: 'startDate',
+      valueType: 'date',
+    },
+    {
+      title: '结束日期',
+      dataIndex: 'endDate',
+      valueType: 'date',
+    },
+    {
+      title: '学历',
+      dataIndex: 'education',
+      valueType: 'text',
+    },
+    {
+      title: '专业',
+      dataIndex: 'major',
+      valueType: 'text',
+    },
+    {
+      title: '学制',
+      dataIndex: 'studyYears',
+      valueType: 'digit',
+    },
+    {
+      title: '是否全日制',
+      dataIndex: 'fullTime',
+      valueType: 'switch',
+    },
+    {
+      title: '证明人姓名',
+      dataIndex: 'witnessName',
+      valueType: 'text',
+    },
+    {
+      title: '证明人电话',
+      dataIndex: 'witnessPhone',
+      valueType: 'text',
+    },
+    {
+      title: '操作',
+      valueType: 'option',
+      hideInTable: readonly,
+    },
+  ];
 
   return (
     <>
-          <ProForm.Item
-            label="学习经历"
-            name="dataSource"
-            trigger="onValuesChange"
-          >
-            <EditableProTable<EducationalExperienceForm>
-              rowKey="id"
-              toolBarRender={false}
-              columns={columns}
-              recordCreatorProps={{
-                newRecordType: 'dataSource',
-                position: 'top',
-                record: () => ({
-                  id: Date.now(),
-                }),
-              }}
-              editable={{
-                type: 'multiple',
-                editableKeys,
-                onChange: setEditableRowKeys,
-                actionRender: (row, _, dom) => {
-                  return [dom.delete];
-                },
-              }}
-            />
-          </ProForm.Item>
-        </Tabs.TabPane>
-        <Tabs.TabPane tab="工作履历" key="3">
-          工作履历
-        </Tabs.TabPane>
-        <Tabs.TabPane tab="职称信息" key="4">
-          Content of Tab Pane 2
-        </Tabs.TabPane>
-        <Tabs.TabPane tab="家庭信息" key="5">
-          家庭信息
-        </Tabs.TabPane>
-      </Tabs>
+      <ProForm.Item
+        label="学习经历"
+        name="educationalExperienceList"
+        trigger="onValuesChange"
+      >
+        <EditableProTable<EducationalExperienceForm>
+          dataSource={value}
+          rowKey="id"
+          toolBarRender={false}
+          columns={columns}
+          recordCreatorProps={readonly ? false : {
+            newRecordType: 'dataSource',
+            position: 'bottom',
+            record: () => ({
+              id: new Date().getTime(),
+            }),
+          }}
+          editable={{
+            type: 'multiple',
+            editableKeys,
+            onChange: setEditableRowKeys,
+            actionRender: (row, _, dom) => {
+              return [dom.delete];
+            },
+          }}
+        />
+      </ProForm.Item>
     </>
   );
 };
 
-export default FormBody;
+export default EducationalExperienceList;

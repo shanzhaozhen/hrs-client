@@ -1,8 +1,8 @@
 export type EducationalExperienceForm = {
   /** 主键ID */
-  id: number;
+  id?: number;
   /** 关联id */
-  pid: number;
+  pid?: number;
   /** 学校 */
   schoolName?: string;
   /** 开始日期 */
@@ -25,7 +25,7 @@ export type EducationalExperienceForm = {
 
 export type EducationalExperienceVO = {
   /** 主键ID */
-  id?: number;
+  id: number;
   /** 关联id */
   pid?: number;
   /** 学校 */
