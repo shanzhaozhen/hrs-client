@@ -1,26 +1,26 @@
 import React, {useState} from 'react';
 import type { ProColumns } from "@ant-design/pro-table";
 import { EditableProTable } from "@ant-design/pro-table";
-import type { EducationalExperienceForm, EducationalExperienceVO } from "@/services/educational-experience/typings";
+import type { CertificateForm, CertificateVO } from "@/services/certificate/typings";
 import ProForm from "@ant-design/pro-form";
 import {getDictionaryChildrenByCode} from "@/services/dictionary/dictionary";
 import type { FormInstance } from "antd";
 
-interface EducationalExperienceListProps {
+interface CertificateListProps {
   staffId?: number;
   readonly?: boolean;
   editForm: FormInstance;
-  value?: (EducationalExperienceVO | EducationalExperienceForm)[];
+  value?: (CertificateVO | CertificateForm)[];
 }
 
-const EducationalExperienceList: React.FC<EducationalExperienceListProps> = (props) => {
+const CertificateList: React.FC<CertificateListProps> = (props) => {
   const { readonly, editForm, value } = props;
 
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>(() =>
     !readonly && value ? value.map((item) => item.id) : []
   );
 
-  const columns: ProColumns<EducationalExperienceForm>[] = [
+  const columns: ProColumns<CertificateForm>[] = [
     {
       title: '学校',
       dataIndex: 'schoolName',
@@ -92,11 +92,11 @@ const EducationalExperienceList: React.FC<EducationalExperienceListProps> = (pro
   return (
     <>
       <ProForm.Item
-        label="学习经历"
-        name="educationalExperienceList"
+        label="证书"
+        name="certificateList"
         trigger="onValuesChange"
       >
-        <EditableProTable<EducationalExperienceForm>
+        <EditableProTable<CertificateForm>
           dataSource={value}
           rowKey="id"
           toolBarRender={false}
@@ -123,4 +123,4 @@ const EducationalExperienceList: React.FC<EducationalExperienceListProps> = (pro
   );
 };
 
-export default EducationalExperienceList;
+export default CertificateList;

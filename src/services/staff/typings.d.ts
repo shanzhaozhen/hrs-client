@@ -1,6 +1,9 @@
 import type { RegionType } from "@/services/region/typings";
-import type { WorkExperienceVO } from "@/services/work-experience/typings";
-import type { EducationalExperienceVO } from "@/services/educational-experience/typings";
+import type {WorkExperienceForm, WorkExperienceVO} from "@/services/work-experience/typings";
+import type {EducationalExperienceForm, EducationalExperienceVO} from "@/services/educational-experience/typings";
+import type { CertificateForm, CertificateVO } from "@/services/certificate/typings";
+import FamilyVO = API.FamilyVO;
+import FamilyForm = API.FamilyForm;
 
 export type StaffForm = {
   /** 主键ID */
@@ -108,13 +111,13 @@ export type StaffForm = {
   currentAddress: RegionType;
   postalAddress: RegionType;
   /** 工作履历 */
-  workExperienceList?: WorkExperienceVO[];
+  workExperienceList?: WorkExperienceForm[];
   /** 教育经历 */
-  educationalExperienceList?: EducationalExperienceVO[];
+  educationalExperienceList?: EducationalExperienceForm[];
   /** 证件信息 */
-  certificateList?: CertificateVO[];
+  certificateList?: CertificateForm[];
   /** 家庭成员 */
-  familyList?: FamilyVO[];
+  familyList?: FamilyForm[];
 };
 
 export type StaffVO = {

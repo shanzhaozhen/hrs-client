@@ -1,6 +1,6 @@
 export type EducationalExperienceForm = {
   /** 主键ID */
-  id?: number;
+  id: number;
   /** 关联id */
   pid?: number;
   /** 学校 */

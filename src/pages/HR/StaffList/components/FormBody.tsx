@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Col, Row, Tabs} from 'antd';
+import {Col, FormInstance, Row, Tabs} from 'antd';
 import ProForm, {
   ProFormDatePicker,
   ProFormDigit,
@@ -11,17 +11,21 @@ import { getDictionaryChildrenByCode } from "@/services/dictionary/dictionary";
 import RegionSelect from "@/components/RegionSelect";
 import type { RegionType } from "@/services/region/typings";
 import CustomUpload from "@/components/CustomUpload";
-import {getAllDepartments} from "@/services/department/department";
+import { getAllDepartments } from "@/services/department/department";
 import EducationalExperienceList from "@/pages/HR/StaffList/components/EducationalExperienceList";
 
 interface FormProps {
   isView?: boolean;
   isEdit?: boolean;
-  values?: StaffVO | StaffForm;
+  values?: StaffForm | StaffVO;
+  workExperienceForm: FormInstance;
+  educationalExperienceForm: FormInstance;
+  certificateForm: FormInstance;
+  familyForm: FormInstance;
 }
 
 const FormBody: React.FC<FormProps> = (props) => {
-  const { isView, isEdit, values } = props;
+  const { isView, isEdit, educationalExperienceForm, values } = props;
 
   // const [birthAddress, setBirthAddress] = useState<string[]>([])
   const [birthAddress, setBirthAddress] = useState<RegionType>({})
@@ -478,18 +482,19 @@ const FormBody: React.FC<FormProps> = (props) => {
             </Col>
           </Row>
         </Tabs.TabPane>
-        <Tabs.TabPane tab="学习经历" key="2">
-           {/* <ProForm.Item
-            label="学习经历"
-            name="educationalExperienceList"
-            trigger="onValuesChange"
-          >
-            <EducationalExperienceList readonly={isView} />
-          </ProForm.Item> */}
-          <EducationalExperienceList readonly={isView} value={values.education} />
+        <Tabs.TabPane tab="工作履历" key="2">
+          <EducationalExperienceList
+            readonly={isView}
+            editForm={educationalExperienceForm}
+            value={values?.educationalExperienceList}
+          />
         </Tabs.TabPane>
-        <Tabs.TabPane tab="工作履历" key="3">
-          工作履历
+        <Tabs.TabPane tab="学习经历" key="3">
+          <EducationalExperienceList
+            readonly={isView}
+            editForm={educationalExperienceForm}
+            value={values?.educationalExperienceList}
+          />
         </Tabs.TabPane>
         <Tabs.TabPane tab="职称信息" key="4">
           Content of Tab Pane 2

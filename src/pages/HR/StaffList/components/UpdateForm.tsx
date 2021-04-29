@@ -4,7 +4,7 @@ import {Button, message} from 'antd';
 import type { StaffForm, StaffVO } from '@/services/staff/typings';
 import FormBody from '@/pages/HR/StaffList/components/FormBody';
 import { updateStaff } from '@/services/staff/staff';
-import { DrawerForm } from '@ant-design/pro-form';
+import ProForm, { DrawerForm } from '@ant-design/pro-form';
 import type { ActionType } from '@ant-design/pro-table';
 import {convertStaffForm} from "@/utils/staff";
 import {HistoryOutlined} from "@ant-design/icons";
@@ -20,6 +20,11 @@ export interface UpdateFormProps {
 const UpdateForm: React.FC<UpdateFormProps> = (props) => {
   const { updateDrawerVisible, handleUpdateDrawerVisible, onCancel, tableActionRef, values } = props;
 
+  const [workExperienceForm] = ProForm.useForm();
+  const [educationalExperienceForm] = ProForm.useForm();
+  const [certificateForm] = ProForm.useForm();
+  const [familyForm] = ProForm.useForm();
+
   /**
    * 修改员工
    * @param fields
@@ -27,6 +32,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
   const handleUpdate = async (fields: StaffForm) => {
     const hide = message.loading('正在修改');
     try {
+      await educationalExperienceForm.validateFields();
       await updateStaff(convertStaffForm(fields));
       hide();
       message.success('修改成功');
@@ -64,7 +70,14 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
         onFinish={handleUpdate}
       >
         {values && Object.keys(values).length ? (
-          <FormBody values={values} isEdit />
+          <FormBody
+            values={values}
+            isEdit
+            workExperienceForm={workExperienceForm}
+            educationalExperienceForm={educationalExperienceForm}
+            certificateForm={certificateForm}
+            familyForm={familyForm}
+          />
         ) : null}
       </DrawerForm>
     </>
