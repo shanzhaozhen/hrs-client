@@ -29,12 +29,8 @@ const FormBody: React.FC<FormProps> = () => {
 
   useEffect(() => {
     getMenuTree()
-      .then((res) => {
-        if (res) {
-          setMenuTree(loopMenuData(res));
-        } else {
-          setMenuTree([]);
-        }
+      .then(({ data }) => {
+        setMenuTree(data ? loopMenuData(data) : []);
       })
       .catch(() => {
         setMenuTree([]);

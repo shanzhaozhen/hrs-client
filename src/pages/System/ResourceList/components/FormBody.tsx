@@ -21,12 +21,8 @@ const FormBody: React.FC<FormProps> = () => {
 
   useEffect(() => {
     getResourceTree()
-      .then((res) => {
-        if (res) {
-          setResourceTree(loopResourceData(res));
-        } else {
-          setResourceTree([]);
-        }
+      .then(({ data }) => {
+        setResourceTree(data ? loopResourceData(data) : []);
       })
       .catch(() => {
         setResourceTree([]);

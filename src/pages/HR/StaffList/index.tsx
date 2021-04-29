@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import {Button, Divider, Input, message} from 'antd';
+import {Button, Divider, FormInstance, Input, message, Modal} from 'antd';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import type {ActionType, ProColumns} from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
@@ -12,17 +12,22 @@ import UpdateForm from "@/pages/HR/StaffList/components/UpdateForm";
 import ViewForm from "@/pages/HR/StaffList/components/ViewForm";
 import { useDepartmentList, useDepartmentTree } from "@/utils/department";
 import FormTreeSelect from "@/components/FormTreeSelect";
+import {ProFormUploadDragger} from "@ant-design/pro-form";
 
 const StaffList: React.FC = () => {
   const actionRef = useRef<ActionType>();
+  const formRef = useRef<FormInstance>();
+
   const [updateFormValues, setUpdateFormValues] = useState<StaffVO | StaffForm>({});
   const [viewDrawerVisible, handleViewDrawerVisible] = useState<boolean>(false);
   const [createDrawerVisible, handleCreateDrawerVisible] = useState<boolean>(false);
   const [updateDrawerVisible, handleUpdateDrawerVisible] = useState<boolean>(false);
   const [selectedRowsState, setSelectedRows] = useState<StaffVO[]>([]);
+  const [importModalVisible, setImportModalVisible] = useState<boolean>(false);
 
   const departmentList = useDepartmentList();
   const departmentTree = useDepartmentTree();
+
 
   // /**
   //  * 批量删除员工
@@ -237,6 +242,7 @@ const StaffList: React.FC = () => {
       <ProTable<StaffVO>
         headerTitle="员工"
         actionRef={actionRef}
+        formRef={formRef}
         rowKey="id"
         search={{
           labelWidth: 120,
@@ -245,10 +251,15 @@ const StaffList: React.FC = () => {
           <Button type="primary" onClick={() => handleCreateDrawerVisible(true)}>
             <PlusOutlined /> 新建
           </Button>,
-          <Button type="primary">
+          <Button type="primary" onClick={() => setImportModalVisible(true)}>
             <ImportOutlined /> 导入
           </Button>,
-          <Button type="primary">
+          <Button
+            type="primary"
+            onClick={() => {
+              console.log(formRef.current?.getFieldsValue());
+            }}
+          >
             <ExportOutlined /> 导出
           </Button>,
         ]}
@@ -298,6 +309,27 @@ const StaffList: React.FC = () => {
         onCancel={() => setUpdateFormValues({})}
         tableActionRef={actionRef}
       />
+
+      <Modal
+        title="导入"
+        visible={importModalVisible}
+        onCancel={() => setImportModalVisible(false)}
+        footer={null}
+      >
+        <div>导入模板请
+          <a href="#" onClick={() => {
+            console.log('dd')
+          }}>
+            点击
+          </a>
+          下载</div>
+        <ProFormUploadDragger
+          description="导入员工"
+          fieldProps={{
+            maxCount: 1
+          }}
+        />
+      </Modal>
 
     </PageContainer>
   );

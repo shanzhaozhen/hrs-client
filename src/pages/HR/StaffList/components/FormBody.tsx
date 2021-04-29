@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import type { FormInstance } from 'antd';
-import {Col, Form, Row, Tabs} from 'antd';
+import {Col, Row, Tabs} from 'antd';
 import ProForm, {
   ProFormDatePicker,
   ProFormDigit,
@@ -16,8 +16,7 @@ import EducationalExperienceList from "@/pages/HR/StaffList/components/Education
 import WorkExperienceList from "@/pages/HR/StaffList/components/WorkExperienceList";
 import CertificateList from "@/pages/HR/StaffList/components/CertificateList";
 import FamilyList from "@/pages/HR/StaffList/components/FamilyList";
-import FormTreeSelect from "@/components/FormTreeSelect";
-import {useDepartmentTree} from "@/utils/department";
+import {getAllDepartments} from "@/services/department/department";
 
 interface FormProps {
   isView?: boolean;
@@ -38,8 +37,6 @@ const FormBody: React.FC<FormProps> = (props) => {
   const [homeAddress, setHomeAddress] = useState<RegionType>({})
   const [currentAddress, setCurrentAddress] = useState<RegionType>({})
   const [postalAddress, setPostalAddress] = useState<RegionType>({})
-
-  const departmentTree = useDepartmentTree();
 
   useEffect(() => {
     if (values) {
@@ -103,13 +100,21 @@ const FormBody: React.FC<FormProps> = (props) => {
               />
             </Col>
             <Col xl={7} lg={12} md={24}>
-              <Form.Item
+              <ProFormSelect
+                width="sm"
                 name="depId"
                 label="部门"
-                rules={[{ required: false, message: '请选择所属部门' }]}
-              >
-                <FormTreeSelect treeData={departmentTree} placeholder="请选择所属部门" disabled={isView} />
-              </Form.Item>
+                rules={[{ required: false, message: '请选择部门' }]}
+                request={async () => {
+                  const { data } = await getAllDepartments();
+                  return data ? data.map(item => ({
+                    value: item.id,
+                    label: item.name
+                  })) : []
+                }}
+                readonly={isView}
+                disabled={isEdit}
+              />
             </Col>
             <Col xl={7} lg={12} md={24}>
               <ProFormSelect
