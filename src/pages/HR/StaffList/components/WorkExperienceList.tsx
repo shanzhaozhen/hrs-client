@@ -3,11 +3,9 @@ import type { ProColumns } from "@ant-design/pro-table";
 import { EditableProTable } from "@ant-design/pro-table";
 import type { WorkExperienceForm, WorkExperienceVO } from "@/services/work-experience/typings";
 import ProForm from "@ant-design/pro-form";
-import {getDictionaryChildrenByCode} from "@/services/dictionary/dictionary";
 import type { FormInstance } from "antd";
 
 interface WorkExperienceListProps {
-  staffId?: number;
   readonly?: boolean;
   editForm: FormInstance;
   value?: (WorkExperienceVO | WorkExperienceForm)[];
@@ -22,8 +20,8 @@ const WorkExperienceList: React.FC<WorkExperienceListProps> = (props) => {
 
   const columns: ProColumns<WorkExperienceForm>[] = [
     {
-      title: '学校',
-      dataIndex: 'schoolName',
+      title: '工作单位',
+      dataIndex: 'workUnit',
       valueType: 'text',
       formItemProps: {
         rules: [
@@ -45,32 +43,19 @@ const WorkExperienceList: React.FC<WorkExperienceListProps> = (props) => {
       valueType: 'date',
     },
     {
-      title: '学历',
-      dataIndex: 'education',
-      valueType: 'text',
-      request: async ({ keyWords }) => {
-        const { data } = await getDictionaryChildrenByCode('Education', keyWords);
-        return data ? data.map(item => ({
-          value: item.name,
-          label: item.name
-        })) : []
-      }
-    },
-    {
-      title: '专业',
-      dataIndex: 'major',
+      title: '职务/岗位',
+      dataIndex: 'duty',
       valueType: 'text',
     },
     {
-      title: '学制',
-      dataIndex: 'studyYears',
+      title: '单位性质',
+      dataIndex: 'unitType',
+      valueType: 'text',
+    },
+    {
+      title: '月薪',
+      dataIndex: 'salary',
       valueType: 'digit',
-    },
-    {
-      title: '是否全日制',
-      dataIndex: 'fullTime',
-      valueType: 'switch',
-      render: (_, {fullTime}) => (fullTime ? '是' : '否'),
     },
     {
       title: '证明人姓名',

@@ -7,7 +7,6 @@ import {getDictionaryChildrenByCode} from "@/services/dictionary/dictionary";
 import type { FormInstance } from "antd";
 
 interface FamilyListProps {
-  staffId?: number;
   readonly?: boolean;
   editForm: FormInstance;
   value?: (FamilyVO | FamilyForm)[];
@@ -22,8 +21,8 @@ const FamilyList: React.FC<FamilyListProps> = (props) => {
 
   const columns: ProColumns<FamilyForm>[] = [
     {
-      title: '学校',
-      dataIndex: 'schoolName',
+      title: '姓名',
+      dataIndex: 'name',
       valueType: 'text',
       formItemProps: {
         rules: [
@@ -35,21 +34,19 @@ const FamilyList: React.FC<FamilyListProps> = (props) => {
       },
     },
     {
-      title: '开始日期',
-      dataIndex: 'startDate',
-      valueType: 'date',
-    },
-    {
-      title: '结束日期',
-      dataIndex: 'endDate',
-      valueType: 'date',
-    },
-    {
-      title: '学历',
-      dataIndex: 'education',
+      title: '关系',
+      dataIndex: 'relation',
       valueType: 'text',
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: '此项为必填项',
+          },
+        ],
+      },
       request: async ({ keyWords }) => {
-        const { data } = await getDictionaryChildrenByCode('Education', keyWords);
+        const { data } = await getDictionaryChildrenByCode('Relation', keyWords);
         return data ? data.map(item => ({
           value: item.name,
           label: item.name
@@ -57,29 +54,40 @@ const FamilyList: React.FC<FamilyListProps> = (props) => {
       }
     },
     {
-      title: '专业',
-      dataIndex: 'major',
+      title: '出生日期',
+      dataIndex: 'birthday',
+      valueType: 'date',
+    },
+    {
+      title: '政治面貌',
+      dataIndex: 'politics',
+      valueType: 'text',
+      request: async ({ keyWords }) => {
+        const { data } = await getDictionaryChildrenByCode('Politics', keyWords);
+        return data ? data.map(item => ({
+          value: item.name,
+          label: item.name
+        })) : []
+      }
+    },
+    {
+      title: '工作单位',
+      dataIndex: 'workUnit',
       valueType: 'text',
     },
     {
-      title: '学制',
-      dataIndex: 'studyYears',
-      valueType: 'digit',
-    },
-    {
-      title: '是否全日制',
-      dataIndex: 'fullTime',
-      valueType: 'switch',
-      render: (_, {fullTime}) => (fullTime ? '是' : '否'),
-    },
-    {
-      title: '证明人姓名',
-      dataIndex: 'witnessName',
+      title: '职务',
+      dataIndex: 'duty',
       valueType: 'text',
     },
     {
-      title: '证明人电话',
-      dataIndex: 'witnessPhone',
+      title: '移动电话',
+      dataIndex: 'mobilePhone',
+      valueType: 'text',
+    },
+    {
+      title: '固话',
+      dataIndex: 'landlinePhone',
       valueType: 'text',
     },
     {

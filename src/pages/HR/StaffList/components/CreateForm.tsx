@@ -4,7 +4,7 @@ import { message } from 'antd';
 import { addStaff } from '@/services/staff/staff';
 import type { StaffForm } from '@/services/staff/typings';
 import FormBody from '@/pages/HR/StaffList/components/FormBody';
-import { DrawerForm } from '@ant-design/pro-form';
+import ProForm, { DrawerForm } from '@ant-design/pro-form';
 import type { ActionType } from '@ant-design/pro-table';
 import { convertStaffForm } from "@/utils/staff";
 
@@ -16,6 +16,11 @@ interface CreateFormProps {
 
 const CreateForm: React.FC<CreateFormProps> = (props) => {
   const { createDrawerVisible, handleCreateDrawerVisible, tableActionRef } = props;
+
+  const [workExperienceForm] = ProForm.useForm();
+  const [educationalExperienceForm] = ProForm.useForm();
+  const [certificateForm] = ProForm.useForm();
+  const [familyForm] = ProForm.useForm();
 
   /**
    * 添加员工
@@ -47,7 +52,12 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
         }}
         onFinish={handleAdd}
       >
-        <FormBody />
+        <FormBody
+          workExperienceForm={workExperienceForm}
+          educationalExperienceForm={educationalExperienceForm}
+          certificateForm={certificateForm}
+          familyForm={familyForm}
+        />
       </DrawerForm>
     </>
   );

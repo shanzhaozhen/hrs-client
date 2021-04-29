@@ -1,34 +1,16 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {Col, Form, Row} from 'antd';
 import {ProFormDigit, ProFormText} from '@ant-design/pro-form';
-import { getDepartmentTree } from "@/services/department/department";
-import type { DepartmentVO } from "@/services/department/typings";
 import FormTreeSelect from "@/components/FormTreeSelect";
+import {useDepartmentTree} from "@/utils/department";
 
 interface FormProps {
   isEdit?: boolean;
 }
 
-const loopDepartmentData = (departmentList: DepartmentVO[]): any =>
-  departmentList.map(({ id, name, children }) => ({
-    value: id,
-    title: name,
-    children: children && loopDepartmentData(children),
-  }));
-
 const FormBody: React.FC<FormProps> = () => {
 
-  const [departmentTree, setDepartmentTree] = useState<[]>();
-
-  useEffect(() => {
-    getDepartmentTree()
-      .then(({ data }) => {
-        setDepartmentTree(loopDepartmentData(data || []));
-      })
-      .catch(() => {
-        setDepartmentTree([]);
-      });
-  }, []);
+  const departmentTree = useDepartmentTree();
 
   return (
     <>

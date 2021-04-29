@@ -9,11 +9,12 @@ interface FormTreeSelectProps {
   loadData?: (dataNode: LegacyDataNode) => Promise<unknown>;
   treeData?: DataNode[];
   onChange?: (value: any) => void;
+  disabled?: boolean;
   value?: any;
 }
 
 const FormTreeSelect: React.FC<FormTreeSelectProps> = (props) => {
-  const { placeholder, loadData, treeData, onChange, value } = props;
+  const { placeholder, loadData, treeData, onChange, disabled, value } = props;
 
   const triggerChange = (changeValue: number[]) => {
     onChange?.(changeValue);
@@ -30,6 +31,8 @@ const FormTreeSelect: React.FC<FormTreeSelectProps> = (props) => {
       treeData={treeData}
       onChange={triggerChange}
       placeholder={placeholder}
+      aria-readonly={true}
+      disabled={disabled}
     />
   );
 };

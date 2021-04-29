@@ -1,11 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {Col, Form, Row} from 'antd';
 import { ProFormSelect, ProFormSwitch, ProFormText } from '@ant-design/pro-form';
 import { getAllRoles } from '@/services/role/role';
 import type { RoleVO } from '@/services/role/typings';
-import { getDepartmentTree } from "@/services/department/department";
 import FormTreeSelect from "@/components/FormTreeSelect";
-import { loopDepartmentData } from "@/utils/department";
+import { useDepartmentTree } from "@/utils/department";
 
 interface FormProps {
   isEdit?: boolean;
@@ -15,17 +14,7 @@ interface FormProps {
 const FormBody: React.FC<FormProps> = (props) => {
   const { isEdit } = props;
 
-  const [departmentTree, setDepartmentTree] = useState<[]>();
-
-  useEffect(() => {
-    getDepartmentTree()
-      .then(({ data }) => {
-        setDepartmentTree(loopDepartmentData(data || []));
-      })
-      .catch(() => {
-        setDepartmentTree([]);
-      });
-  }, []);
+  const departmentTree = useDepartmentTree();
 
   return (
     <>

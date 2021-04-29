@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {Col, FormInstance, Row, Tabs} from 'antd';
+import type { FormInstance } from 'antd';
+import {Col, Form, Row, Tabs} from 'antd';
 import ProForm, {
   ProFormDatePicker,
   ProFormDigit,
@@ -11,8 +12,12 @@ import { getDictionaryChildrenByCode } from "@/services/dictionary/dictionary";
 import RegionSelect from "@/components/RegionSelect";
 import type { RegionType } from "@/services/region/typings";
 import CustomUpload from "@/components/CustomUpload";
-import { getAllDepartments } from "@/services/department/department";
 import EducationalExperienceList from "@/pages/HR/StaffList/components/EducationalExperienceList";
+import WorkExperienceList from "@/pages/HR/StaffList/components/WorkExperienceList";
+import CertificateList from "@/pages/HR/StaffList/components/CertificateList";
+import FamilyList from "@/pages/HR/StaffList/components/FamilyList";
+import FormTreeSelect from "@/components/FormTreeSelect";
+import {useDepartmentTree} from "@/utils/department";
 
 interface FormProps {
   isView?: boolean;
@@ -25,16 +30,16 @@ interface FormProps {
 }
 
 const FormBody: React.FC<FormProps> = (props) => {
-  const { isView, isEdit, educationalExperienceForm, values } = props;
+  const { isView, isEdit, values } = props;
 
-  // const [birthAddress, setBirthAddress] = useState<string[]>([])
   const [birthAddress, setBirthAddress] = useState<RegionType>({})
   const [nativeAddress, setNativeAddress] = useState<RegionType>({})
   const [registeredAddress, setRegisteredAddress] = useState<RegionType>({})
   const [homeAddress, setHomeAddress] = useState<RegionType>({})
   const [currentAddress, setCurrentAddress] = useState<RegionType>({})
   const [postalAddress, setPostalAddress] = useState<RegionType>({})
-  // const [marriageFile, setMarriageFile] = useState<any[]>([])
+
+  const departmentTree = useDepartmentTree();
 
   useEffect(() => {
     if (values) {
@@ -97,36 +102,15 @@ const FormBody: React.FC<FormProps> = (props) => {
                 readonly={isView}
               />
             </Col>
-            {/* <Col xl={7} lg={12} md={24}>
-          <ProFormText
-            width="sm"
-            name="depId"
-            label="部门ID"
-            rules={[{ required: false, message: '请输入部门ID' }]}
-          />
-        </Col> */}
             <Col xl={7} lg={12} md={24}>
-              <ProFormSelect
-                width="sm"
+              <Form.Item
                 name="depId"
                 label="部门"
-                rules={[{ required: false, message: '请选择部门' }]}
-                request={async () => {
-                  const { data } = await getAllDepartments();
-                  return data ? data.map(item => ({
-                    value: item.id,
-                    label: item.name
-                  })) : []
-                }}
-                readonly={isView}
-                disabled={isEdit}
-              />
+                rules={[{ required: false, message: '请选择所属部门' }]}
+              >
+                <FormTreeSelect treeData={departmentTree} placeholder="请选择所属部门" disabled={isView} />
+              </Form.Item>
             </Col>
-            {/* <Col xl={7} lg={12} md={24}>
-          <ProForm.Item label="所属部门" name="depId">
-            <DepartmentHistory />
-          </ProForm.Item>
-        </Col> */}
             <Col xl={7} lg={12} md={24}>
               <ProFormSelect
                 width="sm"
@@ -483,24 +467,32 @@ const FormBody: React.FC<FormProps> = (props) => {
           </Row>
         </Tabs.TabPane>
         <Tabs.TabPane tab="工作履历" key="2">
-          <EducationalExperienceList
+          <WorkExperienceList
             readonly={isView}
-            editForm={educationalExperienceForm}
-            value={values?.educationalExperienceList}
+            editForm={props.workExperienceForm}
+            value={values?.workExperienceList}
           />
         </Tabs.TabPane>
         <Tabs.TabPane tab="学习经历" key="3">
           <EducationalExperienceList
             readonly={isView}
-            editForm={educationalExperienceForm}
+            editForm={props.educationalExperienceForm}
             value={values?.educationalExperienceList}
           />
         </Tabs.TabPane>
         <Tabs.TabPane tab="职称信息" key="4">
-          Content of Tab Pane 2
+          <CertificateList
+            readonly={isView}
+            editForm={props.certificateForm}
+            value={values?.certificateList}
+          />
         </Tabs.TabPane>
         <Tabs.TabPane tab="家庭信息" key="5">
-          家庭信息
+          <FamilyList
+            readonly={isView}
+            editForm={props.familyForm}
+            value={values?.familyList}
+          />
         </Tabs.TabPane>
       </Tabs>
     </>

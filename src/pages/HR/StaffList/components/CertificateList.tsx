@@ -3,11 +3,10 @@ import type { ProColumns } from "@ant-design/pro-table";
 import { EditableProTable } from "@ant-design/pro-table";
 import type { CertificateForm, CertificateVO } from "@/services/certificate/typings";
 import ProForm from "@ant-design/pro-form";
-import {getDictionaryChildrenByCode} from "@/services/dictionary/dictionary";
+import { getDictionaryChildrenByCode } from "@/services/dictionary/dictionary";
 import type { FormInstance } from "antd";
 
 interface CertificateListProps {
-  staffId?: number;
   readonly?: boolean;
   editForm: FormInstance;
   value?: (CertificateVO | CertificateForm)[];
@@ -22,8 +21,8 @@ const CertificateList: React.FC<CertificateListProps> = (props) => {
 
   const columns: ProColumns<CertificateForm>[] = [
     {
-      title: '学校',
-      dataIndex: 'schoolName',
+      title: '证件名称',
+      dataIndex: 'name',
       valueType: 'text',
       formItemProps: {
         rules: [
@@ -35,21 +34,11 @@ const CertificateList: React.FC<CertificateListProps> = (props) => {
       },
     },
     {
-      title: '开始日期',
-      dataIndex: 'startDate',
-      valueType: 'date',
-    },
-    {
-      title: '结束日期',
-      dataIndex: 'endDate',
-      valueType: 'date',
-    },
-    {
-      title: '学历',
-      dataIndex: 'education',
-      valueType: 'text',
+      title: '证件类型',
+      dataIndex: 'type',
+      valueType: 'select',
       request: async ({ keyWords }) => {
-        const { data } = await getDictionaryChildrenByCode('Education', keyWords);
+        const { data } = await getDictionaryChildrenByCode('CertificateType', keyWords);
         return data ? data.map(item => ({
           value: item.name,
           label: item.name
@@ -57,29 +46,18 @@ const CertificateList: React.FC<CertificateListProps> = (props) => {
       }
     },
     {
-      title: '专业',
-      dataIndex: 'major',
+      title: '证件号',
+      dataIndex: 'number',
       valueType: 'text',
     },
     {
-      title: '学制',
-      dataIndex: 'studyYears',
-      valueType: 'digit',
+      title: '取证日期',
+      dataIndex: 'obtainDate',
+      valueType: 'date',
     },
     {
-      title: '是否全日制',
-      dataIndex: 'fullTime',
-      valueType: 'switch',
-      render: (_, {fullTime}) => (fullTime ? '是' : '否'),
-    },
-    {
-      title: '证明人姓名',
-      dataIndex: 'witnessName',
-      valueType: 'text',
-    },
-    {
-      title: '证明人电话',
-      dataIndex: 'witnessPhone',
+      title: '发证单位',
+      dataIndex: 'issueUnit',
       valueType: 'text',
     },
     {

@@ -39,4 +39,3 @@ export const useDepartmentTree = () => {
   return departmentTree;
 }
 
-

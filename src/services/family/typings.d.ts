@@ -2,7 +2,7 @@ export type FamilyForm = {
   /** 主键ID */
   id: number;
   /** 关联id */
-  pid: number;
+  pid?: number;
   /** 姓名 */
   name?: string;
   /** 关系 */

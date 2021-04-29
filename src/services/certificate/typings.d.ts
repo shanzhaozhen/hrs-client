@@ -2,7 +2,7 @@ export type CertificateForm = {
   /** 主键ID */
   id: number;
   /** 关联id */
-  pid: number;
+  pid?: number;
   /** 证件名称 */
   name?: string;
   /** 证件类型 */

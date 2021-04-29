@@ -7,7 +7,6 @@ import {getDictionaryChildrenByCode} from "@/services/dictionary/dictionary";
 import type { FormInstance } from "antd";
 
 interface EducationalExperienceListProps {
-  staffId?: number;
   readonly?: boolean;
   editForm: FormInstance;
   value?: (EducationalExperienceVO | EducationalExperienceForm)[];

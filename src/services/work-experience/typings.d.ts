@@ -2,7 +2,7 @@ export type WorkExperienceForm = {
   /** 主键ID */
   id: number;
   /** 关联id */
-  pid: number;
+  pid?: number;
   /** 工作单位 */
   workUnit?: string;
   /** 开始时间 */

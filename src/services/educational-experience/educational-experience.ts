@@ -24,8 +24,7 @@ export async function getEducationalExperienceById(educationalExperienceId: numb
 
 /** 获取教育经历（通过教育经历id） GET /educational-experience/pid/${pid} */
 export async function getEducationalExperienceListByPid(pid: number, options?: Record<string, any>) {
-  return request<ResultBody<Page<EducationalExperienceVO>>>(
-    `/educational-experience/pid/${pid}`,
+  return request<ResultBody<Page<EducationalExperienceVO>>>(`/educational-experience/pid/${pid}`,
     {
       method: 'GET',
       ...(options || {}),
