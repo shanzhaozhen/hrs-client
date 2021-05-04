@@ -14,6 +14,7 @@ import type { CurrentUser, UserInfo } from '@/services/user/typings';
 import type { Role } from '@/services/user/typings';
 import { iconMap } from '@/components/Common/icon';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
+import {stringify} from "querystring";
 
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -184,6 +185,8 @@ const jwtInterceptor = (url: string, options: RequestOptionsInit) => {
 }; */
 
 
+let confirmModalVisible = false;
+
 /** 异常处理程序
  * @see https://beta-pro.ant.design/docs/request-cn
  */
@@ -219,17 +222,28 @@ const errorHandler = async (error: ResponseError) => {
        */
       if (res.code >= 4011 && res.code <= 4016) {
         if (history.location.pathname !== '/login' && history.location.pathname !== '/') {
-          Modal.confirm({
-            title: '登陆超时',
-            icon: <ExclamationCircleOutlined />,
-            content: '您已被登出，可以取消继续留在该页面，或者重新登录。',
-            okText: '重新登陆',
-            cancelText: '取消',
-            onOk() {
-              history.push('/login');
-            },
-            // onCancel() {},
-          });
+          if (!confirmModalVisible) {
+            confirmModalVisible = true;
+            Modal.confirm({
+              title: '登陆超时',
+              icon: <ExclamationCircleOutlined />,
+              content: '您已被登出，可以取消继续留在该页面，或者重新登录。',
+              okText: '重新登陆',
+              cancelText: '取消',
+              onOk() {
+                confirmModalVisible = false;
+                history.replace({
+                  pathname: '/login',
+                  search: stringify({
+                    redirect: history.location.pathname,
+                  }),
+                });
+              },
+              onCancel() {
+                confirmModalVisible = false;
+              },
+            });
+          }
         }
       } else {
         notification.error({

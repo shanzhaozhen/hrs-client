@@ -35,6 +35,10 @@ const RegionSelect: React.FC<RegionSelectProps> = (props) => {
       setRegionOptions(loopRegionOptions(data || []))
     });
 
+    return () => setRegionOptions([]);
+  }, []);
+
+  useEffect(() => {
     if (customValue) {
       if (customValue.province && customValue.city && customValue.area) {
         setSelectValue([customValue.province, customValue.city, customValue.area]);
@@ -42,7 +46,6 @@ const RegionSelect: React.FC<RegionSelectProps> = (props) => {
       // if (hasDetail) {
       //   setInputValue(customValue?.detail)
       // }
-
     }
   }, []);
 

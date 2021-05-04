@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
-import {Button, Divider, FormInstance, Input, message, Modal} from 'antd';
+import type { FormInstance } from 'antd';
+import {Button, Divider, Input, message, Modal} from 'antd';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import type {ActionType, ProColumns} from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
@@ -316,13 +317,17 @@ const StaffList: React.FC = () => {
         onCancel={() => setImportModalVisible(false)}
         footer={null}
       >
-        <div>导入模板请
+        <div style={{
+          textAlign: "right",
+          marginBottom: 15
+        }}>
           <a href="#" onClick={() => {
             console.log('dd')
           }}>
-            点击
+            点击下载
           </a>
-          下载</div>
+          导入模板
+          </div>
         <ProFormUploadDragger
           description="导入员工"
           fieldProps={{
