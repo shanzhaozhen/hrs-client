@@ -6,14 +6,14 @@ import type {ActionType, ProColumns} from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { getStaffById, getStaffPage } from '@/services/staff/staff';
 import type { StaffForm, StaffVO } from '@/services/staff/typings';
-import {getPageParams, getSortOrder, tableFilter} from "@/utils/common";
-import {ExportOutlined, ImportOutlined, PlusOutlined} from "@ant-design/icons";
+import { getPageParams, getSortOrder, tableFilter } from "@/utils/common";
+import { ExportOutlined, ImportOutlined, PlusOutlined } from "@ant-design/icons";
 import CreateForm from "@/pages/HR/StaffList/components/CreateForm";
 import UpdateForm from "@/pages/HR/StaffList/components/UpdateForm";
 import ViewForm from "@/pages/HR/StaffList/components/ViewForm";
 import { useDepartmentList, useDepartmentTree } from "@/utils/department";
 import FormTreeSelect from "@/components/FormTreeSelect";
-import {ProFormUploadDragger} from "@ant-design/pro-form";
+import { ProFormUploadDragger} from "@ant-design/pro-form";
 
 const StaffList: React.FC = () => {
   const actionRef = useRef<ActionType>();
