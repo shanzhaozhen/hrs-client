@@ -2,8 +2,7 @@ import type { RegionType } from "@/services/region/typings";
 import type {WorkExperienceForm, WorkExperienceVO} from "@/services/work-experience/typings";
 import type {EducationalExperienceForm, EducationalExperienceVO} from "@/services/educational-experience/typings";
 import type { CertificateForm, CertificateVO } from "@/services/certificate/typings";
-import FamilyVO = API.FamilyVO;
-import FamilyForm = API.FamilyForm;
+import type { FamilyForm, FamilyVO } from "@/services/family/typings";
 
 export type StaffForm = {
   /** 主键ID */

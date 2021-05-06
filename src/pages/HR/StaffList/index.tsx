@@ -4,7 +4,7 @@ import {Button, Divider, Input, message, Modal} from 'antd';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import type {ActionType, ProColumns} from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { getStaffById, getStaffPage } from '@/services/staff/staff';
+import {exportStaff, getStaffById, getStaffPage } from '@/services/staff/staff';
 import type { StaffForm, StaffVO } from '@/services/staff/typings';
 import { getPageParams, getSortOrder, tableFilter } from "@/utils/common";
 import { ExportOutlined, ImportOutlined, PlusOutlined } from "@ant-design/icons";
@@ -14,6 +14,7 @@ import ViewForm from "@/pages/HR/StaffList/components/ViewForm";
 import { useDepartmentList, useDepartmentTree } from "@/utils/department";
 import FormTreeSelect from "@/components/FormTreeSelect";
 import { ProFormUploadDragger} from "@ant-design/pro-form";
+import {downloadFile} from "@/utils/file";
 
 const StaffList: React.FC = () => {
   const actionRef = useRef<ActionType>();
@@ -258,7 +259,13 @@ const StaffList: React.FC = () => {
           <Button
             type="primary"
             onClick={() => {
-              console.log(formRef.current?.getFieldsValue());
+              const fieldsValue = formRef.current?.getFieldsValue();
+              console.log(fieldsValue);
+              exportStaff({
+                ...fieldsValue
+              }).then(data => {
+                downloadFile(data, `员工-${new Date().getTime()}.xlsx`)
+              })
             }}
           >
             <ExportOutlined /> 导出

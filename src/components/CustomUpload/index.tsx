@@ -5,6 +5,7 @@ import type { UploadListType } from "antd/es/upload/interface";
 import type { UploadFile } from "antd/lib/upload/interface";
 import proxy from "../../../config/proxy";
 import type { UploadChangeParam } from "antd/lib/upload/interface";
+import {downloadFile} from "@/utils/file";
 
 interface CustomUploadProps {
   type: 'ProFormUploadDragger' | 'ProFormUploadButton';
@@ -69,19 +70,7 @@ const CustomUpload: React.FC<CustomUploadProps> = (props) => {
 
   const onPreview = async (file: UploadFile) => {
     download(file.uid).then(data => {
-      const blob = new Blob([data])
-      if ('download' in document.createElement('a')) { // 非IE下载
-        const lnk = document.createElement('a');
-        lnk.download = file.name;
-        lnk.style.display = 'none';
-        lnk.href = URL.createObjectURL(blob);
-        document.body.appendChild(lnk);
-        lnk.click();
-        URL.revokeObjectURL(lnk.href); // 释放URL 对象
-        document.body.removeChild(lnk);
-      } else { // IE10+下载
-        navigator.msSaveBlob(blob, file.name);
-      }
+      downloadFile(data, file.name);
     })
   };
 
@@ -93,12 +82,13 @@ const CustomUpload: React.FC<CustomUploadProps> = (props) => {
         description={props.description}
         max={props.max}
         readonly={props.readonly}
-        action={'/hrs-api/upload'}
+        action="/hrs-api/upload"
         fieldProps={{
           headers: {
             // @ts-ignore
             Authorization: localStorage.getItem('ACCESS_TOKEN'),
           },
+          name: 'files',
           listType: props.listType,
           // defaultFileList,
           fileList,

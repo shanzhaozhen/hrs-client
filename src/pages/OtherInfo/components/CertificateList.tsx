@@ -5,6 +5,7 @@ import type { CertificateForm, CertificateVO } from "@/services/certificate/typi
 import ProForm from "@ant-design/pro-form";
 import { getDictionaryChildrenByCode } from "@/services/dictionary/dictionary";
 import type { FormInstance } from "antd";
+import CustomUpload from "@/components/CustomUpload";
 
 interface CertificateListProps {
   readonly?: boolean;
@@ -59,6 +60,22 @@ const CertificateList: React.FC<CertificateListProps> = (props) => {
       title: '发证单位',
       dataIndex: 'issueUnit',
       valueType: 'text',
+    },
+    {
+      title: '证件附件',
+      dataIndex: 'files',
+      valueType: 'text',
+      renderFormItem: () => {
+        return (
+          <CustomUpload
+            type="ProFormUploadButton"
+            listType="picture"
+            readonly={readonly}
+            maxCount={1}
+            description="仅能保存单文件"
+          />
+        )
+      }
     },
     {
       title: '操作',
