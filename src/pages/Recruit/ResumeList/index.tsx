@@ -6,12 +6,10 @@ import type {ActionType, ProColumns} from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { exportResume, getResumeById, getResumePage } from '@/services/resume/resume';
 import type { ResumeForm, ResumeVO } from '@/services/resume/typings';
-import { getPageParams, getSortOrder, tableFilter } from "@/utils/common";
-import { ExportOutlined, ImportOutlined, PlusOutlined } from "@ant-design/icons";
+import { getPageParams, getSortOrder } from "@/utils/common";
+import { ExportOutlined, ImportOutlined } from "@ant-design/icons";
 import UpdateForm from "@/pages/Recruit/ResumeList/components/UpdateForm";
 import ViewForm from "@/pages/Recruit/ResumeList/components/ViewForm";
-import { useDepartmentList, useDepartmentTree } from "@/utils/department";
-import FormTreeSelect from "@/components/FormTreeSelect";
 import { ProFormUploadDragger } from "@ant-design/pro-form";
 import {downloadFile} from "@/utils/file";
 
@@ -21,13 +19,9 @@ const ResumeList: React.FC = () => {
 
   const [updateFormValues, setUpdateFormValues] = useState<ResumeVO | ResumeForm>({});
   const [viewDrawerVisible, handleViewDrawerVisible] = useState<boolean>(false);
-  const [createDrawerVisible, handleCreateDrawerVisible] = useState<boolean>(false);
   const [updateDrawerVisible, handleUpdateDrawerVisible] = useState<boolean>(false);
   const [selectedRowsState, setSelectedRows] = useState<ResumeVO[]>([]);
   const [importModalVisible, setImportModalVisible] = useState<boolean>(false);
-
-  const departmentList = useDepartmentList();
-  const departmentTree = useDepartmentTree();
 
   const columns: ProColumns<ResumeVO>[] = [
     {
@@ -45,16 +39,6 @@ const ResumeList: React.FC = () => {
       dataIndex: 'index',
       valueType: 'indexBorder',
       width: 48,
-    },
-    {
-      title: '部门',
-      dataIndex: 'depId',
-      valueType: 'select',
-      sorter: true,
-      renderText: (_, record) => (tableFilter(record.depId, departmentList, '未分配')),
-      renderFormItem: () => {
-        return <FormTreeSelect treeData={departmentTree} placeholder="请选择所属部门" />
-      }
     },
     {
       title: '员工编号',
@@ -220,9 +204,6 @@ const ResumeList: React.FC = () => {
           labelWidth: 120,
         }}
         toolBarRender={() => [
-          <Button type="primary" onClick={() => handleCreateDrawerVisible(true)}>
-            <PlusOutlined /> 新建
-          </Button>,
           <Button type="primary" onClick={() => setImportModalVisible(true)}>
             <ImportOutlined /> 导入
           </Button>,
@@ -234,11 +215,20 @@ const ResumeList: React.FC = () => {
               exportResume({
                 ...fieldsValue
               }).then(data => {
-                downloadFile(data, `员工-${new Date().getTime()}.xlsx`)
+                downloadFile(data, `简历-${new Date().getTime()}.xlsx`)
               })
             }}
           >
             <ExportOutlined /> 导出
+          </Button>,
+          <Button
+            type="primary"
+            onClick={() => {
+              const fieldsValue = formRef.current?.getFieldsValue();
+              console.log(fieldsValue);
+            }}
+          >
+            <ExportOutlined /> 打印
           </Button>,
         ]}
         request={async (params, sorter) => {
@@ -274,11 +264,6 @@ const ResumeList: React.FC = () => {
         handleViewDrawerVisible={handleViewDrawerVisible}
         values={updateFormValues}
         onCancel={() => setUpdateFormValues({})}
-      />
-      <CreateForm
-        createDrawerVisible={createDrawerVisible}
-        handleCreateDrawerVisible={handleCreateDrawerVisible}
-        tableActionRef={actionRef}
       />
       <UpdateForm
         updateDrawerVisible={updateDrawerVisible}

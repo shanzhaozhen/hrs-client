@@ -7,7 +7,7 @@ import ProForm, {
   ProFormSelect,
   ProFormText,
 } from '@ant-design/pro-form';
-import type {StaffForm, StaffVO} from "@/services/staff/typings";
+import type {ResumeForm, ResumeVO} from "@/services/resume/typings";
 import { getDictionaryChildrenByCode } from "@/services/dictionary/dictionary";
 import RegionSelect from "@/components/RegionSelect";
 import type { RegionType } from "@/services/region/typings";
@@ -21,7 +21,7 @@ import {getAllDepartments} from "@/services/department/department";
 interface FormProps {
   isView?: boolean;
   isEdit?: boolean;
-  values?: StaffForm | StaffVO;
+  values?: ResumeForm | ResumeVO;
   workExperienceForm: FormInstance;
   educationalExperienceForm: FormInstance;
   certificateForm: FormInstance;
@@ -84,7 +84,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             <Col xl={7} lg={12} md={24}>
               <ProFormText
                 width="sm"
-                name="staffCode"
+                name="resumeCode"
                 label="员工编号"
                 rules={[{ required: true, message: '请输入员工编号' }]}
                 readonly={isView}
@@ -93,7 +93,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             <Col xl={7} lg={12} md={24}>
               <ProFormText
                 width="sm"
-                name="staffName"
+                name="resumeName"
                 label="员工姓名"
                 rules={[{ required: true, message: '请输入员工名称' }]}
                 readonly={isView}

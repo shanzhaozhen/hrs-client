@@ -13,6 +13,8 @@ export type CertificateForm = {
   obtainDate?: string;
   /** 发证单位 */
   issueUnit?: string;
+  /** 附件id */
+  fileId?: number;
 };
 
 export type CertificateVO = {
@@ -30,6 +32,8 @@ export type CertificateVO = {
   obtainDate?: string;
   /** 发证单位 */
   issueUnit?: string;
+  /** 附件id */
+  fileId?: number;
   /** 创建人 */
   createdBy?: number;
   /** 创建人名称 */

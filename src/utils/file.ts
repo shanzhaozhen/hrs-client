@@ -6,7 +6,6 @@ import { message } from "antd";
  * @param fileName
  */
 export const downloadFile = (data: BlobPart, fileName = new Date().getTime().toString()) => {
-  console.log(data)
   if (data) {
     const blob = new Blob([data])
     if ('download' in document.createElement('a')) { // 非IE下载

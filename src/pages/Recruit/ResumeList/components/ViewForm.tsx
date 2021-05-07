@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import FormBody from '@/pages/HR/StaffList/components/FormBody';
+import FormBody from '@/pages/HR/ResumeList/components/FormBody';
 import { DrawerForm } from '@ant-design/pro-form';
-import type {StaffForm, StaffVO} from "@/services/staff/typings";
+import type {ResumeForm, ResumeVO} from "@/services/resume/typings";
 import {HistoryOutlined} from "@ant-design/icons";
 import {Button} from "antd";
 import TransferRecordModal from "@/pages/HR/TransferRecordList/components/ModalBody";
@@ -11,7 +11,7 @@ interface ViewFormProps {
   viewDrawerVisible: boolean;
   handleViewDrawerVisible: Dispatch<SetStateAction<boolean>>;
   onCancel: () => void;
-  values?: StaffVO | StaffForm;
+  values?: ResumeVO | ResumeForm;
 }
 
 const ViewForm: React.FC<ViewFormProps> = (props) => {
@@ -65,7 +65,7 @@ const ViewForm: React.FC<ViewFormProps> = (props) => {
       <TransferRecordModal
         transferRecordModalVisible={transferRecordModalVisible}
         handleTransferRecordModalVisible={setTransferRecordModalVisible}
-        staffId={values?.id}
+        resumeId={values?.id}
       />
     </>
   );

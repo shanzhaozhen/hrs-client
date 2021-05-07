@@ -29,6 +29,10 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
   const handleAdd = async (fields: StaffForm) => {
     const hide = message.loading('正在添加');
     try {
+      await workExperienceForm.validateFields();
+      await educationalExperienceForm.validateFields();
+      await certificateForm.validateFields();
+      await familyForm.validateFields();
       await addStaff(convertStaffForm(fields));
       hide();
       message.success('添加成功');

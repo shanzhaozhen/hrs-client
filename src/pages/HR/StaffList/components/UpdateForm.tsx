@@ -32,7 +32,10 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
   const handleUpdate = async (fields: StaffForm) => {
     const hide = message.loading('正在修改');
     try {
+      await workExperienceForm.validateFields();
       await educationalExperienceForm.validateFields();
+      await certificateForm.validateFields();
+      await familyForm.validateFields();
       await updateStaff(convertStaffForm(fields));
       hide();
       message.success('修改成功');

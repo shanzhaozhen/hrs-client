@@ -1,3 +1,9 @@
+import type { WorkExperienceVO } from "@/services/work-experience/typings";
+import type { EducationalExperienceVO } from "@/services/educational-experience/typings";
+import type { CertificateVO } from "@/services/certificate/typings";
+import type { FamilyVO } from "@/services/family/typings";
+import {RegionType} from "@/services/region/typings";
+
 export type ResumeForm = {
   /** 主键ID */
   id: number;
@@ -8,17 +14,17 @@ export type ResumeForm = {
   /** 民族 */
   nation?: string;
   /** 籍贯(省) */
-  nativeAddressProvince?: string;
+  nativeAddressProvince?: string | number;
   /** 籍贯(市) */
-  nativeAddressCity?: string;
+  nativeAddressCity?: string | number;
   /** 身份证号码 */
   idNumber?: string;
   /** 出生日期 */
   birthday?: string;
   /** 出生地(省) */
-  birthAddressProvince?: string;
+  birthAddressProvince?: string | number;
   /** 出生地(市) */
-  birthAddressCity?: string;
+  birthAddressCity?: string | number;
   /** 政治面貌 */
   politics?: string;
   /** 最高学历 */
@@ -42,37 +48,37 @@ export type ResumeForm = {
   /** 户口类型 */
   householdType?: string;
   /** 户口地址(省) */
-  registeredAddressProvince?: string;
+  registeredAddressProvince?: string | number;
   /** 户口地址(市) */
-  registeredAddressCity?: string;
+  registeredAddressCity?: string | number;
   /** 户口地址(区) */
-  registeredAddressArea?: string;
+  registeredAddressArea?: string | number;
   /** 户口地址(详情) */
-  registeredAddressDetail?: string;
+  registeredAddressDetail?: string | number;
   /** 家庭住址(省) */
-  homeAddressProvince?: string;
+  homeAddressProvince?: string | number;
   /** 家庭住址(市) */
-  homeAddressCity?: string;
+  homeAddressCity?: string | number;
   /** 家庭住址(区) */
-  homeAddressArea?: string;
+  homeAddressArea?: string | number;
   /** 家庭住址(详细) */
-  homeAddressDetail?: string;
+  homeAddressDetail?: string | number;
   /** 现住地址(省) */
-  currentAddressProvince?: string;
+  currentAddressProvince?: string | number;
   /** 现住地址(市) */
-  currentAddressCity?: string;
+  currentAddressCity?: string | number;
   /** 现住地址(区) */
-  currentAddressArea?: string;
+  currentAddressArea?: string | number;
   /** 现住地址(详细) */
-  currentAddressDetail?: string;
+  currentAddressDetail?: string | number;
   /** 邮递地址(省) */
-  postalAddressProvince?: string;
+  postalAddressProvince?: string | number;
   /** 邮递地址(市) */
-  postalAddressCity?: string;
+  postalAddressCity?: string | number;
   /** 邮递地址(区) */
-  postalAddressArea?: string;
+  postalAddressArea?: string | number;
   /** 邮递地址(详细) */
-  postalAddressDetail?: string;
+  postalAddressDetail?: string | number;
   /** 期望月薪 */
   expectedSalary?: string;
   /** 希望服务年限 */
@@ -139,6 +145,20 @@ export type ResumeForm = {
   vehicleType?: string;
   /** 是否愿意加入人才库 */
   willJoin?: boolean;
+  birthAddress: RegionType;
+  nativeAddress: RegionType;
+  registeredAddress: RegionType;
+  homeAddress: RegionType;
+  currentAddress: RegionType;
+  postalAddress: RegionType;
+  /** 工作履历 */
+  workExperienceList?: WorkExperienceVO[];
+  /** 教育经历 */
+  educationalExperienceList?: EducationalExperienceVO[];
+  /** 证件信息 */
+  certificateList?: CertificateVO[];
+  /** 家庭成员 */
+  familyList?: FamilyVO[];
 };
 
 export type ResumeVO = {
@@ -282,6 +302,14 @@ export type ResumeVO = {
   vehicleType?: string;
   /** 是否愿意加入人才库 */
   willJoin?: boolean;
+  /** 工作履历 */
+  workExperienceList?: WorkExperienceVO[];
+  /** 教育经历 */
+  educationalExperienceList?: EducationalExperienceVO[];
+  /** 证件信息 */
+  certificateList?: CertificateVO[];
+  /** 家庭成员 */
+  familyList?: FamilyVO[];
   /** 创建人 */
   createdBy?: number;
   /** 创建时间 */

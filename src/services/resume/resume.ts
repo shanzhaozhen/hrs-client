@@ -66,3 +66,16 @@ export async function deleteResume(resumeId: number, options?: Record<string, an
     ...(options || {}),
   });
 }
+
+/** 文件下载 POST /download */
+export async function exportResume(params: any, options?: Record<string, any>) {
+  return request('/hrs-api/resume/export', {
+    method: 'GET',
+    responseType: 'blob',
+    params: {
+      ...params
+    },
+    ...(options || {}),
+    skipErrorHandler: true
+  });
+}

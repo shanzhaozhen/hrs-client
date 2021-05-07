@@ -78,7 +78,7 @@ const FormBody: React.FC<FormProps> = (props) => {
   return (
     <>
       <Tabs defaultActiveKey="1">
-        <Tabs.TabPane tab="基础信息" key="1">
+        <Tabs.TabPane tab="基础信息" key="1" forceRender >
           <Row gutter={24}>
             <ProFormText name="id" label="员工id" hidden={true} />
             <Col xl={7} lg={12} md={24}>
@@ -471,28 +471,28 @@ const FormBody: React.FC<FormProps> = (props) => {
             </Col>
           </Row>
         </Tabs.TabPane>
-        <Tabs.TabPane tab="工作履历" key="2">
+        <Tabs.TabPane tab="工作履历" key="2" forceRender>
           <WorkExperienceList
             readonly={isView}
             editForm={props.workExperienceForm}
             value={values?.workExperienceList}
           />
         </Tabs.TabPane>
-        <Tabs.TabPane tab="学习经历" key="3">
+        <Tabs.TabPane tab="学习经历" key="3" forceRender>
           <EducationalExperienceList
             readonly={isView}
             editForm={props.educationalExperienceForm}
             value={values?.educationalExperienceList}
           />
         </Tabs.TabPane>
-        <Tabs.TabPane tab="职称信息" key="4">
+        <Tabs.TabPane tab="职称信息" key="4" forceRender>
           <CertificateList
             readonly={isView}
             editForm={props.certificateForm}
             value={values?.certificateList}
           />
         </Tabs.TabPane>
-        <Tabs.TabPane tab="家庭信息" key="5">
+        <Tabs.TabPane tab="家庭信息" key="5" forceRender>
           <FamilyList
             readonly={isView}
             editForm={props.familyForm}

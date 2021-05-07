@@ -63,18 +63,13 @@ const CertificateList: React.FC<CertificateListProps> = (props) => {
     },
     {
       title: '证件附件',
-      dataIndex: 'files',
+      dataIndex: 'fileId',
       valueType: 'text',
-      renderFormItem: () => {
-        return (
-          <CustomUpload
-            type="ProFormUploadButton"
-            listType="picture"
-            readonly={readonly}
-            maxCount={1}
-            description="仅能保存单文件"
-          />
-        )
+      renderFormItem: (_, { recordKey }) => {
+        return <CustomUpload type={"ProFormUploadButton"} value={recordKey} />
+      },
+      render: (fileIdValue) => {
+        return <CustomUpload type={"ProFormUploadButton"} value={fileIdValue} readonly={true} />
       }
     },
     {

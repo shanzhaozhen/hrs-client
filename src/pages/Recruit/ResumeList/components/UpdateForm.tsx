@@ -1,12 +1,12 @@
 import React from 'react';
 import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import {Button, message} from 'antd';
-import type { StaffForm, StaffVO } from '@/services/staff/typings';
-import FormBody from '@/pages/HR/StaffList/components/FormBody';
-import { updateStaff } from '@/services/staff/staff';
+import type { ResumeForm, ResumeVO } from '@/services/resume/typings';
+import FormBody from '@/pages/Recruit/ResumeList/components/FormBody';
+import { updateResume } from '@/services/resume/resume';
 import ProForm, { DrawerForm } from '@ant-design/pro-form';
 import type { ActionType } from '@ant-design/pro-table';
-import {convertStaffForm} from "@/utils/staff";
+import {convertResumeForm} from "@/utils/resume";
 import {HistoryOutlined} from "@ant-design/icons";
 
 export interface UpdateFormProps {
@@ -14,7 +14,7 @@ export interface UpdateFormProps {
   handleUpdateDrawerVisible: Dispatch<SetStateAction<boolean>>;
   onCancel: () => void;
   tableActionRef: MutableRefObject<ActionType | undefined>;
-  values?: StaffForm | StaffVO;
+  values?: ResumeForm | ResumeVO;
 }
 
 const UpdateForm: React.FC<UpdateFormProps> = (props) => {
@@ -29,11 +29,11 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
    * 修改员工
    * @param fields
    */
-  const handleUpdate = async (fields: StaffForm) => {
+  const handleUpdate = async (fields: ResumeForm) => {
     const hide = message.loading('正在修改');
     try {
       await educationalExperienceForm.validateFields();
-      await updateStaff(convertStaffForm(fields));
+      await updateResume(convertResumeForm(fields));
       hide();
       message.success('修改成功');
       handleUpdateDrawerVisible(false);
