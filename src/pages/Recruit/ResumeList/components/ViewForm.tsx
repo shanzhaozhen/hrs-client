@@ -1,11 +1,8 @@
-import React, {useState} from 'react';
+import React from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import FormBody from '@/pages/HR/ResumeList/components/FormBody';
+import FormBody from '@/pages/Recruit/ResumeList/components/FormBody';
 import { DrawerForm } from '@ant-design/pro-form';
 import type {ResumeForm, ResumeVO} from "@/services/resume/typings";
-import {HistoryOutlined} from "@ant-design/icons";
-import {Button} from "antd";
-import TransferRecordModal from "@/pages/HR/TransferRecordList/components/ModalBody";
 
 interface ViewFormProps {
   viewDrawerVisible: boolean;
@@ -17,26 +14,11 @@ interface ViewFormProps {
 const ViewForm: React.FC<ViewFormProps> = (props) => {
   const { viewDrawerVisible, handleViewDrawerVisible, onCancel, values } = props
 
-  const [transferRecordModalVisible, setTransferRecordModalVisible] = useState<boolean>(false);
-
   return (
     <>
       <DrawerForm
         width={'75%'}
-        title={
-          <>
-            <span style={{ marginRight: 15 }}>查看员工</span>
-            <Button
-              type="primary"
-              icon={<HistoryOutlined />}
-              onClick={() => {
-                setTransferRecordModalVisible(true);
-              }}
-            >
-              调动记录
-            </Button>
-          </>
-        }
+        title="查看简历"
         visible={viewDrawerVisible}
         onVisibleChange={handleViewDrawerVisible}
         initialValues={values}
@@ -62,11 +44,6 @@ const ViewForm: React.FC<ViewFormProps> = (props) => {
         ) : null}
       </DrawerForm>
 
-      <TransferRecordModal
-        transferRecordModalVisible={transferRecordModalVisible}
-        handleTransferRecordModalVisible={setTransferRecordModalVisible}
-        resumeId={values?.id}
-      />
     </>
   );
 };

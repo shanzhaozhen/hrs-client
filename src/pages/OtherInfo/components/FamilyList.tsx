@@ -2,13 +2,13 @@ import React, {useState} from 'react';
 import type { ProColumns } from "@ant-design/pro-table";
 import { EditableProTable } from "@ant-design/pro-table";
 import type { FamilyForm, FamilyVO } from "@/services/family/typings";
-import ProForm from "@ant-design/pro-form";
 import {getDictionaryChildrenByCode} from "@/services/dictionary/dictionary";
 import type { FormInstance } from "antd";
+import ProFormItem from "@ant-design/pro-form/lib/components/FormItem";
 
 interface FamilyListProps {
   readonly?: boolean;
-  editForm: FormInstance;
+  editForm?: FormInstance;
   value?: (FamilyVO | FamilyForm)[];
 }
 
@@ -99,8 +99,7 @@ const FamilyList: React.FC<FamilyListProps> = (props) => {
 
   return (
     <>
-      <ProForm.Item
-        label="家庭成员"
+      <ProFormItem
         name="familyList"
         trigger="onValuesChange"
       >
@@ -126,7 +125,7 @@ const FamilyList: React.FC<FamilyListProps> = (props) => {
             },
           }}
         />
-      </ProForm.Item>
+      </ProFormItem>
     </>
   );
 };

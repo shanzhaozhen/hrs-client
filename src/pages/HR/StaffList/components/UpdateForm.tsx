@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import {Button, message} from 'antd';
 import type { StaffForm, StaffVO } from '@/services/staff/typings';
@@ -8,6 +8,7 @@ import ProForm, { DrawerForm } from '@ant-design/pro-form';
 import type { ActionType } from '@ant-design/pro-table';
 import {convertStaffForm} from "@/utils/staff";
 import {HistoryOutlined} from "@ant-design/icons";
+import TransferRecordModal from "@/pages/HR/TransferRecordList/components/ModalBody";
 
 export interface UpdateFormProps {
   updateDrawerVisible: boolean;
@@ -19,6 +20,8 @@ export interface UpdateFormProps {
 
 const UpdateForm: React.FC<UpdateFormProps> = (props) => {
   const { updateDrawerVisible, handleUpdateDrawerVisible, onCancel, tableActionRef, values } = props;
+
+  const [transferRecordModalVisible, setTransferRecordModalVisible] = useState<boolean>(false);
 
   const [workExperienceForm] = ProForm.useForm();
   const [educationalExperienceForm] = ProForm.useForm();
@@ -58,6 +61,9 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
             <Button
               type="primary"
               icon={<HistoryOutlined />}
+              onClick={() => {
+                setTransferRecordModalVisible(true);
+              }}
             >
               调动记录
             </Button>
@@ -83,6 +89,12 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
           />
         ) : null}
       </DrawerForm>
+
+      <TransferRecordModal
+        transferRecordModalVisible={transferRecordModalVisible}
+        handleTransferRecordModalVisible={setTransferRecordModalVisible}
+        staffId={values?.id}
+      />
     </>
   );
 };

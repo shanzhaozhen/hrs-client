@@ -115,9 +115,15 @@ export default [
     routes: [
       {
         path: '/recruit/resume',
-        name: 'staff',
+        name: 'resume',
         icon: 'smile',
         component: './Recruit/ResumeList',
+      },
+      {
+        path: '/recruit/maintain',
+        name: 'maintain',
+        icon: 'smile',
+        component: './Recruit/MaintainList',
       },
     ],
   },

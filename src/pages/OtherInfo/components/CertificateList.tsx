@@ -2,14 +2,14 @@ import React, {useState} from 'react';
 import type { ProColumns } from "@ant-design/pro-table";
 import { EditableProTable } from "@ant-design/pro-table";
 import type { CertificateForm, CertificateVO } from "@/services/certificate/typings";
-import ProForm from "@ant-design/pro-form";
 import { getDictionaryChildrenByCode } from "@/services/dictionary/dictionary";
 import type { FormInstance } from "antd";
 import CustomUpload from "@/components/CustomUpload";
+import ProFormItem from "@ant-design/pro-form/lib/components/FormItem";
 
 interface CertificateListProps {
   readonly?: boolean;
-  editForm: FormInstance;
+  editForm?: FormInstance;
   value?: (CertificateVO | CertificateForm)[];
 }
 
@@ -68,8 +68,8 @@ const CertificateList: React.FC<CertificateListProps> = (props) => {
       renderFormItem: (_, { recordKey }) => {
         return <CustomUpload type={"ProFormUploadButton"} value={recordKey} />
       },
-      render: (fileIdValue) => {
-        return <CustomUpload type={"ProFormUploadButton"} value={fileIdValue} readonly={true} />
+      render: (_, { fileId }) => {
+        return <CustomUpload type={"ProFormUploadButton"} value={fileId} readonly={true} />
       }
     },
     {
@@ -81,8 +81,7 @@ const CertificateList: React.FC<CertificateListProps> = (props) => {
 
   return (
     <>
-      <ProForm.Item
-        label="证书"
+      <ProFormItem
         name="certificateList"
         trigger="onValuesChange"
       >
@@ -108,7 +107,7 @@ const CertificateList: React.FC<CertificateListProps> = (props) => {
             },
           }}
         />
-      </ProForm.Item>
+      </ProFormItem>
     </>
   );
 };

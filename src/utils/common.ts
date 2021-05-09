@@ -1,5 +1,6 @@
 import type { SortOrder } from "antd/lib/table/interface";
 import type { Orders, PageParams } from "@/services/common/typings";
+import proxy from "../../config/proxy";
 
 export const copyObject = (A: any, B: any) => {
   const res = {};
@@ -65,3 +66,6 @@ export const tableFilter = (key: number | undefined, options: any[], defaultText
   }
   return defaultText;
 }
+
+export const targetUrl = proxy[REACT_APP_ENV || 'dev']['/hrs-api/'].target;
+export const targetUrlNotDiagonal = targetUrl.substr(0, targetUrl.length - 1);

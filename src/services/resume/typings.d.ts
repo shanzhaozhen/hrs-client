@@ -2,13 +2,15 @@ import type { WorkExperienceVO } from "@/services/work-experience/typings";
 import type { EducationalExperienceVO } from "@/services/educational-experience/typings";
 import type { CertificateVO } from "@/services/certificate/typings";
 import type { FamilyVO } from "@/services/family/typings";
-import {RegionType} from "@/services/region/typings";
+import type { RegionType } from "@/services/region/typings";
 
 export type ResumeForm = {
   /** 主键ID */
   id: number;
   /** 姓名 */
   name?: string;
+  /** 个人照片 */
+  personalPhoto?: number;
   /** 性别 */
   sex?: number;
   /** 民族 */
@@ -166,6 +168,8 @@ export type ResumeVO = {
   id?: number;
   /** 姓名 */
   name?: string;
+  /** 个人照片 */
+  personalPhoto?: number;
   /** 性别 */
   sex?: number;
   /** 民族 */

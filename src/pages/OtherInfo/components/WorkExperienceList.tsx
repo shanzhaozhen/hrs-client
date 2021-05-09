@@ -2,12 +2,12 @@ import React, {useState} from 'react';
 import type { ProColumns } from "@ant-design/pro-table";
 import { EditableProTable } from "@ant-design/pro-table";
 import type { WorkExperienceForm, WorkExperienceVO } from "@/services/work-experience/typings";
-import ProForm from "@ant-design/pro-form";
 import type { FormInstance } from "antd";
+import ProFormItem from "@ant-design/pro-form/lib/components/FormItem";
 
 interface WorkExperienceListProps {
   readonly?: boolean;
-  editForm: FormInstance;
+  editForm?: FormInstance;
   value?: (WorkExperienceVO | WorkExperienceForm)[];
 }
 
@@ -76,8 +76,7 @@ const WorkExperienceList: React.FC<WorkExperienceListProps> = (props) => {
 
   return (
     <>
-      <ProForm.Item
-        label="工作履历"
+      <ProFormItem
         name="workExperienceList"
         trigger="onValuesChange"
       >
@@ -103,7 +102,7 @@ const WorkExperienceList: React.FC<WorkExperienceListProps> = (props) => {
             },
           }}
         />
-      </ProForm.Item>
+      </ProFormItem>
     </>
   );
 };

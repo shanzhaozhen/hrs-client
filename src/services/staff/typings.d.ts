@@ -11,6 +11,8 @@ export type StaffForm = {
   staffCode?: string;
   /** 员工姓名 */
   staffName?: string;
+  /** 个人照片 */
+  personalPhoto?: number;
   /** 部门ID */
   depId?: number;
   /** 在司状态 */
@@ -126,6 +128,8 @@ export type StaffVO = {
   staffCode?: string;
   /** 员工姓名 */
   staffName?: string;
+  /** 个人照片 */
+  personalPhoto?: number;
   /** 部门ID */
   depId?: number;
   /** 在司状态 */

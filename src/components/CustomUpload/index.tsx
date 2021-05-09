@@ -3,9 +3,9 @@ import { ProFormUploadButton, ProFormUploadDragger } from "@ant-design/pro-form"
 import { download, getFileById } from "@/services/file/file";
 import type { UploadListType } from "antd/es/upload/interface";
 import type { UploadFile } from "antd/lib/upload/interface";
-import proxy from "../../../config/proxy";
 import type { UploadChangeParam } from "antd/lib/upload/interface";
 import {downloadFile} from "@/utils/file";
+import { targetUrlNotDiagonal } from "@/utils/common";
 
 interface CustomUploadProps {
   type: 'ProFormUploadDragger' | 'ProFormUploadButton';
@@ -31,9 +31,6 @@ const CustomUpload: React.FC<CustomUploadProps> = (props) => {
   };
   const FormComponents = Components[type];
 
-  let targetUrl = proxy[REACT_APP_ENV || 'dev']['/hrs-api/'].target;
-  targetUrl = targetUrl.substr(0, targetUrl.length - 1)
-
   useEffect(() => {
     if (value) {
       getFileById(value).then(({ data }) => {
@@ -41,7 +38,7 @@ const CustomUpload: React.FC<CustomUploadProps> = (props) => {
           uid: data.id,
           name: data.name,
           status: 'done',
-          url: targetUrl + data.urlPath
+          url: targetUrlNotDiagonal + data.urlPath
         }] : [])
       });
     }
@@ -82,6 +79,7 @@ const CustomUpload: React.FC<CustomUploadProps> = (props) => {
         description={props.description}
         max={props.max}
         readonly={props.readonly}
+        disabled={props.readonly}
         action="/hrs-api/upload"
         fieldProps={{
           headers: {

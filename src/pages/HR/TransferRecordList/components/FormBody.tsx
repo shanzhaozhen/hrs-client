@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import type { MutableRefObject } from 'react';
 import type { FormInstance } from 'antd';
 import { Button, Col, Input, Row } from 'antd';
-import ProForm, {ProFormDatePicker, ProFormSelect, ProFormText} from '@ant-design/pro-form';
+import { ProFormDatePicker, ProFormSelect, ProFormText } from '@ant-design/pro-form';
 import { getDictionaryChildrenByCode } from "@/services/dictionary/dictionary";
 import FormTreeSelect from "@/components/FormTreeSelect";
 import { useDepartmentList, useDepartmentTree } from "@/utils/department";
 import { ContactsOutlined } from "@ant-design/icons";
 import StaffSelect from "@/pages/HR/StaffList/components/StaffSelect";
+import ProFormItem from "@ant-design/pro-form/lib/components/FormItem";
 
 interface FormProps {
   isEdit?: boolean;
@@ -38,15 +39,15 @@ const FormBody: React.FC<FormProps> = (props) => {
               disabled
             />
           ) : (
-            <ProForm.Item label="员工编号">
+            <ProFormItem label="员工编号">
               <Input.Group compact>
-                <ProForm.Item name="staffCode">
+                <ProFormItem name="staffCode">
                   <Input
                     placeholder="请选择员工"
                     name="staffCode"
                     disabled
                   />
-                </ProForm.Item>
+                </ProFormItem>
                 <Button
                   type="primary"
                   icon={<ContactsOutlined />}
@@ -55,7 +56,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                   选择员工
                 </Button>
               </Input.Group>
-            </ProForm.Item>
+            </ProFormItem>
           )}
         </Col>
         <Col xl={12} lg={12} md={24}>
@@ -77,13 +78,13 @@ const FormBody: React.FC<FormProps> = (props) => {
           />
         </Col>
         <Col xl={12} lg={12} md={24}>
-          <ProForm.Item
+          <ProFormItem
             name="postDepId"
             label="变更后部门"
             rules={[{ required: false, message: '请选择部门' }]}
           >
             <FormTreeSelect treeData={departmentTree} placeholder="请选择部门" />
-          </ProForm.Item>
+          </ProFormItem>
         </Col>
         <Col xl={12} lg={12} md={24}>
           <ProFormText

@@ -1,12 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import type { FormInstance } from 'antd';
-import {Col, Row, Tabs} from 'antd';
-import ProForm, {
-  ProFormDatePicker,
-  ProFormDigit,
-  ProFormSelect,
-  ProFormText,
-} from '@ant-design/pro-form';
+import {Col, Divider, Row, Tabs} from 'antd';
+import { ProFormDatePicker, ProFormDigit, ProFormSelect, ProFormText } from '@ant-design/pro-form';
 import type {StaffForm, StaffVO} from "@/services/staff/typings";
 import { getDictionaryChildrenByCode } from "@/services/dictionary/dictionary";
 import RegionSelect from "@/components/RegionSelect";
@@ -17,15 +12,17 @@ import WorkExperienceList from "@/pages/OtherInfo/components/WorkExperienceList"
 import CertificateList from "@/pages/OtherInfo/components/CertificateList";
 import FamilyList from "@/pages/OtherInfo/components/FamilyList";
 import {getAllDepartments} from "@/services/department/department";
+import ProFormItem from "@ant-design/pro-form/lib/components/FormItem";
+import PhotoUpload from "@/components/PhotoUpload";
 
 interface FormProps {
   isView?: boolean;
   isEdit?: boolean;
   values?: StaffForm | StaffVO;
-  workExperienceForm: FormInstance;
-  educationalExperienceForm: FormInstance;
-  certificateForm: FormInstance;
-  familyForm: FormInstance;
+  workExperienceForm?: FormInstance;
+  educationalExperienceForm?: FormInstance;
+  certificateForm?: FormInstance;
+  familyForm?: FormInstance;
 }
 
 const FormBody: React.FC<FormProps> = (props) => {
@@ -79,128 +76,159 @@ const FormBody: React.FC<FormProps> = (props) => {
     <>
       <Tabs defaultActiveKey="1">
         <Tabs.TabPane tab="基础信息" key="1" forceRender >
+          <Divider orientation="left">在司信息</Divider>
           <Row gutter={24}>
-            <ProFormText name="id" label="员工id" hidden={true} />
-            <Col xl={7} lg={12} md={24}>
-              <ProFormText
-                width="sm"
-                name="staffCode"
-                label="员工编号"
-                rules={[{ required: true, message: '请输入员工编号' }]}
-                readonly={isView}
-              />
+            <Col xl={16} lg={16} md={24}>
+              <Row gutter={24}>
+                <ProFormText name="id" label="员工id" hidden={true} />
+                <Col xl={12} lg={24} md={24}>
+                  <ProFormText
+                    width="sm"
+                    name="staffCode"
+                    label="员工编号"
+                    rules={[{ required: true, message: '请输入员工编号' }]}
+                    readonly={isView}
+                  />
+                </Col>
+                <Col xl={12} lg={24} md={24}>
+                  <ProFormText
+                    width="sm"
+                    name="staffName"
+                    label="员工姓名"
+                    rules={[{ required: true, message: '请输入员工名称' }]}
+                    readonly={isView}
+                  />
+                </Col>
+                <Col xl={12} lg={24} md={24}>
+                  <ProFormSelect
+                    width="sm"
+                    name="depId"
+                    label="部门"
+                    rules={[{ required: false, message: '请选择部门' }]}
+                    request={async () => {
+                      const { data } = await getAllDepartments();
+                      return data ? data.map(item => ({
+                        value: item.id,
+                        label: item.name
+                      })) : []
+                    }}
+                    readonly={isView}
+                    disabled={isEdit}
+                  />
+                </Col>
+                <Col xl={12} lg={24} md={24}>
+                  <ProFormSelect
+                    width="sm"
+                    name="duty"
+                    label="职务"
+                    rules={[{ required: false, message: '请选择职务' }]}
+                    request={async ({ keyWords }) => {
+                      const { data } = await getDictionaryChildrenByCode('Duty', keyWords);
+                      return data ? data.map(item => ({
+                        value: item.name,
+                        label: item.name
+                      })) : []
+                    }}
+                    readonly={isView}
+                    disabled={isEdit}
+                  />
+                </Col>
+                <Col xl={12} lg={24} md={24}>
+                  <ProFormSelect
+                    width="sm"
+                    name="post"
+                    label="岗位"
+                    rules={[{ required: false, message: '请选择岗位' }]}
+                    request={async ({ keyWords }) => {
+                      const { data } = await getDictionaryChildrenByCode('Post', keyWords);
+                      return data ? data.map(item => ({
+                        value: item.name,
+                        label: item.name
+                      })) : []
+                    }}
+                    readonly={isView}
+                    disabled={isEdit}
+                  />
+                </Col>
+                <Col xl={12} lg={24} md={24}>
+                  <ProFormSelect
+                    width="sm"
+                    name="postType"
+                    label="岗位类型"
+                    rules={[{ required: false, message: '请选择岗位类型' }]}
+                    request={async ({ keyWords }) => {
+                      const { data } = await getDictionaryChildrenByCode('PostType', keyWords);
+                      return data ? data.map(item => ({
+                        value: item.name,
+                        label: item.name
+                      })) : []
+                    }}
+                    readonly={isView}
+                    disabled={isEdit}
+                  />
+                </Col>
+                <Col xl={12} lg={24} md={24}>
+                  <ProFormSelect
+                    width="sm"
+                    name="postLevel"
+                    label="岗位等级"
+                    rules={[{ required: false, message: '请选择岗位等级' }]}
+                    request={async ({ keyWords }) => {
+                      const { data } = await getDictionaryChildrenByCode('PostLevel', keyWords);
+                      return data ? data.map(item => ({
+                        value: item.name,
+                        label: item.name
+                      })) : []
+                    }}
+                    readonly={isView}
+                    disabled={isEdit}
+                  />
+                </Col>
+                <Col xl={12} lg={24} md={24}>
+                  <ProFormSelect
+                    width="sm"
+                    name="companyState"
+                    label="在司状态"
+                    rules={[{ required: false, message: '请输入在司状态' }]}
+                    request={async ({ keyWords }) => {
+                      const { data } = await getDictionaryChildrenByCode('CompanyState', keyWords);
+                      return data ? data.map(item => ({
+                        value: item.name,
+                        label: item.name
+                      })) : []
+                    }}
+                    readonly={isView}
+                  />
+                </Col>
+                <Col xl={12} lg={24} md={24}>
+                  <ProFormDatePicker
+                    width="sm"
+                    name="entryDate"
+                    label="入职日期"
+                    rules={[{ required: false, message: '请选择入职日期' }]}
+                    readonly={isView}
+                  />
+                </Col>
+                <Col xl={12} lg={24} md={24}>
+                  <ProFormText
+                    width="sm"
+                    name="socialSecurityNumber"
+                    label="社保号"
+                    placeholder="请输入社保号"
+                    readonly={isView}
+                  />
+                </Col>
+              </Row>
             </Col>
-            <Col xl={7} lg={12} md={24}>
-              <ProFormText
-                width="sm"
-                name="staffName"
-                label="员工姓名"
-                rules={[{ required: true, message: '请输入员工名称' }]}
-                readonly={isView}
-              />
+            <Col xl={8} lg={8} md={24}>
+              <ProFormItem label="个人照片" name="personalPhoto">
+                <PhotoUpload readonly={isView} />
+              </ProFormItem>
             </Col>
-            <Col xl={7} lg={12} md={24}>
-              <ProFormSelect
-                width="sm"
-                name="depId"
-                label="部门"
-                rules={[{ required: false, message: '请选择部门' }]}
-                request={async () => {
-                  const { data } = await getAllDepartments();
-                  return data ? data.map(item => ({
-                    value: item.id,
-                    label: item.name
-                  })) : []
-                }}
-                readonly={isView}
-                disabled={isEdit}
-              />
-            </Col>
-            <Col xl={7} lg={12} md={24}>
-              <ProFormSelect
-                width="sm"
-                name="duty"
-                label="职务"
-                rules={[{ required: false, message: '请选择职务' }]}
-                request={async ({ keyWords }) => {
-                  const { data } = await getDictionaryChildrenByCode('Duty', keyWords);
-                  return data ? data.map(item => ({
-                    value: item.name,
-                    label: item.name
-                  })) : []
-                }}
-                readonly={isView}
-                disabled={isEdit}
-              />
-            </Col>
-            <Col xl={7} lg={12} md={24}>
-              <ProFormSelect
-                width="sm"
-                name="post"
-                label="岗位"
-                rules={[{ required: false, message: '请选择岗位' }]}
-                request={async ({ keyWords }) => {
-                  const { data } = await getDictionaryChildrenByCode('Post', keyWords);
-                  return data ? data.map(item => ({
-                    value: item.name,
-                    label: item.name
-                  })) : []
-                }}
-                readonly={isView}
-                disabled={isEdit}
-              />
-            </Col>
-            <Col xl={7} lg={12} md={24}>
-              <ProFormSelect
-                width="sm"
-                name="postType"
-                label="岗位类型"
-                rules={[{ required: false, message: '请选择岗位类型' }]}
-                request={async ({ keyWords }) => {
-                  const { data } = await getDictionaryChildrenByCode('PostType', keyWords);
-                  return data ? data.map(item => ({
-                    value: item.name,
-                    label: item.name
-                  })) : []
-                }}
-                readonly={isView}
-                disabled={isEdit}
-              />
-            </Col>
-            <Col xl={7} lg={12} md={24}>
-              <ProFormSelect
-                width="sm"
-                name="postLevel"
-                label="岗位等级"
-                rules={[{ required: false, message: '请选择岗位等级' }]}
-                request={async ({ keyWords }) => {
-                  const { data } = await getDictionaryChildrenByCode('PostLevel', keyWords);
-                  return data ? data.map(item => ({
-                    value: item.name,
-                    label: item.name
-                  })) : []
-                }}
-                readonly={isView}
-                disabled={isEdit}
-              />
-            </Col>
-            <Col xl={7} lg={12} md={24}>
-              <ProFormSelect
-                width="sm"
-                name="companyState"
-                label="在司状态"
-                rules={[{ required: false, message: '请输入在司状态' }]}
-                request={async ({ keyWords }) => {
-                  const { data } = await getDictionaryChildrenByCode('CompanyState', keyWords);
-                  return data ? data.map(item => ({
-                    value: item.name,
-                    label: item.name
-                  })) : []
-                }}
-                readonly={isView}
-              />
-            </Col>
-            <Col xl={7} lg={12} md={24}>
+          </Row>
+          <Divider orientation="left">个人信息</Divider>
+          <Row gutter={24}>
+            <Col xl={8} lg={12} md={24}>
               <ProFormSelect
                 width="sm"
                 name="sex"
@@ -213,7 +241,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                 readonly={isView}
               />
             </Col>
-            <Col xl={7} lg={12} md={24}>
+            <Col xl={8} lg={12} md={24}>
               <ProFormSelect
                 width="sm"
                 name="nation"
@@ -229,7 +257,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                 readonly={isView}
               />
             </Col>
-            <Col xl={7} lg={12} md={24}>
+            <Col xl={8} lg={12} md={24}>
               <ProFormDatePicker
                 width="sm"
                 name="birthday"
@@ -238,7 +266,25 @@ const FormBody: React.FC<FormProps> = (props) => {
                 readonly={isView}
               />
             </Col>
-            <Col xl={7} lg={12} md={24}>
+            <Col xl={8} lg={12} md={24}>
+              <ProFormText
+                width="sm"
+                name="idNumber"
+                label="身份证号码"
+                rules={[{ required: false, message: '请输入身份证号码' }]}
+                readonly={isView}
+              />
+            </Col>
+            <Col xl={8} lg={12} md={24}>
+              <ProFormText
+                width="sm"
+                name="phone"
+                label="联系电话"
+                placeholder="请输入联系电话"
+                readonly={isView}
+              />
+            </Col>
+            <Col xl={8} lg={12} md={24}>
               <ProFormDatePicker
                 width="sm"
                 name="workDate"
@@ -247,16 +293,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                 readonly={isView}
               />
             </Col>
-            <Col xl={7} lg={12} md={24}>
-              <ProFormDatePicker
-                width="sm"
-                name="entryDate"
-                label="入职日期"
-                rules={[{ required: false, message: '请选择入职日期' }]}
-                readonly={isView}
-              />
-            </Col>
-            <Col xl={7} lg={12} md={24}>
+            <Col xl={8} lg={12} md={24}>
               <ProFormSelect
                 width="sm"
                 name="politics"
@@ -272,7 +309,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                 readonly={isView}
               />
             </Col>
-            <Col xl={7} lg={12} md={24}>
+            <Col xl={8} lg={12} md={24}>
               <ProFormSelect
                 width="sm"
                 name="education"
@@ -288,7 +325,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                 readonly={isView}
               />
             </Col>
-            <Col xl={7} lg={12} md={24}>
+            <Col xl={8} lg={12} md={24}>
               <ProFormSelect
                 width="sm"
                 name="degree"
@@ -304,44 +341,17 @@ const FormBody: React.FC<FormProps> = (props) => {
                 readonly={isView}
               />
             </Col>
-            <Col xl={7} lg={12} md={24}>
-              <ProFormText
-                width="sm"
-                name="idNumber"
-                label="身份证号码"
-                rules={[{ required: false, message: '请输入身份证号码' }]}
-                readonly={isView}
-              />
-            </Col>
-            <Col xl={7} lg={12} md={24}>
-              <ProFormText
-                width="sm"
-                name="phone"
-                label="联系电话"
-                placeholder="请输入联系电话"
-                readonly={isView}
-              />
-            </Col>
-            <Col xl={7} lg={12} md={24}>
-              <ProFormText
-                width="sm"
-                name="socialSecurityNumber"
-                label="社保号"
-                placeholder="请输入社保号"
-                readonly={isView}
-              />
-            </Col>
-            <Col xl={7} lg={12} md={24}>
-              <ProForm.Item name="birthAddress" label="出生地">
+            <Col xl={8} lg={12} md={24}>
+              <ProFormItem name="birthAddress" label="出生地">
                 <RegionSelect level={2} customValue={birthAddress} readonly={isView} />
-              </ProForm.Item>
+              </ProFormItem>
             </Col>
-            <Col xl={7} lg={12} md={24}>
-              <ProForm.Item name="nativeAddress" label="籍贯">
+            <Col xl={8} lg={12} md={24}>
+              <ProFormItem name="nativeAddress" label="籍贯">
                 <RegionSelect level={2} customValue={nativeAddress} readonly={isView} />
-              </ProForm.Item>
+              </ProFormItem>
             </Col>
-            <Col xl={7} lg={12} md={24}>
+            <Col xl={8} lg={12} md={24}>
               <ProFormSelect
                 width="sm"
                 name="householdType"
@@ -358,27 +368,30 @@ const FormBody: React.FC<FormProps> = (props) => {
               />
             </Col>
             <Col xl={12} lg={12} md={24}>
-              <ProForm.Item name="registeredAddress" label="户口地址">
+              <ProFormItem name="registeredAddress" label="户口地址">
                 <RegionSelect level={3} customValue={registeredAddress} hasDetail readonly={isView} />
-              </ProForm.Item>
+              </ProFormItem>
             </Col>
             <Col xl={12} lg={12} md={24}>
-              <ProForm.Item name="homeAddress" label="家庭住址">
+              <ProFormItem name="homeAddress" label="家庭住址">
                 <RegionSelect level={3} customValue={homeAddress} hasDetail readonly={isView} />
-              </ProForm.Item>
+              </ProFormItem>
             </Col>
 
             <Col xl={12} lg={12} md={24}>
-              <ProForm.Item name="currentAddress" label="现住地址">
+              <ProFormItem name="currentAddress" label="现住地址">
                 <RegionSelect level={3} customValue={currentAddress} hasDetail readonly={isView} />
-              </ProForm.Item>
+              </ProFormItem>
             </Col>
             <Col xl={12} lg={12} md={24}>
-              <ProForm.Item name="postalAddress" label="邮递地址">
+              <ProFormItem name="postalAddress" label="邮递地址">
                 <RegionSelect level={3} customValue={postalAddress} hasDetail readonly={isView} />
-              </ProForm.Item>
+              </ProFormItem>
             </Col>
-            <Col xl={7} lg={12} md={24}>
+          </Row>
+          <Divider orientation="left">紧急联系人</Divider>
+          <Row gutter={24}>
+            <Col xl={8} lg={12} md={24}>
               <ProFormText
                 width="sm"
                 name="contactName"
@@ -387,7 +400,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                 readonly={isView}
               />
             </Col>
-            <Col xl={7} lg={12} md={24}>
+            <Col xl={8} lg={12} md={24}>
               <ProFormSelect
                 width="sm"
                 name="contactRelation"
@@ -403,7 +416,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                 readonly={isView}
               />
             </Col>
-            <Col xl={7} lg={12} md={24}>
+            <Col xl={8} lg={12} md={24}>
               <ProFormText
                 width="sm"
                 name="contactPhone"
@@ -412,7 +425,11 @@ const FormBody: React.FC<FormProps> = (props) => {
                 readonly={isView}
               />
             </Col>
-            <Col xl={7} lg={12} md={24}>
+          </Row>
+        </Tabs.TabPane>
+        <Tabs.TabPane tab="婚姻状况" key="2" forceRender>
+          <Row gutter={24}>
+            <Col xl={8} lg={12} md={24}>
               <ProFormSelect
                 width="sm"
                 name="maritalStatus"
@@ -428,7 +445,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                 readonly={isView}
               />
             </Col>
-            <Col xl={7} lg={12} md={24}>
+            <Col xl={8} lg={12} md={24}>
               <ProFormText
                 width="sm"
                 name="spouseName"
@@ -437,7 +454,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                 readonly={isView}
               />
             </Col>
-            <Col xl={7} lg={12} md={24}>
+            <Col xl={8} lg={12} md={24}>
               <ProFormDatePicker
                 width="sm"
                 name="marriageDate"
@@ -446,7 +463,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                 readonly={isView}
               />
             </Col>
-            <Col xl={7} lg={12} md={24}>
+            <Col xl={8} lg={12} md={24}>
               <ProFormDigit
                 width="sm"
                 name="childrenNumber"
@@ -456,7 +473,7 @@ const FormBody: React.FC<FormProps> = (props) => {
               />
             </Col>
             <Col xl={24} lg={24} md={24}>
-              <ProForm.Item
+              <ProFormItem
                 label="结婚证件"
                 name="marriageCertificate"
               >
@@ -467,32 +484,32 @@ const FormBody: React.FC<FormProps> = (props) => {
                   maxCount={1}
                   description="仅能保存单文件"
                 />
-              </ProForm.Item>
+              </ProFormItem>
             </Col>
           </Row>
         </Tabs.TabPane>
-        <Tabs.TabPane tab="工作履历" key="2" forceRender>
+        <Tabs.TabPane tab="工作履历" key="3" forceRender>
           <WorkExperienceList
             readonly={isView}
             editForm={props.workExperienceForm}
             value={values?.workExperienceList}
           />
         </Tabs.TabPane>
-        <Tabs.TabPane tab="学习经历" key="3" forceRender>
+        <Tabs.TabPane tab="学习经历" key="4" forceRender>
           <EducationalExperienceList
             readonly={isView}
             editForm={props.educationalExperienceForm}
             value={values?.educationalExperienceList}
           />
         </Tabs.TabPane>
-        <Tabs.TabPane tab="职称信息" key="4" forceRender>
+        <Tabs.TabPane tab="职称信息" key="5" forceRender>
           <CertificateList
             readonly={isView}
             editForm={props.certificateForm}
             value={values?.certificateList}
           />
         </Tabs.TabPane>
-        <Tabs.TabPane tab="家庭信息" key="5" forceRender>
+        <Tabs.TabPane tab="家庭信息" key="6" forceRender>
           <FamilyList
             readonly={isView}
             editForm={props.familyForm}

@@ -2,13 +2,13 @@ import React, {useState} from 'react';
 import type { ProColumns } from "@ant-design/pro-table";
 import { EditableProTable } from "@ant-design/pro-table";
 import type { EducationalExperienceForm, EducationalExperienceVO } from "@/services/educational-experience/typings";
-import ProForm from "@ant-design/pro-form";
 import {getDictionaryChildrenByCode} from "@/services/dictionary/dictionary";
 import type { FormInstance } from "antd";
+import ProFormItem from "@ant-design/pro-form/lib/components/FormItem";
 
 interface EducationalExperienceListProps {
   readonly?: boolean;
-  editForm: FormInstance;
+  editForm?: FormInstance;
   value?: (EducationalExperienceVO | EducationalExperienceForm)[];
 }
 
@@ -90,8 +90,7 @@ const EducationalExperienceList: React.FC<EducationalExperienceListProps> = (pro
 
   return (
     <>
-      <ProForm.Item
-        label="学习经历"
+      <ProFormItem
         name="educationalExperienceList"
         trigger="onValuesChange"
       >
@@ -117,7 +116,7 @@ const EducationalExperienceList: React.FC<EducationalExperienceListProps> = (pro
             },
           }}
         />
-      </ProForm.Item>
+      </ProFormItem>
     </>
   );
 };

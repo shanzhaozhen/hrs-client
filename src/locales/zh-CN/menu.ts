@@ -64,5 +64,5 @@ export default {
   'menu.hr.transfer-record': '调动记录',
   'menu.recruit': '招聘业务',
   'menu.recruit.resume': '简历库',
-  'menu.recruit.staff': '111222'
+  'menu.recruit.maintain': '招聘维护'
 };
