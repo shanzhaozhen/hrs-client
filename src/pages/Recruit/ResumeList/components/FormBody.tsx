@@ -6,13 +6,19 @@ import type {ResumeForm, ResumeVO} from "@/services/resume/typings";
 import { getDictionaryChildrenByCode } from "@/services/dictionary/dictionary";
 import RegionSelect from "@/components/RegionSelect";
 import type { RegionType } from "@/services/region/typings";
-import CustomUpload from "@/components/CustomUpload";
 import EducationalExperienceList from "@/pages/OtherInfo/components/EducationalExperienceList";
 import WorkExperienceList from "@/pages/OtherInfo/components/WorkExperienceList";
 import CertificateList from "@/pages/OtherInfo/components/CertificateList";
 import FamilyList from "@/pages/OtherInfo/components/FamilyList";
 import ProFormItem from "@ant-design/pro-form/lib/components/FormItem";
 import PhotoUpload from "@/components/PhotoUpload";
+import DriverInfo from "@/pages/OtherInfo/components/DriverInfo";
+import PhysicalInfo from "@/pages/OtherInfo/components/PhysicalInfo";
+import MarriageInfo from "@/pages/OtherInfo/components/MarriageInfo";
+import ArmyInfo from "@/pages/OtherInfo/components/ArmyInfo";
+import FriendInfo from "@/pages/OtherInfo/components/FriendInfo";
+import EmergencyContactInfo from "@/pages/OtherInfo/components/EmergencyContactInfo";
+import ContactInfo from "@/pages/OtherInfo/components/ContactInfo";
 
 interface FormProps {
   isView?: boolean;
@@ -324,166 +330,13 @@ const FormBody: React.FC<FormProps> = (props) => {
             </Col>
           </Row>
           <Divider orientation="left">联系方式</Divider>
-          <Row gutter={24}>
-            <Col xl={8} lg={12} md={24}>
-              <ProFormText
-                width="sm"
-                name="phone"
-                label="联系电话"
-                placeholder="请输入联系电话"
-                readonly={isView}
-              />
-            </Col>
-            <Col xl={8} lg={12} md={24}>
-              <ProFormText
-                width="sm"
-                name="email"
-                label="邮箱"
-                placeholder="请输入邮箱"
-                readonly={isView}
-              />
-            </Col>
-            <Col xl={8} lg={12} md={24}>
-              <ProFormText
-                width="sm"
-                name="qq"
-                label="QQ"
-                placeholder="请输入联系QQ"
-                readonly={isView}
-              />
-            </Col>
-          </Row>
+          <ContactInfo isView={isView} />
           <Divider orientation="left">紧急联系人</Divider>
-          <Row gutter={24}>
-            <Col xl={8} lg={12} md={24}>
-              <ProFormText
-                width="sm"
-                name="contactName"
-                label="紧急联系人姓名"
-                rules={[{ required: false, message: '请输入紧急联系人姓名' }]}
-                readonly={isView}
-              />
-            </Col>
-            <Col xl={8} lg={12} md={24}>
-              <ProFormSelect
-                width="sm"
-                name="contactRelation"
-                label="紧急联系人关系"
-                rules={[{ required: false, message: '请选择紧急联系人关系' }]}
-                request={async ({ keyWords }) => {
-                  const { data } = await getDictionaryChildrenByCode('Relation', keyWords);
-                  return data ? data.map(item => ({
-                    value: item.name,
-                    label: item.name
-                  })) : []
-                }}
-                readonly={isView}
-              />
-            </Col>
-            <Col xl={8} lg={12} md={24}>
-              <ProFormText
-                width="sm"
-                name="contactPhone"
-                label="紧急联系人电话"
-                rules={[{ required: false, message: '请输入紧急联系人电话' }]}
-                readonly={isView}
-              />
-            </Col>
-          </Row>
+          <EmergencyContactInfo isView={isView} />
           <Divider orientation="left">亲友在司信息</Divider>
-          <Row gutter={24}>
-            <Col xl={8} lg={12} md={24}>
-              <ProFormText
-                width="sm"
-                name="friendName"
-                label="亲友姓名"
-                rules={[{ required: false, message: '请输入亲友姓名' }]}
-                readonly={isView}
-              />
-            </Col>
-            <Col xl={8} lg={12} md={24}>
-              <ProFormSelect
-                width="sm"
-                name="friendRelation"
-                label="亲友关系"
-                rules={[{ required: false, message: '请选择亲友关系' }]}
-                request={async ({ keyWords }) => {
-                  const { data } = await getDictionaryChildrenByCode('Relation', keyWords);
-                  return data ? data.map(item => ({
-                    value: item.name,
-                    label: item.name
-                  })) : []
-                }}
-                readonly={isView}
-              />
-            </Col>
-            <Col xl={8} lg={12} md={24}>
-              <ProFormText
-                width="sm"
-                name="friendDepartment"
-                label="亲友部门"
-                rules={[{ required: false, message: '请输入亲友部门' }]}
-                readonly={isView}
-              />
-            </Col>
-            <Col xl={8} lg={12} md={24}>
-              <ProFormText
-                width="sm"
-                name="friendDuty"
-                label="亲友职务"
-                rules={[{ required: false, message: '请输入亲友职务' }]}
-                readonly={isView}
-              />
-            </Col>
-          </Row>
+          <FriendInfo isView={isView} />
           <Divider orientation="left">驾照信息</Divider>
-          <Row gutter={24}>
-            <Col xl={8} lg={12} md={24}>
-              <ProFormText
-                width="sm"
-                name="driverLicenseType"
-                label="驾驶证类型"
-                rules={[{ required: false, message: '请输入驾驶证类型' }]}
-                readonly={isView}
-              />
-            </Col>
-            <Col xl={8} lg={12} md={24}>
-              <ProFormDatePicker
-                width="sm"
-                name="workDate"
-                label="驾驶证领证时间"
-                rules={[{ required: false, message: '请输入驾驶证领证时间' }]}
-                readonly={isView}
-              />
-            </Col>
-            <Col xl={8} lg={12} md={24}>
-              <ProFormDigit
-                width="sm"
-                name="driveYear"
-                label="驾龄"
-                rules={[{ required: false, message: '请输入驾龄' }]}
-                readonly={isView}
-              />
-            </Col>
-            <Col xl={8} lg={12} md={24}>
-              <ProFormText
-                width="sm"
-                name="driveLines"
-                label="熟悉的驾驶路线"
-                rules={[{ required: false, message: '请输入熟悉的驾驶路线' }]}
-                readonly={isView}
-              />
-            </Col>
-            <Col xl={8} lg={12} md={24}>
-              <ProFormText
-                width="sm"
-                name="vehicleType"
-                label="驾驶车种"
-                rules={[{ required: false, message: '请输入驾驶车种' }]}
-                readonly={isView}
-              />
-            </Col>
-          </Row>
+          <DriverInfo isView={isView} />
           <Divider/>
           <Row gutter={24}>
             <Col xl={8} md={12} sm={24}>
@@ -499,188 +352,13 @@ const FormBody: React.FC<FormProps> = (props) => {
           </Row>
         </Tabs.TabPane>
         <Tabs.TabPane tab="个人身体情况" key="2">
-          <Row gutter={24}>
-            <Col xl={8} lg={12} md={24}>
-              <ProFormText
-                width="sm"
-                name="physicalCondition"
-                label="本人身体状况"
-                rules={[{ required: false, message: '请输入本人身体状况' }]}
-                readonly={isView}
-              />
-            </Col>
-            <Col xl={8} lg={12} md={24}>
-              <ProFormText
-                width="sm"
-                name="weight"
-                label="体重(KG)"
-                rules={[{ required: false, message: '请输入体重(KG)' }]}
-                readonly={isView}
-              />
-            </Col>
-            <Col xl={8} lg={12} md={24}>
-              <ProFormText
-                width="sm"
-                name="height"
-                label="身高(CM)"
-                rules={[{ required: false, message: '请输入身高(CM)' }]}
-                readonly={isView}
-              />
-            </Col>
-            <Col xl={8} lg={12} md={24}>
-              <ProFormText
-                width="sm"
-                name="vision"
-                label="视力"
-                rules={[{ required: false, message: '请输入视力' }]}
-                readonly={isView}
-              />
-            </Col>
-            <Col xl={8} lg={12} md={24}>
-              <ProFormText
-                width="sm"
-                name="bloodType"
-                label="血型"
-                rules={[{ required: false, message: '请输入血型' }]}
-                readonly={isView}
-              />
-            </Col>
-            <Col xl={8} lg={12} md={24}>
-              <ProFormText
-                width="sm"
-                name="medicalHistory"
-                label="遗传病史或传染病"
-                rules={[{ required: false, message: '请输入遗传病史或传染病' }]}
-                readonly={isView}
-              />
-            </Col>
-          </Row>
+          <PhysicalInfo isView={isView} />
         </Tabs.TabPane>
         <Tabs.TabPane tab="婚姻状况" key="3">
-          <Row gutter={24}>
-            <Col xl={8} lg={12} md={24}>
-              <ProFormSelect
-                width="sm"
-                name="maritalStatus"
-                label="婚姻状况"
-                rules={[{ required: false, message: '请选择婚姻状况' }]}
-                request={async ({ keyWords }) => {
-                  const { data } = await getDictionaryChildrenByCode('MaritalStatus', keyWords);
-                  return data ? data.map(item => ({
-                    value: item.name,
-                    label: item.name
-                  })) : []
-                }}
-                readonly={isView}
-              />
-            </Col>
-            <Col xl={8} lg={12} md={24}>
-              <ProFormDatePicker
-                width="sm"
-                name="marriageDate"
-                label="结婚日期"
-                placeholder="请选择结婚日期"
-                readonly={isView}
-              />
-            </Col>
-            <Col xl={8} lg={12} md={24}>
-              <ProFormText
-                width="sm"
-                name="spouseName"
-                label="配偶名字"
-                placeholder="请输入配偶名字"
-                readonly={isView}
-              />
-            </Col>
-            <Col xl={8} lg={12} md={24}>
-              <ProFormSelect
-                width="sm"
-                name="fertility"
-                label="生育情况"
-                rules={[{ required: false, message: '请选择生育情况' }]}
-                request={async ({ keyWords }) => {
-                  const { data } = await getDictionaryChildrenByCode('Fertility', keyWords);
-                  return data ? data.map(item => ({
-                    value: item.name,
-                    label: item.name
-                  })) : []
-                }}
-                readonly={isView}
-              />
-            </Col>
-            <Col xl={8} lg={12} md={24}>
-              <ProFormDigit
-                width="sm"
-                name="childrenNumber"
-                label="子女人数"
-                placeholder="请输入子女人数"
-                readonly={isView}
-              />
-            </Col>
-            <Col xl={24} lg={24} md={24}>
-              <ProFormItem
-                label="结婚证件"
-                name="marriageCertificate"
-              >
-                <CustomUpload
-                  type="ProFormUploadDragger"
-                  listType="picture"
-                  readonly={isView}
-                  maxCount={1}
-                  description="仅能保存单文件"
-                />
-              </ProFormItem>
-            </Col>
-          </Row>
+          <MarriageInfo isView={isView} />
         </Tabs.TabPane>
         <Tabs.TabPane tab="服兵役信息" key="4">
-          <Row gutter={24}>
-            <Col xl={8} lg={12} md={24}>
-              <ProFormText
-                width="sm"
-                name="troopBase"
-                label="部队驻扎地"
-                rules={[{ required: false, message: '请输入部队驻扎地' }]}
-                readonly={isView}
-              />
-            </Col>
-            <Col xl={8} lg={12} md={24}>
-              <ProFormDatePicker
-                width="sm"
-                name="enlistmentDate"
-                label="入伍时间"
-                rules={[{ required: false, message: '请选择入伍时间' }]}
-                readonly={isView}
-              />
-            </Col>
-            <Col xl={8} lg={12} md={24}>
-              <ProFormDatePicker
-                width="sm"
-                name="dischargeDate"
-                label="退伍时间"
-                rules={[{ required: false, message: '请选择退伍时间' }]}
-                readonly={isView}
-              />
-            </Col>
-            <Col xl={8} lg={12} md={24}>
-              <ProFormText
-                width="sm"
-                name="dischargeRank"
-                label="退伍时军衔"
-                rules={[{ required: false, message: '请输入退伍时军衔' }]}
-                readonly={isView}
-              />
-            </Col>
-            <Col xl={8} lg={12} md={24}>
-              <ProFormText
-                width="sm"
-                name="honour"
-                label="立功"
-                rules={[{ required: false, message: '请输入立功' }]}
-                readonly={isView}
-              />
-            </Col>
-          </Row>
+          <ArmyInfo isView={isView} />
         </Tabs.TabPane>
         <Tabs.TabPane tab="工作履历" key="5">
           <WorkExperienceList
