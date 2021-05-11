@@ -4,7 +4,7 @@ import {Button, Divider, Input, message, Modal} from 'antd';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import type {ActionType, ProColumns} from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import {exportStaff, getStaffById, getStaffPage } from '@/services/staff/staff';
+import {exportStaff, getStaffById, getStaffPage, printStaff} from '@/services/staff/staff';
 import type { StaffForm, StaffVO } from '@/services/staff/typings';
 import { getPageParams, getSortOrder, tableFilter } from "@/utils/common";
 import { ExportOutlined, ImportOutlined, PlusOutlined } from "@ant-design/icons";
@@ -269,6 +269,16 @@ const StaffList: React.FC = () => {
             }}
           >
             <ExportOutlined /> 导出
+          </Button>,
+          <Button
+            type="primary"
+            onClick={() => {
+              printStaff(23452345234).then(data => {
+                downloadFile(data, `员工-${new Date().getTime()}.docx`)
+              })
+            }}
+          >
+            <ExportOutlined /> 打印
           </Button>,
         ]}
         request={async (params, sorter) => {

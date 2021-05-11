@@ -127,16 +127,6 @@ const FormBody: React.FC<FormProps> = (props) => {
                   />
                 </Col>
                 <Col xl={12} lg={24} md={24}>
-                  <ProFormItem name="birthAddress" label="出生地">
-                    <RegionSelect level={2} customValue={birthAddress} readonly={isView} />
-                  </ProFormItem>
-                </Col>
-                <Col xl={12} lg={24} md={24}>
-                  <ProFormItem name="nativeAddress" label="籍贯">
-                    <RegionSelect level={2} customValue={nativeAddress} readonly={isView} />
-                  </ProFormItem>
-                </Col>
-                <Col xl={12} lg={24} md={24}>
                   <ProFormSelect
                     width="sm"
                     name="householdType"
@@ -242,6 +232,16 @@ const FormBody: React.FC<FormProps> = (props) => {
                     rules={[{ required: false, message: '请输入父母赡养情况' }]}
                     readonly={isView}
                   />
+                </Col>
+                <Col xl={12} lg={24} md={24}>
+                  <ProFormItem name="birthAddress" label="出生地">
+                    <RegionSelect level={2} customValue={birthAddress} readonly={isView} />
+                  </ProFormItem>
+                </Col>
+                <Col xl={12} lg={24} md={24}>
+                  <ProFormItem name="nativeAddress" label="籍贯">
+                    <RegionSelect level={2} customValue={nativeAddress} readonly={isView} />
+                  </ProFormItem>
                 </Col>
               </Row>
               <Row gutter={24}>

@@ -67,13 +67,26 @@ export async function batchDeleteStaff(body: number[], options?: Record<string, 
   });
 }
 
-/** 文件下载 POST /download */
+/** 导出员工信息 GET /staff/export */
 export async function exportStaff(params: any, options?: Record<string, any>) {
   return request('/hrs-api/staff/export', {
     method: 'GET',
     responseType: 'blob',
     params: {
       ...params
+    },
+    ...(options || {}),
+    skipErrorHandler: true
+  });
+}
+
+/** 打印员工信息 POST /staff/print */
+export async function printStaff(staffId: number, options?: Record<string, any>) {
+  return request('/hrs-api/staff/print', {
+    method: 'GET',
+    responseType: 'blob',
+    params: {
+      staffId
     },
     ...(options || {}),
     skipErrorHandler: true
