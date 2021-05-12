@@ -12,6 +12,7 @@ import UpdateForm from "@/pages/Recruit/ResumeList/components/UpdateForm";
 import ViewForm from "@/pages/Recruit/ResumeList/components/ViewForm";
 import { ProFormUploadDragger } from "@ant-design/pro-form";
 import {downloadFile} from "@/utils/file";
+import JobView from "@/pages/Recruit/ResumeList/components/JobView";
 
 const ResumeList: React.FC = () => {
   const actionRef = useRef<ActionType>();
@@ -22,6 +23,8 @@ const ResumeList: React.FC = () => {
   const [updateDrawerVisible, handleUpdateDrawerVisible] = useState<boolean>(false);
   const [selectedRowsState, setSelectedRows] = useState<ResumeVO[]>([]);
   const [importModalVisible, setImportModalVisible] = useState<boolean>(false);
+  const [jobViewVisible, handleJobViewVisible] = useState<boolean>(false);
+
 
   const columns: ProColumns<ResumeVO>[] = [
     {
@@ -168,6 +171,8 @@ const ResumeList: React.FC = () => {
             onClick={() => {
               const fieldsValue = formRef.current?.getFieldsValue();
               console.log(fieldsValue);
+              // handleJobViewVisible(true)
+
             }}
           >
             <ExportOutlined /> 打印
@@ -213,6 +218,11 @@ const ResumeList: React.FC = () => {
         values={updateFormValues}
         onCancel={() => setUpdateFormValues({})}
         tableActionRef={actionRef}
+      />
+      <JobView
+        jobViewVisible={jobViewVisible}
+        handleJobViewVisible={handleJobViewVisible}
+        resumeId={1}
       />
 
       <Modal
