@@ -79,3 +79,16 @@ export async function exportResume(params: any, options?: Record<string, any>) {
     skipErrorHandler: true
   });
 }
+
+/** 打印求职申请表 POST /resume/print */
+export async function printResume(resumeId: number, options?: Record<string, any>) {
+  return request('/hrs-api/resume/print', {
+    method: 'GET',
+    responseType: 'blob',
+    params: {
+      resumeId
+    },
+    ...(options || {}),
+    skipErrorHandler: true
+  });
+}

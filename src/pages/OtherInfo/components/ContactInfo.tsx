@@ -24,6 +24,15 @@ const ContactInfo: React.FC<ContactInfoProps> = (props) => {
         <Col xl={8} lg={12} md={24}>
           <ProFormText
             width="sm"
+            name="homePhone"
+            label="家庭电话"
+            placeholder="请输入联系电话"
+            readonly={isView}
+          />
+        </Col>
+        <Col xl={8} lg={12} md={24}>
+          <ProFormText
+            width="sm"
             name="email"
             label="邮箱"
             placeholder="请输入邮箱"

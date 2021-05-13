@@ -4,7 +4,7 @@ import {Button, Divider, Input, message, Modal} from 'antd';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import type {ActionType, ProColumns} from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { exportResume, getResumeById, getResumePage } from '@/services/resume/resume';
+import {exportResume, getResumeById, getResumePage, printResume} from '@/services/resume/resume';
 import type { ResumeForm, ResumeVO } from '@/services/resume/typings';
 import { getPageParams, getSortOrder } from "@/utils/common";
 import { ExportOutlined, ImportOutlined } from "@ant-design/icons";
@@ -172,6 +172,9 @@ const ResumeList: React.FC = () => {
               const fieldsValue = formRef.current?.getFieldsValue();
               console.log(fieldsValue);
               // handleJobViewVisible(true)
+              printResume(2345234523411).then(data => {
+                downloadFile(data, `员工-${new Date().getTime()}.docx`)
+              })
 
             }}
           >
