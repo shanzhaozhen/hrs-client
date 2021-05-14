@@ -19,6 +19,7 @@ import ArmyInfo from "@/pages/OtherInfo/components/ArmyInfo";
 import MarriageInfo from "@/pages/OtherInfo/components/MarriageInfo";
 import EmergencyContactInfo from "@/pages/OtherInfo/components/EmergencyContactInfo";
 import ContactInfo from "@/pages/OtherInfo/components/ContactInfo";
+import CustomUpload from "@/components/CustomUpload";
 
 interface FormProps {
   isView?: boolean;
@@ -455,6 +456,24 @@ const FormBody: React.FC<FormProps> = (props) => {
             editForm={props.familyForm}
             value={values?.familyList}
           />
+        </Tabs.TabPane>
+        <Tabs.TabPane tab="其他附件" key="9" forceRender>
+          <Row gutter={24}>
+            <Col xl={24} lg={24} md={24}>
+              <ProFormItem
+                label="劳动合同"
+                name="laborContract"
+              >
+                <CustomUpload
+                  type="ProFormUploadDragger"
+                  listType="picture"
+                  readonly={isView}
+                  maxCount={1}
+                  description="仅能保存单文件"
+                />
+              </ProFormItem>
+            </Col>
+          </Row>
         </Tabs.TabPane>
       </Tabs>
     </>

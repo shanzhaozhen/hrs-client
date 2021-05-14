@@ -35,6 +35,8 @@ export type StaffForm = {
   idNumber?: string;
   /** 社保号 */
   socialSecurityNumber?: string;
+  /** 劳动合同 */
+  laborContract?: string;
   /** 开始工作时间 */
   workDate?: string;
   /** 入职日期 */
@@ -205,6 +207,8 @@ export type StaffVO = {
   idNumber?: string;
   /** 社保号 */
   socialSecurityNumber?: string;
+  /** 劳动合同 */
+  laborContract?: string;
   /** 开始工作时间 */
   workDate?: string;
   /** 入职日期 */

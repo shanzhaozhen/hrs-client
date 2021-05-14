@@ -128,6 +128,21 @@ export default [
     ],
   },
   {
+    path: '/mobile',
+    name: 'mobile',
+    layout: false,
+    hideInMenu: true,
+    routes: [
+      {
+        path: '/mobile/resume',
+        name: 'ResumeFill',
+        layout: false,
+        hideInMenu: true,
+        component: './Mobile/Resume',
+      },
+    ],
+  },
+  {
     path: '/',
     redirect: '/index',
   },

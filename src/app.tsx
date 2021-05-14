@@ -30,6 +30,11 @@ const loopMenuItem = (menuData: MenuDataItem[]): MenuDataItem[] =>
     children: children && loopMenuItem(children),
   }));
 
+const whiteList = [
+  '/login',
+  '/mobile/resume'
+]
+
 /**
  * @see  https://umijs.org/zh-CN/plugins/plugin-initial-state
  * */
@@ -51,7 +56,7 @@ export async function getInitialState(): Promise<{
     return undefined;
   };
   // 如果是登录页面，不执行
-  if (history.location.pathname !== '/login') {
+  if (whiteList.indexOf(history.location.pathname) === -1) {
     const currentUser = await fetchUserInfo();
 
     return {
@@ -78,7 +83,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
     onPageChange: () => {
       const { location } = history;
       // 如果没有登录，重定向到 login
-      if (!initialState?.userInfo && location.pathname !== '/login') {
+      if (!initialState?.userInfo && whiteList.indexOf(location.pathname) === -1) {
         history.push('/login');
       }
     },
