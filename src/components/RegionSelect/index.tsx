@@ -9,14 +9,14 @@ import {useRegionOptions} from "@/utils/region";
 interface RegionSelectProps {
   size?: SizeType,
   level: number,
-  hasDetail?: boolean,
+  haveDetail?: boolean,
   customValue?: RegionType,
   readonly?: boolean,
   onChange?: (value: any) => void;
 }
 
 const RegionSelect: React.FC<RegionSelectProps> = (props) => {
-  const { size, level, hasDetail, customValue, readonly, onChange } = props;
+  const { size, level, haveDetail, customValue, readonly, onChange } = props;
 
   const [currentValue, setCurrentValue] = useState<RegionType>({});
   const [selectValue, setSelectValue] = useState<CascaderValueType>([]);
@@ -35,9 +35,9 @@ const RegionSelect: React.FC<RegionSelectProps> = (props) => {
   const onRegionChange = (changeValue: CascaderValueType) => {
     setCurrentValue(data => ({
       ...data,
-      province: changeValue[0],
-      city: changeValue[1],
-      area: changeValue[2],
+      province: level > 0 ? changeValue[0] : undefined,
+      city: level > 1 ? changeValue[1] : undefined,
+      area: level > 2 ? changeValue[2] : undefined,
     }));
     onChange?.(currentValue);
   };
@@ -53,14 +53,14 @@ const RegionSelect: React.FC<RegionSelectProps> = (props) => {
   const renderBody = () => {
     if (readonly) {
       let readValue: any = selectValue.join('');
-      if (hasDetail) {
+      if (haveDetail) {
         readValue = inputValue
       }
       return (
         <div>{readValue}</div>
       )
     }
-    if (hasDetail) {
+    if (haveDetail) {
       return (
         <Input.Group compact>
           <Cascader style={{ width: '45%' }} size={size} options={regionOptions} defaultValue={selectValue} onChange={onRegionChange} />

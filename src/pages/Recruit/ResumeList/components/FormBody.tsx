@@ -247,23 +247,23 @@ const FormBody: React.FC<FormProps> = (props) => {
               <Row gutter={24}>
                 <Col xl={12} lg={12} md={24}>
                   <ProFormItem name="registeredAddress" label="户口地址">
-                    <RegionSelect level={3} customValue={registeredAddress} hasDetail readonly={isView} />
+                    <RegionSelect level={3} customValue={registeredAddress} haveDetail readonly={isView} />
                   </ProFormItem>
                 </Col>
                 <Col xl={12} lg={12} md={24}>
                   <ProFormItem name="homeAddress" label="家庭住址">
-                    <RegionSelect level={3} customValue={homeAddress} hasDetail readonly={isView} />
+                    <RegionSelect level={3} customValue={homeAddress} haveDetail readonly={isView} />
                   </ProFormItem>
                 </Col>
 
                 <Col xl={12} lg={12} md={24}>
                   <ProFormItem name="currentAddress" label="现住地址">
-                    <RegionSelect level={3} customValue={currentAddress} hasDetail readonly={isView} />
+                    <RegionSelect level={3} customValue={currentAddress} haveDetail readonly={isView} />
                   </ProFormItem>
                 </Col>
                 <Col xl={12} lg={12} md={24}>
                   <ProFormItem name="postalAddress" label="邮递地址">
-                    <RegionSelect level={3} customValue={postalAddress} hasDetail readonly={isView} />
+                    <RegionSelect level={3} customValue={postalAddress} haveDetail readonly={isView} />
                   </ProFormItem>
                 </Col>
               </Row>
@@ -354,7 +354,7 @@ const FormBody: React.FC<FormProps> = (props) => {
         <Tabs.TabPane tab="个人身体情况" key="2">
           <PhysicalInfo isView={isView} />
         </Tabs.TabPane>
-        <Tabs.TabPane tab="婚姻状况" key="3">
+        <Tabs.TabPane tab="婚育状况" key="3">
           <MarriageInfo isView={isView} />
         </Tabs.TabPane>
         <Tabs.TabPane tab="服兵役信息" key="4">
@@ -367,7 +367,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             value={values?.workExperienceList}
           />
         </Tabs.TabPane>
-        <Tabs.TabPane tab="学习经历" key="6">
+        <Tabs.TabPane tab="教育经历" key="6">
           <EducationalExperienceList
             readonly={isView}
             editForm={props.educationalExperienceForm}
