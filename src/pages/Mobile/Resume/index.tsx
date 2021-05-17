@@ -83,6 +83,7 @@ const ResumeFill: React.FC = () => {
           formRef={formRef}
           onValuesChange={onFormValuesChange}
           initialValues={{
+            // hobby1: 222
           }}
           submitter={{
             submitButtonProps: {
@@ -218,7 +219,30 @@ const ResumeFill: React.FC = () => {
               <Input clearable type="text" placeholder="请输入爱好" />
             </Form.Item>
           </Cell>
-          <ZarmOtherSelect title="父母赡养情况" />
+          <Form.Item
+            name="parentalSupport"
+            noStyle
+          >
+            <ZarmOtherSelect
+              title="父母赡养情况"
+              dataSource={[
+                { label: `1`, value: 1 },
+                { label: `2`, value: 2 }
+              ]}
+            />
+          </Form.Item>
+          <Form.Item
+            name="parentalSupport"
+            noStyle
+          >
+            <ZarmOtherSelect
+              title="父母赡养情况"
+              dataSource={[
+                { label: `1`, value: 1 },
+                { label: `2`, value: 2 }
+              ]}
+            />
+          </Form.Item>
           <Button block theme="primary" onClick={formRef.current?.submit}>提交</Button>
         </ProForm>
       </div>

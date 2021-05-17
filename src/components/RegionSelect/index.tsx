@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {Cascader, Input} from 'antd';
-import type {CascaderOptionType, CascaderValueType} from "antd/es/cascader";
-import { getRegionTreeByLevel } from "@/services/region/region";
-import type {RegionType, RegionVO} from "@/services/region/typings";
+import type { CascaderValueType } from "antd/es/cascader";
+import type { RegionType } from "@/services/region/typings";
 import type { SizeType } from "antd/es/config-provider/SizeContext";
+import {useRegionOptions} from "@/utils/region";
 
 
 interface RegionSelectProps {
@@ -18,34 +18,17 @@ interface RegionSelectProps {
 const RegionSelect: React.FC<RegionSelectProps> = (props) => {
   const { size, level, hasDetail, customValue, readonly, onChange } = props;
 
-  const [regionOptions, setRegionOptions] = useState<CascaderOptionType[]>([]);
   const [currentValue, setCurrentValue] = useState<RegionType>({});
   const [selectValue, setSelectValue] = useState<CascaderValueType>([]);
   const [inputValue] = useState<string | number | undefined>(customValue?.detail);
 
-  const loopRegionOptions = (regionData: RegionVO[]): CascaderOptionType[] =>
-    regionData.map(({ name, children }) => ({
-      value: name,
-      label: name,
-      children: children && loopRegionOptions(children),
-    }));
-
-  useEffect(() => {
-    getRegionTreeByLevel(level, -1).then(({ data }) => {
-      setRegionOptions(loopRegionOptions(data || []))
-    });
-
-    return () => setRegionOptions([]);
-  }, []);
+  const regionOptions = useRegionOptions(level);
 
   useEffect(() => {
     if (customValue) {
       if (customValue.province && customValue.city && customValue.area) {
         setSelectValue([customValue.province, customValue.city, customValue.area]);
       }
-      // if (hasDetail) {
-      //   setInputValue(customValue?.detail)
-      // }
     }
   }, []);
 

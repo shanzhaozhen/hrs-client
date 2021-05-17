@@ -391,6 +391,8 @@ const FormBody: React.FC<FormProps> = (props) => {
                 readonly={isView}
               />
             </Col>
+          </Row>
+          <Row gutter={24}>
             <Col xl={12} lg={12} md={24}>
               <ProFormItem name="registeredAddress" label="户口地址">
                 <RegionSelect level={3} customValue={registeredAddress} hasDetail readonly={isView} />
