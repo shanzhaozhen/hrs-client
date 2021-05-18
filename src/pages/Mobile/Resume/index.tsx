@@ -1,8 +1,8 @@
 import 'zarm/dist/zarm.css';
 import './index.less';
-import React, { useRef, useState} from 'react';
+import React, { useRef, useState } from 'react';
 import type {ReactNode} from 'react';
-import {Button, Cell, Collapse, DateSelect, Icon, Input, Message, Switch} from "zarm";
+import {Button, Cell, Collapse, ConfigProvider, DateSelect, Icon, Input, Message, Panel, Switch} from "zarm";
 import type { FormInstance } from 'antd';
 import { Form } from 'antd';
 import ProForm from '@ant-design/pro-form';
@@ -10,15 +10,15 @@ import ZaSelect from "@/components/CustomZarm/ZaSelect";
 import ZaOtherSelect from "@/components/CustomZarm/ZaOtherSelect";
 import ZaRegionSelect from "@/components/CustomZarm/ZaRegionSelect";
 import type {CollapseItemKey} from "zarm/types/collapse/PropsType";
+import {DownOutlined, UpOutlined} from "@ant-design/icons";
+import WorkItem from "@/pages/Mobile/Resume/components/WorkItem";
 
 const ResumeFill: React.FC = () => {
   const [errors, setErrors] = useState<any>({});
-  const [ activeKey, setActiveKey ] = useState<CollapseItemKey | CollapseItemKey[] | undefined>("1");
   const [ activeKey1, setActiveKey1 ] = useState<CollapseItemKey | CollapseItemKey[] | undefined>("work1");
-
+  const [ currentPage, setCurrentPage ] = useState<number>(7);
 
   const formRef = useRef<FormInstance>();
-
 
   const customValidator = async (currentField: string, value: any, require: boolean, customRule?: () => boolean, customRuleTip?: string) => {
     if (require && !value) {
@@ -83,31 +83,32 @@ const ResumeFill: React.FC = () => {
 
   return (
     <>
-      <div style={{ paddingBottom: 50 }}>
-        <div>
-          <ProForm
-            formRef={formRef}
-            onValuesChange={onFormValuesChange}
-            initialValues={{
-              // hobby1: 222
-            }}
-            submitter={{
-              submitButtonProps: {
-                style: {
-                  display: 'none',
+      <ConfigProvider primaryColor="#1890ff">
+        <div className="za-page">
+          <div>
+            <ProForm
+              formRef={formRef}
+              onValuesChange={onFormValuesChange}
+              initialValues={{
+                // hobby1: 222
+              }}
+              submitter={{
+                submitButtonProps: {
+                  style: {
+                    display: 'none',
+                  },
                 },
-              },
-              resetButtonProps: {
-                style: {
-                  display: 'none',
+                resetButtonProps: {
+                  style: {
+                    display: 'none',
+                  },
                 },
-              },
-            }}
-            onFinish={async (value) => {
-              console.log(value)
-            }}
-          >
-            <Collapse
+              }}
+              onFinish={async (value) => {
+                console.log(value)
+              }}
+            >
+              {/* <Collapse
               activeKey={activeKey}
               animated
               multiple={false}
@@ -115,7 +116,8 @@ const ResumeFill: React.FC = () => {
                 setActiveKey(changeActiveKey);
               }}
             >
-              <Collapse.Item key="1" title="基础信息" animated>
+              <Collapse.Item key="2" title="个人身体情况" animated> */}
+              <Panel title="基础信息" className={currentPage === 1 ? 'page-show' : 'page-hide'}>
                 <Cell title={requiredTitle('姓名')} help={customHelp('name')}>
                   <Form.Item
                     name="name"
@@ -203,46 +205,23 @@ const ResumeFill: React.FC = () => {
                   />
                 </Form.Item>
                 <Form.Item name="birthAddress" noStyle>
-                  <ZaRegionSelect
-                    title="出生地"
-                    level={3}
-                    haveDetail
-                  />
+                  <ZaRegionSelect title="出生地" level={3} haveDetail/>
                 </Form.Item>
                 <Form.Item name="nativeAddress" noStyle>
-                  <ZaRegionSelect
-                    title="籍贯"
-                    level={2}
-                    haveDetail
-                  />
+                  <ZaRegionSelect title="籍贯" level={2}/>
                 </Form.Item>
                 <Form.Item name="registeredAddress" noStyle>
-                  <ZaRegionSelect
-                    title="户口地址"
-                    level={3}
-                    haveDetail
-                  />
+                  <ZaRegionSelect title="户口地址" level={3} haveDetail/>
                 </Form.Item>
                 <Form.Item name="homeAddress" noStyle>
-                  <ZaRegionSelect
-                    title="家庭住址"
-                    level={3}
-                    haveDetail
-                  />
+                  <ZaRegionSelect title="家庭住址" level={3} haveDetail/>
                 </Form.Item>
                 <Form.Item name="currentAddress" noStyle>
-                  <ZaRegionSelect
-                    title="现住地址"
-                    level={3}
-                    haveDetail
+                  <ZaRegionSelect title="现住地址" level={3} haveDetail
                   />
                 </Form.Item>
                 <Form.Item name="postalAddress" noStyle>
-                  <ZaRegionSelect
-                    title="邮递地址"
-                    level={3}
-                    haveDetail
-                  />
+                  <ZaRegionSelect title="邮递地址" level={3} haveDetail/>
                 </Form.Item>
                 <Cell title="期望月薪">
                   <Form.Item name="expectedSalary" noStyle>
@@ -322,8 +301,8 @@ const ResumeFill: React.FC = () => {
                     <Switch defaultChecked />
                   </Form.Item>
                 </Cell>
-              </Collapse.Item>
-              <Collapse.Item key="2" title="个人身体情况" animated>
+              </Panel>
+              <Panel title="个人身体情况" className={currentPage === 2 ? 'page-show' : 'page-hide'}>
                 <Cell title="本人身体状况">
                   <Form.Item name="physicalCondition" noStyle>
                     <Input clearable type="text" placeholder="请输入本人身体状况" />
@@ -349,19 +328,15 @@ const ResumeFill: React.FC = () => {
                     <Input clearable type="text" placeholder="请输入血型" />
                   </Form.Item>
                 </Cell>
-              </Collapse.Item>
-              <Collapse.Item key="3" title="婚育状况" animated>
+              </Panel>
+              <Panel title="婚育情况" className={currentPage === 3 ? 'page-show' : 'page-hide'}>
                 <Cell title="婚姻状况">
                   <Form.Item name="maritalStatus" noStyle>
                     <ZaSelect placeholder="请选择婚姻状况"/>
                   </Form.Item>
                 </Cell>
                 <Cell title="结婚日期">
-                  <Form.Item
-                    name="marriageDate"
-                    trigger="onOk"
-                    noStyle
-                  >
+                  <Form.Item name="marriageDate" trigger="onOk" noStyle>
                     <DateSelect
                       title="请选择结婚日期"
                       placeholder="请选择结婚日期"
@@ -399,8 +374,8 @@ const ResumeFill: React.FC = () => {
                     <Input clearable type="text" placeholder="请输入结婚证件" />
                   </Form.Item>
                 </Cell>
-              </Collapse.Item>
-              <Collapse.Item key="4" title="亲友信息" animated>
+              </Panel>
+              <Panel title="亲友信息" className={currentPage === 4 ? 'page-show' : 'page-hide'}>
                 <Cell title="是否有亲友在司">
                   <Form.Item name="haveFriend" noStyle>
                     <Switch />
@@ -426,13 +401,10 @@ const ResumeFill: React.FC = () => {
                     <Input clearable type="text" placeholder="请输入亲友职务" />
                   </Form.Item>
                 </Cell>
-              </Collapse.Item>
-              <Collapse.Item key="5" title="驾驶证信息" animated>
+              </Panel>
+              <Panel title="驾驶证信息" className={currentPage === 5 ? 'page-show' : 'page-hide'}>
                 <Cell title="驾驶证类型">
-                  <Form.Item
-                    name="driverLicenseType"
-                    noStyle
-                  >
+                  <Form.Item name="driverLicenseType" noStyle>
                     <Input clearable type="text" placeholder="请输入驾驶证类型" />
                   </Form.Item>
                 </Cell>
@@ -465,8 +437,8 @@ const ResumeFill: React.FC = () => {
                     <Input clearable type="text" placeholder="请输入驾驶车种" />
                   </Form.Item>
                 </Cell>
-              </Collapse.Item>
-              <Collapse.Item key="6" title="服兵役信息" animated>
+              </Panel>
+              <Panel title="服兵役信息" className={currentPage === 6 ? 'page-show' : 'page-hide'}>
                 <Cell title="部队驻扎地">
                   <Form.Item name="troopBase" noStyle>
                     <Input clearable type="number" placeholder="请输入部队驻扎地" />
@@ -510,8 +482,8 @@ const ResumeFill: React.FC = () => {
                     <Input clearable type="number" placeholder="请输入服役期间立功/贡献" />
                   </Form.Item>
                 </Cell>
-              </Collapse.Item>
-              <Collapse.Item key="7" title="工作履历" animated>
+              </Panel>
+              <Panel title="工作履历" className={currentPage === 7 ? 'page-show' : 'page-hide'}>
                 <Collapse
                   activeKey={activeKey1}
                   animated
@@ -520,63 +492,71 @@ const ResumeFill: React.FC = () => {
                     setActiveKey1(changeActiveKey);
                   }}
                 >
-                  <Collapse.Item key="work1" title="第一项" animated>
-                    <Cell title="婚姻状况">
-                      <Form.Item name="maritalStatus" noStyle>
-                        <ZaSelect placeholder="请选择婚姻状况"/>
-                      </Form.Item>
-                    </Cell>
-                    <Cell title="结婚日期">
-                      <Form.Item
-                        name="marriageDate"
-                        trigger="onOk"
-                        noStyle
-                      >
-                        <DateSelect
-                          title="请选择结婚日期"
-                          placeholder="请选择结婚日期"
-                          format="yyyy年MM月dd日"
-                          mode="date"
-                          min="1900-01-01"
-                          max="2027-05-15"
-                          hasArrow={false}
-                          disabled
-                        />
-                      </Form.Item>
-                    </Cell>
-                    <Cell title="配偶名字">
-                      <Form.Item name="spouseName" noStyle>
-                        <Input clearable type="text" placeholder="请输入配偶名字" />
-                      </Form.Item>
-                    </Cell>
-                  </Collapse.Item>
+                  {
+                    [{}, {}, {}].map((_, index) => {
+                      return (
+                        <Collapse.Item
+                          key={`work-${index + 1}`}
+                          title={
+                            <>
+                              <span>第{index + 1}项</span>
+                              <Button
+                                style={{ float: "right", marginRight: 15 }}
+                                size="xs"
+                                theme="danger"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                }}
+                              >
+                                删除
+                              </Button>
+                            </>
+                          }
+                          animated
+                        >
+                          <WorkItem />
+                        </Collapse.Item>
+                      );
+                    })
+                  }
                 </Collapse>
-              </Collapse.Item>
-              <Collapse.Item key="8" title="教育经历" animated>
-              </Collapse.Item>
-              <Collapse.Item key="9" title="证书信息" animated>
-              </Collapse.Item>
-              <Collapse.Item key="10" title="家庭信息" animated>
-              </Collapse.Item>
-            </Collapse>
-            <Button block theme="primary" onClick={formRef.current?.submit}>提交</Button>
-          </ProForm>
-        </div>
-        <div className="za-tab-bar" style={{ borderTop: '1px solid #ebedf0' }}>
-          <div className="za-tab-bar__item">
-            <div className="za-tab-bar__icon">
-              <Icon type="warning-round" size="md" />
-            </div>
-            <div className="za-tab-bar__title">上一页</div>
+                <div style={{ textAlign: "center", padding: "15px 10px" }}>
+                  <Button block theme="primary" size="sm" onClick={() => {}}>添加一项数据</Button>
+                </div>
+              </Panel>
+              <Panel title="教育经历" className={currentPage === 8 ? 'page-show' : 'page-hide'}>
+              </Panel>
+              <Panel title="证书信息" className={currentPage === 9 ? 'page-show' : 'page-hide'}>
+              </Panel>
+              <Panel title="家庭信息" className={currentPage === 10 ? 'page-show' : 'page-hide'}>
+              </Panel>
+              {/* <Button block theme="primary" onClick={formRef.current?.submit}>提交</Button> */}
+            </ProForm>
           </div>
-          <div className="za-tab-bar__item">
-            <div className="za-tab-bar__icon">
-              <Icon type="warning-round" size="md" />
-            </div>
-            <div className="za-tab-bar__title">下一页</div>
+          <div className="za-tab-bar" style={{ borderTop: '1px solid #ebedf0' }}>
+            {
+              currentPage > 1 ? (
+                <div className="za-tab-bar__item">
+                  <div className="za-tab-bar__icon">
+                    <UpOutlined />
+                  </div>
+                  <div className="za-tab-bar__title" onClick={() => { setCurrentPage(origin => (origin > 1 && origin < 11 ? origin - 1 : origin)) }}>上一页</div>
+                </div>
+              ) : null
+            }
+            {
+              currentPage < 10 ? (
+                <div className="za-tab-bar__item">
+                  <div className="za-tab-bar__icon">
+                    <DownOutlined />
+                  </div>
+                  <div className="za-tab-bar__title" onClick={() => { setCurrentPage(origin => (origin > 0 && origin < 10 ? origin + 1 : origin)) }}>下一页</div>
+                </div>
+              ) : null
+            }
           </div>
         </div>
-      </div>
+      </ConfigProvider>
     </>
   );
 };
