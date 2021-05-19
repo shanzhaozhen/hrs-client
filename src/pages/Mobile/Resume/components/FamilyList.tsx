@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Cell, Collapse, DateSelect, Input } from "zarm";
 import { Form } from 'antd';
 import ZaSelect from "@/components/CustomZarm/ZaSelect";
+import {PlusOutlined} from "@ant-design/icons";
 
 // interface FamilyListProps {
 //   value?: RegionType;
@@ -59,7 +60,6 @@ const FamilyList: React.FC = () => {
                             min="1900-01-01"
                             max="2027-05-15"
                             hasArrow={false}
-                            disabled
                           />
                         </Form.Item>
                       </Cell>
@@ -78,7 +78,6 @@ const FamilyList: React.FC = () => {
                             min="1900-01-01"
                             max="2027-05-15"
                             hasArrow={false}
-                            disabled
                           />
                         </Form.Item>
                       </Cell>
@@ -107,7 +106,10 @@ const FamilyList: React.FC = () => {
                 ))
               }
               <div style={{ textAlign: "center", padding: "15px 10px" }}>
-                <Button block theme="primary" size="sm" onClick={() => add()}>添加一项数据</Button>
+                <button type="button" className="ant-btn ant-btn-dashed ant-btn-block" onClick={() => add()}>
+                  <PlusOutlined />
+                  <span>添加一项数据</span>
+                </button>
               </div>
             </>
           )

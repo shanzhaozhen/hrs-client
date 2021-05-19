@@ -252,7 +252,6 @@ const ResumeFill: React.FC = () => {
                       min="1900-01-01"
                       max="2027-05-15"
                       hasArrow={false}
-                      disabled
                     />
                   </Form.Item>
                 </Cell>
@@ -340,7 +339,6 @@ const ResumeFill: React.FC = () => {
                       min="1900-01-01"
                       max="2027-05-15"
                       hasArrow={false}
-                      disabled
                     />
                   </Form.Item>
                 </Cell>
@@ -413,7 +411,6 @@ const ResumeFill: React.FC = () => {
                       min="1900-01-01"
                       max="2027-05-15"
                       hasArrow={false}
-                      disabled
                     />
                   </Form.Item>
                 </Cell>
@@ -436,7 +433,7 @@ const ResumeFill: React.FC = () => {
               <Panel title="服兵役信息" className={currentPage === 6 ? 'page-show' : 'page-hide'}>
                 <Cell title="部队驻扎地">
                   <Form.Item name="troopBase" noStyle>
-                    <Input clearable type="number" placeholder="请输入部队驻扎地" />
+                    <Input clearable type="text" placeholder="请输入部队驻扎地" />
                   </Form.Item>
                 </Cell>
                 <Cell title="入伍时间">
@@ -449,7 +446,6 @@ const ResumeFill: React.FC = () => {
                       min="1900-01-01"
                       max="2027-05-15"
                       hasArrow={false}
-                      disabled
                     />
                   </Form.Item>
                 </Cell>
@@ -463,18 +459,17 @@ const ResumeFill: React.FC = () => {
                       min="1900-01-01"
                       max="2027-05-15"
                       hasArrow={false}
-                      disabled
                     />
                   </Form.Item>
                 </Cell>
                 <Cell title="退伍时军衔">
                   <Form.Item name="dischargeRank" noStyle>
-                    <Input clearable type="number" placeholder="请输入退伍时军衔" />
+                    <Input clearable type="text" placeholder="请输入退伍时军衔" />
                   </Form.Item>
                 </Cell>
                 <Cell title="立功/贡献">
                   <Form.Item name="honour" noStyle>
-                    <Input clearable type="number" placeholder="请输入服役期间立功/贡献" />
+                    <Input clearable type="text" placeholder="请输入服役期间立功/贡献" />
                   </Form.Item>
                 </Cell>
               </Panel>
