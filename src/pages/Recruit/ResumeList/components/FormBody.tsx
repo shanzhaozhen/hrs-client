@@ -374,7 +374,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             value={values?.educationalExperienceList}
           />
         </Tabs.TabPane>
-        <Tabs.TabPane tab="职称信息" key="7">
+        <Tabs.TabPane tab="证书信息" key="7">
           <CertificateList
             readonly={isView}
             editForm={props.certificateForm}

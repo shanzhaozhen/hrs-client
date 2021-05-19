@@ -2,20 +2,22 @@ import 'zarm/dist/zarm.css';
 import './index.less';
 import React, { useRef, useState } from 'react';
 import type {ReactNode} from 'react';
-import {Button, Cell, Collapse, ConfigProvider, DateSelect, Icon, Input, Message, Panel, Switch} from "zarm";
+import { Cell, ConfigProvider, DateSelect, Icon, Input, Message, Panel, Switch } from "zarm";
 import type { FormInstance } from 'antd';
 import { Form } from 'antd';
 import ProForm from '@ant-design/pro-form';
 import ZaSelect from "@/components/CustomZarm/ZaSelect";
 import ZaOtherSelect from "@/components/CustomZarm/ZaOtherSelect";
 import ZaRegionSelect from "@/components/CustomZarm/ZaRegionSelect";
-import type {CollapseItemKey} from "zarm/types/collapse/PropsType";
-import {DownOutlined, UpOutlined} from "@ant-design/icons";
-import WorkItem from "@/pages/Mobile/Resume/components/WorkItem";
+import {CheckOutlined, DownOutlined, UpOutlined} from "@ant-design/icons";
+import WorkList from "@/pages/Mobile/Resume/components/WorkList";
+import EducationalList from "@/pages/Mobile/Resume/components/EducationalList";
+import CertificateList from "@/pages/Mobile/Resume/components/CertificateList";
+import FamilyList from "@/pages/Mobile/Resume/components/FamilyList";
 
 const ResumeFill: React.FC = () => {
   const [errors, setErrors] = useState<any>({});
-  const [ activeKey1, setActiveKey1 ] = useState<CollapseItemKey | CollapseItemKey[] | undefined>("work1");
+  // const [ activeKey1, setActiveKey1 ] = useState<CollapseItemKey | CollapseItemKey[] | undefined>("work1");
   const [ currentPage, setCurrentPage ] = useState<number>(7);
 
   const formRef = useRef<FormInstance>();
@@ -90,7 +92,9 @@ const ResumeFill: React.FC = () => {
               formRef={formRef}
               onValuesChange={onFormValuesChange}
               initialValues={{
-                // hobby1: 222
+                name: '12',
+                idNumber: '440',
+                workList: [{}, {}]
               }}
               submitter={{
                 submitButtonProps: {
@@ -108,15 +112,6 @@ const ResumeFill: React.FC = () => {
                 console.log(value)
               }}
             >
-              {/* <Collapse
-              activeKey={activeKey}
-              animated
-              multiple={false}
-              onChange={(changeActiveKey) => {
-                setActiveKey(changeActiveKey);
-              }}
-            >
-              <Collapse.Item key="2" title="个人身体情况" animated> */}
               <Panel title="基础信息" className={currentPage === 1 ? 'page-show' : 'page-hide'}>
                 <Cell title={requiredTitle('姓名')} help={customHelp('name')}>
                   <Form.Item
@@ -484,53 +479,17 @@ const ResumeFill: React.FC = () => {
                 </Cell>
               </Panel>
               <Panel title="工作履历" className={currentPage === 7 ? 'page-show' : 'page-hide'}>
-                <Collapse
-                  activeKey={activeKey1}
-                  animated
-                  multiple
-                  onChange={(changeActiveKey) => {
-                    setActiveKey1(changeActiveKey);
-                  }}
-                >
-                  {
-                    [{}, {}, {}].map((_, index) => {
-                      return (
-                        <Collapse.Item
-                          key={`work-${index + 1}`}
-                          title={
-                            <>
-                              <span>第{index + 1}项</span>
-                              <Button
-                                style={{ float: "right", marginRight: 15 }}
-                                size="xs"
-                                theme="danger"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                }}
-                              >
-                                删除
-                              </Button>
-                            </>
-                          }
-                          animated
-                        >
-                          <WorkItem />
-                        </Collapse.Item>
-                      );
-                    })
-                  }
-                </Collapse>
-                <div style={{ textAlign: "center", padding: "15px 10px" }}>
-                  <Button block theme="primary" size="sm" onClick={() => {}}>添加一项数据</Button>
-                </div>
+                <WorkList />
               </Panel>
               <Panel title="教育经历" className={currentPage === 8 ? 'page-show' : 'page-hide'}>
+                <EducationalList />
               </Panel>
               <Panel title="证书信息" className={currentPage === 9 ? 'page-show' : 'page-hide'}>
+                <CertificateList />
               </Panel>
               <Panel title="家庭信息" className={currentPage === 10 ? 'page-show' : 'page-hide'}>
+                <FamilyList />
               </Panel>
-              {/* <Button block theme="primary" onClick={formRef.current?.submit}>提交</Button> */}
             </ProForm>
           </div>
           <div className="za-tab-bar" style={{ borderTop: '1px solid #ebedf0' }}>
@@ -551,6 +510,16 @@ const ResumeFill: React.FC = () => {
                     <DownOutlined />
                   </div>
                   <div className="za-tab-bar__title" onClick={() => { setCurrentPage(origin => (origin > 0 && origin < 10 ? origin + 1 : origin)) }}>下一页</div>
+                </div>
+              ) : null
+            }
+            {
+              currentPage === 10 ? (
+                <div className="za-tab-bar__item">
+                  <div className="za-tab-bar__icon">
+                    <CheckOutlined />
+                  </div>
+                  <div className="za-tab-bar__title" onClick={formRef.current?.submit}>提交</div>
                 </div>
               ) : null
             }
