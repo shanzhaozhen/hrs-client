@@ -14,11 +14,11 @@ import WorkList from "@/pages/Mobile/Resume/components/WorkList";
 import EducationalList from "@/pages/Mobile/Resume/components/EducationalList";
 import CertificateList from "@/pages/Mobile/Resume/components/CertificateList";
 import FamilyList from "@/pages/Mobile/Resume/components/FamilyList";
+import { validateIdNumber } from "@/utils/validate";
 
 const ResumeFill: React.FC = () => {
   const [errors, setErrors] = useState<any>({});
-  // const [ activeKey1, setActiveKey1 ] = useState<CollapseItemKey | CollapseItemKey[] | undefined>("work1");
-  const [ currentPage, setCurrentPage ] = useState<number>(7);
+  const [ currentPage, setCurrentPage ] = useState<number>(1);
 
   const formRef = useRef<FormInstance>();
 
@@ -129,7 +129,7 @@ const ResumeFill: React.FC = () => {
                     name="idNumber"
                     noStyle
                     rules={[{
-                      validator: async (_, value) => customValidator('idNumber', value, true),
+                      validator: async (_, value) => customValidator('idNumber', value, true, () => validateIdNumber(value), '身份证号码校验不通过'),
                     }]}
                   >
                     <Input clearable type="idcard" placeholder="请输入身份证号码" />
