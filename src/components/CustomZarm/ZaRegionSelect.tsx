@@ -1,13 +1,17 @@
-import React, {useEffect, useState} from 'react';
+import type {ReactNode} from 'react';
+import React, { useEffect, useState} from 'react';
 import type { RegionType } from "@/services/region/typings";
 import {useRegionOptions} from "@/utils/region";
 import ZaSelect from "@/components/CustomZarm/ZaSelect";
 import {Cell, Input} from 'zarm';
 import type {DataSource} from "zarm/types/picker-view/PropsType";
+import {requiredTitle} from "@/utils/zarm";
 
 
 interface ZaRegionSelectProps {
-  title?: string;
+  title?: ReactNode;
+  help?: ReactNode;
+  required?: boolean;
   level: number;
   haveDetail?: boolean;
   valueMember?: string;
@@ -16,7 +20,7 @@ interface ZaRegionSelectProps {
 }
 
 const ZaRegionSelect: React.FC<ZaRegionSelectProps> = (props) => {
-  const { title, level, haveDetail, valueMember, value, onChange } = props;
+  const { title, help, required, level, haveDetail, valueMember, value, onChange } = props;
 
   const regionOptions = useRegionOptions(level);
 
@@ -48,7 +52,7 @@ const ZaRegionSelect: React.FC<ZaRegionSelectProps> = (props) => {
 
   return (
     <>
-      <Cell title={title}>
+      <Cell title={required ? requiredTitle(title) : title} help={help}>
         <ZaSelect
           defaultValue={selectValue}
           valueMember={valueMember}
@@ -59,7 +63,7 @@ const ZaRegionSelect: React.FC<ZaRegionSelectProps> = (props) => {
       </Cell>
       {
         haveDetail ? (
-          <Cell title=" ">
+          <Cell title=" " help={help}>
             <Input
               defaultValue={value?.detail}
               placeholder="请输入详细地址"

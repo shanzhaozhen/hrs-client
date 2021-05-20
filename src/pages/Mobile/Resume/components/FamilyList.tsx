@@ -3,6 +3,7 @@ import { Button, Cell, Collapse, DateSelect, Input } from "zarm";
 import { Form } from 'antd';
 import ZaSelect from "@/components/CustomZarm/ZaSelect";
 import {PlusOutlined} from "@ant-design/icons";
+import {useOptions} from "@/utils/options";
 
 // interface FamilyListProps {
 //   value?: RegionType;
@@ -10,6 +11,9 @@ import {PlusOutlined} from "@ant-design/icons";
 // }
 
 const FamilyList: React.FC = () => {
+
+  const relationOptions = useOptions('Relation');
+  const politicsOptions = useOptions('Politics');
 
   return (
     <>
@@ -47,7 +51,7 @@ const FamilyList: React.FC = () => {
                       </Cell>
                       <Cell title="关系">
                         <Form.Item name={[field.name, 'relation']} isListField={true} noStyle>
-                          <ZaSelect placeholder="请选择关系"/>
+                          <ZaSelect dataSource={relationOptions} placeholder="请选择关系"/>
                         </Form.Item>
                       </Cell>
                       <Cell title="出生日期">
@@ -65,7 +69,7 @@ const FamilyList: React.FC = () => {
                       </Cell>
                       <Cell title="政治面貌">
                         <Form.Item name={[field.name, 'politics']} isListField={true} noStyle>
-                          <ZaSelect placeholder="请选择政治面貌"/>
+                          <ZaSelect dataSource={politicsOptions} placeholder="请选择政治面貌"/>
                         </Form.Item>
                       </Cell>
                       <Cell title="结束时间">

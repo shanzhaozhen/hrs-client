@@ -3,6 +3,7 @@ import {Button, Cell, Collapse, DateSelect, Input} from "zarm";
 import { Form } from 'antd';
 import ZaSelect from "@/components/CustomZarm/ZaSelect";
 import {PlusOutlined} from "@ant-design/icons";
+import {useOptions} from "@/utils/options";
 
 // interface WorkExperienceListProps {
 //   value?: RegionType;
@@ -10,6 +11,8 @@ import {PlusOutlined} from "@ant-design/icons";
 // }
 
 const WorkExperienceList: React.FC = () => {
+
+  const unitTypeOptions = useOptions('UnitType');
 
   return (
     <>
@@ -78,7 +81,7 @@ const WorkExperienceList: React.FC = () => {
                       </Cell>
                       <Cell title="单位性质">
                         <Form.Item name={[field.name, 'unitType']} isListField={true} noStyle>
-                          <ZaSelect placeholder="请选择单位性质"/>
+                          <ZaSelect dataSource={unitTypeOptions} placeholder="请选择单位性质"/>
                         </Form.Item>
                       </Cell>
                       <Cell title="月薪">

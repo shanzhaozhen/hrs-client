@@ -3,6 +3,7 @@ import {Button, Cell, Collapse, DateSelect, Input, Switch} from "zarm";
 import { Form } from 'antd';
 import ZaSelect from "@/components/CustomZarm/ZaSelect";
 import {PlusOutlined} from "@ant-design/icons";
+import {useOptions} from "@/utils/options";
 
 // interface EducationalListProps {
 //   value?: RegionType;
@@ -10,6 +11,8 @@ import {PlusOutlined} from "@ant-design/icons";
 // }
 
 const EducationalList: React.FC = () => {
+
+  const educationOptions = useOptions('Education');
 
   return (
     <>
@@ -73,7 +76,7 @@ const EducationalList: React.FC = () => {
                       </Cell>
                       <Cell title="学历">
                         <Form.Item name={[field.name, 'education']} isListField={true} noStyle>
-                          <ZaSelect placeholder="请选择学历"/>
+                          <ZaSelect dataSource={educationOptions} placeholder="请选择学历"/>
                         </Form.Item>
                       </Cell>
                       <Cell title="专业">

@@ -1,8 +1,7 @@
 import 'zarm/dist/zarm.css';
 import './index.less';
 import React, { useRef, useState } from 'react';
-import type {ReactNode} from 'react';
-import { Cell, ConfigProvider, DateSelect, Icon, Input, Message, Panel, Switch } from "zarm";
+import { Cell, ConfigProvider, DateSelect, Input, Panel, Switch } from "zarm";
 import type { FormInstance } from 'antd';
 import { Form } from 'antd';
 import ProForm from '@ant-design/pro-form';
@@ -14,62 +13,25 @@ import WorkList from "@/pages/Mobile/Resume/components/WorkList";
 import EducationalList from "@/pages/Mobile/Resume/components/EducationalList";
 import CertificateList from "@/pages/Mobile/Resume/components/CertificateList";
 import FamilyList from "@/pages/Mobile/Resume/components/FamilyList";
-import { validateIdNumber } from "@/utils/validate";
+import {customValidator, validateAddress, validateEmail, validateIdNumber, validatePhoneNumber} from "@/utils/validate";
+import {useOptions} from "@/utils/options";
+import {customHelp, requiredTitle} from "@/utils/zarm";
 
 const ResumeFill: React.FC = () => {
-  const [errors, setErrors] = useState<any>({});
+  const [ errors, setErrors ] = useState<any>({});
   const [ currentPage, setCurrentPage ] = useState<number>(1);
 
   const formRef = useRef<FormInstance>();
 
-  const customValidator = async (currentField: string, value: any, require: boolean, customRule?: () => boolean, customRuleTip?: string) => {
-    if (require && !value) {
-      setErrors((origin: any) => ({
-        ...origin,
-        [currentField]: '不能为空'
-      }))
-      throw new Error('不能为空');
-    }
-
-    if (customRule && !customRule()) {
-      setErrors((origin: any) => ({
-        ...origin,
-        [currentField]: customRuleTip || '输入有误'
-      }))
-      throw new Error(customRuleTip);
-    }
-
-    setErrors((origin: any) => ({
-      ...origin,
-      [currentField]: undefined
-    }))
-  }
-
-  const customHelp = (currentField: string | number) => {
-    return (
-      <>
-        {
-          errors && errors[currentField] ? (
-            <Message
-              theme="danger"
-              icon={<Icon type="warning-round" size="sm" />}
-            >
-              {errors[currentField] ? errors[currentField] : '输入有误'}
-            </Message>
-          ) : null
-        }
-      </>
-    )
-  }
-
-  const requiredTitle = (title?: ReactNode) => {
-    return (
-      <>
-        <span style={{color: "red"}}>*</span>
-        {title}
-      </>
-    );
-  }
+  const householdTypeOptions = useOptions('HouseholdType');
+  const nationOptions = useOptions('Nation');
+  const politicsOptions = useOptions('Politics');
+  const educationOptions = useOptions('Education');
+  const degreeOptions = useOptions('Degree');
+  const parentalSupportOptions = useOptions('ParentalSupport');
+  const relationOptions = useOptions('Relation');
+  const maritalStatusOptions = useOptions('MaritalStatus');
+  const applyForOptions = useOptions('ApplyFor');
 
   const onFormValuesChange = (changedValues: any, allValues: any) => {
     if (changedValues && changedValues.idNumber) {
@@ -113,34 +75,34 @@ const ResumeFill: React.FC = () => {
               }}
             >
               <Panel title="基础信息" className={currentPage === 1 ? 'page-show' : 'page-hide'}>
-                <Cell title={requiredTitle('姓名')} help={customHelp('name')}>
+                <Cell title={requiredTitle('姓名')} help={customHelp(errors, 'name')}>
                   <Form.Item
                     name="name"
                     noStyle
                     rules={[{
-                      validator: async (_, value) => customValidator('name', value, true),
+                      validator: async (_, value) => customValidator(setErrors, 'name', value, true),
                     }]}
                   >
                     <Input clearable type="text" placeholder="请输入姓名" />
                   </Form.Item>
                 </Cell>
-                <Cell title={requiredTitle('身份证号码')} help={customHelp('idNumber')}>
+                <Cell title={requiredTitle('身份证号码')} help={customHelp(errors, 'idNumber')}>
                   <Form.Item
                     name="idNumber"
                     noStyle
                     rules={[{
-                      validator: async (_, value) => customValidator('idNumber', value, true, () => validateIdNumber(value), '身份证号码校验不通过'),
+                      validator: async (_, idNumber) => customValidator(setErrors, 'idNumber', idNumber, true, () => validateIdNumber(idNumber), '身份证号码校验不通过'),
                     }]}
                   >
                     <Input clearable type="idcard" placeholder="请输入身份证号码" />
                   </Form.Item>
                 </Cell>
-                <Cell title="性别" help={customHelp('sex')}>
+                <Cell title="性别" help={customHelp(errors, 'sex')}>
                   <Form.Item name="sex" noStyle>
                     <Input clearable type="text" placeholder="输入身份证号码自动识别性别" disabled />
                   </Form.Item>
                 </Cell>
-                <Cell title="生日日期">
+                <Cell title={requiredTitle('生日日期')}>
                   <Form.Item name="birthday" trigger="onOk" noStyle>
                     <DateSelect
                       title="选择生日日期"
@@ -154,77 +116,165 @@ const ResumeFill: React.FC = () => {
                     />
                   </Form.Item>
                 </Cell>
-                <Cell title="户口类型">
-                  <Form.Item name="householdType" noStyle>
-                    <ZaSelect placeholder="请选择户口类型"
-                    />
+                <Cell title={requiredTitle('户口类型')} help={customHelp(errors, 'householdType')}>
+                  <Form.Item
+                    name="householdType"
+                    noStyle
+                    rules={[{
+                      validator: async (_, value) => customValidator(setErrors, 'householdType', value, true),
+                    }]}
+                  >
+                    <ZaSelect dataSource={householdTypeOptions} placeholder="请选择户口类型"/>
                   </Form.Item>
                 </Cell>
-                <Cell title="民族">
-                  <Form.Item name="nation" noStyle>
-                    <ZaSelect placeholder="请选择民族"/>
+                <Cell title={requiredTitle('民族')} help={customHelp(errors, 'nation')}>
+                  <Form.Item
+                    name="nation"
+                    noStyle
+                    rules={[{
+                      validator: async (_, value) => customValidator(setErrors, 'nation', value, true),
+                    }]}
+                  >
+                    <ZaSelect dataSource={nationOptions} placeholder="请选择民族"/>
                   </Form.Item>
                 </Cell>
-                <Cell title="政治面貌">
-                  <Form.Item name="politics" noStyle>
-                    <ZaSelect placeholder="请选择政治面貌"/>
+                <Cell title={requiredTitle('政治面貌')} help={customHelp(errors, 'politics')}>
+                  <Form.Item
+                    name="politics"
+                    noStyle
+                    rules={[{
+                      validator: async (_, value) => customValidator(setErrors, 'politics', value, true),
+                    }]}
+                  >
+                    <ZaSelect dataSource={politicsOptions} placeholder="请选择政治面貌"/>
                   </Form.Item>
                 </Cell>
-                <Cell title="最高学历">
-                  <Form.Item name="education" noStyle>
-                    <ZaSelect placeholder="请选择最高学历"/>
+                <Cell title={requiredTitle('最高学历')} help={customHelp(errors, 'education')}>
+                  <Form.Item
+                    name="education"
+                    noStyle
+                    rules={[{
+                      validator: async (_, value) => customValidator(setErrors, 'education', value, true),
+                    }]}
+                  >
+                    <ZaSelect dataSource={educationOptions} placeholder="请选择最高学历"/>
                   </Form.Item>
                 </Cell>
-                <Cell title="学位">
-                  <Form.Item name="degree" noStyle>
-                    <ZaSelect placeholder="请选择学位"/>
+                <Cell title={requiredTitle('学位')} help={customHelp(errors, 'degree')}>
+                  <Form.Item
+                    name="degree"
+                    noStyle
+                    rules={[{
+                      validator: async (_, value) => customValidator(setErrors, 'degree', value, true),
+                    }]}
+                  >
+                    <ZaSelect dataSource={degreeOptions} placeholder="请选择学位"/>
                   </Form.Item>
                 </Cell>
-                <Cell title="特长">
-                  <Form.Item name="specialty" noStyle>
+                <Cell title={requiredTitle('特长')} help={customHelp(errors, 'specialty')}>
+                  <Form.Item
+                    name="specialty"
+                    noStyle
+                    rules={[{
+                      validator: async (_, value) => customValidator(setErrors, 'specialty', value, true),
+                    }]}
+                  >
                     <Input clearable type="text" placeholder="请输入特长" />
                   </Form.Item>
                 </Cell>
-                <Cell title="爱好">
-                  <Form.Item name="hobby" noStyle>
+                <Cell title={requiredTitle('爱好')} help={customHelp(errors, 'hobby')}>
+                  <Form.Item
+                    name="hobby"
+                    noStyle
+                    rules={[{
+                      validator: async (_, value) => customValidator(setErrors, 'hobby', value, true),
+                    }]}
+                  >
                     <Input clearable type="text" placeholder="请输入爱好" />
                   </Form.Item>
                 </Cell>
-                <Form.Item name="parentalSupport" noStyle>
-                  <ZaOtherSelect
-                    title="父母赡养情况"
-                    dataSource={[
-                      { label: `1`, value: 1 },
-                      { label: `2`, value: 2 }
-                    ]}
-                  />
+                <Form.Item
+                  name="parentalSupport"
+                  noStyle
+                  rules={[{
+                    validator: async (_, value) => customValidator(setErrors, 'parentalSupport', value, true),
+                  }]}
+                >
+                  <ZaOtherSelect title={requiredTitle('父母赡养情况')} dataSource={parentalSupportOptions}/>
                 </Form.Item>
-                <Form.Item name="birthAddress" noStyle>
-                  <ZaRegionSelect title="出生地" level={3} haveDetail/>
+                <Form.Item
+                  name="birthAddress"
+                  noStyle
+                  rules={[{
+                    validator: async (_, birthAddress) => customValidator(setErrors, 'birthAddress', birthAddress, true, () => validateAddress(birthAddress, 2, false), '不能为空'),
+                  }]}
+                >
+                  <ZaRegionSelect title="出生地" required={true} help={customHelp(errors, 'birthAddress')} level={2} />
                 </Form.Item>
-                <Form.Item name="nativeAddress" noStyle>
-                  <ZaRegionSelect title="籍贯" level={2}/>
+                <Form.Item
+                  name="nativeAddress"
+                  noStyle
+                  rules={[{
+                    validator: async (_, nativeAddress) => customValidator(setErrors, 'nativeAddress', nativeAddress, true, () => validateAddress(nativeAddress, 2, false), '不能为空'),
+                  }]}
+                >
+                  <ZaRegionSelect title="籍贯" required={true} help={customHelp(errors, 'nativeAddress')} level={2}/>
                 </Form.Item>
-                <Form.Item name="registeredAddress" noStyle>
-                  <ZaRegionSelect title="户口地址" level={3} haveDetail/>
+                <Form.Item
+                  name="registeredAddress"
+                  noStyle
+                  rules={[{
+                    validator: async (_, registeredAddress) => customValidator(setErrors, 'registeredAddress', registeredAddress, true, () => validateAddress(registeredAddress, 3, true), '不能为空'),
+                  }]}
+                >
+                  <ZaRegionSelect title="户口地址" required={true} help={customHelp(errors, 'registeredAddress')} level={3} haveDetail />
                 </Form.Item>
-                <Form.Item name="homeAddress" noStyle>
-                  <ZaRegionSelect title="家庭住址" level={3} haveDetail/>
+                <Form.Item
+                  name="homeAddress"
+                  noStyle
+                  rules={[{
+                    validator: async (_, homeAddress) => customValidator(setErrors, 'homeAddress', homeAddress, true, () => validateAddress(homeAddress, 3, true), '不能为空'),
+                  }]}
+                >
+                  <ZaRegionSelect title="家庭住址" required={true} help={customHelp(errors, 'homeAddress')} level={3} haveDetail />
                 </Form.Item>
-                <Form.Item name="currentAddress" noStyle>
-                  <ZaRegionSelect title="现住地址" level={3} haveDetail
-                  />
+                <Form.Item
+                  name="currentAddress"
+                  noStyle
+                  rules={[{
+                    validator: async (_, currentAddress) => customValidator(setErrors, 'currentAddress', currentAddress, true, () => validateAddress(currentAddress, 3, true), '不能为空'),
+                  }]}
+                >
+                  <ZaRegionSelect title="现住住址" required={true} help={customHelp(errors, 'currentAddress')} level={3} haveDetail />
                 </Form.Item>
-                <Form.Item name="postalAddress" noStyle>
-                  <ZaRegionSelect title="邮递地址" level={3} haveDetail/>
+                <Form.Item
+                  name="postalAddress"
+                  noStyle
+                  rules={[{
+                    validator: async (_, postalAddress) => customValidator(setErrors, 'postalAddress', postalAddress, true, () => validateAddress(postalAddress, 3, true), '不能为空'),
+                  }]}
+                >
+                  <ZaRegionSelect title="邮递地址" required={true} help={customHelp(errors, 'postalAddress')} level={3} haveDetail />
                 </Form.Item>
-                <Cell title="期望月薪">
-                  <Form.Item name="expectedSalary" noStyle>
+                <Cell title={requiredTitle('期望月薪')} help={customHelp(errors, 'expectedSalary')}>
+                  <Form.Item
+                    name="expectedSalary"
+                    noStyle
+                    rules={[{
+                      validator: async (_, value) => customValidator(setErrors, 'expectedSalary', value, true),
+                    }]}
+                  >
                     <Input clearable type="price" placeholder="请输入期望月薪" />
                   </Form.Item>
                 </Cell>
-                <Cell title="希望服务年限">
-                  <Form.Item name="serviceYears" noStyle>
+                <Cell title={requiredTitle('希望服务年限')} help={customHelp(errors, 'serviceYears')}>
+                  <Form.Item
+                    name="serviceYears"
+                    noStyle
+                    rules={[{
+                      validator: async (_, value) => customValidator(setErrors, 'serviceYears', value, true),
+                    }]}
+                  >
                     <Input clearable type="number" placeholder="请输入希望服务年限" />
                   </Form.Item>
                 </Cell>
@@ -233,19 +283,19 @@ const ResumeFill: React.FC = () => {
                     <Input clearable type="text" placeholder="请输入职称" />
                   </Form.Item>
                 </Cell>
-                <Form.Item name="applyFor" noStyle>
-                  <ZaOtherSelect
-                    title="应聘途径"
-                    dataSource={[
-                      { label: `1`, value: 1 },
-                      { label: `2`, value: 2 }
-                    ]}
-                  />
+                <Form.Item
+                  name="applyFor"
+                  noStyle
+                  rules={[{
+                    validator: async (_, value) => customValidator(setErrors, 'applyFor', value, true),
+                  }]}
+                >
+                  <ZaOtherSelect title={requiredTitle('应聘途径')} dataSource={applyForOptions} />
                 </Form.Item>
                 <Cell title="开始工作时间">
                   <Form.Item name="workDate" trigger="onOk" noStyle>
                     <DateSelect
-                      title="请选择开始工作时间"
+                      title={requiredTitle('请选择开始工作时间')}
                       placeholder="请选择开始工作时间"
                       format="yyyy年MM月dd日"
                       mode="date"
@@ -255,43 +305,79 @@ const ResumeFill: React.FC = () => {
                     />
                   </Form.Item>
                 </Cell>
-                <Cell title="联系电话">
-                  <Form.Item name="phone" noStyle>
+                <Cell title={requiredTitle('联系电话')} help={customHelp(errors, 'phone')}>
+                  <Form.Item
+                    name="phone"
+                    noStyle
+                    rules={[{
+                      validator: async (_, phone) => customValidator(setErrors, 'phone', phone, true, () => validatePhoneNumber(phone)),
+                    }]}
+                  >
                     <Input clearable type="number" placeholder="请输入联系电话" />
                   </Form.Item>
                 </Cell>
-                <Cell title="家庭电话">
+                <Cell title={requiredTitle('家庭电话')} help={customHelp(errors, 'homePhone')}>
                   <Form.Item name="homePhone" noStyle>
                     <Input clearable type="number" placeholder="请输入家庭电话" />
                   </Form.Item>
                 </Cell>
-                <Cell title="邮箱">
-                  <Form.Item name="email" noStyle>
+                <Cell title={requiredTitle('邮箱')} help={customHelp(errors, 'email')}>
+                  <Form.Item
+                    name="email"
+                    noStyle
+                    rules={[{
+                      validator: async (_, email) => customValidator(setErrors, 'email', email, true, () => validateEmail(email), '邮箱格式输入不正确'),
+                    }]}
+                  >
                     <Input clearable type="text" placeholder="请输入邮箱" />
                   </Form.Item>
                 </Cell>
-                <Cell title="QQ">
+                <Cell title={requiredTitle('QQ')} help={customHelp(errors, 'qq')}>
                   <Form.Item name="qq" noStyle>
                     <Input clearable type="number" placeholder="请输入QQ" />
                   </Form.Item>
                 </Cell>
-                <Cell title="紧急联系人">
-                  <Form.Item name="emergencyContactName" noStyle>
+                <Cell title={requiredTitle('紧急联系人')} help={customHelp(errors, 'emergencyContactName')}>
+                  <Form.Item
+                    name="emergencyContactName"
+                    noStyle
+                    rules={[{
+                      validator: async (_, value) => customValidator(setErrors, 'emergencyContactName', value, true),
+                    }]}
+                  >
                     <Input clearable type="text" placeholder="请输入紧急联系人" />
                   </Form.Item>
                 </Cell>
-                <Cell title="紧急联系人关系">
-                  <Form.Item name="emergencyContactRelation" noStyle>
-                    <ZaSelect placeholder="请选择紧急联系人关系"/>
+                <Cell title={requiredTitle('紧急联系人关系')} help={customHelp(errors, 'emergencyContactRelation')}>
+                  <Form.Item
+                    name="emergencyContactRelation"
+                    noStyle
+                    rules={[{
+                      validator: async (_, value) => customValidator(setErrors, 'emergencyContactRelation', value, true),
+                    }]}
+                  >
+                    <ZaSelect dataSource={relationOptions} placeholder="请选择紧急联系人关系"/>
                   </Form.Item>
                 </Cell>
-                <Cell title="紧急联系人电话">
-                  <Form.Item name="emergencyContactPhone" noStyle>
+                <Cell title={requiredTitle('紧急联系人电话')} help={customHelp(errors, 'emergencyContactPhone')}>
+                  <Form.Item
+                    name="emergencyContactPhone"
+                    noStyle
+                    rules={[{
+                      validator: async (_, value) => customValidator(setErrors, 'emergencyContactPhone', value, true),
+                    }]}
+                  >
                     <Input clearable type="number" placeholder="请输入紧急联系人电话" />
                   </Form.Item>
                 </Cell>
-                <Cell title="是否愿意加入人才库">
-                  <Form.Item name="willJoin" noStyle>
+                <Cell title={requiredTitle('是否愿意加入人才库')} help={customHelp(errors, 'willJoin')}>
+                  <Form.Item
+                    name="willJoin"
+                    noStyle
+                    rules={[{
+                      validator: async (_, value) => customValidator(setErrors, 'willJoin', value, true),
+                    }]}
+                  >
                     <Switch defaultChecked />
                   </Form.Item>
                 </Cell>
@@ -326,7 +412,7 @@ const ResumeFill: React.FC = () => {
               <Panel title="婚育情况" className={currentPage === 3 ? 'page-show' : 'page-hide'}>
                 <Cell title="婚姻状况">
                   <Form.Item name="maritalStatus" noStyle>
-                    <ZaSelect placeholder="请选择婚姻状况"/>
+                    <ZaSelect dataSource={maritalStatusOptions} placeholder="请选择婚姻状况"/>
                   </Form.Item>
                 </Cell>
                 <Cell title="结婚日期">
@@ -381,7 +467,7 @@ const ResumeFill: React.FC = () => {
                 </Cell>
                 <Cell title="亲友关系">
                   <Form.Item name="friendRelation" noStyle>
-                    <ZaSelect placeholder="请选择亲友关系"/>
+                    <ZaSelect dataSource={relationOptions} placeholder="请选择亲友关系"/>
                   </Form.Item>
                 </Cell>
                 <Cell title="亲友部门">

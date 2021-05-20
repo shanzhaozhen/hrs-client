@@ -3,6 +3,7 @@ import {Button, Cell, Collapse, DateSelect, Input} from "zarm";
 import { Form } from 'antd';
 import ZaSelect from "@/components/CustomZarm/ZaSelect";
 import {PlusOutlined} from "@ant-design/icons";
+import {useOptions} from "@/utils/options";
 
 // interface CertificateListProps {
 //   value?: RegionType;
@@ -10,6 +11,8 @@ import {PlusOutlined} from "@ant-design/icons";
 // }
 
 const CertificateList: React.FC = () => {
+
+  const CertificateTypeOptions = useOptions('CertificateType')
 
   return (
     <>
@@ -47,7 +50,7 @@ const CertificateList: React.FC = () => {
                       </Cell>
                       <Cell title="证件类型">
                         <Form.Item name={[field.name, 'type']} isListField={true} noStyle>
-                          <ZaSelect placeholder="请选择证件类型"/>
+                          <ZaSelect dataSource={CertificateTypeOptions} placeholder="请选择证件类型"/>
                         </Form.Item>
                       </Cell>
                       <Cell title="证件号">

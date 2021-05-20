@@ -1,10 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import type {ReactNode} from 'react';
+import React, { useEffect, useState} from 'react';
 import ZaSelect from "@/components/CustomZarm/ZaSelect";
 import {Cell, Input} from "zarm";
 import type {DataSource} from "zarm/types/picker-view/PropsType";
 
 interface ZaOtherSelectProps {
-  title?: string;
+  title?: ReactNode;
   dataSource?: DataSource;
   valueMember?: string;
   value?: any;
@@ -14,15 +15,16 @@ interface ZaOtherSelectProps {
 const ZaOtherSelect: React.FC<ZaOtherSelectProps> = (props) => {
   const { title, dataSource, valueMember, value, onChange } = props;
 
-  const [ options ] = useState<any[]>(() => {
-    const newVar = dataSource || [];
-    newVar.push({ label: '其他', value: 'other' });
-    return newVar;
-  });
-
+  const [ selectOptions, setSelectOptions ] = useState<any>([]);
   const [ showInput, setShowInput ] = useState<boolean>(false);
   const [ selectValue, setSelectValue ] = useState<any>();
   const [ inputValue, setInputValue ] = useState<any>();
+
+  useEffect(() => {
+    const newVar = dataSource || [];
+    newVar.push({ label: '其他', value: 'other' });
+    setSelectOptions(newVar);
+  }, [dataSource]);
 
   useEffect(() => {
     if (value) {
@@ -59,7 +61,7 @@ const ZaOtherSelect: React.FC<ZaOtherSelectProps> = (props) => {
         <ZaSelect
           defaultValue={selectValue}
           valueMember={valueMember}
-          dataSource={options}
+          dataSource={selectOptions}
           onChange={onSelectChange}
         />
       </Cell>

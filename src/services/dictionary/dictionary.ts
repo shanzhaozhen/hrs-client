@@ -57,7 +57,7 @@ export async function getDictionaryChildrenById(dictionaryId: number, options?: 
 }
 
 /** 通过父级ID获取字典子节点 GET /dictionary/children/code */
-export async function getDictionaryChildrenByCode(code: string, keyword: string, options?: Record<string, any>) {
+export async function getDictionaryChildrenByCode(code: string, keyword?: string, options?: Record<string, any>) {
   return request<ResultBody<DictionaryVO[]>>(`/hrs-api/dictionary/children/code`, {
     method: 'GET',
     params: {
