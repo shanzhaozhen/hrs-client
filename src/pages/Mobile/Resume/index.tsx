@@ -1,7 +1,7 @@
 import 'zarm/dist/zarm.css';
 import './index.less';
 import React, { useRef, useState } from 'react';
-import { Cell, ConfigProvider, DateSelect, Input, Panel, Switch } from "zarm";
+import {Cell, ConfigProvider, DateSelect, Input, Panel, Switch, Toast} from "zarm";
 import type { FormInstance } from 'antd';
 import { Form } from 'antd';
 import ProForm from '@ant-design/pro-form';
@@ -44,6 +44,31 @@ const ResumeFill: React.FC = () => {
     }
   }
 
+  const pageFields = [
+    ['name', 'idNumber', 'sex', 'birthday', 'householdType', 'nation', 'politics', 'education', 'degree', 'specialty', 'hobby', 'parentalSupport', 'birthAddress', 'nativeAddress', 'registeredAddress', 'homeAddress', 'currentAddress', 'postalAddress', 'expectedSalary', 'serviceYears', 'title', 'applyFor', 'workDate', 'phone', 'homePhone', 'email', 'qq', 'emergencyContactName', 'emergencyContactRelation', 'emergencyContactPhone', 'willJoin'],
+    ['physicalCondition', 'weight', 'height', 'vision', 'bloodType'],
+    ['maritalStatus', 'marriageDate', 'spouseName', 'spousePhysicalCondition', 'fertility', 'childrenNumber', 'marriageCertificate'],
+    ['haveFriend', 'friendName', 'friendRelation', 'friendDepartment', 'friendDuty'],
+    ['driverLicenseType', 'driverLicenseDate', 'driveYear', 'driveLines', 'vehicleType'],
+    ['troopBase', 'enlistmentDate', 'dischargeDate', 'dischargeRank', 'honour'],
+  ];
+
+  const nextPage = async () => {
+    try {
+      if (currentPage > 0 && currentPage < 7) {
+        await formRef.current?.validateFields(pageFields[currentPage - 1]);
+      }
+      setCurrentPage(origin => (origin > 0 && origin < 10 ? origin + 1 : origin))
+    } catch (error) {
+      console.log(error)
+      Toast.show({
+        content: '当前页还没填写完成 ',
+        stayTime: 3000,
+      });
+    }
+
+  }
+
 
   return (
     <>
@@ -53,11 +78,7 @@ const ResumeFill: React.FC = () => {
             <ProForm
               formRef={formRef}
               onValuesChange={onFormValuesChange}
-              initialValues={{
-                name: '12',
-                idNumber: '440',
-                workList: [{}, {}]
-              }}
+              initialValues={{}}
               submitter={{
                 submitButtonProps: {
                   style: {
@@ -71,7 +92,11 @@ const ResumeFill: React.FC = () => {
                 },
               }}
               onFinish={async (value) => {
-                console.log(value)
+                try {
+                  console.log(value)
+                } catch (error) {
+                  console.log(error)
+                }
               }}
             >
               <Panel title="基础信息" className={currentPage === 1 ? 'page-show' : 'page-hide'}>
@@ -378,7 +403,7 @@ const ResumeFill: React.FC = () => {
                       validator: async (_, value) => customValidator(setErrors, 'willJoin', value, true),
                     }]}
                   >
-                    <Switch defaultChecked />
+                    <Switch defaultChecked checked />
                   </Form.Item>
                 </Cell>
               </Panel>
@@ -488,7 +513,7 @@ const ResumeFill: React.FC = () => {
                   </Form.Item>
                 </Cell>
                 <Cell title="驾驶证领证时间">
-                  <Form.Item name="birthday" trigger="onOk" noStyle>
+                  <Form.Item name="driverLicenseDate" trigger="onOk" noStyle>
                     <DateSelect
                       title="请选择驾驶证领证时间"
                       placeholder="请选择驾驶证领证时间"
@@ -590,7 +615,7 @@ const ResumeFill: React.FC = () => {
                   <div className="za-tab-bar__icon">
                     <DownOutlined />
                   </div>
-                  <div className="za-tab-bar__title" onClick={() => { setCurrentPage(origin => (origin > 0 && origin < 10 ? origin + 1 : origin)) }}>下一页</div>
+                  <div className="za-tab-bar__title" onClick={() => nextPage()}>下一页</div>
                 </div>
               ) : null
             }
