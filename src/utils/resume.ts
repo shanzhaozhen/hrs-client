@@ -43,3 +43,17 @@ export const convertResumeForm = (fields: ResumeForm): ResumeForm => {
 
   return newFields;
 };
+
+export const getBirthdayFromIdNumber = (idNumber: string) => {
+  if (idNumber && idNumber.length > 13) {
+    return new Date(`${idNumber.substring(6, 10)}-${idNumber.substring(10, 12)}-${idNumber.substring(12, 14)}`);
+  }
+  return ''
+}
+
+export const getSexFromIdNumber = (idNumber: string) => {
+  if (idNumber && idNumber.length > 16) {
+    return Number(idNumber.substr(16,1)) % 2 ? '男' : '女';
+  }
+  return ''
+}

@@ -3,9 +3,12 @@ import React, { useEffect, useState} from 'react';
 import ZaSelect from "@/components/CustomZarm/ZaSelect";
 import {Cell, Input} from "zarm";
 import type {DataSource} from "zarm/types/picker-view/PropsType";
+import {requiredTitle} from "@/utils/zarm";
 
 interface ZaOtherSelectProps {
-  title?: ReactNode;
+  title?: string | number;
+  required?: boolean;
+  help?: ReactNode;
   dataSource?: DataSource;
   valueMember?: string;
   value?: any;
@@ -13,7 +16,7 @@ interface ZaOtherSelectProps {
 }
 
 const ZaOtherSelect: React.FC<ZaOtherSelectProps> = (props) => {
-  const { title, dataSource, valueMember, value, onChange } = props;
+  const { title, required, help, dataSource, valueMember, value, onChange } = props;
 
   const [ selectOptions, setSelectOptions ] = useState<any>([]);
   const [ showInput, setShowInput ] = useState<boolean>(false);
@@ -57,7 +60,7 @@ const ZaOtherSelect: React.FC<ZaOtherSelectProps> = (props) => {
 
   return (
     <>
-      <Cell title={title}>
+      <Cell title={required ? requiredTitle(title) : title} help={showInput ? null : help}>
         <ZaSelect
           defaultValue={selectValue}
           valueMember={valueMember}
@@ -67,7 +70,7 @@ const ZaOtherSelect: React.FC<ZaOtherSelectProps> = (props) => {
       </Cell>
       {
         showInput ? (
-          <Cell title=" ">
+          <Cell title=" " help={help}>
             <Input
               defaultValue={inputValue}
               placeholder={`请输入${title}`}

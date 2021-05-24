@@ -10,8 +10,8 @@ import {requiredTitle} from "@/utils/zarm";
 
 interface ZaRegionSelectProps {
   title?: ReactNode;
-  help?: ReactNode;
   required?: boolean;
+  help?: ReactNode;
   level: number;
   haveDetail?: boolean;
   valueMember?: string;
@@ -20,7 +20,7 @@ interface ZaRegionSelectProps {
 }
 
 const ZaRegionSelect: React.FC<ZaRegionSelectProps> = (props) => {
-  const { title, help, required, level, haveDetail, valueMember, value, onChange } = props;
+  const { title, required, help, level, haveDetail, valueMember, value, onChange } = props;
 
   const regionOptions = useRegionOptions(level);
 
@@ -52,7 +52,7 @@ const ZaRegionSelect: React.FC<ZaRegionSelectProps> = (props) => {
 
   return (
     <>
-      <Cell title={required ? requiredTitle(title) : title} help={help}>
+      <Cell title={required ? requiredTitle(title) : title} help={haveDetail ? null : help}>
         <ZaSelect
           defaultValue={selectValue}
           valueMember={valueMember}
