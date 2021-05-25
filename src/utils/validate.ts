@@ -11,7 +11,7 @@ import {RegionType} from "@/services/region/typings";
  * @param customRuleTip
  */
 export const customValidator = async (setErrors: Dispatch<SetStateAction<any>>, currentField: string, value: any, require: boolean, customRule?: () => boolean, customRuleTip?: string) => {
-  if (require && !value) {
+  if (require && (typeof(value) !== "boolean" && !value)) {
     setErrors((origin: any) => ({
       ...origin,
       [currentField]: '不能为空'

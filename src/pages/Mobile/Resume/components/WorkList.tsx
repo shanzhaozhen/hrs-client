@@ -16,10 +16,22 @@ const WorkExperienceList: React.FC = () => {
 
   return (
     <>
-      <Form.List name="workExperienceList">
+      <Form.List
+        name="workExperienceList"
+        rules={[{
+          validator: async (_, currentValue) => {
+            console.log('workExperienceList', currentValue)
+            if (currentValue.length < 2) {
+              return Promise.reject(new Error('出错'));
+            }
+            return true;
+          },
+        }]}
+      >
         {
           (fields, { add, remove }, { errors }) => (
             <>
+              <Form.ErrorList errors={errors} />
               {
                 fields.map((field, index) => (
                   <Collapse defaultActiveKey={field.name} key={field.name}>
@@ -44,7 +56,16 @@ const WorkExperienceList: React.FC = () => {
                       animated
                     >
                       <Cell title="工作单位">
-                        <Form.Item name={[field.name, 'workUnit']}  isListField={true} noStyle>
+                        <Form.Item
+                          name={[field.name, 'workUnit']}
+                          isListField={true}
+                          noStyle
+                          rules={[{
+                            required: true,
+                            whitespace: true,
+                            message: "Please input passenger's name or delete this field.",
+                          }]}
+                        >
                           <Input clearable type="text" placeholder="请输入工作单位" />
                         </Form.Item>
                       </Cell>

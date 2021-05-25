@@ -20,10 +20,11 @@ import {getBirthdayFromIdNumber, getSexFromIdNumber} from "@/utils/resume";
 
 const ResumeFill: React.FC = () => {
   const [ errors, setErrors ] = useState<any>({});
-  const [ currentPage, setCurrentPage ] = useState<number>(4);
+  const [ currentPage, setCurrentPage ] = useState<number>(7);
   const [ formMaritalStatus, setFormMaritalStatus ] = useState<boolean>(true);
   const [ formHaveFriend, setFormHaveFriend ] = useState<boolean>(false);
   const [ formFertility, setFormFertility ] = useState<boolean>(false);
+  const [ formInArmy, setFormInArmy ] = useState<boolean>(false);
 
   const formRef = useRef<FormInstance>();
 
@@ -42,7 +43,7 @@ const ResumeFill: React.FC = () => {
     console.log('我变了')
     console.log(changedValues, allValues)
     if (changedValues) {
-      const { idNumber, maritalStatus, fertility, haveFriend } = changedValues;
+      const { idNumber, maritalStatus, fertility, haveFriend, inArmy } = changedValues;
 
       if (changedValues.hasOwnProperty('idNumber')) {
         formRef.current?.setFieldsValue({
@@ -60,6 +61,9 @@ const ResumeFill: React.FC = () => {
       if (changedValues.hasOwnProperty('haveFriend')) {
         setFormHaveFriend(!!haveFriend);
       }
+      if (changedValues.hasOwnProperty('inArmy')) {
+        setFormInArmy(!!inArmy);
+      }
     }
   }
 
@@ -70,6 +74,7 @@ const ResumeFill: React.FC = () => {
     ['haveFriend', 'friendName', 'friendRelation', 'friendDepartment', 'friendDuty'],
     ['driverLicenseType', 'driverLicenseDate', 'driveYear', 'driveLines', 'vehicleType'],
     ['troopBase', 'enlistmentDate', 'dischargeDate', 'dischargeRank', 'honour'],
+    ['workExperienceList']
   ];
 
   const nextPage = async () => {
@@ -679,47 +684,84 @@ const ResumeFill: React.FC = () => {
                 </Cell>
               </Panel>
               <Panel title="服兵役信息" className={currentPage === 6 ? 'page-show' : 'page-hide'}>
-                <Cell title="部队驻扎地">
-                  <Form.Item name="troopBase" noStyle>
-                    <Input clearable type="text" placeholder="请输入部队驻扎地" />
+                <Cell title={requiredTitle('是否有服过兵役')} help={customHelp(errors, 'inArmy')}>
+                  <Form.Item
+                    name="inArmy"
+                    noStyle
+                    rules={[{
+                      validator: async (_, value) => customValidator(setErrors, 'inArmy', value, true),
+                    }]}
+                  >
+                    <Switch />
                   </Form.Item>
                 </Cell>
-                <Cell title="入伍时间">
-                  <Form.Item name="enlistmentDate" trigger="onOk" noStyle>
-                    <DateSelect
-                      title="请选择入伍时间"
-                      placeholder="请选择入伍时间"
-                      format="yyyy年MM月dd日"
-                      mode="date"
-                      min="1900-01-01"
-                      max="2027-05-15"
-                      hasArrow={false}
-                    />
-                  </Form.Item>
-                </Cell>
-                <Cell title="退伍时间">
-                  <Form.Item name="dischargeDate" trigger="onOk" noStyle>
-                    <DateSelect
-                      title="请选择退伍时间"
-                      placeholder="请选择退伍时间"
-                      format="yyyy年MM月dd日"
-                      mode="date"
-                      min="1900-01-01"
-                      max="2027-05-15"
-                      hasArrow={false}
-                    />
-                  </Form.Item>
-                </Cell>
-                <Cell title="退伍时军衔">
-                  <Form.Item name="dischargeRank" noStyle>
-                    <Input clearable type="text" placeholder="请输入退伍时军衔" />
-                  </Form.Item>
-                </Cell>
-                <Cell title="立功/贡献">
-                  <Form.Item name="honour" noStyle>
-                    <Input clearable type="text" placeholder="请输入服役期间立功/贡献" />
-                  </Form.Item>
-                </Cell>
+                {
+                  formInArmy && (
+                    <>
+                      <Cell title={requiredTitle('部队驻扎地')} help={customHelp(errors, 'troopBase')}>
+                        <Form.Item
+                          name="troopBase"
+                          noStyle
+                          rules={[{
+                            validator: async (_, value) => customValidator(setErrors, 'troopBase', value, true),
+                          }]}
+                        >
+                          <Input clearable type="text" placeholder="请输入部队驻扎地" />
+                        </Form.Item>
+                      </Cell>
+                      <Cell title={requiredTitle('入伍时间')} help={customHelp(errors, 'enlistmentDate')}>
+                        <Form.Item
+                          name="enlistmentDate"
+                          trigger="onOk"
+                          noStyle
+                          rules={[{
+                            validator: async (_, value) => customValidator(setErrors, 'enlistmentDate', value, true),
+                          }]}
+                        >
+                          <DateSelect
+                            title="请选择入伍时间"
+                            placeholder="请选择入伍时间"
+                            format="yyyy年MM月dd日"
+                            mode="date"
+                            min="1900-01-01"
+                            max="2027-05-15"
+                            hasArrow={false}
+                          />
+                        </Form.Item>
+                      </Cell>
+                      <Cell title={requiredTitle("退伍时间")} help={customHelp(errors, 'dischargeDate')}>
+                        <Form.Item
+                          name="dischargeDate"
+                          trigger="onOk"
+                          noStyle
+                          rules={[{
+                            validator: async (_, value) => customValidator(setErrors, 'dischargeDate', value, true),
+                          }]}
+                        >
+                          <DateSelect
+                            title="请选择退伍时间"
+                            placeholder="请选择退伍时间"
+                            format="yyyy年MM月dd日"
+                            mode="date"
+                            min="1900-01-01"
+                            max="2027-05-15"
+                            hasArrow={false}
+                          />
+                        </Form.Item>
+                      </Cell>
+                      <Cell title="退伍时军衔">
+                        <Form.Item name="dischargeRank" noStyle>
+                          <Input clearable type="text" placeholder="请输入退伍时军衔" />
+                        </Form.Item>
+                      </Cell>
+                      <Cell title="立功/贡献">
+                        <Form.Item name="honour" noStyle>
+                          <Input clearable type="text" placeholder="请输入服役期间立功/贡献" />
+                        </Form.Item>
+                      </Cell>
+                    </>
+                  )
+                }
               </Panel>
               <Panel title="工作履历" className={currentPage === 7 ? 'page-show' : 'page-hide'}>
                 <WorkList />
