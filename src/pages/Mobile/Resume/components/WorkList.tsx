@@ -1,16 +1,18 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Button, Cell, Collapse, DateSelect, Input} from "zarm";
 import { Form } from 'antd';
 import ZaSelect from "@/components/CustomZarm/ZaSelect";
 import {PlusOutlined} from "@ant-design/icons";
 import {useOptions} from "@/utils/options";
+import {customFormListHelp, requiredTitle} from "@/utils/zarm";
 
 // interface WorkExperienceListProps {
-//   value?: RegionType;
-//   onChange?: (value: any) => void;
+//   formErrors?: any;
+//   setFormErrors?: Dispatch<SetStateAction<any>>;
 // }
 
 const WorkExperienceList: React.FC = () => {
+  const [ workErrors, setWorkErrors ] = useState<any[]>([]);
 
   const unitTypeOptions = useOptions('UnitType');
 
@@ -20,11 +22,22 @@ const WorkExperienceList: React.FC = () => {
         name="workExperienceList"
         rules={[{
           validator: async (_, currentValue) => {
-            console.log('workExperienceList', currentValue)
-            if (currentValue.length < 2) {
-              return Promise.reject(new Error('出错'));
+            console.log('校验', currentValue)
+            if (currentValue.length > 0) {
+              setWorkErrors(currentValue.map((item: any) => ({
+                  workUnit: item.workUnit ? undefined : '不能为空',
+                  startDate: item.startDate ? undefined : '不能为空',
+                  endDate: item.endDate ? undefined : '不能为空',
+                  duty: item.duty ? undefined : '不能为空',
+                  unitType: item.unitType ? undefined : '不能为空',
+                  witnessName: item.witnessName ? undefined : '不能为空',
+                  witnessPhone: item.witnessPhone ? undefined : '不能为空',
+                })));
+              console.log('校验')
+              console.log(workErrors)
             }
-            return true;
+            // setWorkErrors([])
+            return Promise.reject(new Error('出错'));
           },
         }]}
       >
@@ -55,21 +68,16 @@ const WorkExperienceList: React.FC = () => {
                       key={field.name}
                       animated
                     >
-                      <Cell title="工作单位">
+                      <Cell title={requiredTitle('工作单位')} help={customFormListHelp(workErrors, index, 'workUnit')}>
                         <Form.Item
                           name={[field.name, 'workUnit']}
                           isListField={true}
                           noStyle
-                          rules={[{
-                            required: true,
-                            whitespace: true,
-                            message: "Please input passenger's name or delete this field.",
-                          }]}
                         >
                           <Input clearable type="text" placeholder="请输入工作单位" />
                         </Form.Item>
                       </Cell>
-                      <Cell title="开始时间">
+                      <Cell title={requiredTitle('开始时间')} help={customFormListHelp(workErrors, index, 'startDate')}>
                         <Form.Item name={[field.name, 'startDate']} isListField={true} trigger="onOk" noStyle>
                           <DateSelect
                             title="请选择开始时间"
@@ -82,7 +90,7 @@ const WorkExperienceList: React.FC = () => {
                           />
                         </Form.Item>
                       </Cell>
-                      <Cell title="结束时间">
+                      <Cell title={requiredTitle('结束时间')}>
                         <Form.Item name={[field.name, 'endDate']} isListField={true} trigger="onOk" noStyle>
                           <DateSelect
                             title="请选择结束时间"
@@ -95,12 +103,12 @@ const WorkExperienceList: React.FC = () => {
                           />
                         </Form.Item>
                       </Cell>
-                      <Cell title="职务/岗位">
+                      <Cell title={requiredTitle('职务/岗位')}>
                         <Form.Item name={[field.name, 'duty']}  isListField={true} noStyle>
                           <Input clearable type="text" placeholder="请输入职务/岗位" />
                         </Form.Item>
                       </Cell>
-                      <Cell title="单位性质">
+                      <Cell title={requiredTitle('单位性质')}>
                         <Form.Item name={[field.name, 'unitType']} isListField={true} noStyle>
                           <ZaSelect dataSource={unitTypeOptions} placeholder="请选择单位性质"/>
                         </Form.Item>
@@ -110,12 +118,12 @@ const WorkExperienceList: React.FC = () => {
                           <Input clearable type="number" placeholder="请输入月薪" />
                         </Form.Item>
                       </Cell>
-                      <Cell title="证明人姓名">
+                      <Cell title={requiredTitle('证明人姓名')}>
                         <Form.Item name={[field.name, 'witnessName']}  isListField={true} noStyle>
                           <Input clearable type="text" placeholder="请输入证明人姓名" />
                         </Form.Item>
                       </Cell>
-                      <Cell title="证明人电话">
+                      <Cell title={requiredTitle('证明人电话')}>
                         <Form.Item name={[field.name, 'witnessPhone']}  isListField={true} noStyle>
                           <Input clearable type="number" placeholder="请输入证明人电话" />
                         </Form.Item>

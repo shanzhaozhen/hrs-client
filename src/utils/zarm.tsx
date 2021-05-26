@@ -23,6 +23,23 @@ export const customHelp = (errors: any, currentField: string | number) => {
   )
 }
 
+export const customFormListHelp = (errors: any[], index: number, currentField: string | number) => {
+  return (
+    <>
+      {
+        errors && errors[index] && errors[index][currentField] ? (
+          <Message
+            theme="danger"
+            icon={<Icon type="warning-round" size="sm" />}
+          >
+            {errors[index][currentField] ? errors[index][currentField] : '输入有误'}
+          </Message>
+        ) : null
+      }
+    </>
+  )
+}
+
 /**
  * Zarm中的Cell添加必填样式
  * @param title
