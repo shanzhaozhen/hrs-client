@@ -23,16 +23,16 @@ export const customHelp = (errors: any, currentField: string | number) => {
   )
 }
 
-export const customFormListHelp = (errors: any[], index: number, currentField: string | number) => {
+export const customFormListHelp = (errors: any, listField: string, index: number, currentField: string | number) => {
   return (
     <>
       {
-        errors && errors[index] && errors[index][currentField] ? (
+        (errors && errors[listField] && errors[listField][index] && errors[listField][index][currentField]) ? (
           <Message
             theme="danger"
             icon={<Icon type="warning-round" size="sm" />}
           >
-            {errors[index][currentField] ? errors[index][currentField] : '输入有误'}
+            {errors[listField][index][currentField] || '输入有误'}
           </Message>
         ) : null
       }

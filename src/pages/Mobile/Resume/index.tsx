@@ -16,7 +16,7 @@ import FamilyList from "@/pages/Mobile/Resume/components/FamilyList";
 import {customValidator, validateAddress, validateEmail, validateIdNumber, validatePhoneNumber} from "@/utils/validate";
 import {useOptions} from "@/utils/options";
 import {customHelp, requiredTitle} from "@/utils/zarm";
-import {getBirthdayFromIdNumber, getSexFromIdNumber} from "@/utils/resume";
+import {getBirthdayFromIdNumber, getSexFromIdNumber, validateWorkExperienceList} from "@/utils/resume";
 
 const ResumeFill: React.FC = () => {
   const [ errors, setErrors ] = useState<any>({});
@@ -64,6 +64,9 @@ const ResumeFill: React.FC = () => {
       if (changedValues.hasOwnProperty('inArmy')) {
         setFormInArmy(!!inArmy);
       }
+      if (changedValues.hasOwnProperty('workExperienceList')) {
+        validateWorkExperienceList(changedValues.workExperienceList, setErrors, false);
+      }
     }
   }
 
@@ -81,6 +84,9 @@ const ResumeFill: React.FC = () => {
     try {
       if (currentPage > 0 && currentPage < 7) {
         await formRef.current?.validateFields(pageFields[currentPage - 1]);
+      } else if (currentPage) {
+        const currentValues = formRef.current?.getFieldsValue();
+        validateWorkExperienceList(currentValues.workExperienceList, setErrors, true);
       }
       // setCurrentPage(origin => (origin > 0 && origin < 10 ? origin + 1 : origin))
 
@@ -92,9 +98,7 @@ const ResumeFill: React.FC = () => {
         stayTime: 3000,
       });
     }
-
   }
-
 
   return (
     <>
@@ -764,7 +768,7 @@ const ResumeFill: React.FC = () => {
                 }
               </Panel>
               <Panel title="工作履历" className={currentPage === 7 ? 'page-show' : 'page-hide'}>
-                <WorkList />
+                <WorkList formErrors={errors} />
               </Panel>
               <Panel title="教育经历" className={currentPage === 8 ? 'page-show' : 'page-hide'}>
                 <EducationalList />

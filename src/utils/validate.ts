@@ -11,6 +11,8 @@ import {RegionType} from "@/services/region/typings";
  * @param customRuleTip
  */
 export const customValidator = async (setErrors: Dispatch<SetStateAction<any>>, currentField: string, value: any, require: boolean, customRule?: () => boolean, customRuleTip?: string) => {
+  console.log('currentField', currentField)
+
   if (require && (typeof(value) !== "boolean" && !value)) {
     setErrors((origin: any) => ({
       ...origin,
@@ -31,6 +33,14 @@ export const customValidator = async (setErrors: Dispatch<SetStateAction<any>>, 
     ...origin,
     [currentField]: undefined
   }))
+}
+
+export const fieldValidator = (item: any, field: string, errors: Record<string, any>, tips?: string) => {
+  if (item && item[field]) {
+    errors[field] = tips || '不能为空';
+    return true;
+  }
+  return false;
 }
 
 /**

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Button, Cell, Collapse, DateSelect, Input} from "zarm";
 import { Form } from 'antd';
 import ZaSelect from "@/components/CustomZarm/ZaSelect";
@@ -6,45 +6,21 @@ import {PlusOutlined} from "@ant-design/icons";
 import {useOptions} from "@/utils/options";
 import {customFormListHelp, requiredTitle} from "@/utils/zarm";
 
-// interface WorkExperienceListProps {
-//   formErrors?: any;
-//   setFormErrors?: Dispatch<SetStateAction<any>>;
-// }
+interface WorkExperienceListProps {
+  formErrors?: any;
+}
 
-const WorkExperienceList: React.FC = () => {
-  const [ workErrors, setWorkErrors ] = useState<any[]>([]);
+const WorkExperienceList: React.FC<WorkExperienceListProps> = (props) => {
+  const { formErrors } = props;
 
   const unitTypeOptions = useOptions('UnitType');
 
   return (
     <>
-      <Form.List
-        name="workExperienceList"
-        rules={[{
-          validator: async (_, currentValue) => {
-            console.log('校验', currentValue)
-            if (currentValue.length > 0) {
-              setWorkErrors(currentValue.map((item: any) => ({
-                  workUnit: item.workUnit ? undefined : '不能为空',
-                  startDate: item.startDate ? undefined : '不能为空',
-                  endDate: item.endDate ? undefined : '不能为空',
-                  duty: item.duty ? undefined : '不能为空',
-                  unitType: item.unitType ? undefined : '不能为空',
-                  witnessName: item.witnessName ? undefined : '不能为空',
-                  witnessPhone: item.witnessPhone ? undefined : '不能为空',
-                })));
-              console.log('校验')
-              console.log(workErrors)
-            }
-            // setWorkErrors([])
-            return Promise.reject(new Error('出错'));
-          },
-        }]}
-      >
+      <Form.List name="workExperienceList">
         {
-          (fields, { add, remove }, { errors }) => (
+          (fields, { add, remove }) => (
             <>
-              <Form.ErrorList errors={errors} />
               {
                 fields.map((field, index) => (
                   <Collapse defaultActiveKey={field.name} key={field.name}>
@@ -68,7 +44,7 @@ const WorkExperienceList: React.FC = () => {
                       key={field.name}
                       animated
                     >
-                      <Cell title={requiredTitle('工作单位')} help={customFormListHelp(workErrors, index, 'workUnit')}>
+                      <Cell title={requiredTitle('工作单位')} help={customFormListHelp(formErrors, 'workExperienceList', index, 'workUnit')}>
                         <Form.Item
                           name={[field.name, 'workUnit']}
                           isListField={true}
@@ -77,7 +53,7 @@ const WorkExperienceList: React.FC = () => {
                           <Input clearable type="text" placeholder="请输入工作单位" />
                         </Form.Item>
                       </Cell>
-                      <Cell title={requiredTitle('开始时间')} help={customFormListHelp(workErrors, index, 'startDate')}>
+                      <Cell title={requiredTitle('开始时间')} help={customFormListHelp(formErrors, 'workExperienceList', index, 'startDate')}>
                         <Form.Item name={[field.name, 'startDate']} isListField={true} trigger="onOk" noStyle>
                           <DateSelect
                             title="请选择开始时间"
@@ -90,7 +66,7 @@ const WorkExperienceList: React.FC = () => {
                           />
                         </Form.Item>
                       </Cell>
-                      <Cell title={requiredTitle('结束时间')}>
+                      <Cell title={requiredTitle('结束时间')} help={customFormListHelp(formErrors, 'workExperienceList', index, 'endDate')}>
                         <Form.Item name={[field.name, 'endDate']} isListField={true} trigger="onOk" noStyle>
                           <DateSelect
                             title="请选择结束时间"
@@ -103,12 +79,12 @@ const WorkExperienceList: React.FC = () => {
                           />
                         </Form.Item>
                       </Cell>
-                      <Cell title={requiredTitle('职务/岗位')}>
+                      <Cell title={requiredTitle('职务/岗位')} help={customFormListHelp(formErrors, 'workExperienceList', index, 'duty')}>
                         <Form.Item name={[field.name, 'duty']}  isListField={true} noStyle>
                           <Input clearable type="text" placeholder="请输入职务/岗位" />
                         </Form.Item>
                       </Cell>
-                      <Cell title={requiredTitle('单位性质')}>
+                      <Cell title={requiredTitle('单位性质')} help={customFormListHelp(formErrors, 'workExperienceList', index, 'unitType')}>
                         <Form.Item name={[field.name, 'unitType']} isListField={true} noStyle>
                           <ZaSelect dataSource={unitTypeOptions} placeholder="请选择单位性质"/>
                         </Form.Item>
@@ -118,12 +94,12 @@ const WorkExperienceList: React.FC = () => {
                           <Input clearable type="number" placeholder="请输入月薪" />
                         </Form.Item>
                       </Cell>
-                      <Cell title={requiredTitle('证明人姓名')}>
+                      <Cell title={requiredTitle('证明人姓名')} help={customFormListHelp(formErrors, 'workExperienceList', index, 'witnessName')}>
                         <Form.Item name={[field.name, 'witnessName']}  isListField={true} noStyle>
                           <Input clearable type="text" placeholder="请输入证明人姓名" />
                         </Form.Item>
                       </Cell>
-                      <Cell title={requiredTitle('证明人电话')}>
+                      <Cell title={requiredTitle('证明人电话')} help={customFormListHelp(formErrors, 'workExperienceList', index, 'witnessPhone')}>
                         <Form.Item name={[field.name, 'witnessPhone']}  isListField={true} noStyle>
                           <Input clearable type="number" placeholder="请输入证明人电话" />
                         </Form.Item>
@@ -133,7 +109,7 @@ const WorkExperienceList: React.FC = () => {
                 ))
               }
               <div style={{ textAlign: "center", padding: "15px 10px" }}>
-                <button type="button" className="ant-btn ant-btn-dashed ant-btn-block" onClick={() => add()}>
+                <button type="button" className="ant-btn ant-btn-dashed ant-btn-block" onClick={() => add({})}>
                   <PlusOutlined />
                   <span>添加一项数据</span>
                 </button>
