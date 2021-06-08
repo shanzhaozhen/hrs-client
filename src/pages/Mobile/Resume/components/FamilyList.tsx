@@ -4,13 +4,14 @@ import { Form } from 'antd';
 import ZaSelect from "@/components/CustomZarm/ZaSelect";
 import {PlusOutlined} from "@ant-design/icons";
 import {useOptions} from "@/utils/options";
+import {customFormListHelp, requiredTitle} from "@/utils/zarm";
 
-// interface FamilyListProps {
-//   value?: RegionType;
-//   onChange?: (value: any) => void;
-// }
+interface FamilyListProps {
+  formErrors?: any;
+}
 
-const FamilyList: React.FC = () => {
+const FamilyList: React.FC<FamilyListProps> = (props) => {
+  const { formErrors } = props;
 
   const relationOptions = useOptions('Relation');
   const politicsOptions = useOptions('Politics');
@@ -19,7 +20,7 @@ const FamilyList: React.FC = () => {
     <>
       <Form.List name="familyList">
         {
-          (fields, { add, remove }, { errors }) => (
+          (fields, { add, remove }) => (
             <>
               {
                 fields.map((field, index) => (
@@ -44,17 +45,17 @@ const FamilyList: React.FC = () => {
                       key={field.name}
                       animated
                     >
-                      <Cell title="姓名">
+                      <Cell title={requiredTitle('姓名')} help={customFormListHelp(formErrors, 'familyList', index, 'name')}>
                         <Form.Item name={[field.name, 'name']}  isListField={true} noStyle>
                           <Input clearable type="text" placeholder="请输入姓名" />
                         </Form.Item>
                       </Cell>
-                      <Cell title="关系">
+                      <Cell title={requiredTitle('关系')} help={customFormListHelp(formErrors, 'familyList', index, 'relation')}>
                         <Form.Item name={[field.name, 'relation']} isListField={true} noStyle>
                           <ZaSelect dataSource={relationOptions} placeholder="请选择关系"/>
                         </Form.Item>
                       </Cell>
-                      <Cell title="出生日期">
+                      <Cell title={requiredTitle('出生日期')} help={customFormListHelp(formErrors, 'familyList', index, 'name')}>
                         <Form.Item name={[field.name, 'birthday']} isListField={true} trigger="onOk" noStyle>
                           <DateSelect
                             title="请选择出生日期"
@@ -67,35 +68,22 @@ const FamilyList: React.FC = () => {
                           />
                         </Form.Item>
                       </Cell>
-                      <Cell title="政治面貌">
+                      <Cell title={requiredTitle('政治面貌')} help={customFormListHelp(formErrors, 'familyList', index, 'politics')}>
                         <Form.Item name={[field.name, 'politics']} isListField={true} noStyle>
                           <ZaSelect dataSource={politicsOptions} placeholder="请选择政治面貌"/>
                         </Form.Item>
                       </Cell>
-                      <Cell title="结束时间">
-                        <Form.Item name={[field.name, 'endDate']} isListField={true} trigger="onOk" noStyle>
-                          <DateSelect
-                            title="请选择结束时间"
-                            placeholder="请选择结束时间"
-                            format="yyyy年MM月dd日"
-                            mode="date"
-                            min="1900-01-01"
-                            max="2027-05-15"
-                            hasArrow={false}
-                          />
-                        </Form.Item>
-                      </Cell>
-                      <Cell title="工作单位">
+                      <Cell title={requiredTitle('工作单位')} help={customFormListHelp(formErrors, 'familyList', index, 'workUnit')}>
                         <Form.Item name={[field.name, 'workUnit']}  isListField={true} noStyle>
                           <Input clearable type="text" placeholder="请输入工作单位" />
                         </Form.Item>
                       </Cell>
-                      <Cell title="职务">
+                      <Cell title={requiredTitle('职务')} help={customFormListHelp(formErrors, 'familyList', index, 'duty')}>
                         <Form.Item name={[field.name, 'duty']}  isListField={true} noStyle>
                           <Input clearable type="text" placeholder="请输入职务" />
                         </Form.Item>
                       </Cell>
-                      <Cell title="移动电话">
+                      <Cell title={requiredTitle('移动电话')} help={customFormListHelp(formErrors, 'familyList', index, 'mobilePhone')}>
                         <Form.Item name={[field.name, 'mobilePhone']}  isListField={true} noStyle>
                           <Input clearable type="number" placeholder="请输入移动电话" />
                         </Form.Item>

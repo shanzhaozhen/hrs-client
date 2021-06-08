@@ -20,7 +20,7 @@ import {getBirthdayFromIdNumber, getSexFromIdNumber, validateWorkExperienceList}
 
 const ResumeFill: React.FC = () => {
   const [ errors, setErrors ] = useState<any>({});
-  const [ currentPage, setCurrentPage ] = useState<number>(7);
+  const [ currentPage, setCurrentPage ] = useState<number>(8);
   const [ formMaritalStatus, setFormMaritalStatus ] = useState<boolean>(true);
   const [ formHaveFriend, setFormHaveFriend ] = useState<boolean>(false);
   const [ formFertility, setFormFertility ] = useState<boolean>(false);

@@ -4,13 +4,14 @@ import { Form } from 'antd';
 import ZaSelect from "@/components/CustomZarm/ZaSelect";
 import {PlusOutlined} from "@ant-design/icons";
 import {useOptions} from "@/utils/options";
+import {customFormListHelp, requiredTitle} from "@/utils/zarm";
 
-// interface EducationalListProps {
-//   value?: RegionType;
-//   onChange?: (value: any) => void;
-// }
+interface EducationalListProps {
+  formErrors?: any;
+}
 
-const EducationalList: React.FC = () => {
+const EducationalList: React.FC<EducationalListProps> = (props) => {
+  const { formErrors } = props;
 
   const educationOptions = useOptions('Education');
 
@@ -18,7 +19,7 @@ const EducationalList: React.FC = () => {
     <>
       <Form.List name="educationalExperienceList">
         {
-          (fields, { add, remove }, { errors }) => (
+          (fields, { add, remove }) => (
             <>
               {
                 fields.map((field, index) => (
@@ -43,12 +44,12 @@ const EducationalList: React.FC = () => {
                       key={field.name}
                       animated
                     >
-                      <Cell title="学校">
+                      <Cell title={requiredTitle('学校')} help={customFormListHelp(formErrors, 'educationalExperienceList', index, 'politics')}>
                         <Form.Item name={[field.name, 'schoolName']}  isListField={true} noStyle>
                           <Input clearable type="text" placeholder="请输入学校" />
                         </Form.Item>
                       </Cell>
-                      <Cell title="开始时间">
+                      <Cell title={requiredTitle('开始时间')} help={customFormListHelp(formErrors, 'educationalExperienceList', index, 'politics')}>
                         <Form.Item name={[field.name, 'startDate']} isListField={true} trigger="onOk" noStyle>
                           <DateSelect
                             title="请选择开始时间"
@@ -61,7 +62,7 @@ const EducationalList: React.FC = () => {
                           />
                         </Form.Item>
                       </Cell>
-                      <Cell title="结束时间">
+                      <Cell title={requiredTitle('结束时间')} help={customFormListHelp(formErrors, 'educationalExperienceList', index, 'endDate')}>
                         <Form.Item name={[field.name, 'endDate']} isListField={true} trigger="onOk" noStyle>
                           <DateSelect
                             title="请选择结束时间"
@@ -74,32 +75,32 @@ const EducationalList: React.FC = () => {
                           />
                         </Form.Item>
                       </Cell>
-                      <Cell title="学历">
+                      <Cell title={requiredTitle('学历')} help={customFormListHelp(formErrors, 'educationalExperienceList', index, 'education')}>
                         <Form.Item name={[field.name, 'education']} isListField={true} noStyle>
                           <ZaSelect dataSource={educationOptions} placeholder="请选择学历"/>
                         </Form.Item>
                       </Cell>
-                      <Cell title="专业">
+                      <Cell title={requiredTitle('专业')} help={customFormListHelp(formErrors, 'educationalExperienceList', index, 'major')}>
                         <Form.Item name={[field.name, 'major']}  isListField={true} noStyle>
                           <Input clearable type="text" placeholder="请输入专业" />
                         </Form.Item>
                       </Cell>
-                      <Cell title="学制">
+                      <Cell title={requiredTitle('学制')} help={customFormListHelp(formErrors, 'educationalExperienceList', index, 'studyYears')}>
                         <Form.Item name={[field.name, 'studyYears']}  isListField={true} noStyle>
                           <Input clearable type="number" placeholder="请输入学制" />
                         </Form.Item>
                       </Cell>
-                      <Cell title="是否全日制">
+                      <Cell title={requiredTitle('是否全日制')} help={customFormListHelp(formErrors, 'educationalExperienceList', index, 'fullTime')}>
                         <Form.Item name={[field.name, 'fullTime']}  isListField={true} noStyle>
                           <Switch />
                         </Form.Item>
                       </Cell>
-                      <Cell title="证明人姓名">
+                      <Cell title={requiredTitle('证明人姓名')} help={customFormListHelp(formErrors, 'educationalExperienceList', index, 'witnessName')}>
                         <Form.Item name={[field.name, 'witnessName']}  isListField={true} noStyle>
                           <Input clearable type="text" placeholder="请输入证明人姓名" />
                         </Form.Item>
                       </Cell>
-                      <Cell title="证明人电话">
+                      <Cell title={requiredTitle('证明人电话')} help={customFormListHelp(formErrors, 'educationalExperienceList', index, 'witnessPhone')}>
                         <Form.Item name={[field.name, 'witnessPhone']}  isListField={true} noStyle>
                           <Input clearable type="number" placeholder="请输入证明人电话" />
                         </Form.Item>
