@@ -5,7 +5,6 @@ import ZaSelect from "@/components/CustomZarm/ZaSelect";
 import {PlusOutlined} from "@ant-design/icons";
 import {useOptions} from "@/utils/options";
 import {customFormListHelp, requiredTitle} from "@/utils/zarm";
-import ZaCellInput from "@/components/CustomZarm/ZaCellInput";
 
 interface FamilyListProps {
   formErrors?: any;
@@ -46,12 +45,11 @@ const FamilyList: React.FC<FamilyListProps> = (props) => {
                       key={field.name}
                       animated
                     >
-                      <ZaCellInput title="姓名" required={true} name={[field.name, 'name']} />
-                      {/* <Cell title={requiredTitle('姓名')} help={customFormListHelp(formErrors, 'familyList', index, 'name')}>
+                      <Cell title={requiredTitle('姓名')} help={customFormListHelp(formErrors, 'familyList', index, 'name')}>
                         <Form.Item name={[field.name, 'name']}  isListField={true} noStyle>
                           <Input clearable type="text" placeholder="请输入姓名" />
                         </Form.Item>
-                      </Cell> */}
+                      </Cell>
                       <Cell title={requiredTitle('关系')} help={customFormListHelp(formErrors, 'familyList', index, 'relation')}>
                         <Form.Item name={[field.name, 'relation']} isListField={true} noStyle>
                           <ZaSelect dataSource={relationOptions} placeholder="请选择关系"/>

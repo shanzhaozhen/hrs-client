@@ -112,6 +112,7 @@ export const validateWorkExperienceList = (currentValue: any[], setErrors: Dispa
         })
       }
     });
+    console.log('工作经历校验：', isPass)
     if (!isPass) {
       throw new Error('请正确填写工作经历');
     }

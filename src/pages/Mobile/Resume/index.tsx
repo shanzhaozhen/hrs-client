@@ -88,7 +88,7 @@ const ResumeFill: React.FC = () => {
         const currentValues = formRef.current?.getFieldsValue();
         validateWorkExperienceList(currentValues.workExperienceList, setErrors, true);
       }
-      // setCurrentPage(origin => (origin > 0 && origin < 10 ? origin + 1 : origin))
+      setCurrentPage(origin => (origin > 0 && origin < 10 ? origin + 1 : origin))
 
       console.log(formRef.current?.getFieldsValue());
     } catch (error) {

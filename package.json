@@ -64,7 +64,7 @@
     "react-helmet-async": "^1.0.4",
     "umi": "^3.4.0",
     "umi-request": "^1.0.8",
-    "zarm": "^2.9.0"
+    "zarm": "^2.9.2"
   },
   "devDependencies": {
     "@ant-design/pro-cli": "^2.0.2",
