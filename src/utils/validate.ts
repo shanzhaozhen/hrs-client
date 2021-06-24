@@ -1,5 +1,5 @@
 import type { Dispatch, SetStateAction } from "react";
-import {RegionType} from "@/services/region/typings";
+import type {RegionType} from "@/services/region/typings";
 
 /**
  * 封装校验函数
@@ -33,6 +33,29 @@ export const customValidator = async (setErrors: Dispatch<SetStateAction<any>>, 
     ...origin,
     [currentField]: undefined
   }))
+}
+
+/**
+ * 封装校验函数（Form.List）
+ * @param setErrors
+ * @param currentField
+ * @param value
+ * @param require
+ * @param customRule
+ * @param customRuleTip
+ */
+export const customZaCellValidator = async (setErrors: Dispatch<SetStateAction<any>>, value: any, require: boolean, customRule?: () => boolean, customRuleTip?: string) => {
+  if (require && (typeof(value) !== "boolean" && !value)) {
+    setErrors('不能为空');
+    throw new Error('不能为空');
+  }
+
+  if (customRule && !customRule()) {
+    setErrors(customRuleTip || '输入有误');
+    throw new Error(customRuleTip);
+  }
+
+  setErrors(undefined)
 }
 
 export const fieldValidator = (item: any, field: string, errors: Record<string, any>, tips?: string) => {

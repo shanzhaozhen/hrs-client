@@ -23,6 +23,29 @@ export const customHelp = (errors: any, currentField: string | number) => {
   )
 }
 
+
+/**
+ * 封装zarm中Cell组件的help
+ * @param errors
+ * @param currentField
+ */
+export const customZaCellHelp = (errors: any) => {
+  return (
+    <>
+      {
+        errors ? (
+          <Message
+            theme="danger"
+            icon={<Icon type="warning-round" size="sm" />}
+          >
+            { errors || '输入有误' }
+          </Message>
+        ) : null
+      }
+    </>
+  )
+}
+
 export const customFormListHelp = (errors: any, listField: string, index: number, currentField: string | number) => {
   return (
     <>

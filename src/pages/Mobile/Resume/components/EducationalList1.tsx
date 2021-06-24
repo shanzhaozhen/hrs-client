@@ -45,7 +45,7 @@ const EducationalList: React.FC<EducationalListProps> = (props) => {
                       key={field.name}
                       animated
                     >
-                      <ZaCellInput name={[field.name, 'schoolName']} title="学校" required={false} />
+                      <ZaCellInput name={[field.name, 'schoolName']} title="学校" required={true} />
                       {/* <Cell title={requiredTitle('学校')} help={customFormListHelp(formErrors, 'educationalExperienceList', index, 'politics')}>
                         <Form.Item name={[field.name, 'schoolName']}  isListField={true} noStyle>
                           <Input clearable type="text" placeholder="请输入学校" />
