@@ -2,7 +2,7 @@ import React from 'react';
 import type {DataSource} from "zarm/types/picker-view/PropsType";
 import { Select } from "zarm";
 
-interface ZaSelectProps {
+export interface ZaSelectProps {
   dataSource?: DataSource;
   multi?: boolean;
   valueMember?: string;

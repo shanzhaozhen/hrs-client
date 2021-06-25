@@ -771,7 +771,7 @@ const ResumeFill: React.FC = () => {
                 <WorkList formErrors={errors} />
               </Panel>
               <Panel title="教育经历" className={currentPage === 8 ? 'page-show' : 'page-hide'}>
-                <EducationalList />
+                <EducationalList errors={errors} setErrors={setErrors} />
               </Panel>
               <Panel title="证书信息" className={currentPage === 9 ? 'page-show' : 'page-hide'}>
                 <CertificateList />

@@ -36,6 +36,51 @@ export const customValidator = async (setErrors: Dispatch<SetStateAction<any>>, 
 }
 
 /**
+ * 封装校验函数
+ * @param setErrors
+ * @param listField
+ * @param index
+ * @param currentField
+ * @param value
+ * @param require
+ * @param customRule
+ * @param customRuleTip
+ */
+export const customListValidator = async (setErrors: Dispatch<SetStateAction<any>>, listField: string, index: number, currentField: string, value: any, require: boolean, customRule?: () => boolean, customRuleTip?: string) => {
+  if (require && (typeof(value) !== "boolean" && !value)) {
+    setErrors((origin: any) => {
+      const listFieldValue = origin.hasOwnProperty(listField) ? origin[listField] : undefined;
+      const indexFieldValue = origin.hasOwnProperty(index) ? listFieldValue[index] : undefined;
+
+      return {
+        ...origin,
+        [listField]: {
+          ...listFieldValue,
+          [index]: {
+            ...indexFieldValue,
+            [currentField]: '不能为空'
+          }
+        }
+      }
+    })
+    throw new Error('不能为空');
+  }
+
+  if (customRule && !customRule()) {
+    setErrors((origin: any) => ({
+      ...origin,
+      [currentField]: customRuleTip || '输入有误'
+    }))
+    throw new Error(customRuleTip);
+  }
+
+  setErrors((origin: any) => ({
+    ...origin,
+    [currentField]: undefined
+  }))
+}
+
+/**
  * 封装校验函数（Form.List）
  * @param setErrors
  * @param currentField
@@ -56,14 +101,6 @@ export const customZaCellValidator = async (setErrors: Dispatch<SetStateAction<a
   }
 
   setErrors(undefined)
-}
-
-export const fieldValidator = (item: any, field: string, errors: Record<string, any>, tips?: string) => {
-  if (item && item[field]) {
-    errors[field] = tips || '不能为空';
-    return true;
-  }
-  return false;
 }
 
 /**
