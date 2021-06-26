@@ -1,46 +1,42 @@
 import type { ReactNode } from 'react';
 import React from 'react';
-import { Cell, Input } from "zarm";
+import {Cell, Switch} from "zarm";
 import { requiredTitle } from "@/utils/zarm";
 import {Form} from "antd";
 import type {NamePath} from "rc-field-form/lib/interface";
 import type {Rule} from "rc-field-form/lib/interface";
 
-export interface ZaInputProps {
-  type?: 'text' | 'search' | 'password' | 'number' | 'price' | 'idcard';
-  placeholder?: string;
-  clearable?: boolean;
-  disabled?: boolean;
-  readOnly?: boolean;
-  required?: boolean;
+export interface ZaSwitchProps {
+  defaultChecked?: boolean;
+  checked?: boolean;
 }
 
-interface ZaCellInputProps {
+interface ZaCellSwitchProps {
   name: NamePath;
   title?: string;
   required?: boolean;
   help?: ReactNode;
   rules?: Rule[];
   validateTrigger?: string | string[]
-  zaInputProps: ZaInputProps;
+  zaSwitchProps?: ZaSwitchProps;
 }
 
-const ZaCellInput: React.FC<ZaCellInputProps> = (props) => {
-  const { name, title, required, help, rules, validateTrigger, zaInputProps } = props;
+const ZaCellSwitch: React.FC<ZaCellSwitchProps> = (props) => {
+  const { name, title, required, help, rules, validateTrigger, zaSwitchProps } = props;
 
   return (
     <>
       <Cell title={required ? requiredTitle(title) : title} help={help}>
         <Form.Item name={name} rules={rules} validateTrigger={validateTrigger} noStyle>
-          <Input {...zaInputProps} />
+          <Switch {...zaSwitchProps} />
         </Form.Item>
       </Cell>
     </>
   );
 };
 
-ZaCellInput.defaultProps = {
+ZaCellSwitch.defaultProps = {
   validateTrigger: ['onChange', 'onBlur'],
 };
 
-export default ZaCellInput;
+export default ZaCellSwitch;

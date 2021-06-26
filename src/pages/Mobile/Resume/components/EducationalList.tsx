@@ -1,13 +1,15 @@
-import React, {Dispatch, SetStateAction, useState} from 'react';
-import {Button, Cell, Collapse, Input, Switch} from "zarm";
+import React from 'react';
+import type {Dispatch, SetStateAction} from 'react';
+import { Button, Collapse } from "zarm";
 import { Form } from 'antd';
-import ZaSelect from "@/components/CustomZarm/ZaSelect";
 import {PlusOutlined} from "@ant-design/icons";
 import {useOptions} from "@/utils/options";
-import {customFormListHelp, requiredTitle} from "@/utils/zarm";
+import { customFormListHelp } from "@/utils/zarm";
 import ZaCellInput from "@/components/CustomZarm/ZaCellInput";
 import {customListValidator} from "@/utils/validate";
 import ZaCellDataSelect from "@/components/CustomZarm/ZaCellDataSelect";
+import ZaCellSelect from "@/components/CustomZarm/ZaCellSelect";
+import ZaCellSwitch from "@/components/CustomZarm/ZaCellSwitch";
 
 interface EducationalListProps {
   errors: any;
@@ -51,9 +53,11 @@ const EducationalList: React.FC<EducationalListProps> = (props) => {
                       <ZaCellInput
                         name={[field.name, 'schoolName']}
                         title="学校"
-                        type="text"
-                        clearable
-                        placeholder="请输入工作单位"
+                        zaInputProps={{
+                          type: 'text',
+                          clearable: true,
+                          placeholder: '请输入工作单位',
+                        }}
                         required={true}
                         help={customFormListHelp(errors, 'educationalExperienceList', index, 'schoolName')}
                         rules={[{
@@ -62,13 +66,15 @@ const EducationalList: React.FC<EducationalListProps> = (props) => {
                       />
                       <ZaCellDataSelect
                         name={[field.name, 'startDate']}
-                        title="开始时间"
-                        placeholder="请选择开始时间"
-                        format="yyyy年MM月dd日"
-                        mode="date"
-                        min="1900-01-01"
-                        max="2027-05-15"
-                        hasArrow={false}
+                        title='开始时间'
+                        zaDateSelectProps={{
+                          placeholder: '请选择开始时间',
+                          format: 'yyyy年MM月dd日',
+                          mode: 'date',
+                          min: '1900-01-01',
+                          max: '2027-05-15',
+                          hasArrow: false
+                        }}
                         required={true}
                         trigger="onOk"
                         rules={[{
@@ -78,48 +84,97 @@ const EducationalList: React.FC<EducationalListProps> = (props) => {
                       <ZaCellDataSelect
                         name={[field.name, 'endDate']}
                         title="结束时间"
-                        placeholder="请选择结束时间"
-                        format="yyyy年MM月dd日"
-                        mode="date"
-                        min="1900-01-01"
-                        max="2027-05-15"
-                        hasArrow={false}
+                        zaDateSelectProps={{
+                          placeholder: '请选择结束时间',
+                          format: 'yyyy年MM月dd日',
+                          mode: 'date',
+                          min: '1900-01-01',
+                          max: '2027-05-15',
+                          hasArrow: false
+                        }}
                         required={true}
                         trigger="onOk"
                         rules={[{
                           validator: async (_, value) => customListValidator(setErrors, 'educationalExperienceList', index, 'endDate', value, true),
                         }]}
                       />
-                      <Cell title={requiredTitle('学历')} help={customFormListHelp(errors, 'educationalExperienceList', index, 'education')}>
-                        <Form.Item name={[field.name, 'education']} isListField={true} noStyle>
-                          <ZaSelect dataSource={educationOptions} placeholder="请选择学历"/>
-                        </Form.Item>
-                      </Cell>
-                      <Cell title={requiredTitle('专业')} help={customFormListHelp(errors, 'educationalExperienceList', index, 'major')}>
-                        <Form.Item name={[field.name, 'major']}  isListField={true} noStyle>
-                          <Input clearable type="text" placeholder="请输入专业" />
-                        </Form.Item>
-                      </Cell>
-                      <Cell title={requiredTitle('学制')} help={customFormListHelp(errors, 'educationalExperienceList', index, 'studyYears')}>
-                        <Form.Item name={[field.name, 'studyYears']}  isListField={true} noStyle>
-                          <Input clearable type="number" placeholder="请输入学制" />
-                        </Form.Item>
-                      </Cell>
-                      <Cell title={requiredTitle('是否全日制')} help={customFormListHelp(errors, 'educationalExperienceList', index, 'fullTime')}>
-                        <Form.Item name={[field.name, 'fullTime']}  isListField={true} noStyle>
-                          <Switch />
-                        </Form.Item>
-                      </Cell>
-                      <Cell title={requiredTitle('证明人姓名')} help={customFormListHelp(errors, 'educationalExperienceList', index, 'witnessName')}>
-                        <Form.Item name={[field.name, 'witnessName']}  isListField={true} noStyle>
-                          <Input clearable type="text" placeholder="请输入证明人姓名" />
-                        </Form.Item>
-                      </Cell>
-                      <Cell title={requiredTitle('证明人电话')} help={customFormListHelp(errors, 'educationalExperienceList', index, 'witnessPhone')}>
-                        <Form.Item name={[field.name, 'witnessPhone']}  isListField={true} noStyle>
-                          <Input clearable type="number" placeholder="请输入证明人电话" />
-                        </Form.Item>
-                      </Cell>
+                      <ZaCellSelect
+                        name={[field.name, 'education']}
+                        title="学历"
+                        required={true}
+                        rules={[{
+                          validator: async (_, value) => customListValidator(setErrors, 'educationalExperienceList', index, 'education', value, true),
+                        }]}
+                        zaSelectProps={{
+                          dataSource: educationOptions,
+                          placeholder: '请选择学历'
+                        }}
+                      />
+                      <ZaCellInput
+                        name={[field.name, 'major']}
+                        title="专业"
+                        zaInputProps={{
+                          type: 'text',
+                          clearable: true,
+                          placeholder: '请输入专业'
+                        }}
+                        required={true}
+                        help={customFormListHelp(errors, 'educationalExperienceList', index, 'major')}
+                        rules={[{
+                          validator: async (_, value) => customListValidator(setErrors, 'educationalExperienceList', index, 'major', value, true),
+                        }]}
+                      />
+                      <ZaCellInput
+                        name={[field.name, 'studyYears']}
+                        title="学制"
+                        zaInputProps={{
+                          type: 'number',
+                          clearable: true,
+                          placeholder: '请输入学制'
+                        }}
+                        required={true}
+                        help={customFormListHelp(errors, 'educationalExperienceList', index, 'studyYears')}
+                        rules={[{
+                          validator: async (_, value) => customListValidator(setErrors, 'educationalExperienceList', index, 'studyYears', value, true),
+                        }]}
+                      />
+                      <ZaCellSwitch
+                        name={[field.name, 'fullTime']}
+                        title="是否全日制"
+                        required={true}
+                        help={customFormListHelp(errors, 'educationalExperienceList', index, 'fullTime')}
+                        rules={[{
+                          validator: async (_, value) => customListValidator(setErrors, 'educationalExperienceList', index, 'fullTime', value, true),
+                        }]}
+                      />
+                      <ZaCellInput
+                        name={[field.name, 'witnessName']}
+                        title="证明人姓名"
+                        zaInputProps={{
+                          type: 'text',
+                          clearable: true,
+                          placeholder: '请输入证明人姓名',
+                        }}
+                        required={true}
+                        help={customFormListHelp(errors, 'educationalExperienceList', index, 'witnessName')}
+                        rules={[{
+                          validator: async (_, value) => customListValidator(setErrors, 'educationalExperienceList', index, 'witnessName', value, true),
+                        }]}
+                      />
+                      <ZaCellInput
+                        name={[field.name, 'witnessPhone']}
+                        title="证明人电话"
+                        zaInputProps={{
+                          type: 'number',
+                          clearable: true,
+                          placeholder: '请输入证明人电话',
+                        }}
+                        required={true}
+                        help={customFormListHelp(errors, 'educationalExperienceList', index, 'witnessPhone')}
+                        rules={[{
+                          validator: async (_, value) => customListValidator(setErrors, 'educationalExperienceList', index, 'witnessPhone', value, true),
+                        }]}
+                      />
                     </Collapse.Item>
                   </Collapse>
                 ))

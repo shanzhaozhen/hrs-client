@@ -14,16 +14,17 @@ interface ZaCellSelectProps {
   required?: boolean;
   help?: ReactNode;
   rules?: Rule[];
+  validateTrigger?: string | string[]
   zaSelectProps?: ZaSelectProps
 }
 
 const ZaCellSelect: React.FC<ZaCellSelectProps> = (props) => {
-  const { name, title, required, help, rules, zaSelectProps } = props;
+  const { name, title, required, help, rules, validateTrigger, zaSelectProps } = props;
 
   return (
     <>
       <Cell title={required ? requiredTitle(title) : title} help={help}>
-        <Form.Item name={name} rules={rules} noStyle>
+        <Form.Item name={name} rules={rules} validateTrigger={validateTrigger} noStyle>
           <ZaSelect {...zaSelectProps} />
         </Form.Item>
       </Cell>
@@ -31,5 +32,8 @@ const ZaCellSelect: React.FC<ZaCellSelectProps> = (props) => {
   );
 };
 
+ZaCellSelect.defaultProps = {
+  validateTrigger: ['onChange', 'onBlur'],
+};
 
 export default ZaCellSelect;

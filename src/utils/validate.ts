@@ -36,6 +36,32 @@ export const customValidator = async (setErrors: Dispatch<SetStateAction<any>>, 
 }
 
 /**
+ * 更新错误信息（Form.List）
+ * @param setErrors
+ * @param listField
+ * @param index
+ * @param currentField
+ * @param errorMessage
+ */
+const updateErrorList = (setErrors: Dispatch<SetStateAction<any>>, listField: string, index: number, currentField: string, errorMessage?: string) => {
+  setErrors((origin: any) => {
+    const listFieldValue = origin.hasOwnProperty(listField) ? origin[listField] : undefined;
+    const indexFieldValue = listFieldValue && listFieldValue.hasOwnProperty(index) ? listFieldValue[index] : undefined;
+
+    return {
+      ...origin,
+      [listField]: {
+        ...listFieldValue,
+        [index]: {
+          ...indexFieldValue,
+          [currentField]: errorMessage
+        }
+      }
+    }
+  })
+}
+
+/**
  * 封装校验函数
  * @param setErrors
  * @param listField
@@ -48,36 +74,16 @@ export const customValidator = async (setErrors: Dispatch<SetStateAction<any>>, 
  */
 export const customListValidator = async (setErrors: Dispatch<SetStateAction<any>>, listField: string, index: number, currentField: string, value: any, require: boolean, customRule?: () => boolean, customRuleTip?: string) => {
   if (require && (typeof(value) !== "boolean" && !value)) {
-    setErrors((origin: any) => {
-      const listFieldValue = origin.hasOwnProperty(listField) ? origin[listField] : undefined;
-      const indexFieldValue = origin.hasOwnProperty(index) ? listFieldValue[index] : undefined;
-
-      return {
-        ...origin,
-        [listField]: {
-          ...listFieldValue,
-          [index]: {
-            ...indexFieldValue,
-            [currentField]: '不能为空'
-          }
-        }
-      }
-    })
+    updateErrorList(setErrors, listField, index, currentField, '不能为空')
     throw new Error('不能为空');
   }
 
   if (customRule && !customRule()) {
-    setErrors((origin: any) => ({
-      ...origin,
-      [currentField]: customRuleTip || '输入有误'
-    }))
-    throw new Error(customRuleTip);
+    updateErrorList(setErrors, listField, index, currentField, customRuleTip || '输入有误')
+    throw new Error(customRuleTip || '输入有误');
   }
 
-  setErrors((origin: any) => ({
-    ...origin,
-    [currentField]: undefined
-  }))
+  updateErrorList(setErrors, listField, index, currentField)
 }
 
 /**

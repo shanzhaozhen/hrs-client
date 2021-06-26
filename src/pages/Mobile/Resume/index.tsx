@@ -70,6 +70,8 @@ const ResumeFill: React.FC = () => {
     }
   }
 
+  const defaultValidateTrigger = ['onChange', 'onBlur']
+
   const pageFields = [
     ['name', 'idNumber', 'sex', 'birthday', 'householdType', 'nation', 'politics', 'education', 'degree', 'specialty', 'hobby', 'parentalSupport', 'birthAddress', 'nativeAddress', 'registeredAddress', 'homeAddress', 'currentAddress', 'postalAddress', 'expectedSalary', 'serviceYears', 'title', 'applyFor', 'workDate', 'phone', 'homePhone', 'email', 'qq', 'emergencyContactName', 'emergencyContactRelation', 'emergencyContactPhone', 'willJoin'],
     ['physicalCondition', 'weight', 'height', 'vision', 'bloodType'],
@@ -134,6 +136,7 @@ const ResumeFill: React.FC = () => {
                   <Form.Item
                     name="name"
                     noStyle
+                    validateTrigger={defaultValidateTrigger}
                     rules={[{
                       validator: async (_, value) => customValidator(setErrors, 'name', value, true),
                     }]}
@@ -145,6 +148,7 @@ const ResumeFill: React.FC = () => {
                   <Form.Item
                     name="idNumber"
                     noStyle
+                    validateTrigger={defaultValidateTrigger}
                     rules={[{
                       validator: async (_, idNumber) => customValidator(setErrors, 'idNumber', idNumber, true, () => validateIdNumber(idNumber), '身份证号码校验不通过'),
                     }]}
@@ -175,6 +179,7 @@ const ResumeFill: React.FC = () => {
                   <Form.Item
                     name="householdType"
                     noStyle
+                    validateTrigger={defaultValidateTrigger}
                     rules={[{
                       validator: async (_, value) => customValidator(setErrors, 'householdType', value, true),
                     }]}
@@ -186,6 +191,7 @@ const ResumeFill: React.FC = () => {
                   <Form.Item
                     name="nation"
                     noStyle
+                    validateTrigger={defaultValidateTrigger}
                     rules={[{
                       validator: async (_, value) => customValidator(setErrors, 'nation', value, true),
                     }]}
@@ -197,6 +203,7 @@ const ResumeFill: React.FC = () => {
                   <Form.Item
                     name="politics"
                     noStyle
+                    validateTrigger={defaultValidateTrigger}
                     rules={[{
                       validator: async (_, value) => customValidator(setErrors, 'politics', value, true),
                     }]}
@@ -208,6 +215,7 @@ const ResumeFill: React.FC = () => {
                   <Form.Item
                     name="education"
                     noStyle
+                    validateTrigger={defaultValidateTrigger}
                     rules={[{
                       validator: async (_, value) => customValidator(setErrors, 'education', value, true),
                     }]}
@@ -219,6 +227,7 @@ const ResumeFill: React.FC = () => {
                   <Form.Item
                     name="degree"
                     noStyle
+                    validateTrigger={defaultValidateTrigger}
                     rules={[{
                       validator: async (_, value) => customValidator(setErrors, 'degree', value, true),
                     }]}
@@ -230,6 +239,7 @@ const ResumeFill: React.FC = () => {
                   <Form.Item
                     name="specialty"
                     noStyle
+                    validateTrigger={defaultValidateTrigger}
                     rules={[{
                       validator: async (_, value) => customValidator(setErrors, 'specialty', value, true),
                     }]}
@@ -241,6 +251,7 @@ const ResumeFill: React.FC = () => {
                   <Form.Item
                     name="hobby"
                     noStyle
+                    validateTrigger={defaultValidateTrigger}
                     rules={[{
                       validator: async (_, value) => customValidator(setErrors, 'hobby', value, true),
                     }]}
@@ -251,7 +262,8 @@ const ResumeFill: React.FC = () => {
                 <Form.Item
                   name="parentalSupport"
                   noStyle
-                  rules={[{
+                  validateTrigger={defaultValidateTrigger}
+                    rules={[{
                     validator: async (_, value) => customValidator(setErrors, 'parentalSupport', value, true),
                   }]}
                 >
@@ -260,7 +272,8 @@ const ResumeFill: React.FC = () => {
                 <Form.Item
                   name="birthAddress"
                   noStyle
-                  rules={[{
+                  validateTrigger={defaultValidateTrigger}
+                    rules={[{
                     validator: async (_, birthAddress) => customValidator(setErrors, 'birthAddress', birthAddress, true, () => validateAddress(birthAddress, 2, false), '请选择出生地'),
                   }]}
                 >
@@ -269,7 +282,8 @@ const ResumeFill: React.FC = () => {
                 <Form.Item
                   name="nativeAddress"
                   noStyle
-                  rules={[{
+                  validateTrigger={defaultValidateTrigger}
+                    rules={[{
                     validator: async (_, nativeAddress) => customValidator(setErrors, 'nativeAddress', nativeAddress, true, () => validateAddress(nativeAddress, 2, false), '请选择籍贯'),
                   }]}
                 >
@@ -278,7 +292,8 @@ const ResumeFill: React.FC = () => {
                 <Form.Item
                   name="registeredAddress"
                   noStyle
-                  rules={[{
+                  validateTrigger={defaultValidateTrigger}
+                    rules={[{
                     validator: async (_, registeredAddress) => customValidator(setErrors, 'registeredAddress', registeredAddress, false, () => validateAddress(registeredAddress, 3, true), '请填写完整的户口地址'),
                   }]}
                 >
@@ -287,7 +302,8 @@ const ResumeFill: React.FC = () => {
                 <Form.Item
                   name="homeAddress"
                   noStyle
-                  rules={[{
+                  validateTrigger={defaultValidateTrigger}
+                    rules={[{
                     validator: async (_, homeAddress) => customValidator(setErrors, 'homeAddress', homeAddress, false, () => validateAddress(homeAddress, 3, true), '请填写完整的家庭住址'),
                   }]}
                 >
@@ -296,7 +312,8 @@ const ResumeFill: React.FC = () => {
                 <Form.Item
                   name="currentAddress"
                   noStyle
-                  rules={[{
+                  validateTrigger={defaultValidateTrigger}
+                    rules={[{
                     validator: async (_, currentAddress) => customValidator(setErrors, 'currentAddress', currentAddress, false, () => validateAddress(currentAddress, 3, true), '请填写完整的现住住址'),
                   }]}
                 >
@@ -305,7 +322,8 @@ const ResumeFill: React.FC = () => {
                 <Form.Item
                   name="postalAddress"
                   noStyle
-                  rules={[{
+                  validateTrigger={defaultValidateTrigger}
+                    rules={[{
                     validator: async (_, postalAddress) => customValidator(setErrors, 'postalAddress', postalAddress, false, () => validateAddress(postalAddress, 3, true), '请填写完整的邮递地址'),
                   }]}
                 >
@@ -315,6 +333,7 @@ const ResumeFill: React.FC = () => {
                   <Form.Item
                     name="expectedSalary"
                     noStyle
+                    validateTrigger={defaultValidateTrigger}
                     rules={[{
                       validator: async (_, value) => customValidator(setErrors, 'expectedSalary', value, true),
                     }]}
@@ -326,6 +345,7 @@ const ResumeFill: React.FC = () => {
                   <Form.Item
                     name="serviceYears"
                     noStyle
+                    validateTrigger={defaultValidateTrigger}
                     rules={[{
                       validator: async (_, value) => customValidator(setErrors, 'serviceYears', value, true),
                     }]}
@@ -341,7 +361,8 @@ const ResumeFill: React.FC = () => {
                 <Form.Item
                   name="applyFor"
                   noStyle
-                  rules={[{
+                  validateTrigger={defaultValidateTrigger}
+                    rules={[{
                     validator: async (_, value) => customValidator(setErrors, 'applyFor', value, true),
                   }]}
                 >
@@ -364,6 +385,7 @@ const ResumeFill: React.FC = () => {
                   <Form.Item
                     name="phone"
                     noStyle
+                    validateTrigger={defaultValidateTrigger}
                     rules={[{
                       validator: async (_, phone) => customValidator(setErrors, 'phone', phone, true, () => validatePhoneNumber(phone)),
                     }]}
@@ -380,6 +402,7 @@ const ResumeFill: React.FC = () => {
                   <Form.Item
                     name="email"
                     noStyle
+                    validateTrigger={defaultValidateTrigger}
                     rules={[{
                       validator: async (_, email) => customValidator(setErrors, 'email', email, true, () => validateEmail(email), '邮箱格式输入不正确'),
                     }]}
@@ -396,6 +419,7 @@ const ResumeFill: React.FC = () => {
                   <Form.Item
                     name="emergencyContactName"
                     noStyle
+                    validateTrigger={defaultValidateTrigger}
                     rules={[{
                       validator: async (_, value) => customValidator(setErrors, 'emergencyContactName', value, true),
                     }]}
@@ -407,6 +431,7 @@ const ResumeFill: React.FC = () => {
                   <Form.Item
                     name="emergencyContactRelation"
                     noStyle
+                    validateTrigger={defaultValidateTrigger}
                     rules={[{
                       validator: async (_, value) => customValidator(setErrors, 'emergencyContactRelation', value, true),
                     }]}
@@ -418,6 +443,7 @@ const ResumeFill: React.FC = () => {
                   <Form.Item
                     name="emergencyContactPhone"
                     noStyle
+                    validateTrigger={defaultValidateTrigger}
                     rules={[{
                       validator: async (_, value) => customValidator(setErrors, 'emergencyContactPhone', value, true),
                     }]}
@@ -429,6 +455,7 @@ const ResumeFill: React.FC = () => {
                   <Form.Item
                     name="willJoin"
                     noStyle
+                    validateTrigger={defaultValidateTrigger}
                     rules={[{
                       validator: async (_, value) => customValidator(setErrors, 'willJoin', value, true),
                     }]}
@@ -442,6 +469,7 @@ const ResumeFill: React.FC = () => {
                   <Form.Item
                     name="physicalCondition"
                     noStyle
+                    validateTrigger={defaultValidateTrigger}
                     rules={[{
                       validator: async (_, value) => customValidator(setErrors, 'physicalCondition', value, true),
                     }]}
@@ -453,6 +481,7 @@ const ResumeFill: React.FC = () => {
                   <Form.Item
                     name="weight"
                     noStyle
+                    validateTrigger={defaultValidateTrigger}
                     rules={[{
                       validator: async (_, value) => customValidator(setErrors, 'weight', value, true),
                     }]}
@@ -464,6 +493,7 @@ const ResumeFill: React.FC = () => {
                   <Form.Item
                     name="height"
                     noStyle
+                    validateTrigger={defaultValidateTrigger}
                     rules={[{
                       validator: async (_, value) => customValidator(setErrors, 'height', value, true),
                     }]}
@@ -475,6 +505,7 @@ const ResumeFill: React.FC = () => {
                   <Form.Item
                     name="vision"
                     noStyle
+                    validateTrigger={defaultValidateTrigger}
                     rules={[{
                       validator: async (_, value) => customValidator(setErrors, 'vision', value, true),
                     }]}
@@ -485,7 +516,8 @@ const ResumeFill: React.FC = () => {
                 <Form.Item
                   name="bloodType"
                   noStyle
-                  rules={[{
+                  validateTrigger={defaultValidateTrigger}
+                    rules={[{
                     validator: async (_, value) => customValidator(setErrors, 'bloodType', value, true),
                   }]}
                 >
@@ -497,6 +529,7 @@ const ResumeFill: React.FC = () => {
                   <Form.Item
                     name="maritalStatus"
                     noStyle
+                    validateTrigger={defaultValidateTrigger}
                     rules={[{
                       validator: async (_, value) => customValidator(setErrors, 'maritalStatus', value, true),
                     }]}
@@ -512,7 +545,8 @@ const ResumeFill: React.FC = () => {
                           name="marriageDate"
                           trigger="onOk"
                           noStyle
-                          rules={[{
+                          validateTrigger={defaultValidateTrigger}
+                    rules={[{
                             validator: async (_, value) => customValidator(setErrors, 'marriageDate', value, !formMaritalStatus),
                           }]}
                         >
@@ -531,7 +565,8 @@ const ResumeFill: React.FC = () => {
                         <Form.Item
                           name="spouseName"
                           noStyle
-                          rules={[{
+                          validateTrigger={defaultValidateTrigger}
+                    rules={[{
                             validator: async (_, value) => customValidator(setErrors, 'spouseName', value, !formMaritalStatus),
                           }]}
                         >
@@ -542,7 +577,8 @@ const ResumeFill: React.FC = () => {
                         <Form.Item
                           name="spousePhysicalCondition"
                           noStyle
-                          rules={[{
+                          validateTrigger={defaultValidateTrigger}
+                    rules={[{
                             validator: async (_, value) => customValidator(setErrors, 'spousePhysicalCondition', value, !formMaritalStatus),
                           }]}
                         >
@@ -553,7 +589,8 @@ const ResumeFill: React.FC = () => {
                         <Form.Item
                           name="fertility"
                           noStyle
-                          rules={[{
+                          validateTrigger={defaultValidateTrigger}
+                    rules={[{
                             validator: async (_, value) => customValidator(setErrors, 'fertility', value, !formMaritalStatus),
                           }]}
                         >
@@ -567,7 +604,8 @@ const ResumeFill: React.FC = () => {
                               <Form.Item
                                 name="childrenNumber"
                                 noStyle
-                                rules={[{
+                                validateTrigger={defaultValidateTrigger}
+                    rules={[{
                                   validator: async (_, value) => customValidator(setErrors, 'marriageDate', value, formFertility),
                                 }]}
                               >
@@ -594,6 +632,7 @@ const ResumeFill: React.FC = () => {
                   <Form.Item
                     name="haveFriend"
                     noStyle
+                    validateTrigger={defaultValidateTrigger}
                     rules={[{
                       validator: async (_, value) => customValidator(setErrors, 'haveFriend', value, true),
                     }]}
@@ -608,7 +647,8 @@ const ResumeFill: React.FC = () => {
                         <Form.Item
                           name="friendName"
                           noStyle
-                          rules={[{
+                          validateTrigger={defaultValidateTrigger}
+                    rules={[{
                             validator: async (_, value) => customValidator(setErrors, 'friendName', value, formHaveFriend),
                           }]}
                         >
@@ -619,7 +659,8 @@ const ResumeFill: React.FC = () => {
                         <Form.Item
                           name="friendRelation"
                           noStyle
-                          rules={[{
+                          validateTrigger={defaultValidateTrigger}
+                    rules={[{
                             validator: async (_, value) => customValidator(setErrors, 'friendRelation', value, formHaveFriend),
                           }]}
                         >
@@ -630,7 +671,8 @@ const ResumeFill: React.FC = () => {
                         <Form.Item
                           name="friendDepartment"
                           noStyle
-                          rules={[{
+                          validateTrigger={defaultValidateTrigger}
+                    rules={[{
                             validator: async (_, value) => customValidator(setErrors, 'friendDepartment', value, formHaveFriend),
                           }]}
                         >
@@ -641,7 +683,8 @@ const ResumeFill: React.FC = () => {
                         <Form.Item
                           name="friendDuty"
                           noStyle
-                          rules={[{
+                          validateTrigger={defaultValidateTrigger}
+                    rules={[{
                             validator: async (_, value) => customValidator(setErrors, 'friendDuty', value, formHaveFriend),
                           }]}
                         >
@@ -692,6 +735,7 @@ const ResumeFill: React.FC = () => {
                   <Form.Item
                     name="inArmy"
                     noStyle
+                    validateTrigger={defaultValidateTrigger}
                     rules={[{
                       validator: async (_, value) => customValidator(setErrors, 'inArmy', value, true),
                     }]}
@@ -706,7 +750,8 @@ const ResumeFill: React.FC = () => {
                         <Form.Item
                           name="troopBase"
                           noStyle
-                          rules={[{
+                          validateTrigger={defaultValidateTrigger}
+                    rules={[{
                             validator: async (_, value) => customValidator(setErrors, 'troopBase', value, true),
                           }]}
                         >
@@ -718,7 +763,8 @@ const ResumeFill: React.FC = () => {
                           name="enlistmentDate"
                           trigger="onOk"
                           noStyle
-                          rules={[{
+                          validateTrigger={defaultValidateTrigger}
+                    rules={[{
                             validator: async (_, value) => customValidator(setErrors, 'enlistmentDate', value, true),
                           }]}
                         >
@@ -738,7 +784,8 @@ const ResumeFill: React.FC = () => {
                           name="dischargeDate"
                           trigger="onOk"
                           noStyle
-                          rules={[{
+                          validateTrigger={defaultValidateTrigger}
+                    rules={[{
                             validator: async (_, value) => customValidator(setErrors, 'dischargeDate', value, true),
                           }]}
                         >
