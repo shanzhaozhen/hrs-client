@@ -1,17 +1,22 @@
 import React from 'react';
-import {Button, Cell, Collapse, DateSelect, Input} from "zarm";
+import type {Dispatch, SetStateAction} from 'react';
+import {Button, Collapse} from "zarm";
 import { Form } from 'antd';
-import ZaSelect from "@/components/CustomZarm/ZaSelect";
 import {PlusOutlined} from "@ant-design/icons";
 import {useOptions} from "@/utils/options";
-import {customFormListHelp, requiredTitle} from "@/utils/zarm";
+import { customFormListHelp } from "@/utils/zarm";
+import {customListValidator} from "@/utils/validate";
+import ZaCellInput from "@/components/CustomZarm/ZaCellInput";
+import ZaCellDataSelect from "@/components/CustomZarm/ZaCellDataSelect";
+import ZaCellSelect from "@/components/CustomZarm/ZaCellSelect";
 
 interface WorkExperienceListProps {
-  formErrors?: any;
+  errors: any;
+  setErrors: Dispatch<SetStateAction<any>>;
 }
 
 const WorkExperienceList: React.FC<WorkExperienceListProps> = (props) => {
-  const { formErrors } = props;
+  const { errors, setErrors } = props;
 
   const unitTypeOptions = useOptions('UnitType');
 
@@ -44,66 +49,122 @@ const WorkExperienceList: React.FC<WorkExperienceListProps> = (props) => {
                       key={field.name}
                       animated
                     >
-                      <Cell title={requiredTitle('工作单位')} help={customFormListHelp(formErrors, 'workExperienceList', index, 'workUnit')}>
-                        <Form.Item
-                          name={[field.name, 'workUnit']}
-                          isListField={true}
-                          noStyle
-                        >
-                          <Input clearable type="text" placeholder="请输入工作单位" />
-                        </Form.Item>
-                      </Cell>
-                      <Cell title={requiredTitle('开始时间')} help={customFormListHelp(formErrors, 'workExperienceList', index, 'startDate')}>
-                        <Form.Item name={[field.name, 'startDate']} isListField={true} trigger="onOk" noStyle>
-                          <DateSelect
-                            title="请选择开始时间"
-                            placeholder="请选择开始时间"
-                            format="yyyy年MM月dd日"
-                            mode="date"
-                            min="1900-01-01"
-                            max="2027-05-15"
-                            hasArrow={false}
-                          />
-                        </Form.Item>
-                      </Cell>
-                      <Cell title={requiredTitle('结束时间')} help={customFormListHelp(formErrors, 'workExperienceList', index, 'endDate')}>
-                        <Form.Item name={[field.name, 'endDate']} isListField={true} trigger="onOk" noStyle>
-                          <DateSelect
-                            title="请选择结束时间"
-                            placeholder="请选择结束时间"
-                            format="yyyy年MM月dd日"
-                            mode="date"
-                            min="1900-01-01"
-                            max="2027-05-15"
-                            hasArrow={false}
-                          />
-                        </Form.Item>
-                      </Cell>
-                      <Cell title={requiredTitle('职务/岗位')} help={customFormListHelp(formErrors, 'workExperienceList', index, 'duty')}>
-                        <Form.Item name={[field.name, 'duty']}  isListField={true} noStyle>
-                          <Input clearable type="text" placeholder="请输入职务/岗位" />
-                        </Form.Item>
-                      </Cell>
-                      <Cell title={requiredTitle('单位性质')} help={customFormListHelp(formErrors, 'workExperienceList', index, 'unitType')}>
-                        <Form.Item name={[field.name, 'unitType']} isListField={true} noStyle>
-                          <ZaSelect dataSource={unitTypeOptions} placeholder="请选择单位性质"/>
-                        </Form.Item>
-                      </Cell>
-                      <Cell title="月薪">
-                        <Form.Item name={[field.name, 'salary']}  isListField={true} noStyle>
-                          <Input clearable type="number" placeholder="请输入月薪" />
-                        </Form.Item>
-                      </Cell>
-                      <Cell title={requiredTitle('证明人姓名')} help={customFormListHelp(formErrors, 'workExperienceList', index, 'witnessName')}>
-                        <Form.Item name={[field.name, 'witnessName']}  isListField={true} noStyle>
-                          <Input clearable type="text" placeholder="请输入证明人姓名" />
-                        </Form.Item>
-                      </Cell>
-                      <Cell title={requiredTitle('证明人电话')} help={customFormListHelp(formErrors, 'workExperienceList', index, 'witnessPhone')}>
-                        <Form.Item name={[field.name, 'witnessPhone']}  isListField={true} noStyle>
-                          <Input clearable type="number" placeholder="请输入证明人电话" />
-                        </Form.Item>
-                      </Cell>
+                      <ZaCellInput
+                        name={[field.name, 'workUnit']}
+                        title="工作单位"
+                        zaInputProps={{
+                          type: 'text',
+                          clearable: true,
+                          placeholder: '请输入工作单位',
+                        }}
+                        required={true}
+                        help={customFormListHelp(errors, 'workExperienceList', index, 'workUnit')}
+                        rules={[{
+                          validator: async (_, value) => customListValidator(setErrors, 'workExperienceList', index, 'workUnit', value, true),
+                        }]}
+                      />
+                      <ZaCellDataSelect
+                        name={[field.name, 'startDate']}
+                        title='开始时间'
+                        zaDateSelectProps={{
+                          placeholder: '请选择开始时间',
+                          format: 'yyyy年MM月dd日',
+                          mode: 'date',
+                          min: '1900-01-01',
+                          max: '2027-05-15',
+                          hasArrow: false
+                        }}
+                        required={true}
+                        trigger="onOk"
+                        rules={[{
+                          validator: async (_, value) => customListValidator(setErrors, 'workExperienceList', index, 'startDate', value, true),
+                        }]}
+                      />
+                      <ZaCellDataSelect
+                        name={[field.name, 'endDate']}
+                        title="结束时间"
+                        zaDateSelectProps={{
+                          placeholder: '请选择结束时间',
+                          format: 'yyyy年MM月dd日',
+                          mode: 'date',
+                          min: '1900-01-01',
+                          max: '2027-05-15',
+                          hasArrow: false
+                        }}
+                        required={true}
+                        trigger="onOk"
+                        rules={[{
+                          validator: async (_, value) => customListValidator(setErrors, 'workExperienceList', index, 'endDate', value, true),
+                        }]}
+                      />
+                      <ZaCellInput
+                        name={[field.name, 'duty']}
+                        title="职务/岗位"
+                        zaInputProps={{
+                          type: 'text',
+                          clearable: true,
+                          placeholder: '请输入职务/岗位',
+                        }}
+                        required={true}
+                        help={customFormListHelp(errors, 'workExperienceList', index, 'duty')}
+                        rules={[{
+                          validator: async (_, value) => customListValidator(setErrors, 'workExperienceList', index, 'duty', value, true),
+                        }]}
+                      />
+                      <ZaCellSelect
+                        name={[field.name, 'unitType']}
+                        title="单位性质"
+                        required={true}
+                        rules={[{
+                          validator: async (_, value) => customListValidator(setErrors, 'workExperienceList', index, 'unitType', value, true),
+                        }]}
+                        zaSelectProps={{
+                          dataSource: unitTypeOptions,
+                          placeholder: '请选择单位性质'
+                        }}
+                      />
+                      <ZaCellInput
+                        name={[field.name, 'unitType']}
+                        title="月薪"
+                        zaInputProps={{
+                          type: 'number',
+                          clearable: true,
+                          placeholder: '请输入月薪',
+                        }}
+                        required={true}
+                        help={customFormListHelp(errors, 'workExperienceList', index, 'unitType')}
+                        rules={[{
+                          validator: async (_, value) => customListValidator(setErrors, 'workExperienceList', index, 'duty', value, true),
+                        }]}
+                      />
+                      <ZaCellInput
+                        name={[field.name, 'witnessName']}
+                        title="证明人姓名"
+                        zaInputProps={{
+                          type: 'text',
+                          clearable: true,
+                          placeholder: '请输入证明人姓名',
+                        }}
+                        required={true}
+                        help={customFormListHelp(errors, 'workExperienceList', index, 'witnessName')}
+                        rules={[{
+                          validator: async (_, value) => customListValidator(setErrors, 'workExperienceList', index, 'duty', value, true),
+                        }]}
+                      />
+                      <ZaCellInput
+                        name={[field.name, 'number']}
+                        title="证明人电话"
+                        zaInputProps={{
+                          type: 'number',
+                          clearable: true,
+                          placeholder: '请输入证明人电话',
+                        }}
+                        required={true}
+                        help={customFormListHelp(errors, 'workExperienceList', index, 'number')}
+                        rules={[{
+                          validator: async (_, value) => customListValidator(setErrors, 'workExperienceList', index, 'duty', value, true),
+                        }]}
+                      />
                     </Collapse.Item>
                   </Collapse>
                 ))

@@ -64,9 +64,9 @@ const ResumeFill: React.FC = () => {
       if (changedValues.hasOwnProperty('inArmy')) {
         setFormInArmy(!!inArmy);
       }
-      if (changedValues.hasOwnProperty('workExperienceList')) {
-        validateWorkExperienceList(changedValues.workExperienceList, setErrors, false);
-      }
+      // if (changedValues.hasOwnProperty('workExperienceList')) {
+      //   validateWorkExperienceList(changedValues.workExperienceList, setErrors, false);
+      // }
     }
   }
 
@@ -815,16 +815,16 @@ const ResumeFill: React.FC = () => {
                 }
               </Panel>
               <Panel title="工作履历" className={currentPage === 7 ? 'page-show' : 'page-hide'}>
-                <WorkList formErrors={errors} />
+                <WorkList errors={errors} setErrors={setErrors} />
               </Panel>
               <Panel title="教育经历" className={currentPage === 8 ? 'page-show' : 'page-hide'}>
                 <EducationalList errors={errors} setErrors={setErrors} />
               </Panel>
               <Panel title="证书信息" className={currentPage === 9 ? 'page-show' : 'page-hide'}>
-                <CertificateList />
+                <CertificateList errors={errors} setErrors={setErrors} />
               </Panel>
               <Panel title="家庭信息" className={currentPage === 10 ? 'page-show' : 'page-hide'}>
-                <FamilyList />
+                <FamilyList errors={errors} setErrors={setErrors} />
               </Panel>
             </ProForm>
           </div>

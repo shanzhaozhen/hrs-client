@@ -1,24 +1,29 @@
-import React from 'react';
-import {Button, Cell, Collapse, DateSelect, Input} from "zarm";
+import React, {Dispatch, SetStateAction} from 'react';
+import {Button, Cell, Collapse, Input} from "zarm";
 import { Form } from 'antd';
-import ZaSelect from "@/components/CustomZarm/ZaSelect";
 import {PlusOutlined} from "@ant-design/icons";
 import {useOptions} from "@/utils/options";
+import {customFormListHelp} from "@/utils/zarm";
+import {customListValidator} from "@/utils/validate";
+import ZaCellInput from "@/components/CustomZarm/ZaCellInput";
+import ZaCellSelect from "@/components/CustomZarm/ZaCellSelect";
+import ZaCellDataSelect from "@/components/CustomZarm/ZaCellDataSelect";
 
-// interface CertificateListProps {
-//   value?: RegionType;
-//   onChange?: (value: any) => void;
-// }
+interface CertificateListProps {
+  errors: any;
+  setErrors: Dispatch<SetStateAction<any>>;
+}
 
-const CertificateList: React.FC = () => {
+const CertificateList: React.FC<CertificateListProps> = (props) => {
+  const { errors, setErrors } = props;
 
-  const CertificateTypeOptions = useOptions('CertificateType')
+  const certificateTypeOptions = useOptions('CertificateType')
 
   return (
     <>
       <Form.List name="certificateList">
         {
-          (fields, { add, remove }, { errors }) => (
+          (fields, { add, remove }) => (
             <>
               {
                 fields.map((field, index) => (
@@ -43,39 +48,78 @@ const CertificateList: React.FC = () => {
                       key={field.name}
                       animated
                     >
-                      <Cell title="证件名称">
-                        <Form.Item name={[field.name, 'name']}  isListField={true} noStyle>
-                          <Input clearable type="text" placeholder="请输入证件名称" />
-                        </Form.Item>
-                      </Cell>
-                      <Cell title="证件类型">
-                        <Form.Item name={[field.name, 'type']} isListField={true} noStyle>
-                          <ZaSelect dataSource={CertificateTypeOptions} placeholder="请选择证件类型"/>
-                        </Form.Item>
-                      </Cell>
-                      <Cell title="证件号">
-                        <Form.Item name={[field.name, 'name']}  isListField={true} noStyle>
-                          <Input clearable type="text" placeholder="请输入证件号" />
-                        </Form.Item>
-                      </Cell>
-                      <Cell title="取证日期">
-                        <Form.Item name={[field.name, 'obtainDate']} isListField={true} trigger="onOk" noStyle>
-                          <DateSelect
-                            title="请选择取证日期"
-                            placeholder="请选择取证日期"
-                            format="yyyy年MM月dd日"
-                            mode="date"
-                            min="1900-01-01"
-                            max="2027-05-15"
-                            hasArrow={false}
-                          />
-                        </Form.Item>
-                      </Cell>
-                      <Cell title="发证单位">
-                        <Form.Item name={[field.name, 'issueUnit']}  isListField={true} noStyle>
-                          <Input clearable type="number" placeholder="请输入发证单位" />
-                        </Form.Item>
-                      </Cell>
+                      <ZaCellInput
+                        name={[field.name, 'name']}
+                        title="证件名称"
+                        zaInputProps={{
+                          type: 'text',
+                          clearable: true,
+                          placeholder: '请输入证件名称',
+                        }}
+                        required={true}
+                        help={customFormListHelp(errors, 'certificateList', index, 'name')}
+                        rules={[{
+                          validator: async (_, value) => customListValidator(setErrors, 'certificateList', index, 'name', value, true),
+                        }]}
+                      />
+                      <ZaCellSelect
+                        name={[field.name, 'type']}
+                        title="证件类型"
+                        required={true}
+                        rules={[{
+                          validator: async (_, value) => customListValidator(setErrors, 'certificateList', index, 'type', value, true),
+                        }]}
+                        zaSelectProps={{
+                          dataSource: certificateTypeOptions,
+                          placeholder: '请选择证件类型'
+                        }}
+                      />
+                      <ZaCellInput
+                        name={[field.name, 'number']}
+                        title="证件号"
+                        zaInputProps={{
+                          type: 'text',
+                          clearable: true,
+                          placeholder: '请输入证件号',
+                        }}
+                        required={true}
+                        help={customFormListHelp(errors, 'certificateList', index, 'number')}
+                        rules={[{
+                          validator: async (_, value) => customListValidator(setErrors, 'certificateList', index, 'number', value, true),
+                        }]}
+                      />
+                      <ZaCellDataSelect
+                        name={[field.name, 'obtainDate']}
+                        title="取证日期"
+                        zaDateSelectProps={{
+                          placeholder: '请选择取证日期',
+                          format: 'yyyy年MM月dd日',
+                          mode: 'date',
+                          min: '1900-01-01',
+                          max: '2027-05-15',
+                          hasArrow: false
+                        }}
+                        required={true}
+                        trigger="onOk"
+                        rules={[{
+                          validator: async (_, value) => customListValidator(setErrors, 'educationalExperienceList', index, 'endDate', value, true),
+                        }]}
+                      />
+                      <ZaCellInput
+                        name={[field.name, 'issueUnit']}
+                        title="发证单位"
+                        zaInputProps={{
+                          type: 'text',
+                          clearable: true,
+                          placeholder: '请输入发证单位',
+                        }}
+                        required={true}
+                        help={customFormListHelp(errors, 'certificateList', index, 'issueUnit')}
+                        rules={[{
+                          validator: async (_, value) => customListValidator(setErrors, 'certificateList', index, 'number', value, true),
+                        }]}
+                      />
+                      {/* todo: 附件 */}
                       <Cell title="附件">
                         <Form.Item name={[field.name, 'fileId']}  isListField={true} noStyle>
                           <Input clearable type="text" placeholder="请输入附件" />

@@ -52,11 +52,11 @@ const EducationalList: React.FC<EducationalListProps> = (props) => {
                     >
                       <ZaCellInput
                         name={[field.name, 'schoolName']}
-                        title="学校"
+                        title="学校名称"
                         zaInputProps={{
                           type: 'text',
                           clearable: true,
-                          placeholder: '请输入工作单位',
+                          placeholder: '请输入学校名称',
                         }}
                         required={true}
                         help={customFormListHelp(errors, 'educationalExperienceList', index, 'schoolName')}

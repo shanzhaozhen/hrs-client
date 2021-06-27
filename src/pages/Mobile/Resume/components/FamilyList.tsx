@@ -1,18 +1,22 @@
 import React from 'react';
-import { Button, Cell, Collapse, DateSelect, Input } from "zarm";
+import type {Dispatch, SetStateAction} from 'react';
+import { Button, Collapse } from "zarm";
 import { Form } from 'antd';
-import ZaSelect from "@/components/CustomZarm/ZaSelect";
 import {PlusOutlined} from "@ant-design/icons";
 import {useOptions} from "@/utils/options";
-import {customFormListHelp, requiredTitle} from "@/utils/zarm";
+import {customFormListHelp} from "@/utils/zarm";
 import ZaCellInput from "@/components/CustomZarm/ZaCellInput";
+import {customListValidator} from "@/utils/validate";
+import ZaCellSelect from "@/components/CustomZarm/ZaCellSelect";
+import ZaCellDataSelect from "@/components/CustomZarm/ZaCellDataSelect";
 
 interface FamilyListProps {
-  formErrors?: any;
+  errors: any;
+  setErrors: Dispatch<SetStateAction<any>>;
 }
 
 const FamilyList: React.FC<FamilyListProps> = (props) => {
-  const { formErrors } = props;
+  const { errors, setErrors } = props;
 
   const relationOptions = useOptions('Relation');
   const politicsOptions = useOptions('Politics');
@@ -46,55 +50,112 @@ const FamilyList: React.FC<FamilyListProps> = (props) => {
                       key={field.name}
                       animated
                     >
-                      <ZaCellInput title="姓名" required={true} name={[field.name, 'name']} />
-                      {/* <Cell title={requiredTitle('姓名')} help={customFormListHelp(formErrors, 'familyList', index, 'name')}>
-                        <Form.Item name={[field.name, 'name']}  isListField={true} noStyle>
-                          <Input clearable type="text" placeholder="请输入姓名" />
-                        </Form.Item>
-                      </Cell> */}
-                      <Cell title={requiredTitle('关系')} help={customFormListHelp(formErrors, 'familyList', index, 'relation')}>
-                        <Form.Item name={[field.name, 'relation']} isListField={true} noStyle>
-                          <ZaSelect dataSource={relationOptions} placeholder="请选择关系"/>
-                        </Form.Item>
-                      </Cell>
-                      <Cell title={requiredTitle('出生日期')} help={customFormListHelp(formErrors, 'familyList', index, 'name')}>
-                        <Form.Item name={[field.name, 'birthday']} isListField={true} trigger="onOk" noStyle>
-                          <DateSelect
-                            title="请选择出生日期"
-                            placeholder="请选择出生日期"
-                            format="yyyy年MM月dd日"
-                            mode="date"
-                            min="1900-01-01"
-                            max="2027-05-15"
-                            hasArrow={false}
-                          />
-                        </Form.Item>
-                      </Cell>
-                      <Cell title={requiredTitle('政治面貌')} help={customFormListHelp(formErrors, 'familyList', index, 'politics')}>
-                        <Form.Item name={[field.name, 'politics']} isListField={true} noStyle>
-                          <ZaSelect dataSource={politicsOptions} placeholder="请选择政治面貌"/>
-                        </Form.Item>
-                      </Cell>
-                      <Cell title={requiredTitle('工作单位')} help={customFormListHelp(formErrors, 'familyList', index, 'workUnit')}>
-                        <Form.Item name={[field.name, 'workUnit']}  isListField={true} noStyle>
-                          <Input clearable type="text" placeholder="请输入工作单位" />
-                        </Form.Item>
-                      </Cell>
-                      <Cell title={requiredTitle('职务')} help={customFormListHelp(formErrors, 'familyList', index, 'duty')}>
-                        <Form.Item name={[field.name, 'duty']}  isListField={true} noStyle>
-                          <Input clearable type="text" placeholder="请输入职务" />
-                        </Form.Item>
-                      </Cell>
-                      <Cell title={requiredTitle('移动电话')} help={customFormListHelp(formErrors, 'familyList', index, 'mobilePhone')}>
-                        <Form.Item name={[field.name, 'mobilePhone']}  isListField={true} noStyle>
-                          <Input clearable type="number" placeholder="请输入移动电话" />
-                        </Form.Item>
-                      </Cell>
-                      <Cell title="固话">
-                        <Form.Item name={[field.name, 'landlinePhone']}  isListField={true} noStyle>
-                          <Input clearable type="number" placeholder="请输入固话" />
-                        </Form.Item>
-                      </Cell>
+                      <ZaCellInput
+                        name={[field.name, 'name']}
+                        title="姓名"
+                        zaInputProps={{
+                          type: 'text',
+                          clearable: true,
+                          placeholder: '姓名',
+                        }}
+                        required={true}
+                        help={customFormListHelp(errors, 'familyList', index, 'name')}
+                        rules={[{
+                          validator: async (_, value) => customListValidator(setErrors, 'familyList', index, 'name', value, true),
+                        }]}
+                      />
+                      <ZaCellSelect
+                        name={[field.name, 'relation']}
+                        title="关系"
+                        required={true}
+                        rules={[{
+                          validator: async (_, value) => customListValidator(setErrors, 'familyList', index, 'relation', value, true),
+                        }]}
+                        zaSelectProps={{
+                          dataSource: relationOptions,
+                          placeholder: '请选择关系'
+                        }}
+                      />
+                      <ZaCellDataSelect
+                        name={[field.name, 'birthday']}
+                        title='出生日期'
+                        zaDateSelectProps={{
+                          placeholder: '请选择出生日期',
+                          format: 'yyyy年MM月dd日',
+                          mode: 'date',
+                          min: '1900-01-01',
+                          max: '2027-05-15',
+                          hasArrow: false
+                        }}
+                        required={true}
+                        trigger="onOk"
+                        rules={[{
+                          validator: async (_, value) => customListValidator(setErrors, 'familyList', index, 'birthday', value, true),
+                        }]}
+                      />
+                      <ZaCellSelect
+                        name={[field.name, 'politics']}
+                        title="政治面貌"
+                        required={true}
+                        rules={[{
+                          validator: async (_, value) => customListValidator(setErrors, 'familyList', index, 'politics', value, true),
+                        }]}
+                        zaSelectProps={{
+                          dataSource: politicsOptions,
+                          placeholder: '请选择政治面貌'
+                        }}
+                      />
+                      <ZaCellInput
+                        name={[field.name, 'workUnit']}
+                        title="工作单位"
+                        zaInputProps={{
+                          type: 'text',
+                          clearable: true,
+                          placeholder: '请输入工作单位',
+                        }}
+                        required={true}
+                        help={customFormListHelp(errors, 'familyList', index, 'workUnit')}
+                        rules={[{
+                          validator: async (_, value) => customListValidator(setErrors, 'familyList', index, 'workUnit', value, true),
+                        }]}
+                      />
+                      <ZaCellInput
+                        name={[field.name, 'duty']}
+                        title="职务"
+                        zaInputProps={{
+                          type: 'text',
+                          clearable: true,
+                          placeholder: '请输入职务',
+                        }}
+                        required={true}
+                        help={customFormListHelp(errors, 'familyList', index, 'duty')}
+                        rules={[{
+                          validator: async (_, value) => customListValidator(setErrors, 'familyList', index, 'duty', value, true),
+                        }]}
+                      />
+                      <ZaCellInput
+                        name={[field.name, 'mobilePhone']}
+                        title="移动电话"
+                        zaInputProps={{
+                          type: 'number',
+                          clearable: true,
+                          placeholder: '请输入移动电话',
+                        }}
+                        required={true}
+                        help={customFormListHelp(errors, 'familyList', index, 'mobilePhone')}
+                        rules={[{
+                          validator: async (_, value) => customListValidator(setErrors, 'familyList', index, 'mobilePhone', value, true),
+                        }]}
+                      />
+                      <ZaCellInput
+                        name={[field.name, 'landlinePhone']}
+                        title="固话"
+                        zaInputProps={{
+                          type: 'number',
+                          clearable: true,
+                          placeholder: '请输入固话',
+                        }}
+                      />
                     </Collapse.Item>
                   </Collapse>
                 ))
