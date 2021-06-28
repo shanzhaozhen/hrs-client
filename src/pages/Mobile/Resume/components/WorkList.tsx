@@ -20,6 +20,12 @@ const WorkExperienceList: React.FC<WorkExperienceListProps> = (props) => {
 
   const unitTypeOptions = useOptions('UnitType');
 
+  const simpleHelp = (index: number, currentField: string) => (customFormListHelp(errors, 'workExperienceList', index, currentField));
+
+  const simpleRules = (index: number, currentField: string) => ([{
+    validator: async (_: any, value: any) => customListValidator(setErrors, 'workExperienceList', index, currentField, value, true),
+  }]);
+
   return (
     <>
       <Form.List name="workExperienceList">
@@ -58,10 +64,8 @@ const WorkExperienceList: React.FC<WorkExperienceListProps> = (props) => {
                           placeholder: '请输入工作单位',
                         }}
                         required={true}
-                        help={customFormListHelp(errors, 'workExperienceList', index, 'workUnit')}
-                        rules={[{
-                          validator: async (_, value) => customListValidator(setErrors, 'workExperienceList', index, 'workUnit', value, true),
-                        }]}
+                        help={simpleHelp(index, 'workUnit')}
+                        rules={simpleRules(index, 'workUnit')}
                       />
                       <ZaCellDataSelect
                         name={[field.name, 'startDate']}
@@ -76,9 +80,8 @@ const WorkExperienceList: React.FC<WorkExperienceListProps> = (props) => {
                         }}
                         required={true}
                         trigger="onOk"
-                        rules={[{
-                          validator: async (_, value) => customListValidator(setErrors, 'workExperienceList', index, 'startDate', value, true),
-                        }]}
+                        help={simpleHelp(index, 'startDate')}
+                        rules={simpleRules(index, 'startDate')}
                       />
                       <ZaCellDataSelect
                         name={[field.name, 'endDate']}
@@ -93,9 +96,8 @@ const WorkExperienceList: React.FC<WorkExperienceListProps> = (props) => {
                         }}
                         required={true}
                         trigger="onOk"
-                        rules={[{
-                          validator: async (_, value) => customListValidator(setErrors, 'workExperienceList', index, 'endDate', value, true),
-                        }]}
+                        help={simpleHelp(index, 'endDate')}
+                        rules={simpleRules(index, 'endDate')}
                       />
                       <ZaCellInput
                         name={[field.name, 'duty']}
@@ -106,25 +108,22 @@ const WorkExperienceList: React.FC<WorkExperienceListProps> = (props) => {
                           placeholder: '请输入职务/岗位',
                         }}
                         required={true}
-                        help={customFormListHelp(errors, 'workExperienceList', index, 'duty')}
-                        rules={[{
-                          validator: async (_, value) => customListValidator(setErrors, 'workExperienceList', index, 'duty', value, true),
-                        }]}
+                        help={simpleHelp(index, 'duty')}
+                        rules={simpleRules(index, 'duty')}
                       />
                       <ZaCellSelect
                         name={[field.name, 'unitType']}
                         title="单位性质"
                         required={true}
-                        rules={[{
-                          validator: async (_, value) => customListValidator(setErrors, 'workExperienceList', index, 'unitType', value, true),
-                        }]}
+                        help={simpleHelp(index, 'unitType')}
+                        rules={simpleRules(index, 'unitType')}
                         zaSelectProps={{
                           dataSource: unitTypeOptions,
                           placeholder: '请选择单位性质'
                         }}
                       />
                       <ZaCellInput
-                        name={[field.name, 'unitType']}
+                        name={[field.name, 'salary']}
                         title="月薪"
                         zaInputProps={{
                           type: 'number',
@@ -132,10 +131,8 @@ const WorkExperienceList: React.FC<WorkExperienceListProps> = (props) => {
                           placeholder: '请输入月薪',
                         }}
                         required={true}
-                        help={customFormListHelp(errors, 'workExperienceList', index, 'unitType')}
-                        rules={[{
-                          validator: async (_, value) => customListValidator(setErrors, 'workExperienceList', index, 'duty', value, true),
-                        }]}
+                        help={simpleHelp(index, 'salary')}
+                        rules={simpleRules(index, 'salary')}
                       />
                       <ZaCellInput
                         name={[field.name, 'witnessName']}
@@ -146,13 +143,11 @@ const WorkExperienceList: React.FC<WorkExperienceListProps> = (props) => {
                           placeholder: '请输入证明人姓名',
                         }}
                         required={true}
-                        help={customFormListHelp(errors, 'workExperienceList', index, 'witnessName')}
-                        rules={[{
-                          validator: async (_, value) => customListValidator(setErrors, 'workExperienceList', index, 'duty', value, true),
-                        }]}
+                        help={simpleHelp(index, 'witnessName')}
+                        rules={simpleRules(index, 'witnessName')}
                       />
                       <ZaCellInput
-                        name={[field.name, 'number']}
+                        name={[field.name, 'witnessPhone']}
                         title="证明人电话"
                         zaInputProps={{
                           type: 'number',
@@ -160,10 +155,8 @@ const WorkExperienceList: React.FC<WorkExperienceListProps> = (props) => {
                           placeholder: '请输入证明人电话',
                         }}
                         required={true}
-                        help={customFormListHelp(errors, 'workExperienceList', index, 'number')}
-                        rules={[{
-                          validator: async (_, value) => customListValidator(setErrors, 'workExperienceList', index, 'duty', value, true),
-                        }]}
+                        help={simpleHelp(index, 'witnessPhone')}
+                        rules={simpleRules(index, 'witnessPhone')}
                       />
                     </Collapse.Item>
                   </Collapse>

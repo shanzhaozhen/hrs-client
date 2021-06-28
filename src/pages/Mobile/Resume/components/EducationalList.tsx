@@ -21,6 +21,13 @@ const EducationalList: React.FC<EducationalListProps> = (props) => {
 
   const educationOptions = useOptions('Education');
 
+  const simpleHelp = (index: number, currentField: string) => (customFormListHelp(errors, 'educationalExperienceList', index, currentField));
+
+  const simpleRules = (index: number, currentField: string) => ([{
+    validator: async (_: any, value: any) => customListValidator(setErrors, 'educationalExperienceList', index, currentField, value, true),
+  }]);
+
+
   return (
     <>
       <Form.List name="educationalExperienceList">
@@ -59,10 +66,8 @@ const EducationalList: React.FC<EducationalListProps> = (props) => {
                           placeholder: '请输入学校名称',
                         }}
                         required={true}
-                        help={customFormListHelp(errors, 'educationalExperienceList', index, 'schoolName')}
-                        rules={[{
-                          validator: async (_, value) => customListValidator(setErrors, 'educationalExperienceList', index, 'schoolName', value, true),
-                        }]}
+                        help={simpleHelp(index, 'schoolName')}
+                        rules={simpleRules(index, 'schoolName')}
                       />
                       <ZaCellDataSelect
                         name={[field.name, 'startDate']}
@@ -77,9 +82,8 @@ const EducationalList: React.FC<EducationalListProps> = (props) => {
                         }}
                         required={true}
                         trigger="onOk"
-                        rules={[{
-                          validator: async (_, value) => customListValidator(setErrors, 'educationalExperienceList', index, 'startDate', value, true),
-                        }]}
+                        help={simpleHelp(index, 'startDate')}
+                        rules={simpleRules(index, 'startDate')}
                       />
                       <ZaCellDataSelect
                         name={[field.name, 'endDate']}
@@ -94,17 +98,15 @@ const EducationalList: React.FC<EducationalListProps> = (props) => {
                         }}
                         required={true}
                         trigger="onOk"
-                        rules={[{
-                          validator: async (_, value) => customListValidator(setErrors, 'educationalExperienceList', index, 'endDate', value, true),
-                        }]}
+                        help={simpleHelp(index, 'endDate')}
+                        rules={simpleRules(index, 'endDate')}
                       />
                       <ZaCellSelect
                         name={[field.name, 'education']}
                         title="学历"
                         required={true}
-                        rules={[{
-                          validator: async (_, value) => customListValidator(setErrors, 'educationalExperienceList', index, 'education', value, true),
-                        }]}
+                        help={simpleHelp(index, 'education')}
+                        rules={simpleRules(index, 'education')}
                         zaSelectProps={{
                           dataSource: educationOptions,
                           placeholder: '请选择学历'
@@ -119,10 +121,8 @@ const EducationalList: React.FC<EducationalListProps> = (props) => {
                           placeholder: '请输入专业'
                         }}
                         required={true}
-                        help={customFormListHelp(errors, 'educationalExperienceList', index, 'major')}
-                        rules={[{
-                          validator: async (_, value) => customListValidator(setErrors, 'educationalExperienceList', index, 'major', value, true),
-                        }]}
+                        help={simpleHelp(index, 'major')}
+                        rules={simpleRules(index, 'major')}
                       />
                       <ZaCellInput
                         name={[field.name, 'studyYears']}
@@ -133,19 +133,15 @@ const EducationalList: React.FC<EducationalListProps> = (props) => {
                           placeholder: '请输入学制'
                         }}
                         required={true}
-                        help={customFormListHelp(errors, 'educationalExperienceList', index, 'studyYears')}
-                        rules={[{
-                          validator: async (_, value) => customListValidator(setErrors, 'educationalExperienceList', index, 'studyYears', value, true),
-                        }]}
+                        help={simpleHelp(index, 'studyYears')}
+                        rules={simpleRules(index, 'studyYears')}
                       />
                       <ZaCellSwitch
                         name={[field.name, 'fullTime']}
                         title="是否全日制"
                         required={true}
-                        help={customFormListHelp(errors, 'educationalExperienceList', index, 'fullTime')}
-                        rules={[{
-                          validator: async (_, value) => customListValidator(setErrors, 'educationalExperienceList', index, 'fullTime', value, true),
-                        }]}
+                        help={simpleHelp(index, 'fullTime')}
+                        rules={simpleRules(index, 'fullTime')}
                       />
                       <ZaCellInput
                         name={[field.name, 'witnessName']}
@@ -156,10 +152,8 @@ const EducationalList: React.FC<EducationalListProps> = (props) => {
                           placeholder: '请输入证明人姓名',
                         }}
                         required={true}
-                        help={customFormListHelp(errors, 'educationalExperienceList', index, 'witnessName')}
-                        rules={[{
-                          validator: async (_, value) => customListValidator(setErrors, 'educationalExperienceList', index, 'witnessName', value, true),
-                        }]}
+                        help={simpleHelp(index, 'witnessName')}
+                        rules={simpleRules(index, 'witnessName')}
                       />
                       <ZaCellInput
                         name={[field.name, 'witnessPhone']}
@@ -170,10 +164,8 @@ const EducationalList: React.FC<EducationalListProps> = (props) => {
                           placeholder: '请输入证明人电话',
                         }}
                         required={true}
-                        help={customFormListHelp(errors, 'educationalExperienceList', index, 'witnessPhone')}
-                        rules={[{
-                          validator: async (_, value) => customListValidator(setErrors, 'educationalExperienceList', index, 'witnessPhone', value, true),
-                        }]}
+                        help={simpleHelp(index, 'witnessPhone')}
+                        rules={simpleRules(index, 'witnessPhone')}
                       />
                     </Collapse.Item>
                   </Collapse>

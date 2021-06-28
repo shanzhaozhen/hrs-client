@@ -8,7 +8,7 @@ import type {DataSource} from "zarm/types/picker-view/PropsType";
 import {requiredTitle} from "@/utils/zarm";
 
 
-interface ZaRegionSelectProps {
+export interface ZaRegionSelectProps {
   title?: ReactNode;
   required?: boolean;
   help?: ReactNode;

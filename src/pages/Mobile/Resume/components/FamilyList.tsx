@@ -21,6 +21,12 @@ const FamilyList: React.FC<FamilyListProps> = (props) => {
   const relationOptions = useOptions('Relation');
   const politicsOptions = useOptions('Politics');
 
+  const simpleHelp = (index: number, currentField: string) => (customFormListHelp(errors, 'familyList', index, currentField));
+
+  const simpleRules = (index: number, currentField: string) => ([{
+    validator: async (_: any, value: any) => customListValidator(setErrors, 'familyList', index, currentField, value, true),
+  }]);
+
   return (
     <>
       <Form.List name="familyList">
@@ -59,18 +65,15 @@ const FamilyList: React.FC<FamilyListProps> = (props) => {
                           placeholder: '姓名',
                         }}
                         required={true}
-                        help={customFormListHelp(errors, 'familyList', index, 'name')}
-                        rules={[{
-                          validator: async (_, value) => customListValidator(setErrors, 'familyList', index, 'name', value, true),
-                        }]}
+                        help={simpleHelp(index, 'name')}
+                        rules={simpleRules(index, 'name')}
                       />
                       <ZaCellSelect
                         name={[field.name, 'relation']}
                         title="关系"
                         required={true}
-                        rules={[{
-                          validator: async (_, value) => customListValidator(setErrors, 'familyList', index, 'relation', value, true),
-                        }]}
+                        help={simpleHelp(index, 'relation')}
+                        rules={simpleRules(index, 'relation')}
                         zaSelectProps={{
                           dataSource: relationOptions,
                           placeholder: '请选择关系'
@@ -89,17 +92,15 @@ const FamilyList: React.FC<FamilyListProps> = (props) => {
                         }}
                         required={true}
                         trigger="onOk"
-                        rules={[{
-                          validator: async (_, value) => customListValidator(setErrors, 'familyList', index, 'birthday', value, true),
-                        }]}
+                        help={simpleHelp(index, 'birthday')}
+                        rules={simpleRules(index, 'birthday')}
                       />
                       <ZaCellSelect
                         name={[field.name, 'politics']}
                         title="政治面貌"
                         required={true}
-                        rules={[{
-                          validator: async (_, value) => customListValidator(setErrors, 'familyList', index, 'politics', value, true),
-                        }]}
+                        help={simpleHelp(index, 'politics')}
+                        rules={simpleRules(index, 'politics')}
                         zaSelectProps={{
                           dataSource: politicsOptions,
                           placeholder: '请选择政治面貌'
@@ -114,10 +115,8 @@ const FamilyList: React.FC<FamilyListProps> = (props) => {
                           placeholder: '请输入工作单位',
                         }}
                         required={true}
-                        help={customFormListHelp(errors, 'familyList', index, 'workUnit')}
-                        rules={[{
-                          validator: async (_, value) => customListValidator(setErrors, 'familyList', index, 'workUnit', value, true),
-                        }]}
+                        help={simpleHelp(index, 'workUnit')}
+                        rules={simpleRules(index, 'workUnit')}
                       />
                       <ZaCellInput
                         name={[field.name, 'duty']}
@@ -128,10 +127,8 @@ const FamilyList: React.FC<FamilyListProps> = (props) => {
                           placeholder: '请输入职务',
                         }}
                         required={true}
-                        help={customFormListHelp(errors, 'familyList', index, 'duty')}
-                        rules={[{
-                          validator: async (_, value) => customListValidator(setErrors, 'familyList', index, 'duty', value, true),
-                        }]}
+                        help={simpleHelp(index, 'duty')}
+                        rules={simpleRules(index, 'duty')}
                       />
                       <ZaCellInput
                         name={[field.name, 'mobilePhone']}
@@ -142,10 +139,8 @@ const FamilyList: React.FC<FamilyListProps> = (props) => {
                           placeholder: '请输入移动电话',
                         }}
                         required={true}
-                        help={customFormListHelp(errors, 'familyList', index, 'mobilePhone')}
-                        rules={[{
-                          validator: async (_, value) => customListValidator(setErrors, 'familyList', index, 'mobilePhone', value, true),
-                        }]}
+                        help={simpleHelp(index, 'mobilePhone')}
+                        rules={simpleRules(index, 'mobilePhone')}
                       />
                       <ZaCellInput
                         name={[field.name, 'landlinePhone']}

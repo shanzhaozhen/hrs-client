@@ -6,17 +6,25 @@ import type { FormInstance } from 'antd';
 import { Form } from 'antd';
 import ProForm from '@ant-design/pro-form';
 import ZaSelect from "@/components/CustomZarm/ZaSelect";
-import ZaOtherSelect from "@/components/CustomZarm/ZaOtherSelect";
-import ZaRegionSelect from "@/components/CustomZarm/ZaRegionSelect";
 import {CheckOutlined, DownOutlined, UpOutlined} from "@ant-design/icons";
 import WorkList from "@/pages/Mobile/Resume/components/WorkList";
 import EducationalList from "@/pages/Mobile/Resume/components/EducationalList";
 import CertificateList from "@/pages/Mobile/Resume/components/CertificateList";
 import FamilyList from "@/pages/Mobile/Resume/components/FamilyList";
-import {customValidator, validateAddress, validateEmail, validateIdNumber, validatePhoneNumber} from "@/utils/validate";
+import {
+  customValidator,
+  validateAddress,
+  validateEmail,
+} from "@/utils/validate";
 import {useOptions} from "@/utils/options";
-import {customHelp, requiredTitle} from "@/utils/zarm";
+import { customHelp, requiredTitle } from "@/utils/zarm";
 import {getBirthdayFromIdNumber, getSexFromIdNumber, validateWorkExperienceList} from "@/utils/resume";
+import ZaCellInput from "@/components/CustomZarm/ZaCellInput";
+import ZaCellDataSelect from "@/components/CustomZarm/ZaCellDataSelect";
+import ZaCellSelect from "@/components/CustomZarm/ZaCellSelect";
+import ZaCellOtherSelect from "@/components/CustomZarm/ZaCellOtherSelect";
+import ZaCellZaRegionSelect from "@/components/CustomZarm/ZaCellZaRegionSelect";
+import ZaCellSwitch from "@/components/CustomZarm/ZaCellSwitch";
 
 const ResumeFill: React.FC = () => {
   const [ errors, setErrors ] = useState<any>({});
@@ -38,6 +46,12 @@ const ResumeFill: React.FC = () => {
   const maritalStatusOptions = useOptions('MaritalStatus');
   const applyForOptions = useOptions('ApplyFor');
   const bloodTypeOptions = useOptions('BloodType');
+
+  const simpleHelp = (currentField: string) => (customHelp(errors, currentField));
+
+  const simpleRules = (currentField: string) => ([{
+    validator: async (_: any, value: any) => customValidator(setErrors, currentField, value, true),
+  }]);
 
   const onFormValuesChange = (changedValues: any, allValues: any) => {
     console.log('我变了')
@@ -102,6 +116,7 @@ const ResumeFill: React.FC = () => {
     }
   }
 
+  // @ts-ignore
   return (
     <>
       <ConfigProvider primaryColor="#1890ff">
@@ -132,684 +147,782 @@ const ResumeFill: React.FC = () => {
               }}
             >
               <Panel title="基础信息" className={currentPage === 1 ? 'page-show' : 'page-hide'}>
-                <Cell title={requiredTitle('姓名')} help={customHelp(errors, 'name')}>
-                  <Form.Item
-                    name="name"
-                    noStyle
-                    validateTrigger={defaultValidateTrigger}
-                    rules={[{
-                      validator: async (_, value) => customValidator(setErrors, 'name', value, true),
-                    }]}
-                  >
-                    <Input clearable type="text" placeholder="请输入姓名" />
-                  </Form.Item>
-                </Cell>
-                <Cell title={requiredTitle('身份证号码')} help={customHelp(errors, 'idNumber')}>
-                  <Form.Item
-                    name="idNumber"
-                    noStyle
-                    validateTrigger={defaultValidateTrigger}
-                    rules={[{
-                      validator: async (_, idNumber) => customValidator(setErrors, 'idNumber', idNumber, true, () => validateIdNumber(idNumber), '身份证号码校验不通过'),
-                    }]}
-                  >
-                    <Input clearable type="idcard" placeholder="请输入身份证号码" />
-                  </Form.Item>
-                </Cell>
-                <Cell title="性别" help={customHelp(errors, 'sex')}>
-                  <Form.Item name="sex" noStyle>
-                    <Input clearable type="text" placeholder="输入身份证号码自动识别性别" disabled />
-                  </Form.Item>
-                </Cell>
-                <Cell title={requiredTitle('生日日期')}>
-                  <Form.Item name="birthday" trigger="onOk" noStyle>
-                    <DateSelect
-                      title="选择生日日期"
-                      placeholder="自动识别生日日期"
-                      format="yyyy年MM月dd日"
-                      mode="date"
-                      min="1900-01-01"
-                      max="2027-05-15"
-                      hasArrow={false}
-                      disabled
-                    />
-                  </Form.Item>
-                </Cell>
-                <Cell title={requiredTitle('户口类型')} help={customHelp(errors, 'householdType')}>
-                  <Form.Item
-                    name="householdType"
-                    noStyle
-                    validateTrigger={defaultValidateTrigger}
-                    rules={[{
-                      validator: async (_, value) => customValidator(setErrors, 'householdType', value, true),
-                    }]}
-                  >
-                    <ZaSelect dataSource={householdTypeOptions} placeholder="请选择户口类型"/>
-                  </Form.Item>
-                </Cell>
-                <Cell title={requiredTitle('民族')} help={customHelp(errors, 'nation')}>
-                  <Form.Item
-                    name="nation"
-                    noStyle
-                    validateTrigger={defaultValidateTrigger}
-                    rules={[{
-                      validator: async (_, value) => customValidator(setErrors, 'nation', value, true),
-                    }]}
-                  >
-                    <ZaSelect dataSource={nationOptions} placeholder="请选择民族"/>
-                  </Form.Item>
-                </Cell>
-                <Cell title={requiredTitle('政治面貌')} help={customHelp(errors, 'politics')}>
-                  <Form.Item
-                    name="politics"
-                    noStyle
-                    validateTrigger={defaultValidateTrigger}
-                    rules={[{
-                      validator: async (_, value) => customValidator(setErrors, 'politics', value, true),
-                    }]}
-                  >
-                    <ZaSelect dataSource={politicsOptions} placeholder="请选择政治面貌"/>
-                  </Form.Item>
-                </Cell>
-                <Cell title={requiredTitle('最高学历')} help={customHelp(errors, 'education')}>
-                  <Form.Item
-                    name="education"
-                    noStyle
-                    validateTrigger={defaultValidateTrigger}
-                    rules={[{
-                      validator: async (_, value) => customValidator(setErrors, 'education', value, true),
-                    }]}
-                  >
-                    <ZaSelect dataSource={educationOptions} placeholder="请选择最高学历"/>
-                  </Form.Item>
-                </Cell>
-                <Cell title={requiredTitle('学位')} help={customHelp(errors, 'degree')}>
-                  <Form.Item
-                    name="degree"
-                    noStyle
-                    validateTrigger={defaultValidateTrigger}
-                    rules={[{
-                      validator: async (_, value) => customValidator(setErrors, 'degree', value, true),
-                    }]}
-                  >
-                    <ZaSelect dataSource={degreeOptions} placeholder="请选择学位"/>
-                  </Form.Item>
-                </Cell>
-                <Cell title={requiredTitle('特长')} help={customHelp(errors, 'specialty')}>
-                  <Form.Item
-                    name="specialty"
-                    noStyle
-                    validateTrigger={defaultValidateTrigger}
-                    rules={[{
-                      validator: async (_, value) => customValidator(setErrors, 'specialty', value, true),
-                    }]}
-                  >
-                    <Input clearable type="text" placeholder="请输入特长" />
-                  </Form.Item>
-                </Cell>
-                <Cell title={requiredTitle('爱好')} help={customHelp(errors, 'hobby')}>
-                  <Form.Item
-                    name="hobby"
-                    noStyle
-                    validateTrigger={defaultValidateTrigger}
-                    rules={[{
-                      validator: async (_, value) => customValidator(setErrors, 'hobby', value, true),
-                    }]}
-                  >
-                    <Input clearable type="text" placeholder="请输入爱好" />
-                  </Form.Item>
-                </Cell>
-                <Form.Item
+                <ZaCellInput
+                  name="name"
+                  title="姓名"
+                  zaInputProps={{
+                    type: 'text',
+                    clearable: true,
+                    placeholder: '请输入姓名',
+                  }}
+                  required={true}
+                  help={simpleHelp('name')}
+                  rules={simpleRules('name')}
+                />
+                <ZaCellInput
+                  name="idNumber"
+                  title="身份证号码"
+                  zaInputProps={{
+                    type: 'idcard',
+                    clearable: true,
+                    placeholder: '请输入身份证号码',
+                  }}
+                  required={true}
+                  help={simpleHelp('idNumber')}
+                  rules={simpleRules('idNumber')}
+                />
+                <ZaCellInput
+                  name="sex"
+                  title="身份证号码"
+                  zaInputProps={{
+                    type: 'text',
+                    clearable: true,
+                    placeholder: '输入身份证号码自动识别性别',
+                    disabled: true
+                  }}
+                  help={simpleHelp('sex')}
+                />
+                <ZaCellDataSelect
+                  name="birthday"
+                  title='生日日期'
+                  zaDateSelectProps={{
+                    placeholder: '自动识别生日日期',
+                    format: 'yyyy年MM月dd日',
+                    mode: 'date',
+                    min: '1900-01-01',
+                    max: '2027-05-15',
+                    hasArrow: false
+                  }}
+                  trigger="onOk"
+                  help={simpleHelp('startDate')}
+                />
+                <ZaCellSelect
+                  name="householdType"
+                  title="户口类型"
+                  required={true}
+                  help={simpleHelp('householdType')}
+                  rules={simpleRules('householdType')}
+                  zaSelectProps={{
+                    dataSource: householdTypeOptions,
+                    placeholder: '请选择户口类型'
+                  }}
+                />
+                <ZaCellSelect
+                  name="nation"
+                  title="民族"
+                  required={true}
+                  help={simpleHelp('nation')}
+                  rules={simpleRules('nation')}
+                  zaSelectProps={{
+                    dataSource: nationOptions,
+                    placeholder: '请选择民族'
+                  }}
+                />
+                <ZaCellSelect
+                  name="politics"
+                  title="政治面貌"
+                  required={true}
+                  help={simpleHelp('nation')}
+                  rules={simpleRules('nation')}
+                  zaSelectProps={{
+                    dataSource: politicsOptions,
+                    placeholder: '请选择政治面貌'
+                  }}
+                />
+                <ZaCellSelect
+                  name="education"
+                  title="最高学历"
+                  required={true}
+                  help={simpleHelp('education')}
+                  rules={simpleRules('education')}
+                  zaSelectProps={{
+                    dataSource: educationOptions,
+                    placeholder: '请选择最高学历'
+                  }}
+                />
+                <ZaCellSelect
+                  name="degree"
+                  title="学位"
+                  required={true}
+                  help={simpleHelp('degree')}
+                  rules={simpleRules('degree')}
+                  zaSelectProps={{
+                    dataSource: degreeOptions,
+                    placeholder: '请选择学位'
+                  }}
+                />
+                <ZaCellInput
+                  name="specialty"
+                  title="特长"
+                  zaInputProps={{
+                    type: 'text',
+                    clearable: true,
+                    placeholder: '请输入特长',
+                  }}
+                  required={true}
+                  help={simpleHelp('specialty')}
+                  rules={simpleRules('specialty')}
+                />
+                <ZaCellInput
+                  name="hobby"
+                  title="爱好"
+                  zaInputProps={{
+                    type: 'text',
+                    clearable: true,
+                    placeholder: '请输入爱好',
+                  }}
+                  required={true}
+                  help={simpleHelp('hobby')}
+                  rules={simpleRules('hobby')}
+                />
+                <ZaCellOtherSelect
                   name="parentalSupport"
-                  noStyle
-                  validateTrigger={defaultValidateTrigger}
-                    rules={[{
-                    validator: async (_, value) => customValidator(setErrors, 'parentalSupport', value, true),
-                  }]}
-                >
-                  <ZaOtherSelect title="父母赡养情况" required={true} dataSource={parentalSupportOptions}/>
-                </Form.Item>
-                <Form.Item
+                  help={simpleHelp('parentalSupport')}
+                  rules={simpleRules('parentalSupport')}
+                  zaOtherSelectProps={{
+                    title:'父母赡养情况',
+                    required: true,
+                    dataSource: parentalSupportOptions,
+                  }}
+                />
+                <ZaCellZaRegionSelect
                   name="birthAddress"
-                  noStyle
-                  validateTrigger={defaultValidateTrigger}
-                    rules={[{
+                  help={simpleHelp('birthAddress')}
+                  rules={[{
                     validator: async (_, birthAddress) => customValidator(setErrors, 'birthAddress', birthAddress, true, () => validateAddress(birthAddress, 2, false), '请选择出生地'),
                   }]}
-                >
-                  <ZaRegionSelect title="出生地" required={true} help={customHelp(errors, 'birthAddress')} level={2} />
-                </Form.Item>
-                <Form.Item
+                  zaRegionSelectProps={{
+                    title:'出生地',
+                    required: true,
+                    level: 2
+                  }}
+                />
+                <ZaCellZaRegionSelect
                   name="nativeAddress"
-                  noStyle
-                  validateTrigger={defaultValidateTrigger}
-                    rules={[{
-                    validator: async (_, nativeAddress) => customValidator(setErrors, 'nativeAddress', nativeAddress, true, () => validateAddress(nativeAddress, 2, false), '请选择籍贯'),
+                  help={simpleHelp('nativeAddress')}
+                  rules={[{
+                    validator: async (_, birthAddress) => customValidator(setErrors, 'nativeAddress', birthAddress, true, () => validateAddress(birthAddress, 2, false), '请选择籍贯'),
                   }]}
-                >
-                  <ZaRegionSelect title="籍贯" required={true} help={customHelp(errors, 'nativeAddress')} level={2}/>
-                </Form.Item>
-                <Form.Item
+                  zaRegionSelectProps={{
+                    title:'出生地',
+                    required: true,
+                    level: 2
+                  }}
+                />
+                <ZaCellZaRegionSelect
                   name="registeredAddress"
-                  noStyle
-                  validateTrigger={defaultValidateTrigger}
-                    rules={[{
+                  help={simpleHelp('registeredAddress')}
+                  rules={[{
                     validator: async (_, registeredAddress) => customValidator(setErrors, 'registeredAddress', registeredAddress, false, () => validateAddress(registeredAddress, 3, true), '请填写完整的户口地址'),
                   }]}
-                >
-                  <ZaRegionSelect title="户口地址" required={true} help={customHelp(errors, 'registeredAddress')} level={3} haveDetail />
-                </Form.Item>
-                <Form.Item
+                  zaRegionSelectProps={{
+                    title:'户口地址',
+                    required: true,
+                    haveDetail: true,
+                    level: 3
+                  }}
+                />
+                <ZaCellZaRegionSelect
                   name="homeAddress"
-                  noStyle
-                  validateTrigger={defaultValidateTrigger}
-                    rules={[{
+                  help={simpleHelp('homeAddress')}
+                  rules={[{
                     validator: async (_, homeAddress) => customValidator(setErrors, 'homeAddress', homeAddress, false, () => validateAddress(homeAddress, 3, true), '请填写完整的家庭住址'),
                   }]}
-                >
-                  <ZaRegionSelect title="家庭住址" required={true} help={customHelp(errors, 'homeAddress')} level={3} haveDetail />
-                </Form.Item>
-                <Form.Item
+                  zaRegionSelectProps={{
+                    title:'家庭住址',
+                    required: true,
+                    haveDetail: true,
+                    level: 3
+                  }}
+                />
+                <ZaCellZaRegionSelect
                   name="currentAddress"
-                  noStyle
-                  validateTrigger={defaultValidateTrigger}
-                    rules={[{
+                  help={simpleHelp('currentAddress')}
+                  rules={[{
                     validator: async (_, currentAddress) => customValidator(setErrors, 'currentAddress', currentAddress, false, () => validateAddress(currentAddress, 3, true), '请填写完整的现住住址'),
                   }]}
-                >
-                  <ZaRegionSelect title="现住住址" required={true} help={customHelp(errors, 'currentAddress')} level={3} haveDetail />
-                </Form.Item>
-                <Form.Item
+                  zaRegionSelectProps={{
+                    title:'家庭住址',
+                    required: true,
+                    haveDetail: true,
+                    level: 3
+                  }}
+                />
+                <ZaCellZaRegionSelect
+                  name="currentAddress"
+                  help={simpleHelp('currentAddress')}
+                  rules={[{
+                    validator: async (_, currentAddress) => customValidator(setErrors, 'currentAddress', currentAddress, false, () => validateAddress(currentAddress, 3, true), '请填写完整的现住住址'),
+                  }]}
+                  zaRegionSelectProps={{
+                    title:'现住住址',
+                    required: true,
+                    haveDetail: true,
+                    level: 3
+                  }}
+                />
+                <ZaCellZaRegionSelect
                   name="postalAddress"
-                  noStyle
-                  validateTrigger={defaultValidateTrigger}
-                    rules={[{
+                  help={simpleHelp('postalAddress')}
+                  rules={[{
                     validator: async (_, postalAddress) => customValidator(setErrors, 'postalAddress', postalAddress, false, () => validateAddress(postalAddress, 3, true), '请填写完整的邮递地址'),
                   }]}
-                >
-                  <ZaRegionSelect title="邮递地址" required={true} help={customHelp(errors, 'postalAddress')} level={3} haveDetail />
-                </Form.Item>
-                <Cell title={requiredTitle('期望月薪')} help={customHelp(errors, 'expectedSalary')}>
-                  <Form.Item
-                    name="expectedSalary"
-                    noStyle
-                    validateTrigger={defaultValidateTrigger}
-                    rules={[{
-                      validator: async (_, value) => customValidator(setErrors, 'expectedSalary', value, true),
-                    }]}
-                  >
-                    <Input clearable type="price" placeholder="请输入期望月薪" />
-                  </Form.Item>
-                </Cell>
-                <Cell title={requiredTitle('希望服务年限')} help={customHelp(errors, 'serviceYears')}>
-                  <Form.Item
-                    name="serviceYears"
-                    noStyle
-                    validateTrigger={defaultValidateTrigger}
-                    rules={[{
-                      validator: async (_, value) => customValidator(setErrors, 'serviceYears', value, true),
-                    }]}
-                  >
-                    <Input clearable type="number" placeholder="请输入希望服务年限" />
-                  </Form.Item>
-                </Cell>
-                <Cell title="职称">
-                  <Form.Item name="title" noStyle>
-                    <Input clearable type="text" placeholder="请输入职称" />
-                  </Form.Item>
-                </Cell>
-                <Form.Item
+                  zaRegionSelectProps={{
+                    title:'邮递地址',
+                    required: true,
+                    haveDetail: true,
+                    level: 3
+                  }}
+                />
+                <ZaCellInput
+                  name="expectedSalary"
+                  title="期望月薪"
+                  required={true}
+                  zaInputProps={{
+                    type: 'number',
+                    clearable: true,
+                    placeholder: '请输入期望月薪',
+                  }}
+                  help={simpleHelp('expectedSalary')}
+                  rules={simpleRules('expectedSalary')}
+                />
+                <ZaCellInput
+                  name="serviceYears"
+                  title="希望服务年限"
+                  required={true}
+                  zaInputProps={{
+                    type: 'number',
+                    clearable: true,
+                    placeholder: '请输入希望服务年限',
+                  }}
+                  help={simpleHelp('serviceYears')}
+                  rules={simpleRules('serviceYears')}
+                />
+                <ZaCellInput
                   name="applyFor"
-                  noStyle
-                  validateTrigger={defaultValidateTrigger}
-                    rules={[{
-                    validator: async (_, value) => customValidator(setErrors, 'applyFor', value, true),
+                  title="职称"
+                  required={true}
+                  zaInputProps={{
+                    type: 'text',
+                    clearable: true,
+                    placeholder: '请输入职称',
+                  }}
+                  help={simpleHelp('title')}
+                  rules={simpleRules('title')}
+                />
+                <ZaCellInput
+                  name="applyFor"
+                  title="职称"
+                  required={true}
+                  zaInputProps={{
+                    type: 'text',
+                    clearable: true,
+                    placeholder: '请输入职称',
+                  }}
+                  help={simpleHelp('title')}
+                  rules={simpleRules('title')}
+                />
+                <ZaCellOtherSelect
+                  name="applyFor"
+                  help={simpleHelp('applyFor')}
+                  rules={simpleRules('applyFor')}
+                  zaOtherSelectProps={{
+                    title:'应聘途径',
+                    required: true,
+                    dataSource: applyForOptions,
+                  }}
+                />
+                <ZaCellDataSelect
+                  name="workDate"
+                  title="开始工作时间"
+                  zaDateSelectProps={{
+                    placeholder: '请选择开始工作时间',
+                    format: 'yyyy年MM月dd日',
+                    mode: 'date',
+                    min: '1900-01-01',
+                    max: '2027-05-15',
+                    hasArrow: false
+                  }}
+                  required={true}
+                  trigger="onOk"
+                  help={simpleHelp('endDate')}
+                  rules={simpleRules('endDate')}
+                />
+                <ZaCellInput
+                  name="phone"
+                  title="联系电话"
+                  zaInputProps={{
+                    type: 'number',
+                    clearable: true,
+                    placeholder: '请输入联系电话',
+                  }}
+                  required={true}
+                  help={simpleHelp('phone')}
+                  rules={simpleRules('phone')}
+                />
+                <ZaCellInput
+                  name="phone"
+                  title="家庭电话"
+                  zaInputProps={{
+                    type: 'number',
+                    clearable: true,
+                    placeholder: '请输入家庭电话',
+                  }}
+                  required={true}
+                  help={simpleHelp('homePhone')}
+                  rules={simpleRules('homePhone')}
+                />
+                <ZaCellInput
+                  name="email"
+                  title="邮箱"
+                  zaInputProps={{
+                    type: 'text',
+                    clearable: true,
+                    placeholder: '请输入邮箱',
+                  }}
+                  required={true}
+                  help={simpleHelp('homePhone')}
+                  rules={[{
+                    validator: async (_, email) => customValidator(setErrors, 'email', email, true, () => validateEmail(email), '邮箱格式输入不正确'),
                   }]}
-                >
-                  <ZaOtherSelect title="应聘途径" required={true} dataSource={applyForOptions} help={customHelp(errors, 'applyFor')}/>
-                </Form.Item>
-                <Cell title="开始工作时间">
-                  <Form.Item name="workDate" trigger="onOk" noStyle>
-                    <DateSelect
-                      title={requiredTitle('请选择开始工作时间')}
-                      placeholder="请选择开始工作时间"
-                      format="yyyy年MM月dd日"
-                      mode="date"
-                      min="1900-01-01"
-                      max="2027-05-15"
-                      hasArrow={false}
-                    />
-                  </Form.Item>
-                </Cell>
-                <Cell title={requiredTitle('联系电话')} help={customHelp(errors, 'phone')}>
-                  <Form.Item
-                    name="phone"
-                    noStyle
-                    validateTrigger={defaultValidateTrigger}
-                    rules={[{
-                      validator: async (_, phone) => customValidator(setErrors, 'phone', phone, true, () => validatePhoneNumber(phone)),
-                    }]}
-                  >
-                    <Input clearable type="number" placeholder="请输入联系电话" />
-                  </Form.Item>
-                </Cell>
-                <Cell title={requiredTitle('家庭电话')} help={customHelp(errors, 'homePhone')}>
-                  <Form.Item name="homePhone" noStyle>
-                    <Input clearable type="number" placeholder="请输入家庭电话" />
-                  </Form.Item>
-                </Cell>
-                <Cell title={requiredTitle('邮箱')} help={customHelp(errors, 'email')}>
-                  <Form.Item
-                    name="email"
-                    noStyle
-                    validateTrigger={defaultValidateTrigger}
-                    rules={[{
-                      validator: async (_, email) => customValidator(setErrors, 'email', email, true, () => validateEmail(email), '邮箱格式输入不正确'),
-                    }]}
-                  >
-                    <Input clearable type="text" placeholder="请输入邮箱" />
-                  </Form.Item>
-                </Cell>
-                <Cell title={requiredTitle('QQ')} help={customHelp(errors, 'qq')}>
-                  <Form.Item name="qq" noStyle>
-                    <Input clearable type="number" placeholder="请输入QQ" />
-                  </Form.Item>
-                </Cell>
-                <Cell title={requiredTitle('紧急联系人')} help={customHelp(errors, 'emergencyContactName')}>
-                  <Form.Item
-                    name="emergencyContactName"
-                    noStyle
-                    validateTrigger={defaultValidateTrigger}
-                    rules={[{
-                      validator: async (_, value) => customValidator(setErrors, 'emergencyContactName', value, true),
-                    }]}
-                  >
-                    <Input clearable type="text" placeholder="请输入紧急联系人" />
-                  </Form.Item>
-                </Cell>
-                <Cell title={requiredTitle('紧急联系人关系')} help={customHelp(errors, 'emergencyContactRelation')}>
-                  <Form.Item
-                    name="emergencyContactRelation"
-                    noStyle
-                    validateTrigger={defaultValidateTrigger}
-                    rules={[{
-                      validator: async (_, value) => customValidator(setErrors, 'emergencyContactRelation', value, true),
-                    }]}
-                  >
-                    <ZaSelect dataSource={relationOptions} placeholder="请选择紧急联系人关系"/>
-                  </Form.Item>
-                </Cell>
-                <Cell title={requiredTitle('紧急联系人电话')} help={customHelp(errors, 'emergencyContactPhone')}>
-                  <Form.Item
-                    name="emergencyContactPhone"
-                    noStyle
-                    validateTrigger={defaultValidateTrigger}
-                    rules={[{
-                      validator: async (_, value) => customValidator(setErrors, 'emergencyContactPhone', value, true),
-                    }]}
-                  >
-                    <Input clearable type="number" placeholder="请输入紧急联系人电话" />
-                  </Form.Item>
-                </Cell>
-                <Cell title={requiredTitle('是否愿意加入人才库')} help={customHelp(errors, 'willJoin')}>
-                  <Form.Item
-                    name="willJoin"
-                    noStyle
-                    validateTrigger={defaultValidateTrigger}
-                    rules={[{
-                      validator: async (_, value) => customValidator(setErrors, 'willJoin', value, true),
-                    }]}
-                  >
-                    <Switch defaultChecked checked />
-                  </Form.Item>
-                </Cell>
+                />
+                <ZaCellInput
+                  name="qq"
+                  title="QQ"
+                  zaInputProps={{
+                    type: 'text',
+                    clearable: true,
+                    placeholder: '请输入QQ',
+                  }}
+                  help={simpleHelp('qq')}
+                />
+                <ZaCellInput
+                  name="emergencyContactName"
+                  title="紧急联系人"
+                  zaInputProps={{
+                    type: 'text',
+                    clearable: true,
+                    placeholder: '请输入紧急联系人',
+                  }}
+                  required={true}
+                  help={simpleHelp('emergencyContactName')}
+                  rules={simpleRules('emergencyContactName')}
+                />
+                <ZaCellSelect
+                  name="emergencyContactRelation"
+                  title="紧急联系人关系"
+                  required={true}
+                  help={simpleHelp('emergencyContactRelation')}
+                  rules={simpleRules('emergencyContactRelation')}
+                  zaSelectProps={{
+                    dataSource: relationOptions,
+                    placeholder: '请选择紧急联系人关系'
+                  }}
+                />
+                <ZaCellInput
+                  name="emergencyContactPhone"
+                  title="紧急联系人电话"
+                  zaInputProps={{
+                    type: 'number',
+                    clearable: true,
+                    placeholder: '请输入紧急联系人电话',
+                  }}
+                  required={true}
+                  help={simpleHelp('emergencyContactPhone')}
+                  rules={simpleRules('emergencyContactPhone')}
+                />
+                <ZaCellSwitch
+                  name="willJoin"
+                  title="是否愿意加入人才库"
+                  required={true}
+                  help={simpleHelp('fullTime')}
+                  rules={simpleRules('fullTime')}
+                  zaSwitchProps={{
+                    defaultChecked: true,
+                    checked: true
+                  }}
+                />
               </Panel>
               <Panel title="个人身体情况" className={currentPage === 2 ? 'page-show' : 'page-hide'}>
-                <Cell title={requiredTitle('本人身体状况')} help={customHelp(errors, 'physicalCondition')}>
-                  <Form.Item
-                    name="physicalCondition"
-                    noStyle
-                    validateTrigger={defaultValidateTrigger}
-                    rules={[{
-                      validator: async (_, value) => customValidator(setErrors, 'physicalCondition', value, true),
-                    }]}
-                  >
-                    <Input clearable type="text" placeholder="请输入本人身体状况" />
-                  </Form.Item>
-                </Cell>
-                <Cell title={requiredTitle('体重(KG)')} help={customHelp(errors, 'weight')}>
-                  <Form.Item
-                    name="weight"
-                    noStyle
-                    validateTrigger={defaultValidateTrigger}
-                    rules={[{
-                      validator: async (_, value) => customValidator(setErrors, 'weight', value, true),
-                    }]}
-                  >
-                    <Input clearable type="price" placeholder="请输入您的体重(KG)" />
-                  </Form.Item>
-                </Cell>
-                <Cell title={requiredTitle('身高(CM)')} help={customHelp(errors, 'height')}>
-                  <Form.Item
-                    name="height"
-                    noStyle
-                    validateTrigger={defaultValidateTrigger}
-                    rules={[{
-                      validator: async (_, value) => customValidator(setErrors, 'height', value, true),
-                    }]}
-                  >
-                    <Input clearable type="price" placeholder="请输入您的身高(CM)" />
-                  </Form.Item>
-                </Cell>
-                <Cell title={requiredTitle('视力')} help={customHelp(errors, 'vision')}>
-                  <Form.Item
-                    name="vision"
-                    noStyle
-                    validateTrigger={defaultValidateTrigger}
-                    rules={[{
-                      validator: async (_, value) => customValidator(setErrors, 'vision', value, true),
-                    }]}
-                  >
-                    <Input clearable type="price" placeholder="请填写您的视力，如5.0" />
-                  </Form.Item>
-                </Cell>
-                <Form.Item
+                <ZaCellInput
+                  name="physicalCondition"
+                  title="本人身体状况"
+                  zaInputProps={{
+                    type: 'text',
+                    clearable: true,
+                    placeholder: '请输入本人身体状况',
+                  }}
+                  required={true}
+                  help={simpleHelp('physicalCondition')}
+                  rules={simpleRules('physicalCondition')}
+                />
+                <ZaCellInput
+                  name="weight"
+                  title="体重(KG)"
+                  zaInputProps={{
+                    type: 'text',
+                    clearable: true,
+                    placeholder: '请输入您的体重(KG)',
+                  }}
+                  required={true}
+                  help={simpleHelp('weight')}
+                  rules={simpleRules('weight')}
+                />
+                <ZaCellInput
+                  name="height"
+                  title="身高(CM)"
+                  zaInputProps={{
+                    type: 'text',
+                    clearable: true,
+                    placeholder: '请输入您的身高(CM)',
+                  }}
+                  required={true}
+                  help={simpleHelp('height')}
+                  rules={simpleRules('height')}
+                />
+                <ZaCellInput
+                  name="height"
+                  title="视力"
+                  zaInputProps={{
+                    type: 'text',
+                    clearable: true,
+                    placeholder: '请输入您的视力，如5.0',
+                  }}
+                  required={true}
+                  help={simpleHelp('vision')}
+                  rules={simpleRules('vision')}
+                />
+                <ZaCellOtherSelect
                   name="bloodType"
-                  noStyle
-                  validateTrigger={defaultValidateTrigger}
-                    rules={[{
-                    validator: async (_, value) => customValidator(setErrors, 'bloodType', value, true),
-                  }]}
-                >
-                  <ZaOtherSelect title="血型" required={true} dataSource={bloodTypeOptions} help={customHelp(errors, 'bloodType')} />
-                </Form.Item>
+                  help={simpleHelp('bloodType')}
+                  rules={simpleRules('bloodType')}
+                  zaOtherSelectProps={{
+                    title:'血型',
+                    required: true,
+                    dataSource: bloodTypeOptions,
+                  }}
+                />
               </Panel>
               <Panel title="婚育情况" className={currentPage === 3 ? 'page-show' : 'page-hide'}>
-                <Cell title={requiredTitle('婚姻状况')} help={customHelp(errors, 'maritalStatus')}>
-                  <Form.Item
-                    name="maritalStatus"
-                    noStyle
-                    validateTrigger={defaultValidateTrigger}
-                    rules={[{
-                      validator: async (_, value) => customValidator(setErrors, 'maritalStatus', value, true),
-                    }]}
-                  >
-                    <ZaSelect dataSource={maritalStatusOptions} placeholder="请选择婚姻状况"/>
-                  </Form.Item>
-                </Cell>
+                <ZaCellSelect
+                  name="maritalStatus"
+                  title="婚姻状况"
+                  required={true}
+                  help={simpleHelp('maritalStatus')}
+                  rules={simpleRules('maritalStatus')}
+                  zaSelectProps={{
+                    dataSource: maritalStatusOptions,
+                    placeholder: '请选择婚姻状况'
+                  }}
+                />
                 {
                   !formMaritalStatus && (
                     <>
-                      <Cell title={requiredTitle('结婚日期')} help={customHelp(errors, 'marriageDate')}>
-                        <Form.Item
-                          name="marriageDate"
-                          trigger="onOk"
-                          noStyle
-                          validateTrigger={defaultValidateTrigger}
-                    rules={[{
-                            validator: async (_, value) => customValidator(setErrors, 'marriageDate', value, !formMaritalStatus),
-                          }]}
-                        >
-                          <DateSelect
-                            title="请选择结婚日期"
-                            placeholder="请选择结婚日期"
-                            format="yyyy年MM月dd日"
-                            mode="date"
-                            min="1900-01-01"
-                            max="2027-05-15"
-                            hasArrow={false}
-                          />
-                        </Form.Item>
-                      </Cell>
-                      <Cell title={requiredTitle('配偶名字')} help={customHelp(errors, 'spouseName')}>
-                        <Form.Item
-                          name="spouseName"
-                          noStyle
-                          validateTrigger={defaultValidateTrigger}
-                    rules={[{
-                            validator: async (_, value) => customValidator(setErrors, 'spouseName', value, !formMaritalStatus),
-                          }]}
-                        >
-                          <Input clearable type="text" placeholder="请输入配偶名字" />
-                        </Form.Item>
-                      </Cell>
-                      <Cell title={requiredTitle('配偶身体状况')} help={customHelp(errors, 'spousePhysicalCondition')}>
-                        <Form.Item
-                          name="spousePhysicalCondition"
-                          noStyle
-                          validateTrigger={defaultValidateTrigger}
-                    rules={[{
-                            validator: async (_, value) => customValidator(setErrors, 'spousePhysicalCondition', value, !formMaritalStatus),
-                          }]}
-                        >
-                          <Input clearable type="text" placeholder="请输入配偶身体状况" />
-                        </Form.Item>
-                      </Cell>
-                      <Cell title={requiredTitle('生育情况')} help={customHelp(errors, 'fertility')}>
-                        <Form.Item
-                          name="fertility"
-                          noStyle
-                          validateTrigger={defaultValidateTrigger}
-                    rules={[{
-                            validator: async (_, value) => customValidator(setErrors, 'fertility', value, !formMaritalStatus),
-                          }]}
-                        >
-                          <ZaSelect dataSource={[{label: '已育', value: '已育'}, {label: '未育', value: '未育'}]} placeholder="请输入生育情况" />
-                        </Form.Item>
-                      </Cell>
+                      <ZaCellDataSelect
+                        name="marriageDate"
+                        title="结婚日期"
+                        zaDateSelectProps={{
+                          placeholder: '请选择结婚日期',
+                          format: 'yyyy年MM月dd日',
+                          mode: 'date',
+                          min: '1900-01-01',
+                          max: '2027-05-15',
+                          hasArrow: false
+                        }}
+                        required={true}
+                        trigger="onOk"
+                        help={simpleHelp('marriageDate')}
+                        rules={[{
+                          validator: async (_, value) => customValidator(setErrors, 'marriageDate', value, !formMaritalStatus),
+                        }]}
+                      />
+                      <ZaCellInput
+                        name="spouseName"
+                        title="配偶名字"
+                        zaInputProps={{
+                          type: 'text',
+                          clearable: true,
+                          placeholder: '请输入您的配偶名字',
+                        }}
+                        required={true}
+                        help={simpleHelp('spouseName')}
+                        rules={[{
+                          validator: async (_, value) => customValidator(setErrors, 'spouseName', value, !formMaritalStatus),
+                        }]}
+                      />
+                      <ZaCellInput
+                        name="spousePhysicalCondition"
+                        title="配偶身体状况"
+                        zaInputProps={{
+                          type: 'text',
+                          clearable: true,
+                          placeholder: '请输入您的配偶身体状况',
+                        }}
+                        required={true}
+                        help={simpleHelp('spousePhysicalCondition')}
+                        rules={[{
+                          validator: async (_, value) => customValidator(setErrors, 'spousePhysicalCondition', value, !formMaritalStatus),
+                        }]}
+                      />
+                      <ZaCellSelect
+                        name="fertility"
+                        title="生育情况"
+                        required={true}
+                        help={simpleHelp('fertility')}
+                        rules={simpleRules('fertility')}
+                        zaSelectProps={{
+                          dataSource: [{label: '已育', value: '已育'}, {label: '未育', value: '未育'}],
+                          placeholder: '请输入生育情况'
+                        }}
+                      />
                       {
                         formFertility && (
                           <>
-                            <Cell title={requiredTitle('子女人数')} help={customHelp(errors, 'childrenNumber')}>
-                              <Form.Item
-                                name="childrenNumber"
-                                noStyle
-                                validateTrigger={defaultValidateTrigger}
-                    rules={[{
-                                  validator: async (_, value) => customValidator(setErrors, 'marriageDate', value, formFertility),
-                                }]}
-                              >
-                                <Input clearable type="number" placeholder="请输入子女人数" />
-                              </Form.Item>
-                            </Cell>
+                            <ZaCellInput
+                              name="childrenNumber"
+                              title="子女人数"
+                              zaInputProps={{
+                                type: 'number',
+                                clearable: true,
+                                placeholder: '请输入您的配偶身体状况',
+                              }}
+                              required={true}
+                              help={simpleHelp('childrenNumber')}
+                              rules={[{
+                                validator: async (_, value) => customValidator(setErrors, 'childrenNumber', value, formFertility),
+                              }]}
+                            />
                           </>
                         )
                       }
-                      <Cell title="结婚证件">
-                        <Form.Item
-                          name="marriageCertificate"
-                          noStyle
-                        >
-                          <Input clearable type="text" placeholder="请输入结婚证件" />
-                        </Form.Item>
-                      </Cell>
+                      {/*
+                        todo: 附件
+                        <Cell title="结婚证件">
+                          <Form.Item
+                            name="marriageCertificate"
+                            noStyle
+                          >
+                            <Input clearable type="text" placeholder="请输入结婚证件" />
+                          </Form.Item>
+                        </Cell>
+                       */}
                     </>
                   )
                 }
               </Panel>
               <Panel title="亲友信息" className={currentPage === 4 ? 'page-show' : 'page-hide'}>
-                <Cell title={requiredTitle('是否有亲友在司')} help={customHelp(errors, 'childrenNumber')}>
-                  <Form.Item
-                    name="haveFriend"
-                    noStyle
-                    validateTrigger={defaultValidateTrigger}
-                    rules={[{
-                      validator: async (_, value) => customValidator(setErrors, 'haveFriend', value, true),
-                    }]}
-                  >
-                    <Switch />
-                  </Form.Item>
-                </Cell>
+                <ZaCellSwitch
+                  name="haveFriend"
+                  title="是否有亲友在司"
+                  required={true}
+                  help={simpleHelp('haveFriend')}
+                  rules={simpleRules('haveFriend')}
+                />
                 {
                   formHaveFriend && (
                     <>
-                      <Cell title={requiredTitle('亲友姓名')} help={customHelp(errors, 'friendName')}>
-                        <Form.Item
-                          name="friendName"
-                          noStyle
-                          validateTrigger={defaultValidateTrigger}
-                    rules={[{
-                            validator: async (_, value) => customValidator(setErrors, 'friendName', value, formHaveFriend),
-                          }]}
-                        >
-                          <Input clearable type="text" placeholder="请输入亲友姓名" />
-                        </Form.Item>
-                      </Cell>
-                      <Cell title={requiredTitle('亲友关系')} help={customHelp(errors, 'friendRelation')}>
-                        <Form.Item
-                          name="friendRelation"
-                          noStyle
-                          validateTrigger={defaultValidateTrigger}
-                    rules={[{
-                            validator: async (_, value) => customValidator(setErrors, 'friendRelation', value, formHaveFriend),
-                          }]}
-                        >
-                          <ZaSelect dataSource={relationOptions} placeholder="请选择亲友关系"/>
-                        </Form.Item>
-                      </Cell>
-                      <Cell title={requiredTitle('亲友部门')} help={customHelp(errors, 'friendDepartment')}>
-                        <Form.Item
-                          name="friendDepartment"
-                          noStyle
-                          validateTrigger={defaultValidateTrigger}
-                    rules={[{
-                            validator: async (_, value) => customValidator(setErrors, 'friendDepartment', value, formHaveFriend),
-                          }]}
-                        >
-                          <Input clearable type="text" placeholder="请输入亲友部门" />
-                        </Form.Item>
-                      </Cell>
-                      <Cell title={requiredTitle('亲友职务')} help={customHelp(errors, 'friendDuty')}>
-                        <Form.Item
-                          name="friendDuty"
-                          noStyle
-                          validateTrigger={defaultValidateTrigger}
-                    rules={[{
-                            validator: async (_, value) => customValidator(setErrors, 'friendDuty', value, formHaveFriend),
-                          }]}
-                        >
-                          <Input clearable type="text" placeholder="请输入亲友职务" />
-                        </Form.Item>
-                      </Cell>
+                      <ZaCellInput
+                        name="friendName"
+                        title="亲友姓名"
+                        zaInputProps={{
+                          type: 'text',
+                          clearable: true,
+                          placeholder: '请输入您亲友的姓名',
+                        }}
+                        required={true}
+                        help={simpleHelp('childrenNumber')}
+                        rules={[{
+                          validator: async (_, value) => customValidator(setErrors, 'childrenNumber', value, formFertility),
+                        }]}
+                      />
+                      <ZaCellSelect
+                        name="friendRelation"
+                        title="亲友关系"
+                        required={true}
+                        help={simpleHelp('friendRelation')}
+                        rules={[{
+                          validator: async (_, value) => customValidator(setErrors, 'friendRelation', value, formHaveFriend),
+                        }]}
+                        zaSelectProps={{
+                          dataSource: relationOptions,
+                          placeholder: '请选择亲友关系'
+                        }}
+                      />
+                      <ZaCellInput
+                        name="friendDepartment"
+                        title="亲友部门"
+                        zaInputProps={{
+                          type: 'text',
+                          clearable: true,
+                          placeholder: '请输入亲友部门',
+                        }}
+                        required={true}
+                        help={simpleHelp('friendDepartment')}
+                        rules={[{
+                          validator: async (_, value) => customValidator(setErrors, 'friendDepartment', value, formHaveFriend),
+                        }]}
+                      />
+                      <ZaCellInput
+                        name="friendDuty"
+                        title="亲友职务"
+                        zaInputProps={{
+                          type: 'text',
+                          clearable: true,
+                          placeholder: '请输入亲友职务',
+                        }}
+                        required={true}
+                        help={simpleHelp('friendDuty')}
+                        rules={[{
+                          validator: async (_, value) => customValidator(setErrors, 'friendDuty', value, formHaveFriend),
+                        }]}
+                      />
                     </>
                   )
                 }
               </Panel>
               <Panel title="驾驶证信息" className={currentPage === 5 ? 'page-show' : 'page-hide'}>
-                <Cell title="驾驶证类型">
-                  <Form.Item name="driverLicenseType" noStyle>
-                    <Input clearable type="text" placeholder="请输入驾驶证类型" />
-                  </Form.Item>
-                </Cell>
-                <Cell title="驾驶证领证时间">
-                  <Form.Item name="driverLicenseDate" trigger="onOk" noStyle>
-                    <DateSelect
-                      title="请选择驾驶证领证时间"
-                      placeholder="请选择驾驶证领证时间"
-                      format="yyyy年MM月dd日"
-                      mode="date"
-                      min="1900-01-01"
-                      max="2027-05-15"
-                      hasArrow={false}
-                    />
-                  </Form.Item>
-                </Cell>
-                <Cell title="驾龄">
-                  <Form.Item name="driveYear" noStyle>
-                    <Input clearable type="number" placeholder="请输入驾龄" />
-                  </Form.Item>
-                </Cell>
-                <Cell title="熟悉的驾驶路线">
-                  <Form.Item name="driveLines" noStyle>
-                    <Input clearable type="text" placeholder="请输入熟悉的驾驶路线" />
-                  </Form.Item>
-                </Cell>
-                <Cell title="驾驶车种">
-                  <Form.Item name="vehicleType" noStyle>
-                    <Input clearable type="text" placeholder="请输入驾驶车种" />
-                  </Form.Item>
-                </Cell>
+                <ZaCellInput
+                  name="driverLicenseType"
+                  title="驾驶证类型"
+                  zaInputProps={{
+                    type: 'text',
+                    clearable: true,
+                    placeholder: '请输入驾驶证类型',
+                  }}
+                />
+                <ZaCellDataSelect
+                  name="driverLicenseDate"
+                  title="驾驶证领证时间"
+                  zaDateSelectProps={{
+                    placeholder: '请选择驾驶证领证时间',
+                    format: 'yyyy年MM月dd日',
+                    mode: 'date',
+                    min: '1900-01-01',
+                    max: '2027-05-15',
+                    hasArrow: false
+                  }}
+                  trigger="onOk"
+                />
+                <ZaCellInput
+                  name="driveYear"
+                  title="驾龄"
+                  zaInputProps={{
+                    type: 'number',
+                    clearable: true,
+                    placeholder: '请输入驾龄',
+                  }}
+                />
+                <ZaCellInput
+                  name="driveLines"
+                  title="熟悉的驾驶路线"
+                  zaInputProps={{
+                    type: 'text',
+                    clearable: true,
+                    placeholder: '请输入熟悉的驾驶路线',
+                  }}
+                />
+                <ZaCellInput
+                  name="vehicleType"
+                  title="驾驶车种"
+                  zaInputProps={{
+                    type: 'text',
+                    clearable: true,
+                    placeholder: '请输入驾驶车种',
+                  }}
+                />
               </Panel>
               <Panel title="服兵役信息" className={currentPage === 6 ? 'page-show' : 'page-hide'}>
-                <Cell title={requiredTitle('是否有服过兵役')} help={customHelp(errors, 'inArmy')}>
-                  <Form.Item
-                    name="inArmy"
-                    noStyle
-                    validateTrigger={defaultValidateTrigger}
-                    rules={[{
-                      validator: async (_, value) => customValidator(setErrors, 'inArmy', value, true),
-                    }]}
-                  >
-                    <Switch />
-                  </Form.Item>
-                </Cell>
+                <ZaCellSwitch
+                  name="inArmy"
+                  title="是否有服过兵役"
+                  required={true}
+                  help={simpleHelp('inArmy')}
+                  rules={simpleRules('inArmy')}
+                />
                 {
                   formInArmy && (
                     <>
-                      <Cell title={requiredTitle('部队驻扎地')} help={customHelp(errors, 'troopBase')}>
-                        <Form.Item
-                          name="troopBase"
-                          noStyle
-                          validateTrigger={defaultValidateTrigger}
-                    rules={[{
-                            validator: async (_, value) => customValidator(setErrors, 'troopBase', value, true),
-                          }]}
-                        >
-                          <Input clearable type="text" placeholder="请输入部队驻扎地" />
-                        </Form.Item>
-                      </Cell>
-                      <Cell title={requiredTitle('入伍时间')} help={customHelp(errors, 'enlistmentDate')}>
-                        <Form.Item
-                          name="enlistmentDate"
-                          trigger="onOk"
-                          noStyle
-                          validateTrigger={defaultValidateTrigger}
-                    rules={[{
-                            validator: async (_, value) => customValidator(setErrors, 'enlistmentDate', value, true),
-                          }]}
-                        >
-                          <DateSelect
-                            title="请选择入伍时间"
-                            placeholder="请选择入伍时间"
-                            format="yyyy年MM月dd日"
-                            mode="date"
-                            min="1900-01-01"
-                            max="2027-05-15"
-                            hasArrow={false}
-                          />
-                        </Form.Item>
-                      </Cell>
-                      <Cell title={requiredTitle("退伍时间")} help={customHelp(errors, 'dischargeDate')}>
-                        <Form.Item
-                          name="dischargeDate"
-                          trigger="onOk"
-                          noStyle
-                          validateTrigger={defaultValidateTrigger}
-                    rules={[{
-                            validator: async (_, value) => customValidator(setErrors, 'dischargeDate', value, true),
-                          }]}
-                        >
-                          <DateSelect
-                            title="请选择退伍时间"
-                            placeholder="请选择退伍时间"
-                            format="yyyy年MM月dd日"
-                            mode="date"
-                            min="1900-01-01"
-                            max="2027-05-15"
-                            hasArrow={false}
-                          />
-                        </Form.Item>
-                      </Cell>
-                      <Cell title="退伍时军衔">
-                        <Form.Item name="dischargeRank" noStyle>
-                          <Input clearable type="text" placeholder="请输入退伍时军衔" />
-                        </Form.Item>
-                      </Cell>
-                      <Cell title="立功/贡献">
-                        <Form.Item name="honour" noStyle>
-                          <Input clearable type="text" placeholder="请输入服役期间立功/贡献" />
-                        </Form.Item>
-                      </Cell>
+                      <ZaCellInput
+                        name="troopBase"
+                        title="部队驻扎地"
+                        zaInputProps={{
+                          type: 'text',
+                          clearable: true,
+                          placeholder: '请输入部队驻扎地',
+                        }}
+                        required={true}
+                        help={simpleHelp('troopBase')}
+                        validateTrigger={defaultValidateTrigger}
+                        rules={[{
+                          validator: async (_, value) => customValidator(setErrors, 'troopBase', value, true),
+                        }]}
+                      />
+                      <ZaCellDataSelect
+                        name="enlistmentDate"
+                        title="入伍时间"
+                        zaDateSelectProps={{
+                          placeholder: '请选择入伍时间',
+                          format: 'yyyy年MM月dd日',
+                          mode: 'date',
+                          min: '1900-01-01',
+                          max: '2027-05-15',
+                          hasArrow: false
+                        }}
+                        required={true}
+                        trigger="onOk"
+                        help={simpleHelp('enlistmentDate')}
+                        rules={[{
+                          validator: async (_, value) => customValidator(setErrors, 'enlistmentDate', value, true),
+                        }]}
+                      />
+                      <ZaCellDataSelect
+                        name="dischargeDate"
+                        title="退伍时间"
+                        zaDateSelectProps={{
+                          placeholder: '请选择退伍时间',
+                          format: 'yyyy年MM月dd日',
+                          mode: 'date',
+                          min: '1900-01-01',
+                          max: '2027-05-15',
+                          hasArrow: false
+                        }}
+                        required={true}
+                        trigger="onOk"
+                        help={simpleHelp('dischargeDate')}
+                        rules={[{
+                          validator: async (_, value) => customValidator(setErrors, 'dischargeDate', value, true),
+                        }]}
+                      />
+                      <ZaCellInput
+                        name="dischargeRank"
+                        title="退伍时军衔"
+                        zaInputProps={{
+                          type: 'text',
+                          clearable: true,
+                          placeholder: '请输入退伍时军衔',
+                        }}
+                        required={true}
+                        help={simpleHelp('dischargeRank')}
+                        validateTrigger={defaultValidateTrigger}
+                        rules={[{
+                          validator: async (_, value) => customValidator(setErrors, 'dischargeRank', value, true),
+                        }]}
+                      />
+                      <ZaCellInput
+                        name="honour"
+                        title="立功/贡献"
+                        zaInputProps={{
+                          type: 'text',
+                          clearable: true,
+                          placeholder: '请输入立功/贡献',
+                        }}
+                        required={true}
+                        help={simpleHelp('honour')}
+                        validateTrigger={defaultValidateTrigger}
+                        rules={[{
+                          validator: async (_, value) => customValidator(setErrors, 'honour', value, true),
+                        }]}
+                      />
                     </>
                   )
                 }

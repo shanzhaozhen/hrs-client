@@ -1,11 +1,11 @@
 import type {ReactNode} from 'react';
-import React, { useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import ZaSelect from "@/components/CustomZarm/ZaSelect";
 import {Cell, Input} from "zarm";
 import type {DataSource} from "zarm/types/picker-view/PropsType";
 import {requiredTitle} from "@/utils/zarm";
 
-interface ZaOtherSelectProps {
+export interface ZaOtherSelectProps {
   title?: string | number;
   required?: boolean;
   help?: ReactNode;

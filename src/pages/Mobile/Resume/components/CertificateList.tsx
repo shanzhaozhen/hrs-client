@@ -19,6 +19,12 @@ const CertificateList: React.FC<CertificateListProps> = (props) => {
 
   const certificateTypeOptions = useOptions('CertificateType')
 
+  const simpleHelp = (index: number, currentField: string) => (customFormListHelp(errors, 'certificateList', index, currentField));
+
+  const simpleRules = (index: number, currentField: string) => ([{
+    validator: async (_: any, value: any) => customListValidator(setErrors, 'certificateList', index, currentField, value, true),
+  }]);
+
   return (
     <>
       <Form.List name="certificateList">
@@ -57,18 +63,15 @@ const CertificateList: React.FC<CertificateListProps> = (props) => {
                           placeholder: '请输入证件名称',
                         }}
                         required={true}
-                        help={customFormListHelp(errors, 'certificateList', index, 'name')}
-                        rules={[{
-                          validator: async (_, value) => customListValidator(setErrors, 'certificateList', index, 'name', value, true),
-                        }]}
+                        help={simpleHelp(index, 'name')}
+                        rules={simpleRules(index, 'name')}
                       />
                       <ZaCellSelect
                         name={[field.name, 'type']}
                         title="证件类型"
                         required={true}
-                        rules={[{
-                          validator: async (_, value) => customListValidator(setErrors, 'certificateList', index, 'type', value, true),
-                        }]}
+                        help={simpleHelp(index, 'type')}
+                        rules={simpleRules(index, 'type')}
                         zaSelectProps={{
                           dataSource: certificateTypeOptions,
                           placeholder: '请选择证件类型'
@@ -83,10 +86,8 @@ const CertificateList: React.FC<CertificateListProps> = (props) => {
                           placeholder: '请输入证件号',
                         }}
                         required={true}
-                        help={customFormListHelp(errors, 'certificateList', index, 'number')}
-                        rules={[{
-                          validator: async (_, value) => customListValidator(setErrors, 'certificateList', index, 'number', value, true),
-                        }]}
+                        help={simpleHelp(index, 'number')}
+                        rules={simpleRules(index, 'number')}
                       />
                       <ZaCellDataSelect
                         name={[field.name, 'obtainDate']}
@@ -101,9 +102,8 @@ const CertificateList: React.FC<CertificateListProps> = (props) => {
                         }}
                         required={true}
                         trigger="onOk"
-                        rules={[{
-                          validator: async (_, value) => customListValidator(setErrors, 'educationalExperienceList', index, 'endDate', value, true),
-                        }]}
+                        help={simpleHelp(index, 'obtainDate')}
+                        rules={simpleRules(index, 'obtainDate')}
                       />
                       <ZaCellInput
                         name={[field.name, 'issueUnit']}
@@ -114,10 +114,8 @@ const CertificateList: React.FC<CertificateListProps> = (props) => {
                           placeholder: '请输入发证单位',
                         }}
                         required={true}
-                        help={customFormListHelp(errors, 'certificateList', index, 'issueUnit')}
-                        rules={[{
-                          validator: async (_, value) => customListValidator(setErrors, 'certificateList', index, 'number', value, true),
-                        }]}
+                        help={simpleHelp(index, 'issueUnit')}
+                        rules={simpleRules(index, 'issueUnit')}
                       />
                       {/* todo: 附件 */}
                       <Cell title="附件">
