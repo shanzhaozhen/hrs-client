@@ -175,6 +175,8 @@ const UserList: React.FC = () => {
       title: '创建时间',
       dataIndex: 'createdDate',
       valueType: 'dateTime',
+      sorter: true,
+      defaultSortOrder: 'descend',
       hideInSearch: true,
       hideInForm: true,
     },

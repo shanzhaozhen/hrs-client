@@ -4,9 +4,10 @@ import { Button, Divider, Input, message, Modal } from 'antd';
 import {FooterToolbar, PageContainer} from '@ant-design/pro-layout';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { getFilePage } from '@/services/file/file';
+import {download, getFilePage} from '@/services/file/file';
 import type { FileVO } from '@/services/file/typings';
 import {getPageParams, getSortOrder} from "@/utils/common";
+import {downloadFile} from "@/utils/file";
 
 const FileList: React.FC = () => {
   const actionRef = useRef<ActionType>();
@@ -94,13 +95,14 @@ const FileList: React.FC = () => {
       title: '上传时间',
       dataIndex: 'createdDate',
       valueType: 'dateTime',
+      sorter: true,
+      defaultSortOrder: 'descend',
       hideInSearch: true,
       hideInForm: true,
     },
     {
       title: '创建人',
-      dataIndex: 'createdDate',
-      valueType: 'dateTime',
+      dataIndex: 'createdBy',
       hideInTable: true,
       hideInSearch: true,
       hideInForm: true,
@@ -115,7 +117,9 @@ const FileList: React.FC = () => {
             onClick={async () => {
               if (record && record.id) {
                 const hide = message.loading('正在下载');
-                // todo: 下载文件
+                const data = await download(record.id);
+                console.log(data)
+                downloadFile(data, record.name);
                 hide();
                 message.success('文件下载成功！')
                 actionRef.current?.reloadAndRest?.();

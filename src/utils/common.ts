@@ -28,6 +28,8 @@ export const getPageParams = (params: any): PageParams => {
  * @param sorter
  */
 export const getSortOrder = (sorter: Record<string, SortOrder>): Orders | undefined | null => {
+  console.log(sorter)
+
   if (sorter) {
     const orders: Orders = {
       asc: [],
