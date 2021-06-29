@@ -115,6 +115,7 @@ const FileList: React.FC = () => {
             onClick={async () => {
               if (record && record.id) {
                 const hide = message.loading('正在下载');
+                // todo: 下载文件
                 hide();
                 message.success('文件下载成功！')
                 actionRef.current?.reloadAndRest?.();

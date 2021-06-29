@@ -1,24 +1,18 @@
 import 'zarm/dist/zarm.css';
 import './index.less';
 import React, { useRef, useState } from 'react';
-import {Cell, ConfigProvider, DateSelect, Input, Panel, Switch, Toast} from "zarm";
+import {ConfigProvider, Panel, Toast} from "zarm";
 import type { FormInstance } from 'antd';
-import { Form } from 'antd';
 import ProForm from '@ant-design/pro-form';
-import ZaSelect from "@/components/CustomZarm/ZaSelect";
 import {CheckOutlined, DownOutlined, UpOutlined} from "@ant-design/icons";
 import WorkList from "@/pages/Mobile/Resume/components/WorkList";
 import EducationalList from "@/pages/Mobile/Resume/components/EducationalList";
 import CertificateList from "@/pages/Mobile/Resume/components/CertificateList";
 import FamilyList from "@/pages/Mobile/Resume/components/FamilyList";
-import {
-  customValidator,
-  validateAddress,
-  validateEmail,
-} from "@/utils/validate";
+import {customValidator, validateAddress, validateEmail } from "@/utils/validate";
 import {useOptions} from "@/utils/options";
-import { customHelp, requiredTitle } from "@/utils/zarm";
-import {getBirthdayFromIdNumber, getSexFromIdNumber, validateWorkExperienceList} from "@/utils/resume";
+import { customHelp } from "@/utils/zarm";
+import {getBirthdayFromIdNumber, getSexFromIdNumber} from "@/utils/resume";
 import ZaCellInput from "@/components/CustomZarm/ZaCellInput";
 import ZaCellDataSelect from "@/components/CustomZarm/ZaCellDataSelect";
 import ZaCellSelect from "@/components/CustomZarm/ZaCellSelect";
@@ -28,7 +22,7 @@ import ZaCellSwitch from "@/components/CustomZarm/ZaCellSwitch";
 
 const ResumeFill: React.FC = () => {
   const [ errors, setErrors ] = useState<any>({});
-  const [ currentPage, setCurrentPage ] = useState<number>(8);
+  const [ currentPage, setCurrentPage ] = useState<number>(1);
   const [ formMaritalStatus, setFormMaritalStatus ] = useState<boolean>(true);
   const [ formHaveFriend, setFormHaveFriend ] = useState<boolean>(false);
   const [ formFertility, setFormFertility ] = useState<boolean>(false);
@@ -84,8 +78,6 @@ const ResumeFill: React.FC = () => {
     }
   }
 
-  const defaultValidateTrigger = ['onChange', 'onBlur']
-
   const pageFields = [
     ['name', 'idNumber', 'sex', 'birthday', 'householdType', 'nation', 'politics', 'education', 'degree', 'specialty', 'hobby', 'parentalSupport', 'birthAddress', 'nativeAddress', 'registeredAddress', 'homeAddress', 'currentAddress', 'postalAddress', 'expectedSalary', 'serviceYears', 'title', 'applyFor', 'workDate', 'phone', 'homePhone', 'email', 'qq', 'emergencyContactName', 'emergencyContactRelation', 'emergencyContactPhone', 'willJoin'],
     ['physicalCondition', 'weight', 'height', 'vision', 'bloodType'],
@@ -93,17 +85,15 @@ const ResumeFill: React.FC = () => {
     ['haveFriend', 'friendName', 'friendRelation', 'friendDepartment', 'friendDuty'],
     ['driverLicenseType', 'driverLicenseDate', 'driveYear', 'driveLines', 'vehicleType'],
     ['troopBase', 'enlistmentDate', 'dischargeDate', 'dischargeRank', 'honour'],
-    ['workExperienceList']
+    ['workExperienceList'],
+    ['educationalList'],
+    ['certificateList'],
+    ['familyList'],
   ];
 
   const nextPage = async () => {
     try {
-      if (currentPage > 0 && currentPage < 7) {
-        await formRef.current?.validateFields(pageFields[currentPage - 1]);
-      } else if (currentPage) {
-        const currentValues = formRef.current?.getFieldsValue();
-        validateWorkExperienceList(currentValues.workExperienceList, setErrors, true);
-      }
+      await formRef.current?.validateFields(pageFields[currentPage - 1]);
       setCurrentPage(origin => (origin > 0 && origin < 10 ? origin + 1 : origin))
 
       console.log(formRef.current?.getFieldsValue());
@@ -852,7 +842,6 @@ const ResumeFill: React.FC = () => {
                         }}
                         required={true}
                         help={simpleHelp('troopBase')}
-                        validateTrigger={defaultValidateTrigger}
                         rules={[{
                           validator: async (_, value) => customValidator(setErrors, 'troopBase', value, true),
                         }]}
@@ -903,7 +892,6 @@ const ResumeFill: React.FC = () => {
                         }}
                         required={true}
                         help={simpleHelp('dischargeRank')}
-                        validateTrigger={defaultValidateTrigger}
                         rules={[{
                           validator: async (_, value) => customValidator(setErrors, 'dischargeRank', value, true),
                         }]}
@@ -918,7 +906,6 @@ const ResumeFill: React.FC = () => {
                         }}
                         required={true}
                         help={simpleHelp('honour')}
-                        validateTrigger={defaultValidateTrigger}
                         rules={[{
                           validator: async (_, value) => customValidator(setErrors, 'honour', value, true),
                         }]}

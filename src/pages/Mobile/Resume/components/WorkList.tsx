@@ -9,6 +9,7 @@ import {customListValidator} from "@/utils/validate";
 import ZaCellInput from "@/components/CustomZarm/ZaCellInput";
 import ZaCellDataSelect from "@/components/CustomZarm/ZaCellDataSelect";
 import ZaCellSelect from "@/components/CustomZarm/ZaCellSelect";
+import {validateWorkExperienceList} from "@/utils/resume";
 
 interface WorkExperienceListProps {
   errors: any;
@@ -28,7 +29,12 @@ const WorkExperienceList: React.FC<WorkExperienceListProps> = (props) => {
 
   return (
     <>
-      <Form.List name="workExperienceList">
+      <Form.List
+        name="workExperienceList"
+        rules={[{
+          validator: async (_: any, workExperienceList: any) => (validateWorkExperienceList(workExperienceList, setErrors))
+        }]}
+      >
         {
           (fields, { add, remove }) => (
             <>

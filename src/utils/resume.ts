@@ -68,42 +68,41 @@ export const getSexFromIdNumber = (idNumber: string) => {
  * 校验工作简历
  * @param currentValue
  * @param setErrors
- * @param isNextPage
  */
-export const validateWorkExperienceList = (currentValue: any[], setErrors: Dispatch<SetStateAction<any>>, isNextPage: boolean) => {
+export const validateWorkExperienceList = (currentValue: any[], setErrors: Dispatch<SetStateAction<any>>) => {
+  let isPass = true;
   if (currentValue && currentValue.length > 0) {
-    let isPass = true;
     setErrors((origin: any) => {
       return {
         ...origin,
         workExperienceList: currentValue.map((item: any) => {
           const error: Record<string, any> = {};
           if (item) {
-            if ((isNextPage || item.hasOwnProperty('workUnit')) && !item.workUnit) {
+            if (!(item.hasOwnProperty('workUnit') && item.workUnit)) {
               error.workUnit = '不能为空';
               isPass = false;
             }
-            if ((isNextPage || item.hasOwnProperty('startDate')) && !item.startDate) {
+            if (!(item.hasOwnProperty('startDate') && item.startDate)) {
               error.startDate = '不能为空';
               isPass = false;
             }
-            if ((isNextPage || item.hasOwnProperty('endDate')) && !item.endDate) {
+            if (!(item.hasOwnProperty('endDate') && item.endDate)) {
               error.endDate = '不能为空';
               isPass = false;
             }
-            if ((isNextPage || item.hasOwnProperty('duty')) && !item.duty) {
+            if (!(item.hasOwnProperty('duty') && item.duty)) {
               error.duty = '不能为空';
               isPass = false;
             }
-            if ((isNextPage || item.hasOwnProperty('unitType')) && !item.unitType) {
+            if (!(item.hasOwnProperty('unitType') && item.unitType)) {
               error.unitType = '不能为空';
               isPass = false;
             }
-            if ((isNextPage || item.hasOwnProperty('witnessName')) && !item.witnessName) {
+            if (!(item.hasOwnProperty('witnessName') && item.witnessName)) {
               error.witnessName = '不能为空';
               isPass = false;
             }
-            if ((isNextPage || item.hasOwnProperty('witnessPhone')) && !item.witnessPhone) {
+            if (!(item.hasOwnProperty('witnessPhone') && item.witnessPhone)) {
               error.witnessPhone = '不能为空';
               isPass = false;
             }
@@ -112,13 +111,10 @@ export const validateWorkExperienceList = (currentValue: any[], setErrors: Dispa
         })
       }
     });
-    console.log('工作经历校验：', isPass)
-    if (!isPass) {
-      throw new Error('请正确填写工作经历');
-    }
-    return isPass;
   }
-  return true;
+  if (!isPass) {
+    throw new Error('请正确填写工作经历');
+  }
 }
 
 
@@ -126,50 +122,49 @@ export const validateWorkExperienceList = (currentValue: any[], setErrors: Dispa
  * 校验教育经历成员
  * @param currentValue
  * @param setErrors
- * @param isNextPage
  */
-export const validateEducationalList = (currentValue: any[], setErrors: Dispatch<SetStateAction<any>>, isNextPage: boolean) => {
+export const validateEducationalList = (currentValue: any[], setErrors: Dispatch<SetStateAction<any>>) => {
+  let isPass = true;
   if (currentValue && currentValue.length > 0) {
-    let isPass = true;
     setErrors((origin: any) => {
       return {
         ...origin,
         educationalExperienceList: currentValue.map((item: any) => {
           const error: Record<string, any> = {};
           if (item) {
-            if ((isNextPage || item.hasOwnProperty('schoolName')) && !item.schoolName) {
+            if (!(item.hasOwnProperty('schoolName') && item.schoolName)) {
               error.schoolName = '不能为空';
               isPass = false;
             }
-            if ((isNextPage || item.hasOwnProperty('startDate')) && !item.startDate) {
+            if (!(item.hasOwnProperty('startDate') && item.startDate)) {
               error.startDate = '不能为空';
               isPass = false;
             }
-            if ((isNextPage || item.hasOwnProperty('endDate')) && !item.endDate) {
+            if (!(item.hasOwnProperty('endDate') && item.endDate)) {
               error.endDate = '不能为空';
               isPass = false;
             }
-            if ((isNextPage || item.hasOwnProperty('education')) && !item.education) {
+            if (!(item.hasOwnProperty('education') && item.education)) {
               error.education = '不能为空';
               isPass = false;
             }
-            if ((isNextPage || item.hasOwnProperty('major')) && !item.major) {
+            if (!(item.hasOwnProperty('major') && item.major)) {
               error.major = '不能为空';
               isPass = false;
             }
-            if ((isNextPage || item.hasOwnProperty('studyYears')) && !item.studyYears) {
+            if (!(item.hasOwnProperty('studyYears') && item.studyYears)) {
               error.studyYears = '不能为空';
               isPass = false;
             }
-            if ((isNextPage || item.hasOwnProperty('fullTime')) && !item.fullTime) {
+            if (!(item.hasOwnProperty('fullTime') && item.fullTime)) {
               error.fullTime = '不能为空';
               isPass = false;
             }
-            if ((isNextPage || item.hasOwnProperty('witnessName')) && !item.witnessName) {
+            if (!(item.hasOwnProperty('witnessName') && item.witnessName)) {
               error.witnessName = '不能为空';
               isPass = false;
             }
-            if ((isNextPage || item.hasOwnProperty('witnessPhone')) && !item.witnessPhone) {
+            if (!(item.hasOwnProperty('witnessPhone') && item.witnessPhone)) {
               error.witnessPhone = '不能为空';
               isPass = false;
             }
@@ -178,55 +173,51 @@ export const validateEducationalList = (currentValue: any[], setErrors: Dispatch
         })
       }
     });
-    if (!isPass) {
-      throw new Error('请正确填写工作经历');
-    }
-    return isPass;
   }
-  return true;
+  if (!isPass) {
+    throw new Error('请正确填写教育经历');
+  }
 }
-
 
 /**
  * 校验家庭成员
  * @param currentValue
  * @param setErrors
- * @param isNextPage
  */
-export const validateFamilyList = (currentValue: any[], setErrors: Dispatch<SetStateAction<any>>, isNextPage: boolean) => {
+export const validateFamilyList = (currentValue: any[], setErrors: Dispatch<SetStateAction<any>>) => {
+  let isPass = true;
   if (currentValue && currentValue.length > 0) {
-    let isPass = true;
     setErrors((origin: any) => {
       return {
         ...origin,
         familyList: currentValue.map((item: any) => {
           const error: Record<string, any> = {};
           if (item) {
-            if ((isNextPage || item.hasOwnProperty('name')) && !item.name) {
+            if (!(item.hasOwnProperty('name') && item.name)) {
               error.workUnit = '不能为空';
               isPass = false;
             }
-            if ((isNextPage || item.hasOwnProperty('relation')) && !item.relation) {
+            if (!(item.hasOwnProperty('relation') && item.relation)) {
               error.startDate = '不能为空';
               isPass = false;
             }
-            if ((isNextPage || item.hasOwnProperty('birthday')) && !item.birthday) {
+            if (!(item.hasOwnProperty('birthday') && item.birthday)) {
               error.endDate = '不能为空';
               isPass = false;
             }
-            if ((isNextPage || item.hasOwnProperty('politics')) && !item.politics) {
+            if (!(item.hasOwnProperty('politics') && item.politics)) {
               error.duty = '不能为空';
               isPass = false;
             }
-            if ((isNextPage || item.hasOwnProperty('workUnit')) && !item.workUnit) {
+            if (!(item.hasOwnProperty('workUnit') && item.workUnit)) {
               error.unitType = '不能为空';
               isPass = false;
             }
-            if ((isNextPage || item.hasOwnProperty('duty')) && !item.duty) {
+            if (!(item.hasOwnProperty('duty') && item.duty)) {
               error.witnessName = '不能为空';
               isPass = false;
             }
-            if ((isNextPage || item.hasOwnProperty('mobilePhone')) && !item.mobilePhone) {
+            if (!(item.hasOwnProperty('mobilePhone') && item.mobilePhone)) {
               error.witnessPhone = '不能为空';
               isPass = false;
             }
@@ -235,10 +226,54 @@ export const validateFamilyList = (currentValue: any[], setErrors: Dispatch<SetS
         })
       }
     });
-    if (!isPass) {
-      throw new Error('请正确填写工作经历');
-    }
-    return isPass;
   }
-  return true;
+  if (!isPass) {
+    throw new Error('请正确填写家庭信息');
+  }
+}
+
+
+/**
+ * 校验证书信息
+ * @param currentValue
+ * @param setErrors
+ */
+export const validateCertificateList = (currentValue: any[], setErrors: Dispatch<SetStateAction<any>>) => {
+  let isPass = true;
+  if (currentValue && currentValue.length > 0) {
+    setErrors((origin: any) => {
+      return {
+        ...origin,
+        familyList: currentValue.map((item: any) => {
+          const error: Record<string, any> = {};
+          if (item) {
+            if (!(item.hasOwnProperty('name') && item.name)) {
+              error.workUnit = '不能为空';
+              isPass = false;
+            }
+            if (!(item.hasOwnProperty('type') && item.relation)) {
+              error.startDate = '不能为空';
+              isPass = false;
+            }
+            if (!(item.hasOwnProperty('number') && item.birthday)) {
+              error.endDate = '不能为空';
+              isPass = false;
+            }
+            if (!(item.hasOwnProperty('obtainDate') && item.politics)) {
+              error.duty = '不能为空';
+              isPass = false;
+            }
+            if (!(item.hasOwnProperty('issueUnit') && item.workUnit)) {
+              error.unitType = '不能为空';
+              isPass = false;
+            }
+          }
+          return error;
+        })
+      }
+    });
+  }
+  if (!isPass) {
+    throw new Error('请正确填写证书信息');
+  }
 }
