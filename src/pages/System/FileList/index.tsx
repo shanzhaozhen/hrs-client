@@ -1,13 +1,13 @@
 import React, {useRef, useState} from 'react';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { Button, Divider, Input, message, Modal } from 'antd';
-import {FooterToolbar, PageContainer} from '@ant-design/pro-layout';
+import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import {download, getFilePage} from '@/services/file/file';
+import { download, getFilePage } from '@/services/file/file';
 import type { FileVO } from '@/services/file/typings';
-import {getPageParams, getSortOrder} from "@/utils/common";
-import {downloadFile} from "@/utils/file";
+import { getPageParams, getSortOrder } from "@/utils/common";
+import { downloadFile } from "@/utils/file";
 
 const FileList: React.FC = () => {
   const actionRef = useRef<ActionType>();
