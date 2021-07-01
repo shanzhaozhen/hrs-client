@@ -27,6 +27,7 @@ const FileList: React.FC = () => {
         const hide = message.loading('正在删除');
         if (!selectedRowsState) return true;
         try {
+          // todo: 删除文件，先判断有没有其他文件利用，没有的话删除实际文件和文件记录
           // await batchDeleteFile(selectedRowsState.map((selectedRow) => selectedRow.id));
           hide();
           message.success('删除成功，即将刷新');
