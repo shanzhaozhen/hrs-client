@@ -4,27 +4,27 @@ import {Button, Divider, Input, message, Modal} from 'antd';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import type {ActionType, ProColumns} from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import {exportStaff, getStaffById, getStaffPage, printStaff} from '@/services/staff/staff';
-import type { StaffForm, StaffVO } from '@/services/staff/typings';
+import {exportStaffSalary, getStaffSalaryById, getStaffSalaryPage, printStaffSalary} from '@/services/salary-staff/salary-staff';
+import type { StaffSalaryForm, StaffSalaryVO } from '@/services/salary-staff/typings';
 import { getPageParams, getSortOrder, tableFilter } from "@/utils/common";
 import { ExportOutlined, ImportOutlined, PlusOutlined } from "@ant-design/icons";
-import CreateForm from "@/pages/HR/StaffList/components/CreateForm";
-import UpdateForm from "@/pages/HR/StaffList/components/UpdateForm";
-import ViewForm from "@/pages/HR/StaffList/components/ViewForm";
+import CreateForm from "@/pages/Salary/SalaryStaffList/components/CreateForm";
+import UpdateForm from "@/pages/Salary/SalaryStaffList/components/UpdateForm";
+import ViewForm from "@/pages/Salary/SalaryStaffList/components/ViewForm";
 import { useDepartmentList, useDepartmentTree } from "@/utils/department";
 import FormTreeSelect from "@/components/FormTreeSelect";
-import { ProFormUploadDragger} from "@ant-design/pro-form";
+import { ProFormUploadDragger } from "@ant-design/pro-form";
 import {downloadFile} from "@/utils/file";
 
-const StaffList: React.FC = () => {
+const StaffSalaryList: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const formRef = useRef<FormInstance>();
 
-  const [updateFormValues, setUpdateFormValues] = useState<StaffVO | StaffForm>({});
+  const [updateFormValues, setUpdateFormValues] = useState<StaffSalaryVO | StaffSalaryForm>({});
   const [viewDrawerVisible, handleViewDrawerVisible] = useState<boolean>(false);
   const [createDrawerVisible, handleCreateDrawerVisible] = useState<boolean>(false);
   const [updateDrawerVisible, handleUpdateDrawerVisible] = useState<boolean>(false);
-  const [selectedRowsState, setSelectedRows] = useState<StaffVO[]>([]);
+  const [selectedRowsState, setSelectedRows] = useState<StaffSalaryVO[]>([]);
   const [importModalVisible, setImportModalVisible] = useState<boolean>(false);
 
   const departmentList = useDepartmentList();
@@ -34,7 +34,7 @@ const StaffList: React.FC = () => {
   // /**
   //  * 批量删除员工
   //  */
-  // const handleDeleteStaff = () => {
+  // const handleDeleteStaffSalary = () => {
   //   Modal.confirm({
   //     title: '确认',
   //     icon: <ExclamationCircleOutlined />,
@@ -45,7 +45,7 @@ const StaffList: React.FC = () => {
   //       const hide = message.loading('正在删除');
   //       if (!selectedRowsState) return true;
   //       try {
-  //         await batchDeleteStaff(selectedRowsState.map((selectedRow) => selectedRow.id));
+  //         await batchDeleteStaffSalary(selectedRowsState.map((selectedRow) => selectedRow.id));
   //         hide();
   //         message.success('删除成功，即将刷新');
   //         actionRef.current?.reloadAndRest?.();
@@ -59,7 +59,7 @@ const StaffList: React.FC = () => {
   //   });
   // };
 
-  const columns: ProColumns<StaffVO>[] = [
+  const columns: ProColumns<StaffSalaryVO>[] = [
     {
       title: '关键字',
       key: 'keyword',
@@ -88,7 +88,7 @@ const StaffList: React.FC = () => {
     },
     {
       title: '员工编号',
-      dataIndex: 'staffCode',
+      dataIndex: 'salaryStaffCode',
       valueType: 'text',
       sorter: true,
       hideInSearch: true,
@@ -103,7 +103,7 @@ const StaffList: React.FC = () => {
     },
     {
       title: '员工姓名',
-      dataIndex: 'staffCode',
+      dataIndex: 'salaryStaffCode',
       valueType: 'text',
       sorter: true,
       hideInSearch: true,
@@ -211,7 +211,7 @@ const StaffList: React.FC = () => {
           <a
             onClick={async () => {
               if (record && record.id) {
-                const { data } = await getStaffById(record.id);
+                const { data } = await getStaffSalaryById(record.id);
                 setUpdateFormValues(data || {});
                 handleViewDrawerVisible(true);
               } else {
@@ -225,7 +225,7 @@ const StaffList: React.FC = () => {
           <a
             onClick={async () => {
               if (record && record.id) {
-                const { data } = await getStaffById(record.id);
+                const { data } = await getStaffSalaryById(record.id);
                 setUpdateFormValues(data || {});
                 handleUpdateDrawerVisible(true);
               } else {
@@ -240,11 +240,10 @@ const StaffList: React.FC = () => {
     },
   ];
 
-  // @ts-ignore
   return (
     <PageContainer>
-      <ProTable<StaffVO>
-        headerTitle="员工"
+      <ProTable<StaffSalaryVO>
+        headerTitle="员工薪资"
         actionRef={actionRef}
         formRef={formRef}
         rowKey="id"
@@ -263,7 +262,7 @@ const StaffList: React.FC = () => {
             onClick={() => {
               const fieldsValue = formRef.current?.getFieldsValue();
               console.log(fieldsValue);
-              exportStaff({
+              exportStaffSalary({
                 ...fieldsValue
               }).then(data => {
                 downloadFile(data, `员工-${new Date().getTime()}.xlsx`)
@@ -275,7 +274,7 @@ const StaffList: React.FC = () => {
           <Button
             type="primary"
             onClick={() => {
-              printStaff(23452345234).then(data => {
+              printStaffSalary(23452345234).then(data => {
                 downloadFile(data, `员工-${new Date().getTime()}.docx`)
               })
             }}
@@ -284,7 +283,7 @@ const StaffList: React.FC = () => {
           </Button>,
         ]}
         request={async (params, sorter) => {
-          const { data } = await getStaffPage(getPageParams(params), getSortOrder(sorter));
+          const { data } = await getStaffSalaryPage(getPageParams(params), getSortOrder(sorter));
           return {
             // success 请返回 true，
             // 不然 table 会停止解析数据，即使有数据
@@ -307,7 +306,7 @@ const StaffList: React.FC = () => {
             </div>
           }
         >
-          {/* <Button onClick={handleDeleteStaff}>批量删除</Button> */}
+          {/* <Button onClick={handleDeleteStaffSalary}>批量删除</Button> */}
         </FooterToolbar>
       )}
 
@@ -341,7 +340,7 @@ const StaffList: React.FC = () => {
           marginBottom: 15
         }}>
           <a href="#" onClick={() => {
-            // todo: 员工信息导入
+            // todo: 员工薪资导入
             console.log('dd')
           }}>
             点击下载
@@ -360,4 +359,4 @@ const StaffList: React.FC = () => {
   );
 };
 
-export default StaffList;
+export default StaffSalaryList;

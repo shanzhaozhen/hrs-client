@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import type { MutableRefObject } from 'react';
 import type { FormInstance } from 'antd';
 import { Button, Col, Input, Row } from 'antd';
-import {ProFormDatePicker, ProFormSelect, ProFormText, ProFormTextArea} from '@ant-design/pro-form';
+import { ProFormDatePicker, ProFormSelect, ProFormText } from '@ant-design/pro-form';
 import { getDictionaryChildrenByCode } from "@/services/dictionary/dictionary";
 import FormTreeSelect from "@/components/FormTreeSelect";
 import { useDepartmentList, useDepartmentTree } from "@/utils/department";
@@ -184,12 +184,6 @@ const FormBody: React.FC<FormProps> = (props) => {
             name="effectiveDate"
             label="生效日期"
             rules={[{ required: true, message: '请选择生效日期' }]}
-          />
-        </Col>
-        <Col xl={24} lg={24} md={24}>
-          <ProFormTextArea
-            name="remarks"
-            label="备注"
           />
         </Col>
       </Row>

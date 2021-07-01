@@ -109,6 +109,38 @@ export default [
     ],
   },
   {
+    path: '/salary',
+    name: 'salary',
+    icon: 'crown',
+    routes: [
+      {
+        path: '/salary/salary-staff',
+        name: 'salary-staff',
+        icon: 'smile',
+        component: './Salary/SalaryStaffList',
+      },
+      // {
+      //   path: '/salary/salary-change',
+      //   name: 'salary-change',
+      //   icon: 'smile',
+      //   component: './Salary/SalaryChangeList',
+      // },
+      // {
+      //   path: '/salary/salary-plan',
+      //   name: 'salary-plan',
+      //   icon: 'smile',
+      //   component: './Salary/SalaryPlanList',
+      // },
+      // {
+      //   path: '/salary/salary-actual',
+      //   name: 'salary-actual',
+      //   icon: 'smile',
+      //   component: './Salary/SalaryActualList',
+      // },
+    ],
+  },
+
+  {
     path: '/recruit',
     name: 'recruit',
     icon: 'crown',

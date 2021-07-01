@@ -25,6 +25,8 @@ export type TransferRecordForm = {
   postPostLevel?: string;
   /** 生效日期 */
   effectiveDate?: string;
+  /** 备注 */
+  remarks?: string;
 };
 
 export type TransferRecordVO = {
@@ -58,6 +60,8 @@ export type TransferRecordVO = {
   postPostLevel?: string;
   /** 生效日期 */
   effectiveDate?: string;
+  /** 备注 */
+  remarks?: string;
   /** 创建人 */
   createdBy?: number;
   /** 创建人名称 */

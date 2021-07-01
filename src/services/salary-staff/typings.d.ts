@@ -4,13 +4,13 @@ import type {EducationalExperienceForm, EducationalExperienceVO} from "@/service
 import type { CertificateForm, CertificateVO } from "@/services/certificate/typings";
 import type { FamilyForm, FamilyVO } from "@/services/family/typings";
 
-export type StaffForm = {
+export type StaffSalaryForm = {
   /** 主键ID */
   id: number;
   /** 员工编号 */
-  staffCode?: string;
+  salaryStaffCode?: string;
   /** 员工姓名 */
-  staffName?: string;
+  salaryStaffName?: string;
   /** 个人照片 */
   personalPhoto?: number;
   /** 部门ID */
@@ -41,8 +41,6 @@ export type StaffForm = {
   workDate?: string;
   /** 入职日期 */
   entryDate?: string;
-  /** 离职日期 */
-  departureDate?: string;
   /** 政治面貌 */
   politics?: string;
   /** 最高学历 */
@@ -178,13 +176,13 @@ export type StaffForm = {
   postalAddress: RegionType;
 };
 
-export type StaffVO = {
+export type StaffSalaryVO = {
   /** 主键ID */
   id?: number;
   /** 员工编号 */
-  staffCode?: string;
+  salaryStaffCode?: string;
   /** 员工姓名 */
-  staffName?: string;
+  salaryStaffName?: string;
   /** 个人照片 */
   personalPhoto?: number;
   /** 部门ID */
@@ -215,8 +213,6 @@ export type StaffVO = {
   workDate?: string;
   /** 入职日期 */
   entryDate?: string;
-  /** 离职日期 */
-  departureDate?: string;
   /** 政治面貌 */
   politics?: string;
   /** 最高学历 */

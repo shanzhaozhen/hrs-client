@@ -1,51 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Col, Form, Row } from 'antd';
 import { ProFormText, ProFormTextArea } from '@ant-design/pro-form';
-import { getMenuTree } from '@/services/menu/menu';
-import type { MenuVO } from '@/services/menu/typings';
 import FormTree from '@/components/FormTree';
-import { getResourceTree } from '@/services/resource/resource';
+import {useMenuTree} from "@/utils/menu";
+import {useResourcesTree} from "@/utils/resources";
 
 interface FormProps {
   isEdit?: boolean;
 }
 
-const loopMenuData = (menuData: MenuVO[]): any =>
-  menuData.map(({ id, name, children }) => ({
-    title: name,
-    key: id,
-    children: children && loopMenuData(children),
-  }));
-
 const FormBody: React.FC<FormProps> = () => {
-  const [menuTree, setMenuTree] = useState<[]>();
-  const [resourceTree, setResourcesTree] = useState<[]>();
-
-  useEffect(() => {
-    getMenuTree()
-      .then((res) => {
-        if (res) {
-          setMenuTree(loopMenuData(res));
-        } else {
-          setMenuTree([]);
-        }
-      })
-      .catch(() => {
-        setMenuTree([]);
-      });
-
-    getResourceTree()
-      .then((res) => {
-        if (res) {
-          setResourcesTree(loopMenuData(res));
-        } else {
-          setResourcesTree([]);
-        }
-      })
-      .catch(() => {
-        setResourcesTree([]);
-      });
-  }, []);
+  const menuTree = useMenuTree();
+  const resourceTree = useResourcesTree();
 
   return (
     <>
