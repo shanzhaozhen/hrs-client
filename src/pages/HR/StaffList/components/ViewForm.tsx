@@ -5,7 +5,7 @@ import { DrawerForm } from '@ant-design/pro-form';
 import type {StaffForm, StaffVO} from "@/services/staff/typings";
 import {HistoryOutlined} from "@ant-design/icons";
 import {Button} from "antd";
-import TransferRecordModal from "@/pages/HR/TransferRecordList/components/ModalBody";
+import StaffChangeModal from "@/pages/HR/StaffChangeList/components/ModalBody";
 
 interface ViewFormProps {
   viewDrawerVisible: boolean;
@@ -17,7 +17,7 @@ interface ViewFormProps {
 const ViewForm: React.FC<ViewFormProps> = (props) => {
   const { viewDrawerVisible, handleViewDrawerVisible, onCancel, values } = props
 
-  const [transferRecordModalVisible, setTransferRecordModalVisible] = useState<boolean>(false);
+  const [staffChangeModalVisible, setStaffChangeModalVisible] = useState<boolean>(false);
 
   return (
     <>
@@ -30,7 +30,7 @@ const ViewForm: React.FC<ViewFormProps> = (props) => {
               type="primary"
               icon={<HistoryOutlined />}
               onClick={() => {
-                setTransferRecordModalVisible(true);
+                setStaffChangeModalVisible(true);
               }}
             >
               调动记录
@@ -62,9 +62,9 @@ const ViewForm: React.FC<ViewFormProps> = (props) => {
         ) : null}
       </DrawerForm>
 
-      <TransferRecordModal
-        transferRecordModalVisible={transferRecordModalVisible}
-        handleTransferRecordModalVisible={setTransferRecordModalVisible}
+      <StaffChangeModal
+        staffChangeModalVisible={staffChangeModalVisible}
+        handleStaffChangeModalVisible={setStaffChangeModalVisible}
         staffId={values?.id}
       />
     </>

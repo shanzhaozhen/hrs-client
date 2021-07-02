@@ -6,8 +6,8 @@ import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import CreateForm from './CreateForm';
 import UpdateForm from './UpdateForm';
-import { getTransferRecordPage, getTransferRecordById, deleteTransferRecord, batchDeleteTransferRecorde, runTransfer } from '@/services/transfer-record/transfer-record';
-import type { TransferRecordVO } from '@/services/transfer-record/typings';
+import { getStaffChangePage, getStaffChangeById, deleteStaffChange, batchDeleteStaffChange, runTransfer } from '@/services/staff-change/staff-change';
+import type { StaffChangeVO } from '@/services/staff-change/typings';
 import {getPageParams, getSortOrder, tableFilter} from "@/utils/common";
 import { useDepartmentList } from "@/utils/department";
 
@@ -15,21 +15,21 @@ interface ListBodyProps {
   staffId?: number;
 }
 
-const TransferRecordListBody: React.FC<ListBodyProps> = (props) => {
+const StaffChangeListBody: React.FC<ListBodyProps> = (props) => {
   const { staffId } = props;
 
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-  const [updateFormValues, setUpdateFormValues] = useState<TransferRecordVO>({});
+  const [updateFormValues, setUpdateFormValues] = useState<StaffChangeVO>({});
   const actionRef = useRef<ActionType>();
-  const [selectedRowsState, setSelectedRows] = useState<TransferRecordVO[]>([]);
+  const [selectedRowsState, setSelectedRows] = useState<StaffChangeVO[]>([]);
 
   const departmentList = useDepartmentList();
 
   /**
    * 批量删除调动记录
    */
-  const handleDeleteTransferRecord = () => {
+  const handleDeleteStaffChange = () => {
     Modal.confirm({
       title: '确认',
       icon: <ExclamationCircleOutlined />,
@@ -40,7 +40,7 @@ const TransferRecordListBody: React.FC<ListBodyProps> = (props) => {
         const hide = message.loading('正在删除');
         if (!selectedRowsState) return true;
         try {
-          await batchDeleteTransferRecorde(selectedRowsState.map((selectedRow) => selectedRow.id));
+          await batchDeleteStaffChange(selectedRowsState.map((selectedRow) => selectedRow.id));
           hide();
           message.success('删除成功，即将刷新');
           actionRef.current?.reloadAndRest?.();
@@ -54,7 +54,7 @@ const TransferRecordListBody: React.FC<ListBodyProps> = (props) => {
     });
   };
 
-  const columns: ProColumns<TransferRecordVO>[] = [
+  const columns: ProColumns<StaffChangeVO>[] = [
     {
       title: '关键字',
       key: 'keyword',
@@ -172,7 +172,7 @@ const TransferRecordListBody: React.FC<ListBodyProps> = (props) => {
           <a
             onClick={async () => {
               if (record && record.id) {
-                const { data } = await getTransferRecordById(record.id);
+                const { data } = await getStaffChangeById(record.id);
                 setUpdateFormValues(data || {});
                 handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到调动记录信息（id:${record.id}）`);
@@ -188,7 +188,7 @@ const TransferRecordListBody: React.FC<ListBodyProps> = (props) => {
             title="确定删除该调动记录?"
             onConfirm={async () => {
               if (record && record.id) {
-                await deleteTransferRecord(record.id);
+                await deleteStaffChange(record.id);
                 message.success('删除成功！');
                 actionRef.current?.reloadAndRest?.();
               } else {
@@ -207,7 +207,7 @@ const TransferRecordListBody: React.FC<ListBodyProps> = (props) => {
 
   return (
     <>
-      <ProTable<TransferRecordVO>
+      <ProTable<StaffChangeVO>
         headerTitle="调动记录"
         actionRef={actionRef}
         rowKey="id"
@@ -220,7 +220,7 @@ const TransferRecordListBody: React.FC<ListBodyProps> = (props) => {
           </Button>,
         ]}
         request={async (params, sorter) => {
-          const { data } = await getTransferRecordPage(getPageParams(params), staffId, getSortOrder(sorter));
+          const { data } = await getStaffChangePage(getPageParams(params), staffId, getSortOrder(sorter));
           return {
             // success 请返回 true，
             // 不然 table 会停止解析数据，即使有数据
@@ -243,7 +243,7 @@ const TransferRecordListBody: React.FC<ListBodyProps> = (props) => {
             </div>
           }
         >
-          <Button onClick={handleDeleteTransferRecord}>批量删除</Button>
+          <Button onClick={handleDeleteStaffChange}>批量删除</Button>
         </FooterToolbar>
       )}
       <CreateForm
@@ -266,4 +266,4 @@ const TransferRecordListBody: React.FC<ListBodyProps> = (props) => {
   );
 };
 
-export default TransferRecordListBody;
+export default StaffChangeListBody;

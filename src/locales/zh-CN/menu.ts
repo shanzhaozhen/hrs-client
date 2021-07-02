@@ -61,7 +61,7 @@ export default {
   'menu.system.file': '文件管理',
   'menu.hr': '人事业务',
   'menu.hr.staff': '员工管理',
-  'menu.hr.transfer-record': '调动记录',
+  'menu.hr.staff-change': '调动记录',
   'menu.salary': '薪资管理',
   'menu.salary.salary-staff': '员工薪资',
   'menu.salary.salary-change': '调薪记录',

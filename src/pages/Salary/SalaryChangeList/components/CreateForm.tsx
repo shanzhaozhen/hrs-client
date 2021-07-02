@@ -2,9 +2,9 @@ import React, {useEffect, useRef, useState} from 'react';
 import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import type { FormInstance } from 'antd';
 import { message } from 'antd';
-import { addTransferRecord } from '@/services/transfer-record/transfer-record';
-import type {TransferRecordForm, TransferRecordVO} from '@/services/transfer-record/typings';
-import FormBody from '@/pages/HR/TransferRecordList/components/FormBody';
+import { addStaffChange } from '@/services/staff-change/staff-change';
+import type {StaffChangeForm, StaffChangeVO} from '@/services/staff-change/typings';
+import FormBody from '@/pages/HR/StaffChangeList/components/FormBody';
 import { ModalForm } from '@ant-design/pro-form';
 import type { ActionType } from '@ant-design/pro-table';
 import {getStaffById} from "@/services/staff/staff";
@@ -19,12 +19,12 @@ interface CreateFormProps {
 const CreateForm: React.FC<CreateFormProps> = (props) => {
   const { createModalVisible, handleCreateModalVisible, tableActionRef, staffId } = props;
 
-  const [transferRecordInitialValues, setTransferRecordInitialValues] = useState<TransferRecordVO>({});
+  const [staffChangeInitialValues, setStaffChangeInitialValues] = useState<StaffChangeVO>({});
 
   useEffect(() => {
     if (staffId) {
       getStaffById(staffId).then(({ data }) => {
-        setTransferRecordInitialValues(data ? {
+        setStaffChangeInitialValues(data ? {
           ...data,
           id: undefined,
           staffId: data.id,
@@ -52,10 +52,10 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
    * 添加调动记录
    * @param fields
    */
-  const handleAdd = async (fields: TransferRecordForm) => {
+  const handleAdd = async (fields: StaffChangeForm) => {
     const hide = message.loading('正在添加');
     try {
-      await addTransferRecord({ ...fields });
+      await addStaffChange({ ...fields });
       hide();
       message.success('添加成功');
       handleCreateModalVisible(false);
@@ -74,13 +74,13 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
         visible={createModalVisible}
         onVisibleChange={handleCreateModalVisible}
         formRef={formRef}
-        initialValues={transferRecordInitialValues}
+        initialValues={staffChangeInitialValues}
         modalProps={{
           destroyOnClose: true,
         }}
         onFinish={handleAdd}
       >
-        {!staffId || transferRecordInitialValues && Object.keys(transferRecordInitialValues).length ? (
+        {!staffId || staffChangeInitialValues && Object.keys(staffChangeInitialValues).length ? (
           <FormBody staffId={staffId} formRef={formRef} />
         ) : null}
       </ModalForm>

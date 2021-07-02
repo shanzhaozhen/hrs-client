@@ -1,4 +1,4 @@
-export type TransferRecordForm = {
+export type StaffChangeForm = {
   /** 主键ID */
   id?: number;
   /** 员工id */
@@ -29,7 +29,7 @@ export type TransferRecordForm = {
   remarks?: string;
 };
 
-export type TransferRecordVO = {
+export type StaffChangeVO = {
   /** 主键ID */
   id?: number;
   /** 员工id */

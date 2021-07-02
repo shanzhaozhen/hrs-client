@@ -101,10 +101,10 @@ export default [
         component: './HR/StaffList',
       },
       {
-        path: '/hr/transfer-record',
-        name: 'transfer-record',
+        path: '/hr/staff-change',
+        name: 'staff-change',
         icon: 'smile',
-        component: './HR/TransferRecordList',
+        component: './HR/StaffChangeList',
       },
     ],
   },
