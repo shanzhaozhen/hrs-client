@@ -38,13 +38,13 @@ const CertificateList: React.FC<CertificateListProps> = (props) => {
       title: '证件类型',
       dataIndex: 'type',
       valueType: 'select',
-      request: async ({ keyWords }) => {
-        const { data } = await getDictionaryChildrenByCode('CertificateType', keyWords);
-        return data ? data.map(item => ({
-          value: item.name,
-          label: item.name
-        })) : []
-      }
+      // request: async ({ keyWords }) => {
+      //   const { data } = await getDictionaryChildrenByCode('CertificateType', keyWords);
+      //   return data ? data.map(item => ({
+      //     value: item.name,
+      //     label: item.name
+      //   })) : []
+      // }
     },
     {
       title: '证件号',
