@@ -1,45 +1,66 @@
 import type { StaffForm } from "@/services/staff/typings";
 
 export const convertStaffForm = (fields: StaffForm): StaffForm => {
-  const newFields = { ...fields };
+  let { staffInfo } = fields;
 
-  if (fields.birthAddress) {
-    newFields.birthAddressProvince = fields.birthAddress.province;
-    newFields.birthAddressCity = fields.birthAddress.city;
+  if (staffInfo.birthAddress) {
+    staffInfo = {
+      ...staffInfo,
+      birthAddressProvince: fields.staffInfo.birthAddress.province,
+      birthAddressCity: fields.staffInfo.birthAddress.city,
+    }
   }
 
-  if (fields.nativeAddress) {
-    newFields.nativeAddressProvince = fields.nativeAddress.province;
-    newFields.nativeAddressCity = fields.nativeAddress.city;
+  if (staffInfo.nativeAddress) {
+    staffInfo = {
+      ...staffInfo,
+      nativeAddressProvince: fields.staffInfo.nativeAddress.province,
+      nativeAddressCity: fields.staffInfo.nativeAddress.city,
+    }
   }
 
-  if (fields.registeredAddress) {
-    newFields.registeredAddressProvince = fields.registeredAddress.province;
-    newFields.registeredAddressCity = fields.registeredAddress.city;
-    newFields.registeredAddressArea = fields.registeredAddress.area;
-    newFields.registeredAddressDetail = fields.registeredAddress.detail;
+  if (staffInfo.registeredAddress) {
+    staffInfo = {
+      ...staffInfo,
+      registeredAddressProvince: fields.staffInfo.registeredAddress.province,
+      registeredAddressCity: fields.staffInfo.registeredAddress.city,
+      registeredAddressArea: fields.staffInfo.registeredAddress.area,
+      registeredAddressDetail: fields.staffInfo.registeredAddress.detail
+    }
   }
 
-  if (fields.homeAddress) {
-    newFields.homeAddressProvince = fields.homeAddress.province;
-    newFields.homeAddressCity = fields.homeAddress.city;
-    newFields.homeAddressArea = fields.homeAddress.area;
-    newFields.homeAddressDetail = fields.homeAddress.detail;
+  if (staffInfo.homeAddress) {
+    staffInfo = {
+      ...staffInfo,
+      homeAddressProvince: fields.staffInfo.homeAddress.province,
+      homeAddressCity: fields.staffInfo.homeAddress.city,
+      homeAddressArea: fields.staffInfo.homeAddress.area,
+      homeAddressDetail: fields.staffInfo.homeAddress.detail
+    }
   }
 
-  if (fields.currentAddress) {
-    newFields.currentAddressProvince = fields.currentAddress.province;
-    newFields.currentAddressCity = fields.currentAddress.city;
-    newFields.currentAddressArea = fields.currentAddress.area;
-    newFields.currentAddressDetail = fields.currentAddress.detail;
+  if (staffInfo.currentAddress) {
+    staffInfo = {
+      ...staffInfo,
+      currentAddressProvince: fields.staffInfo.currentAddress.province,
+      currentAddressCity: fields.staffInfo.currentAddress.city,
+      currentAddressArea: fields.staffInfo.currentAddress.area,
+      currentAddressDetail: fields.staffInfo.currentAddress.detail
+    }
   }
 
-  if (fields.postalAddress) {
-    newFields.postalAddressProvince = fields.postalAddress.province;
-    newFields.postalAddressCity = fields.postalAddress.city;
-    newFields.postalAddressArea = fields.postalAddress.area;
-    newFields.postalAddressDetail = fields.postalAddress.detail;
+  if (staffInfo.postalAddress) {
+    staffInfo = {
+      ...staffInfo,
+      postalAddressProvince: fields.staffInfo.postalAddress.province,
+      postalAddressCity: fields.staffInfo.postalAddress.city,
+      postalAddressArea: fields.staffInfo.postalAddress.area,
+      postalAddressDetail: fields.staffInfo.postalAddress.detail
+    }
   }
 
-  return newFields;
+  return {
+    ...fields,
+    staffInfo: staffInfo
+  };
 };

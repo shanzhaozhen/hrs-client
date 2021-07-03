@@ -3,7 +3,6 @@ import type { FormInstance } from 'antd';
 import {Col, Divider, Row, Tabs} from 'antd';
 import { ProFormDatePicker, ProFormSelect, ProFormText } from '@ant-design/pro-form';
 import type {StaffForm, StaffVO} from "@/services/staff/typings";
-import { getDictionaryChildrenByCode } from "@/services/dictionary/dictionary";
 import RegionSelect from "@/components/RegionSelect";
 import type { RegionType } from "@/services/region/typings";
 import EducationalExperienceList from "@/pages/OtherInfo/components/EducationalExperienceList";
@@ -20,6 +19,7 @@ import MarriageInfo from "@/pages/OtherInfo/components/MarriageInfo";
 import EmergencyContactInfo from "@/pages/OtherInfo/components/EmergencyContactInfo";
 import ContactInfo from "@/pages/OtherInfo/components/ContactInfo";
 import CustomUpload from "@/components/CustomUpload";
+import {useOptions} from "@/utils/options";
 
 interface FormProps {
   isView?: boolean;
@@ -44,39 +44,50 @@ const FormBody: React.FC<FormProps> = (props) => {
   useEffect(() => {
     if (values) {
       setBirthAddress({
-        province: values.birthAddressProvince,
-        city: values.birthAddressCity
+        province: values.staffInfo?.birthAddressProvince,
+        city: values.staffInfo?.birthAddressCity
       });
       setNativeAddress({
-        province: values.nativeAddressProvince,
-        city: values.nativeAddressCity
+        province: values.staffInfo?.nativeAddressProvince,
+        city: values.staffInfo?.nativeAddressCity
       })
       setRegisteredAddress({
-        province: values.registeredAddressProvince,
-        city: values.registeredAddressCity,
-        area: values.registeredAddressArea,
-        detail: values.registeredAddressDetail
+        province: values.staffInfo?.registeredAddressProvince,
+        city: values.staffInfo?.registeredAddressCity,
+        area: values.staffInfo?.registeredAddressArea,
+        detail: values.staffInfo?.registeredAddressDetail
       })
       setHomeAddress({
-        province: values.homeAddressProvince,
-        city: values.homeAddressCity,
-        area: values.homeAddressArea,
-        detail: values.homeAddressDetail
+        province: values.staffInfo?.homeAddressProvince,
+        city: values.staffInfo?.homeAddressCity,
+        area: values.staffInfo?.homeAddressArea,
+        detail: values.staffInfo?.homeAddressDetail
       })
       setCurrentAddress({
-        province: values.currentAddressProvince,
-        city: values.currentAddressCity,
-        area: values.currentAddressArea,
-        detail: values.currentAddressDetail
+        province: values.staffInfo?.currentAddressProvince,
+        city: values.staffInfo?.currentAddressCity,
+        area: values.staffInfo?.currentAddressArea,
+        detail: values.staffInfo?.currentAddressDetail
       })
       setPostalAddress({
-        province: values.postalAddressProvince,
-        city: values.postalAddressCity,
-        area: values.postalAddressArea,
-        detail: values.postalAddressDetail
+        province: values.staffInfo?.postalAddressProvince,
+        city: values.staffInfo?.postalAddressCity,
+        area: values.staffInfo?.postalAddressArea,
+        detail: values.staffInfo?.postalAddressDetail
       })
     }
   }, []);
+
+  const dutyOptions = useOptions('Duty');
+  const postOptions = useOptions('Post');
+  const postTypeOptions = useOptions('PostType');
+  const postLevelOptions = useOptions('PostLevel');
+  const companyStateOptions = useOptions('CompanyState');
+  const householdTypeOptions = useOptions('HouseholdType');
+  const nationOptions = useOptions('Nation');
+  const politicsOptions = useOptions('Politics');
+  const educationOptions = useOptions('Education');
+  const degreeOptions = useOptions('Degree');
 
   return (
     <>
@@ -87,6 +98,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             <Col xl={16} lg={16} md={24}>
               <Row gutter={24}>
                 <ProFormText name="id" label="员工id" hidden={true} />
+                <ProFormText name={['staffInfo', 'id']} label="员工信息id" hidden={true} />
                 <Col xl={12} lg={24} md={24}>
                   <ProFormText
                     width="sm"
@@ -105,6 +117,9 @@ const FormBody: React.FC<FormProps> = (props) => {
                     readonly={isView}
                   />
                 </Col>
+                {/*
+                    todo: 部门改成树状选择
+                */}
                 <Col xl={12} lg={24} md={24}>
                   <ProFormSelect
                     width="sm"
@@ -128,13 +143,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                     name="duty"
                     label="职务"
                     rules={[{ required: false, message: '请选择职务' }]}
-                    request={async ({ keyWords }) => {
-                      const { data } = await getDictionaryChildrenByCode('Duty', keyWords);
-                      return data ? data.map(item => ({
-                        value: item.name,
-                        label: item.name
-                      })) : []
-                    }}
+                    options={dutyOptions}
                     readonly={isView}
                     disabled={isEdit}
                   />
@@ -145,13 +154,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                     name="post"
                     label="岗位"
                     rules={[{ required: false, message: '请选择岗位' }]}
-                    request={async ({ keyWords }) => {
-                      const { data } = await getDictionaryChildrenByCode('Post', keyWords);
-                      return data ? data.map(item => ({
-                        value: item.name,
-                        label: item.name
-                      })) : []
-                    }}
+                    options={postOptions}
                     readonly={isView}
                     disabled={isEdit}
                   />
@@ -162,13 +165,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                     name="postType"
                     label="岗位类型"
                     rules={[{ required: false, message: '请选择岗位类型' }]}
-                    request={async ({ keyWords }) => {
-                      const { data } = await getDictionaryChildrenByCode('PostType', keyWords);
-                      return data ? data.map(item => ({
-                        value: item.name,
-                        label: item.name
-                      })) : []
-                    }}
+                    options={postTypeOptions}
                     readonly={isView}
                     disabled={isEdit}
                   />
@@ -179,13 +176,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                     name="postLevel"
                     label="岗位等级"
                     rules={[{ required: false, message: '请选择岗位等级' }]}
-                    request={async ({ keyWords }) => {
-                      const { data } = await getDictionaryChildrenByCode('PostLevel', keyWords);
-                      return data ? data.map(item => ({
-                        value: item.name,
-                        label: item.name
-                      })) : []
-                    }}
+                    options={postLevelOptions}
                     readonly={isView}
                     disabled={isEdit}
                   />
@@ -196,13 +187,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                     name="companyState"
                     label="在司状态"
                     rules={[{ required: false, message: '请输入在司状态' }]}
-                    request={async ({ keyWords }) => {
-                      const { data } = await getDictionaryChildrenByCode('CompanyState', keyWords);
-                      return data ? data.map(item => ({
-                        value: item.name,
-                        label: item.name
-                      })) : []
-                    }}
+                    options={companyStateOptions}
                     readonly={isView}
                   />
                 </Col>
@@ -250,16 +235,10 @@ const FormBody: React.FC<FormProps> = (props) => {
             <Col xl={8} lg={12} md={24}>
               <ProFormSelect
                 width="sm"
-                name="nation"
+                name={['staffInfo', 'nation']}
                 label="民族"
-                rules={[{ required: false, message: '请选择民族' }]}
-                request={async ({ keyWords }) => {
-                  const { data } = await getDictionaryChildrenByCode('Nation', keyWords);
-                  return data ? data.map(item => ({
-                    value: item.name,
-                    label: item.name
-                  })) : []
-                }}
+                rules={[{ required: true, message: '请选择民族' }]}
+                options={nationOptions}
                 readonly={isView}
               />
             </Col>
@@ -293,81 +272,57 @@ const FormBody: React.FC<FormProps> = (props) => {
             <Col xl={8} lg={12} md={24}>
               <ProFormSelect
                 width="sm"
-                name="politics"
+                name={['staffInfo', 'politics']}
                 label="政治面貌"
                 rules={[{ required: false, message: '请选择政治面貌' }]}
-                request={async ({ keyWords }) => {
-                  const { data } = await getDictionaryChildrenByCode('Politics', keyWords);
-                  return data ? data.map(item => ({
-                    value: item.name,
-                    label: item.name
-                  })) : []
-                }}
+                options={politicsOptions}
                 readonly={isView}
               />
             </Col>
             <Col xl={8} lg={12} md={24}>
               <ProFormSelect
                 width="sm"
-                name="education"
+                name={['staffInfo', 'education']}
                 label="最高学历"
                 rules={[{ required: false, message: '请选择最高学历' }]}
-                request={async ({ keyWords }) => {
-                  const { data } = await getDictionaryChildrenByCode('Education', keyWords);
-                  return data ? data.map(item => ({
-                    value: item.name,
-                    label: item.name
-                  })) : []
-                }}
+                options={educationOptions}
                 readonly={isView}
               />
             </Col>
             <Col xl={8} lg={12} md={24}>
               <ProFormSelect
                 width="sm"
-                name="degree"
+                name={['staffInfo', 'degree']}
                 label="学位"
                 rules={[{ required: false, message: '请选择学位' }]}
-                request={async ({ keyWords }) => {
-                  const { data } = await getDictionaryChildrenByCode('Degree', keyWords);
-                  return data ? data.map(item => ({
-                    value: item.name,
-                    label: item.name
-                  })) : []
-                }}
+                options={degreeOptions}
                 readonly={isView}
               />
             </Col>
             <Col xl={8} lg={12} md={24}>
-              <ProFormItem name="birthAddress" label="出生地">
+              <ProFormItem name={['staffInfo', 'birthAddress']} label="出生地">
                 <RegionSelect level={2} customValue={birthAddress} readonly={isView} />
               </ProFormItem>
             </Col>
             <Col xl={8} lg={12} md={24}>
-              <ProFormItem name="nativeAddress" label="籍贯">
+              <ProFormItem name={['staffInfo', 'nativeAddress']} label="籍贯">
                 <RegionSelect level={2} customValue={nativeAddress} readonly={isView} />
               </ProFormItem>
             </Col>
             <Col xl={8} lg={12} md={24}>
               <ProFormSelect
                 width="sm"
-                name="householdType"
+                name={['staffInfo', 'householdType']}
                 label="户口类型"
                 rules={[{ required: false, message: '请选择户口类型' }]}
-                request={async ({ keyWords }) => {
-                  const { data } = await getDictionaryChildrenByCode('HouseholdType', keyWords);
-                  return data ? data.map(item => ({
-                    value: item.name,
-                    label: item.name
-                  })) : []
-                }}
+                options={householdTypeOptions}
                 readonly={isView}
               />
             </Col>
             <Col xl={8} lg={12} md={24}>
               <ProFormText
                 width="sm"
-                name="parentalSupport"
+                name={['staffInfo', 'parentalSupport']}
                 label="父母赡养情况"
                 rules={[{ required: false, message: '请输入父母赡养情况' }]}
                 readonly={isView}
@@ -376,7 +331,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             <Col xl={8} lg={12} md={24}>
               <ProFormText
                 width="sm"
-                name="specialty"
+                name={['staffInfo', 'specialty']}
                 label="特长"
                 rules={[{ required: false, message: '请输入特长' }]}
                 readonly={isView}
@@ -385,7 +340,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             <Col xl={8} lg={12} md={24}>
               <ProFormText
                 width="sm"
-                name="hobby"
+                name={['staffInfo', 'hobby']}
                 label="爱好"
                 rules={[{ required: false, message: '请输入爱好' }]}
                 readonly={isView}
@@ -394,23 +349,23 @@ const FormBody: React.FC<FormProps> = (props) => {
           </Row>
           <Row gutter={24}>
             <Col xl={12} lg={12} md={24}>
-              <ProFormItem name="registeredAddress" label="户口地址">
+              <ProFormItem name={['staffInfo', 'registeredAddress']} label="户口地址">
                 <RegionSelect level={3} customValue={registeredAddress} haveDetail readonly={isView} />
               </ProFormItem>
             </Col>
             <Col xl={12} lg={12} md={24}>
-              <ProFormItem name="homeAddress" label="家庭住址">
+              <ProFormItem name={['staffInfo', 'homeAddress']} label="家庭住址">
                 <RegionSelect level={3} customValue={homeAddress} haveDetail readonly={isView} />
               </ProFormItem>
             </Col>
 
             <Col xl={12} lg={12} md={24}>
-              <ProFormItem name="currentAddress" label="现住地址">
+              <ProFormItem name={['staffInfo', 'currentAddress']} label="现住地址">
                 <RegionSelect level={3} customValue={currentAddress} haveDetail readonly={isView} />
               </ProFormItem>
             </Col>
             <Col xl={12} lg={12} md={24}>
-              <ProFormItem name="postalAddress" label="邮递地址">
+              <ProFormItem name={['staffInfo', 'postalAddress']} label="邮递地址">
                 <RegionSelect level={3} customValue={postalAddress} haveDetail readonly={isView} />
               </ProFormItem>
             </Col>

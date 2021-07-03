@@ -15,7 +15,7 @@ const ArmyInfo: React.FC<ArmyInfoProps> = (props) => {
         <Col xl={8} lg={12} md={24}>
           <ProFormText
             width="sm"
-            name="troopBase"
+            name={['staffInfo', 'troopBase']}
             label="部队驻扎地"
             rules={[{ required: false, message: '请输入部队驻扎地' }]}
             readonly={isView}
@@ -24,7 +24,7 @@ const ArmyInfo: React.FC<ArmyInfoProps> = (props) => {
         <Col xl={8} lg={12} md={24}>
           <ProFormDatePicker
             width="sm"
-            name="enlistmentDate"
+            name={['staffInfo', 'enlistmentDate']}
             label="入伍时间"
             rules={[{ required: false, message: '请选择入伍时间' }]}
             readonly={isView}
@@ -33,7 +33,7 @@ const ArmyInfo: React.FC<ArmyInfoProps> = (props) => {
         <Col xl={8} lg={12} md={24}>
           <ProFormDatePicker
             width="sm"
-            name="dischargeDate"
+            name={['staffInfo', 'dischargeDate']}
             label="退伍时间"
             rules={[{ required: false, message: '请选择退伍时间' }]}
             readonly={isView}
@@ -42,7 +42,7 @@ const ArmyInfo: React.FC<ArmyInfoProps> = (props) => {
         <Col xl={8} lg={12} md={24}>
           <ProFormText
             width="sm"
-            name="dischargeRank"
+            name={['staffInfo', 'dischargeRank']}
             label="退伍时军衔"
             rules={[{ required: false, message: '请输入退伍时军衔' }]}
             readonly={isView}
@@ -51,7 +51,7 @@ const ArmyInfo: React.FC<ArmyInfoProps> = (props) => {
         <Col xl={8} lg={12} md={24}>
           <ProFormText
             width="sm"
-            name="honour"
+            name={['staffInfo', 'honour']}
             label="立功"
             rules={[{ required: false, message: '请输入立功' }]}
             readonly={isView}

@@ -15,7 +15,7 @@ const PhysicalInfo: React.FC<PhysicalInfoProps> = (props) => {
         <Col xl={8} lg={12} md={24}>
           <ProFormText
             width="sm"
-            name="physicalCondition"
+            name={['staffInfo', 'physicalCondition']}
             label="本人身体状况"
             rules={[{ required: false, message: '请输入本人身体状况' }]}
             readonly={isView}
@@ -24,7 +24,7 @@ const PhysicalInfo: React.FC<PhysicalInfoProps> = (props) => {
         <Col xl={8} lg={12} md={24}>
           <ProFormText
             width="sm"
-            name="weight"
+            name={['staffInfo', 'weight']}
             label="体重(KG)"
             rules={[{ required: false, message: '请输入体重(KG)' }]}
             readonly={isView}
@@ -33,7 +33,7 @@ const PhysicalInfo: React.FC<PhysicalInfoProps> = (props) => {
         <Col xl={8} lg={12} md={24}>
           <ProFormText
             width="sm"
-            name="height"
+            name={['staffInfo', 'height']}
             label="身高(CM)"
             rules={[{ required: false, message: '请输入身高(CM)' }]}
             readonly={isView}
@@ -42,7 +42,7 @@ const PhysicalInfo: React.FC<PhysicalInfoProps> = (props) => {
         <Col xl={8} lg={12} md={24}>
           <ProFormText
             width="sm"
-            name="vision"
+            name={['staffInfo', 'vision']}
             label="视力"
             rules={[{ required: false, message: '请输入视力' }]}
             readonly={isView}
@@ -51,7 +51,7 @@ const PhysicalInfo: React.FC<PhysicalInfoProps> = (props) => {
         <Col xl={8} lg={12} md={24}>
           <ProFormText
             width="sm"
-            name="bloodType"
+            name={['staffInfo', 'bloodType']}
             label="血型"
             rules={[{ required: false, message: '请输入血型' }]}
             readonly={isView}
@@ -60,7 +60,7 @@ const PhysicalInfo: React.FC<PhysicalInfoProps> = (props) => {
         <Col xl={8} lg={12} md={24}>
           <ProFormText
             width="sm"
-            name="medicalHistory"
+            name={['staffInfo', 'medicalHistory']}
             label="遗传病史或传染病"
             rules={[{ required: false, message: '请输入遗传病史或传染病' }]}
             readonly={isView}

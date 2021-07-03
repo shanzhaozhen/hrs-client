@@ -1,7 +1,7 @@
 import React from 'react';
 import {Col, Row} from "antd";
 import {ProFormDatePicker, ProFormDigit, ProFormSelect, ProFormText} from "@ant-design/pro-form";
-import {getDictionaryChildrenByCode} from "@/services/dictionary/dictionary";
+import {useOptions} from "@/utils/options";
 
 interface DriverInfoProps {
   isView?: boolean;
@@ -9,6 +9,8 @@ interface DriverInfoProps {
 
 const DriverInfo: React.FC<DriverInfoProps> = (props) => {
   const { isView } = props;
+
+  const driverLicenseTypeOptions = useOptions('DriverLicenseType');
 
   return (
     <>
@@ -19,13 +21,7 @@ const DriverInfo: React.FC<DriverInfoProps> = (props) => {
             name="driverLicenseType"
             label="驾驶证类型"
             rules={[{ required: false, message: '请选择驾驶证类型' }]}
-            request={async ({ keyWords }) => {
-              const { data } = await getDictionaryChildrenByCode('DriverLicenseType', keyWords);
-              return data ? data.map(item => ({
-                value: item.name,
-                label: item.name
-              })) : []
-            }}
+            options={driverLicenseTypeOptions}
             readonly={isView}
           />
         </Col>

@@ -15,7 +15,7 @@ const ContactInfo: React.FC<ContactInfoProps> = (props) => {
         <Col xl={8} lg={12} md={24}>
           <ProFormText
             width="sm"
-            name="phone"
+            name={['staffInfo', 'phone']}
             label="联系电话"
             placeholder="请输入联系电话"
             readonly={isView}
@@ -24,7 +24,7 @@ const ContactInfo: React.FC<ContactInfoProps> = (props) => {
         <Col xl={8} lg={12} md={24}>
           <ProFormText
             width="sm"
-            name="homePhone"
+            name={['staffInfo', 'homePhone']}
             label="家庭电话"
             placeholder="请输入联系电话"
             readonly={isView}
@@ -33,7 +33,7 @@ const ContactInfo: React.FC<ContactInfoProps> = (props) => {
         <Col xl={8} lg={12} md={24}>
           <ProFormText
             width="sm"
-            name="email"
+            name={['staffInfo', 'email']}
             label="邮箱"
             placeholder="请输入邮箱"
             readonly={isView}
@@ -42,7 +42,7 @@ const ContactInfo: React.FC<ContactInfoProps> = (props) => {
         <Col xl={8} lg={12} md={24}>
           <ProFormText
             width="sm"
-            name="qq"
+            name={['staffInfo', 'qq']}
             label="QQ"
             placeholder="请输入联系QQ"
             readonly={isView}

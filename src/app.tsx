@@ -27,6 +27,7 @@ const loopMenuItem = (menuData: MenuDataItem[]): MenuDataItem[] =>
   menuData.map(({ icon, children, ...item }) => ({
     ...item,
     icon: icon && iconMap[icon as string] && React.createElement(iconMap[icon as string]),
+    access: '',
     children: children && loopMenuItem(children),
   }));
 

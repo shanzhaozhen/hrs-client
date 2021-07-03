@@ -48,11 +48,23 @@ export default defineConfig({
   manifest: {
     basePath: '/',
   },
-  openAPI: {
-    requestLibPath: "import { request } from 'umi'",
-    // 或者使用在线的版本
-    schemaPath: 'http://localhost:8080/v3/api-docs',
-    // schemaPath: join(__dirname, 'oneapi.json'),
-    mock: false,
-  },
+  openAPI: [
+    {
+      requestLibPath: "import { request } from 'umi'",
+      // 或者使用在线的版本
+      schemaPath: 'http://localhost:8080/v3/api-docs',
+      // schemaPath: join(__dirname, 'oneapi.json'),
+      mock: false,
+    },
+    {
+      requestLibPath: "import { request } from 'umi'",
+      schemaPath: 'http://localhost:8080/v3/api-docs',
+      projectName: 'hrs',
+    }
+  ]
+  // 启动时间有点慢，试试新出的 MFSU 方案，1s+ 完成启动，详见 https://github.com/umijs/umi/issues/6766
+  // 只需要 dev，这么配
+  // mfsu: {},
+  // 如果需要针对生产环境生效，这么配
+  // mfsu: { production: { output: '.mfsu-production' } },
 });

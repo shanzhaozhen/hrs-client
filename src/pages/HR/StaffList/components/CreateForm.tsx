@@ -54,6 +54,10 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
         drawerProps={{
           destroyOnClose: true,
         }}
+        onValuesChange={(changedValues: any, allValues: any) => {
+          console.log('changedValues', changedValues)
+          console.log('allValues', allValues)
+        }}
         onFinish={handleAdd}
       >
         <FormBody

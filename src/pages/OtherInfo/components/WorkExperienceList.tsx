@@ -5,6 +5,7 @@ import type { WorkExperienceForm, WorkExperienceVO } from "@/services/work-exper
 import type { FormInstance } from "antd";
 import ProFormItem from "@ant-design/pro-form/lib/components/FormItem";
 import {getDictionaryChildrenByCode} from "@/services/dictionary/dictionary";
+import {useOptions} from "@/utils/options";
 
 interface WorkExperienceListProps {
   readonly?: boolean;
@@ -14,6 +15,8 @@ interface WorkExperienceListProps {
 
 const WorkExperienceList: React.FC<WorkExperienceListProps> = (props) => {
   const { readonly, editForm, value } = props;
+
+  const unitTypeOptions = useOptions('UnitType');
 
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>(() =>
     !readonly && value ? value.map((item) => item.id) : []
@@ -52,13 +55,13 @@ const WorkExperienceList: React.FC<WorkExperienceListProps> = (props) => {
       title: '单位性质',
       dataIndex: 'unitType',
       valueType: 'select',
-      request: async ({ keyWords }) => {
-        const { data } = await getDictionaryChildrenByCode('UnitType', keyWords);
-        return data ? data.map(item => ({
-          value: item.name,
-          label: item.name
-        })) : []
-      }
+      // request: async ({ keyWords }) => {
+      //   const { data } = await getDictionaryChildrenByCode('UnitType', keyWords);
+      //   return data ? data.map(item => ({
+      //     value: item.name,
+      //     label: item.name
+      //   })) : []
+      // }
     },
     {
       title: '月薪',
