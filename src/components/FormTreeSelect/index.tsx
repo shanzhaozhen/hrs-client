@@ -10,11 +10,12 @@ interface FormTreeSelectProps {
   treeData?: DataNode[];
   onChange?: (value: any) => void;
   disabled?: boolean;
+  style?: React.CSSProperties;
   value?: any;
 }
 
 const FormTreeSelect: React.FC<FormTreeSelectProps> = (props) => {
-  const { placeholder, loadData, treeData, onChange, disabled, value } = props;
+  const { placeholder, loadData, treeData, onChange, disabled, style, value } = props;
 
   const triggerChange = (changeValue: number[]) => {
     onChange?.(changeValue);
@@ -24,7 +25,10 @@ const FormTreeSelect: React.FC<FormTreeSelectProps> = (props) => {
     <TreeSelect
       showSearch
       allowClear
-      style={{ width: '100%' }}
+      style={{
+        width: '100%',
+        ...style
+      }}
       dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
       value={value}
       loadData={loadData}

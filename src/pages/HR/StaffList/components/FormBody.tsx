@@ -9,7 +9,6 @@ import EducationalExperienceList from "@/pages/OtherInfo/components/EducationalE
 import WorkExperienceList from "@/pages/OtherInfo/components/WorkExperienceList";
 import CertificateList from "@/pages/OtherInfo/components/CertificateList";
 import FamilyList from "@/pages/OtherInfo/components/FamilyList";
-import {getAllDepartments} from "@/services/department/department";
 import ProFormItem from "@ant-design/pro-form/lib/components/FormItem";
 import PhotoUpload from "@/components/PhotoUpload";
 import DriverInfo from "@/pages/OtherInfo/components/DriverInfo";
@@ -20,6 +19,8 @@ import EmergencyContactInfo from "@/pages/OtherInfo/components/EmergencyContactI
 import ContactInfo from "@/pages/OtherInfo/components/ContactInfo";
 import CustomUpload from "@/components/CustomUpload";
 import {useOptions} from "@/utils/options";
+import FormTreeSelect from "@/components/FormTreeSelect";
+import {useDepartmentTree} from "@/utils/department";
 
 interface FormProps {
   isView?: boolean;
@@ -78,6 +79,7 @@ const FormBody: React.FC<FormProps> = (props) => {
     }
   }, []);
 
+  const departmentTree = useDepartmentTree();
   const dutyOptions = useOptions('Duty');
   const postOptions = useOptions('Post');
   const postTypeOptions = useOptions('PostType');
@@ -99,6 +101,7 @@ const FormBody: React.FC<FormProps> = (props) => {
               <Row gutter={24}>
                 <ProFormText name="id" label="员工id" hidden={true} />
                 <ProFormText name={['staffInfo', 'id']} label="员工信息id" hidden={true} />
+                <ProFormText name={['staffInfo', 'staffId']} label="关联员工id" hidden={true} />
                 <Col xl={12} lg={24} md={24}>
                   <ProFormText
                     width="sm"
@@ -117,11 +120,16 @@ const FormBody: React.FC<FormProps> = (props) => {
                     readonly={isView}
                   />
                 </Col>
-                {/*
-                    todo: 部门改成树状选择
-                */}
                 <Col xl={12} lg={24} md={24}>
-                  <ProFormSelect
+                  <ProFormItem
+                    name="depId"
+                    label="部门"
+                    rules={[{ required: true, message: '请选择部门' }]}
+                  >
+                    <FormTreeSelect treeData={departmentTree} style={{ width: 216 }} placeholder="请选择部门" />
+                  </ProFormItem>
+
+                  {/* <ProFormSelect
                     width="sm"
                     name="depId"
                     label="部门"
@@ -135,7 +143,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                     }}
                     readonly={isView}
                     disabled={isEdit}
-                  />
+                  /> */}
                 </Col>
                 <Col xl={12} lg={24} md={24}>
                   <ProFormSelect

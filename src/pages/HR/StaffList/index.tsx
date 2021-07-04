@@ -14,7 +14,7 @@ import ViewForm from "@/pages/HR/StaffList/components/ViewForm";
 import { useDepartmentList, useDepartmentTree } from "@/utils/department";
 import FormTreeSelect from "@/components/FormTreeSelect";
 import { ProFormUploadDragger} from "@ant-design/pro-form";
-import {downloadFile} from "@/utils/file";
+import { downloadFile } from "@/utils/file";
 
 const StaffList: React.FC = () => {
   const actionRef = useRef<ActionType>();
@@ -29,7 +29,6 @@ const StaffList: React.FC = () => {
 
   const departmentList = useDepartmentList();
   const departmentTree = useDepartmentTree();
-
 
   // /**
   //  * 批量删除员工
@@ -240,7 +239,6 @@ const StaffList: React.FC = () => {
     },
   ];
 
-  // @ts-ignore
   return (
     <PageContainer>
       <ProTable<StaffVO>
@@ -262,7 +260,6 @@ const StaffList: React.FC = () => {
             type="primary"
             onClick={() => {
               const fieldsValue = formRef.current?.getFieldsValue();
-              console.log(fieldsValue);
               exportStaff({
                 ...fieldsValue
               }).then(data => {
@@ -275,7 +272,8 @@ const StaffList: React.FC = () => {
           <Button
             type="primary"
             onClick={() => {
-              printStaff(23452345234).then(data => {
+              const fieldsValue = formRef.current?.getFieldsValue();
+              printStaff(fieldsValue.id).then(data => {
                 downloadFile(data, `员工-${new Date().getTime()}.docx`)
               })
             }}
