@@ -1,7 +1,6 @@
 import React from 'react';
 import {Col, Row} from "antd";
 import {ProFormSelect, ProFormText} from "@ant-design/pro-form";
-import {getDictionaryChildrenByCode} from "@/services/dictionary/dictionary";
 import {useOptions} from "@/utils/options";
 
 interface EmergencyContactInfoProps {

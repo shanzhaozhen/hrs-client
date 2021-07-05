@@ -2,10 +2,10 @@ import React, {useState} from 'react';
 import type { ProColumns } from "@ant-design/pro-table";
 import { EditableProTable } from "@ant-design/pro-table";
 import type { CertificateForm, CertificateVO } from "@/services/certificate/typings";
-import { getDictionaryChildrenByCode } from "@/services/dictionary/dictionary";
 import type { FormInstance } from "antd";
 import CustomUpload from "@/components/CustomUpload";
 import ProFormItem from "@ant-design/pro-form/lib/components/FormItem";
+import {useOptions} from "@/utils/options";
 
 interface CertificateListProps {
   readonly?: boolean;
@@ -15,6 +15,8 @@ interface CertificateListProps {
 
 const CertificateList: React.FC<CertificateListProps> = (props) => {
   const { readonly, editForm, value } = props;
+
+  const certificateTypeOptions = useOptions('CertificateType');
 
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>(() =>
     !readonly && value ? value.map((item) => item.id) : []
@@ -38,13 +40,7 @@ const CertificateList: React.FC<CertificateListProps> = (props) => {
       title: '证件类型',
       dataIndex: 'type',
       valueType: 'select',
-      // request: async ({ keyWords }) => {
-      //   const { data } = await getDictionaryChildrenByCode('CertificateType', keyWords);
-      //   return data ? data.map(item => ({
-      //     value: item.name,
-      //     label: item.name
-      //   })) : []
-      // }
+      fieldProps: { options: certificateTypeOptions }
     },
     {
       title: '证件号',

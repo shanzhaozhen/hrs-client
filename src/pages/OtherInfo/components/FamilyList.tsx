@@ -2,9 +2,9 @@ import React, {useState} from 'react';
 import type { ProColumns } from "@ant-design/pro-table";
 import { EditableProTable } from "@ant-design/pro-table";
 import type { FamilyForm, FamilyVO } from "@/services/family/typings";
-import {getDictionaryChildrenByCode} from "@/services/dictionary/dictionary";
 import type { FormInstance } from "antd";
 import ProFormItem from "@ant-design/pro-form/lib/components/FormItem";
+import {useOptions} from "@/utils/options";
 
 interface FamilyListProps {
   readonly?: boolean;
@@ -14,6 +14,9 @@ interface FamilyListProps {
 
 const FamilyList: React.FC<FamilyListProps> = (props) => {
   const { readonly, editForm, value } = props;
+
+  const relationOptions = useOptions('Relation');
+  const politicsOptions = useOptions('Politics');
 
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>(() =>
     !readonly && value ? value.map((item) => item.id) : []
@@ -36,7 +39,7 @@ const FamilyList: React.FC<FamilyListProps> = (props) => {
     {
       title: '关系',
       dataIndex: 'relation',
-      valueType: 'text',
+      valueType: 'select',
       formItemProps: {
         rules: [
           {
@@ -45,13 +48,7 @@ const FamilyList: React.FC<FamilyListProps> = (props) => {
           },
         ],
       },
-      request: async ({ keyWords }) => {
-        const { data } = await getDictionaryChildrenByCode('Relation', keyWords);
-        return data ? data.map(item => ({
-          value: item.name,
-          label: item.name
-        })) : []
-      }
+      fieldProps: { options: relationOptions }
     },
     {
       title: '出生日期',
@@ -62,13 +59,7 @@ const FamilyList: React.FC<FamilyListProps> = (props) => {
       title: '政治面貌',
       dataIndex: 'politics',
       valueType: 'text',
-      request: async ({ keyWords }) => {
-        const { data } = await getDictionaryChildrenByCode('Politics', keyWords);
-        return data ? data.map(item => ({
-          value: item.name,
-          label: item.name
-        })) : []
-      }
+      fieldProps: { options: politicsOptions }
     },
     {
       title: '工作单位',

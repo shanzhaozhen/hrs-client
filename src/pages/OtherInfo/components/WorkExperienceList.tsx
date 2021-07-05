@@ -4,7 +4,6 @@ import { EditableProTable } from "@ant-design/pro-table";
 import type { WorkExperienceForm, WorkExperienceVO } from "@/services/work-experience/typings";
 import type { FormInstance } from "antd";
 import ProFormItem from "@ant-design/pro-form/lib/components/FormItem";
-import {getDictionaryChildrenByCode} from "@/services/dictionary/dictionary";
 import {useOptions} from "@/utils/options";
 
 interface WorkExperienceListProps {
@@ -55,13 +54,7 @@ const WorkExperienceList: React.FC<WorkExperienceListProps> = (props) => {
       title: '单位性质',
       dataIndex: 'unitType',
       valueType: 'select',
-      // request: async ({ keyWords }) => {
-      //   const { data } = await getDictionaryChildrenByCode('UnitType', keyWords);
-      //   return data ? data.map(item => ({
-      //     value: item.name,
-      //     label: item.name
-      //   })) : []
-      // }
+      fieldProps: { options: unitTypeOptions }
     },
     {
       title: '月薪',

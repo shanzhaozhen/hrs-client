@@ -52,7 +52,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
         }}
         onFinish={handleAdd}
       >
-        <FormBody />
+        <FormBody formRef={formRef} />
       </ModalForm>
     </>
   );

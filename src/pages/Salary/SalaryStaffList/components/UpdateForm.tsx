@@ -4,22 +4,21 @@ import {Button, message} from 'antd';
 import type { StaffForm, StaffVO } from '@/services/staff/typings';
 import FormBody from '@/pages/HR/StaffList/components/FormBody';
 import { updateStaff } from '@/services/staff/staff';
-import ProForm, { DrawerForm } from '@ant-design/pro-form';
+import ProForm, { ModalForm } from '@ant-design/pro-form';
 import type { ActionType } from '@ant-design/pro-table';
 import {convertStaffForm} from "@/utils/staff";
 import {HistoryOutlined} from "@ant-design/icons";
 import StaffChangeModal from "@/pages/HR/StaffChangeList/components/ModalBody";
 
 export interface UpdateFormProps {
-  updateDrawerVisible: boolean;
-  handleUpdateDrawerVisible: Dispatch<SetStateAction<boolean>>;
-  onCancel: () => void;
+  updateModalVisible: boolean;
+  handleUpdateModalVisible: Dispatch<SetStateAction<boolean>>;
   tableActionRef: MutableRefObject<ActionType | undefined>;
   values?: StaffForm | StaffVO;
 }
 
 const UpdateForm: React.FC<UpdateFormProps> = (props) => {
-  const { updateDrawerVisible, handleUpdateDrawerVisible, onCancel, tableActionRef, values } = props;
+  const { updateModalVisible, handleUpdateModalVisible, tableActionRef, values } = props;
 
   const [staffChangeModalVisible, setStaffChangeModalVisible] = useState<boolean>(false);
 
@@ -42,7 +41,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
       await updateStaff(convertStaffForm(fields));
       hide();
       message.success('修改成功');
-      handleUpdateDrawerVisible(false);
+      handleUpdateModalVisible(false);
       tableActionRef.current?.reloadAndRest?.();
       // message.error(res.message || '修改失败请重试！');
     } catch (error) {
@@ -53,7 +52,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
 
   return (
     <>
-      <DrawerForm
+      <ModalForm
         width={'75%'}
         title={
           <>
@@ -69,11 +68,10 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
             </Button>
           </>
         }
-        visible={updateDrawerVisible}
-        onVisibleChange={handleUpdateDrawerVisible}
+        visible={updateModalVisible}
+        onVisibleChange={handleUpdateModalVisible}
         initialValues={values}
-        drawerProps={{
-          onClose: onCancel,
+        modalProps={{
           destroyOnClose: true,
         }}
         onFinish={handleUpdate}
@@ -88,7 +86,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
             familyForm={familyForm}
           />
         ) : null}
-      </DrawerForm>
+      </ModalForm>
 
       <StaffChangeModal
         staffChangeModalVisible={staffChangeModalVisible}

@@ -21,9 +21,9 @@ const StaffSalaryList: React.FC = () => {
   const formRef = useRef<FormInstance>();
 
   const [updateFormValues, setUpdateFormValues] = useState<StaffSalaryVO | StaffSalaryForm>({});
-  const [viewDrawerVisible, handleViewDrawerVisible] = useState<boolean>(false);
-  const [createDrawerVisible, handleCreateDrawerVisible] = useState<boolean>(false);
-  const [updateDrawerVisible, handleUpdateDrawerVisible] = useState<boolean>(false);
+  const [viewModalVisible, handleViewModalVisible] = useState<boolean>(false);
+  const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
+  const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [selectedRowsState, setSelectedRows] = useState<StaffSalaryVO[]>([]);
   const [importModalVisible, setImportModalVisible] = useState<boolean>(false);
 
@@ -83,7 +83,7 @@ const StaffSalaryList: React.FC = () => {
       sorter: true,
       renderText: (_, record) => (tableFilter(record.depId, departmentList, '未分配')),
       renderFormItem: () => {
-        return <FormTreeSelect treeData={departmentTree} placeholder="请选择所属部门" />
+        return <FormTreeSelect treeData={departmentTree} placeholder="请选择部门" />
       }
     },
     {
@@ -117,76 +117,6 @@ const StaffSalaryList: React.FC = () => {
       },
     },
     {
-      title: '性别',
-      dataIndex: 'sex',
-      valueType: 'text',
-      hideInSearch: true,
-      hideInTable: true,
-    },
-    {
-      title: '在司状态',
-      dataIndex: 'companyState',
-      valueType: 'text',
-      hideInSearch: true,
-      hideInTable: true,
-    },
-    {
-      title: '职务',
-      dataIndex: 'duty',
-      valueType: 'text',
-      hideInSearch: true,
-      hideInTable: true,
-    },
-    {
-      title: '岗位',
-      dataIndex: 'post',
-      valueType: 'text',
-      hideInSearch: true,
-      hideInTable: true,
-    },
-    {
-      title: '岗位类型',
-      dataIndex: 'postType',
-      valueType: 'text',
-      hideInSearch: true,
-      hideInTable: true,
-    },
-    {
-      title: '民族',
-      dataIndex: 'nation',
-      valueType: 'text',
-      hideInSearch: true,
-      hideInTable: true,
-    },
-    {
-      title: '出生日期',
-      dataIndex: 'birthday',
-      valueType: 'text',
-      hideInSearch: true,
-      hideInTable: true,
-    },
-    {
-      title: '开始工作时间',
-      dataIndex: 'workDate',
-      valueType: 'text',
-      hideInSearch: true,
-      hideInTable: true,
-    },
-    {
-      title: '入职日期',
-      dataIndex: 'entryDate',
-      valueType: 'text',
-      hideInSearch: true,
-      hideInTable: true,
-    },
-    {
-      title: '入职日期',
-      dataIndex: 'entryDate',
-      valueType: 'date',
-      hideInSearch: true,
-      hideInTable: true,
-    },
-    {
       title: '创建时间',
       dataIndex: 'createdDate',
       valueType: 'dateTime',
@@ -213,7 +143,7 @@ const StaffSalaryList: React.FC = () => {
               if (record && record.id) {
                 const { data } = await getStaffSalaryById(record.id);
                 setUpdateFormValues(data || {});
-                handleViewDrawerVisible(true);
+                handleViewModalVisible(true);
               } else {
                 message.warn('没有选中有效的员工');
               }
@@ -227,7 +157,7 @@ const StaffSalaryList: React.FC = () => {
               if (record && record.id) {
                 const { data } = await getStaffSalaryById(record.id);
                 setUpdateFormValues(data || {});
-                handleUpdateDrawerVisible(true);
+                handleUpdateModalVisible(true);
               } else {
                 message.warn('没有选中有效的员工');
               }
@@ -251,7 +181,7 @@ const StaffSalaryList: React.FC = () => {
           labelWidth: 120,
         }}
         toolBarRender={() => [
-          <Button type="primary" onClick={() => handleCreateDrawerVisible(true)}>
+          <Button type="primary" onClick={() => handleCreateModalVisible(true)}>
             <PlusOutlined /> 新建
           </Button>,
           <Button type="primary" onClick={() => setImportModalVisible(true)}>
@@ -261,7 +191,6 @@ const StaffSalaryList: React.FC = () => {
             type="primary"
             onClick={() => {
               const fieldsValue = formRef.current?.getFieldsValue();
-              console.log(fieldsValue);
               exportStaffSalary({
                 ...fieldsValue
               }).then(data => {
@@ -274,7 +203,8 @@ const StaffSalaryList: React.FC = () => {
           <Button
             type="primary"
             onClick={() => {
-              printStaffSalary(23452345234).then(data => {
+              const fieldsValue = formRef.current?.getFieldsValue();
+              printStaffSalary(fieldsValue.id).then(data => {
                 downloadFile(data, `员工-${new Date().getTime()}.docx`)
               })
             }}
@@ -311,20 +241,18 @@ const StaffSalaryList: React.FC = () => {
       )}
 
       <ViewForm
-        viewDrawerVisible={viewDrawerVisible}
-        handleViewDrawerVisible={handleViewDrawerVisible}
-        values={updateFormValues}
+        viewModalVisible={viewModalVisible}
+        handleViewModalVisible={handleViewModalVisible}
         onCancel={() => setUpdateFormValues({})}
       />
       <CreateForm
-        createDrawerVisible={createDrawerVisible}
-        handleCreateDrawerVisible={handleCreateDrawerVisible}
+        createModalVisible={createModalVisible}
+        handleCreateModalVisible={handleCreateModalVisible}
         tableActionRef={actionRef}
       />
       <UpdateForm
-        updateDrawerVisible={updateDrawerVisible}
-        handleUpdateDrawerVisible={handleUpdateDrawerVisible}
-        values={updateFormValues}
+        updateModalVisible={updateModalVisible}
+        handleUpdateModalVisible={handleUpdateModalVisible}
         onCancel={() => setUpdateFormValues({})}
         tableActionRef={actionRef}
       />

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import type {MutableRefObject} from 'react';
 import type { FormInstance } from 'antd';
 import {Button, Col, Input, Row} from 'antd';
-import {ProFormDatePicker, ProFormSelect, ProFormText, ProFormTextArea} from '@ant-design/pro-form';
+import { ProFormDigit, ProFormSelect, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
 import ProFormItem from "@ant-design/pro-form/lib/components/FormItem";
 import {ContactsOutlined} from "@ant-design/icons";
 import {useDepartmentList} from "@/utils/department";
@@ -16,7 +16,7 @@ interface FormProps {
 }
 
 const FormBody: React.FC<FormProps> = (props) => {
-  const { staffId, isView, isEdit, formRef } = props;
+  const { staffId, isEdit, formRef } = props;
 
   const [staffSelectVisible, setStaffSelectVisible] = useState<boolean>(false);
 
@@ -34,12 +34,16 @@ const FormBody: React.FC<FormProps> = (props) => {
               name="staffCode"
               label="员工编号"
               placeholder="员工编号"
+              required={true}
               disabled
             />
           ) : (
-            <ProFormItem label="员工编号">
+            <ProFormItem label="员工编号" required={true}>
               <Input.Group compact>
-                <ProFormItem name="staffCode">
+                <ProFormItem
+                  name="staffCode"
+                  rules={[{ required: true, message: '请选择员工' }]}
+                >
                   <Input
                     placeholder="请选择员工"
                     name="staffCode"
@@ -62,6 +66,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             width="md"
             name="staffName"
             label="员工姓名"
+            required={true}
             placeholder="员工姓名"
             disabled
           />
@@ -71,16 +76,25 @@ const FormBody: React.FC<FormProps> = (props) => {
             width="md"
             name="depId"
             label="部门"
+            required={true}
             options={departmentList.map(item => ({value: item.id || '', label: item.name}))}
             disabled
           />
         </Col>
         <Col xl={12} lg={12} md={24}>
-          <ProFormDatePicker
+          <ProFormDigit
             width="md"
-            name="effectiveDate"
-            label="生效日期"
-            rules={[{ required: true, message: '请选择生效日期' }]}
+            name="basicSalary"
+            label="基础工资"
+            rules={[{ required: true, message: '请输入基础工资' }]}
+          />
+        </Col>
+        <Col xl={12} lg={12} md={24}>
+          <ProFormDigit
+            width="md"
+            name="postSalary"
+            label="岗位工资"
+            rules={[{ required: true, message: '请输入岗位工资' }]}
           />
         </Col>
         <Col xl={24} lg={24} md={24}>
@@ -97,27 +111,12 @@ const FormBody: React.FC<FormProps> = (props) => {
         handleStaffSelectVisible={setStaffSelectVisible}
         onSelectAction={(selectValue) => {
           const currentFormValue = formRef?.current.getFieldsValue();
-          let addFields = {};
-          if (!isEdit) {
-            addFields = {
-              postDepId: selectValue.depId,
-              postDuty: selectValue.duty,
-              postPost: selectValue.post,
-              postPostType: selectValue.postType,
-              postPostLevel: selectValue.postLevel,
-            }
-          }
           formRef?.current.setFieldsValue({
             ...currentFormValue,
             staffId: selectValue.id,
             staffCode: selectValue.staffCode,
             staffName: selectValue.staffName,
-            preDepId: selectValue.depId,
-            preDuty: selectValue.duty,
-            prePost: selectValue.post,
-            prePostType: selectValue.postType,
-            prePostLevel: selectValue.postLevel,
-            ...addFields
+            depId: selectValue.depId,
           })
           setStaffSelectVisible(false);
         }}

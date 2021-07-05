@@ -2,9 +2,9 @@ import React, {useState} from 'react';
 import type { ProColumns } from "@ant-design/pro-table";
 import { EditableProTable } from "@ant-design/pro-table";
 import type { EducationalExperienceForm, EducationalExperienceVO } from "@/services/educational-experience/typings";
-import {getDictionaryChildrenByCode} from "@/services/dictionary/dictionary";
 import type { FormInstance } from "antd";
 import ProFormItem from "@ant-design/pro-form/lib/components/FormItem";
+import {useOptions} from "@/utils/options";
 
 interface EducationalExperienceListProps {
   readonly?: boolean;
@@ -14,6 +14,8 @@ interface EducationalExperienceListProps {
 
 const EducationalExperienceList: React.FC<EducationalExperienceListProps> = (props) => {
   const { readonly, editForm, value } = props;
+
+  const educationOptions = useOptions('Education');
 
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>(() =>
     !readonly && value ? value.map((item) => item.id) : []
@@ -47,13 +49,7 @@ const EducationalExperienceList: React.FC<EducationalExperienceListProps> = (pro
       title: '学历',
       dataIndex: 'education',
       valueType: 'text',
-      request: async ({ keyWords }) => {
-        const { data } = await getDictionaryChildrenByCode('Education', keyWords);
-        return data ? data.map(item => ({
-          value: item.name,
-          label: item.name
-        })) : []
-      }
+      fieldProps: { options: educationOptions }
     },
     {
       title: '专业',

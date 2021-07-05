@@ -8,14 +8,14 @@ import {Button} from "antd";
 import StaffChangeModal from "@/pages/HR/StaffChangeList/components/ModalBody";
 
 interface ViewFormProps {
-  viewDrawerVisible: boolean;
-  handleViewDrawerVisible: Dispatch<SetStateAction<boolean>>;
+  viewModalVisible: boolean;
+  handleViewModalVisible: Dispatch<SetStateAction<boolean>>;
   onCancel: () => void;
   values?: StaffVO | StaffForm;
 }
 
 const ViewForm: React.FC<ViewFormProps> = (props) => {
-  const { viewDrawerVisible, handleViewDrawerVisible, values } = props
+  const { viewModalVisible, handleViewModalVisible, values } = props
 
   const [staffChangeModalVisible, setStaffChangeModalVisible] = useState<boolean>(false);
 
@@ -37,8 +37,8 @@ const ViewForm: React.FC<ViewFormProps> = (props) => {
             </Button>
           </>
         }
-        visible={viewDrawerVisible}
-        onVisibleChange={handleViewDrawerVisible}
+        visible={viewModalVisible}
+        onVisibleChange={handleViewModalVisible}
         initialValues={values}
         modalProps={{
           destroyOnClose: true,
