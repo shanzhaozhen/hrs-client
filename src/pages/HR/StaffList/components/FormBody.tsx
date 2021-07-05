@@ -126,24 +126,14 @@ const FormBody: React.FC<FormProps> = (props) => {
                     label="部门"
                     rules={[{ required: true, message: '请选择部门' }]}
                   >
-                    <FormTreeSelect treeData={departmentTree} style={{ width: 216 }} placeholder="请选择部门" />
+                    <FormTreeSelect
+                      treeData={departmentTree}
+                      style={{ width: 216 }}
+                      placeholder="请选择部门"
+                      readonly={isView}
+                      disabled={isEdit}
+                    />
                   </ProFormItem>
-
-                  {/* <ProFormSelect
-                    width="sm"
-                    name="depId"
-                    label="部门"
-                    rules={[{ required: false, message: '请选择部门' }]}
-                    request={async () => {
-                      const { data } = await getAllDepartments();
-                      return data ? data.map(item => ({
-                        value: item.id,
-                        label: item.name
-                      })) : []
-                    }}
-                    readonly={isView}
-                    disabled={isEdit}
-                  /> */}
                 </Col>
                 <Col xl={12} lg={24} md={24}>
                   <ProFormSelect
@@ -245,7 +235,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                 width="sm"
                 name={['staffInfo', 'nation']}
                 label="民族"
-                rules={[{ required: true, message: '请选择民族' }]}
+                rules={[{ required: false, message: '请选择民族' }]}
                 options={nationOptions}
                 readonly={isView}
               />

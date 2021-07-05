@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {getMenuTree} from "@/services/menu/menu";
-import {MenuVO} from "@/services/menu/typings";
+import type { MenuVO } from "@/services/menu/typings";
 
 const loopMenuData = (menuData: MenuVO[]): any =>
   menuData.map(({ id, name, children }) => ({

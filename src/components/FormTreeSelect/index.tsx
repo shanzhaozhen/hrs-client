@@ -1,7 +1,8 @@
-import React from 'react';
-import { TreeSelect } from 'antd';
+import React, {useEffect, useState} from 'react';
+import {Space, TreeSelect } from 'antd';
 import type { DataNode } from 'rc-tree/lib/interface';
 import type { LegacyDataNode } from "rc-tree-select/lib/interface";
+import {getTreeValue} from "@/utils/tree";
 
 interface FormTreeSelectProps {
   placeholder?: string;
@@ -11,17 +12,29 @@ interface FormTreeSelectProps {
   onChange?: (value: any) => void;
   disabled?: boolean;
   style?: React.CSSProperties;
+  readonly?: boolean;
   value?: any;
 }
 
 const FormTreeSelect: React.FC<FormTreeSelectProps> = (props) => {
-  const { placeholder, loadData, treeData, onChange, disabled, style, value } = props;
+  const { placeholder, loadData, treeData, onChange, disabled, readonly, style, value } = props;
+
+  const [ viewText, setViewText ] = useState<React.ReactNode>();
+
+  useEffect(() => {
+    if (readonly) {
+      setViewText(getTreeValue(value, treeData))
+    }
+    return () => setViewText(value);
+  }, [readonly, treeData, value])
 
   const triggerChange = (changeValue: number[]) => {
     onChange?.(changeValue);
   };
 
-  return (
+  return (readonly ? (
+    <Space>{viewText}</Space>
+  ) : (
     <TreeSelect
       showSearch
       allowClear
@@ -35,10 +48,9 @@ const FormTreeSelect: React.FC<FormTreeSelectProps> = (props) => {
       treeData={treeData}
       onChange={triggerChange}
       placeholder={placeholder}
-      aria-readonly={true}
       disabled={disabled}
     />
-  );
+  ));
 };
 
 FormTreeSelect.defaultProps = {

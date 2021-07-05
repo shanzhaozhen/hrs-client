@@ -3,12 +3,12 @@ import type { MutableRefObject } from 'react';
 import type { FormInstance } from 'antd';
 import { Button, Col, Input, Row } from 'antd';
 import {ProFormDatePicker, ProFormSelect, ProFormText, ProFormTextArea} from '@ant-design/pro-form';
-import { getDictionaryChildrenByCode } from "@/services/dictionary/dictionary";
 import FormTreeSelect from "@/components/FormTreeSelect";
 import { useDepartmentList, useDepartmentTree } from "@/utils/department";
 import { ContactsOutlined } from "@ant-design/icons";
 import StaffSelect from "@/pages/HR/StaffList/components/StaffSelect";
 import ProFormItem from "@ant-design/pro-form/lib/components/FormItem";
+import {useOptions} from "@/utils/options";
 
 interface FormProps {
   isEdit?: boolean;
@@ -23,6 +23,11 @@ const FormBody: React.FC<FormProps> = (props) => {
 
   const departmentList = useDepartmentList();
   const departmentTree = useDepartmentTree();
+  const dutyOptions = useOptions('Duty');
+  const postOptions = useOptions('Post');
+  const postTypeOptions = useOptions('PostType');
+  const postLevelOptions = useOptions('PostLevel');
+
 
   return (
     <>
@@ -100,13 +105,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             name="postDuty"
             label="变更后职务"
             rules={[{ required: false, message: '请选择职务' }]}
-            request={async ({ keyWords }) => {
-              const { data } = await getDictionaryChildrenByCode('Duty', keyWords);
-              return data ? data.map(item => ({
-                value: item.name,
-                label: item.name
-              })) : []
-            }}
+            options={dutyOptions}
           />
         </Col>
         <Col xl={12} lg={12} md={24}>
@@ -123,13 +122,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             name="postPost"
             label="变更后岗位"
             rules={[{ required: false, message: '请选择岗位' }]}
-            request={async ({ keyWords }) => {
-              const { data } = await getDictionaryChildrenByCode('Post', keyWords);
-              return data ? data.map(item => ({
-                value: item.name,
-                label: item.name
-              })) : []
-            }}
+            options={postOptions}
           />
         </Col>
         <Col xl={12} lg={12} md={24}>
@@ -146,13 +139,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             name="postPostType"
             label="变更后岗位类型"
             rules={[{ required: false, message: '请选择岗位类型' }]}
-            request={async ({ keyWords }) => {
-              const { data } = await getDictionaryChildrenByCode('PostType', keyWords);
-              return data ? data.map(item => ({
-                value: item.name,
-                label: item.name
-              })) : []
-            }}
+            options={postTypeOptions}
           />
         </Col>
         <Col xl={12} lg={12} md={24}>
@@ -169,13 +156,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             name="postPostLevel"
             label="变更后岗位等级"
             rules={[{ required: false, message: '请选择岗位等级' }]}
-            request={async ({ keyWords }) => {
-              const { data } = await getDictionaryChildrenByCode('PostLevel', keyWords);
-              return data ? data.map(item => ({
-                value: item.name,
-                label: item.name
-              })) : []
-            }}
+            options={postLevelOptions}
           />
         </Col>
         <Col xl={12} lg={12} md={24}>

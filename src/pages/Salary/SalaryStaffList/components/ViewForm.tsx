@@ -25,7 +25,7 @@ const ViewForm: React.FC<ViewFormProps> = (props) => {
         width={'75%'}
         title={
           <>
-            <span style={{ marginRight: 15 }}>查看员工</span>
+            <span style={{ marginRight: 15 }}>查看员工薪资</span>
             <Button
               type="primary"
               icon={<HistoryOutlined />}
@@ -33,7 +33,7 @@ const ViewForm: React.FC<ViewFormProps> = (props) => {
                 setStaffChangeModalVisible(true);
               }}
             >
-              调动记录
+              调薪记录
             </Button>
           </>
         }

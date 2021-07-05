@@ -40,45 +40,45 @@ export type StaffInfoForm = {
   /** QQ */
   qq?: string;
   /** 籍贯(省) */
-  nativeAddressProvince?: string;
+  nativeAddressProvince?: string | number;
   /** 籍贯(市) */
-  nativeAddressCity?: string;
+  nativeAddressCity?: string | number;
   /** 出生地(省) */
-  birthAddressProvince?: string;
+  birthAddressProvince?: string | number;
   /** 出生地(市) */
-  birthAddressCity?: string;
+  birthAddressCity?: string | number;
   /** 户口类型 */
   householdType?: string;
   /** 户口地址(省) */
-  registeredAddressProvince?: string;
+  registeredAddressProvince?: string | number;
   /** 户口地址(市) */
-  registeredAddressCity?: string;
+  registeredAddressCity?: string | number;
   /** 户口地址(区) */
-  registeredAddressArea?: string;
+  registeredAddressArea?: string | number;
   /** 户口地址(详细) */
   registeredAddressDetail?: string;
   /** 家庭住址(省) */
-  homeAddressProvince?: string;
+  homeAddressProvince?: string | number;
   /** 家庭住址(市) */
-  homeAddressCity?: string;
+  homeAddressCity?: string | number;
   /** 家庭住址(区) */
-  homeAddressArea?: string;
+  homeAddressArea?: string | number;
   /** 家庭住址(详细) */
   homeAddressDetail?: string;
   /** 现住地址(省) */
-  currentAddressProvince?: string;
+  currentAddressProvince?: string | number;
   /** 现住地址(市) */
-  currentAddressCity?: string;
+  currentAddressCity?: string | number;
   /** 现住地址(区) */
-  currentAddressArea?: string;
+  currentAddressArea?: string | number;
   /** 现住地址(详细) */
   currentAddressDetail?: string;
   /** 邮递地址(省) */
-  postalAddressProvince?: string;
+  postalAddressProvince?: string | number;
   /** 邮递地址(市) */
-  postalAddressCity?: string;
+  postalAddressCity?: string | number;
   /** 邮递地址(区) */
-  postalAddressArea?: string;
+  postalAddressArea?: string | number;
   /** 邮递地址(详细) */
   postalAddressDetail?: string;
   /** 紧急联系人姓名 */

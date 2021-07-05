@@ -57,7 +57,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
         width={'75%'}
         title={
           <>
-            <span style={{ marginRight: 15 }}>修改员工</span>
+            <span style={{ marginRight: 15 }}>修改员工薪资</span>
             <Button
               type="primary"
               icon={<HistoryOutlined />}

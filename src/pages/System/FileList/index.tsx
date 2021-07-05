@@ -119,7 +119,6 @@ const FileList: React.FC = () => {
               if (record && record.id) {
                 const hide = message.loading('正在下载');
                 const data = await download(record.id);
-                console.log(data)
                 downloadFile(data, record.name);
                 hide();
                 message.success('文件下载成功！')

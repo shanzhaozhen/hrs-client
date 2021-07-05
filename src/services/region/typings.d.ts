@@ -48,5 +48,5 @@ export type RegionType = {
   /** 区 */
   area?: string | number;
   /** 详细地址 */
-  detail?: string | number;
+  detail?: string;
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import {Col, Row} from "antd";
 import { ProFormSelect, ProFormText } from "@ant-design/pro-form";
-import {getDictionaryChildrenByCode} from "@/services/dictionary/dictionary";
+import {useOptions} from "@/utils/options";
 
 interface FriendInfoProps {
   isView?: boolean;
@@ -9,6 +9,8 @@ interface FriendInfoProps {
 
 const FriendInfo: React.FC<FriendInfoProps> = (props) => {
   const { isView } = props;
+
+  const relationOptions = useOptions('Relation');
 
   return (
     <>
@@ -28,13 +30,7 @@ const FriendInfo: React.FC<FriendInfoProps> = (props) => {
             name="friendRelation"
             label="亲友关系"
             rules={[{ required: false, message: '请选择亲友关系' }]}
-            request={async ({ keyWords }) => {
-              const { data } = await getDictionaryChildrenByCode('Relation', keyWords);
-              return data ? data.map(item => ({
-                value: item.name,
-                label: item.name
-              })) : []
-            }}
+            options={relationOptions}
             readonly={isView}
           />
         </Col>

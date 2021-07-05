@@ -3,7 +3,6 @@ import type { FormInstance } from 'antd';
 import {Col, Divider, Row, Tabs} from 'antd';
 import { ProFormDatePicker, ProFormDigit, ProFormSelect, ProFormSwitch, ProFormText } from '@ant-design/pro-form';
 import type {ResumeForm, ResumeVO} from "@/services/resume/typings";
-import { getDictionaryChildrenByCode } from "@/services/dictionary/dictionary";
 import RegionSelect from "@/components/RegionSelect";
 import type { RegionType } from "@/services/region/typings";
 import EducationalExperienceList from "@/pages/OtherInfo/components/EducationalExperienceList";
@@ -19,6 +18,7 @@ import ArmyInfo from "@/pages/OtherInfo/components/ArmyInfo";
 import FriendInfo from "@/pages/OtherInfo/components/FriendInfo";
 import EmergencyContactInfo from "@/pages/OtherInfo/components/EmergencyContactInfo";
 import ContactInfo from "@/pages/OtherInfo/components/ContactInfo";
+import {useOptions} from "@/utils/options";
 
 interface FormProps {
   isView?: boolean;
@@ -77,6 +77,13 @@ const FormBody: React.FC<FormProps> = (props) => {
     }
   }, []);
 
+  const householdTypeOptions = useOptions('HouseholdType');
+  const nationOptions = useOptions('Nation');
+  const politicsOptions = useOptions('Politics');
+  const educationOptions = useOptions('Education');
+  const degreeOptions = useOptions('Degree');
+  const applyForOptions = useOptions('ApplyFor');
+
   return (
     <>
       <Tabs defaultActiveKey="1">
@@ -132,13 +139,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                     name="householdType"
                     label="户口类型"
                     rules={[{ required: false, message: '请选择户口类型' }]}
-                    request={async ({ keyWords }) => {
-                      const { data } = await getDictionaryChildrenByCode('HouseholdType', keyWords);
-                      return data ? data.map(item => ({
-                        value: item.name,
-                        label: item.name
-                      })) : []
-                    }}
+                    options={householdTypeOptions}
                     readonly={isView}
                   />
                 </Col>
@@ -148,13 +149,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                     name="nation"
                     label="民族"
                     rules={[{ required: false, message: '请选择民族' }]}
-                    request={async ({ keyWords }) => {
-                      const { data } = await getDictionaryChildrenByCode('Nation', keyWords);
-                      return data ? data.map(item => ({
-                        value: item.name,
-                        label: item.name
-                      })) : []
-                    }}
+                    options={nationOptions}
                     readonly={isView}
                   />
                 </Col>
@@ -164,13 +159,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                     name="politics"
                     label="政治面貌"
                     rules={[{ required: false, message: '请选择政治面貌' }]}
-                    request={async ({ keyWords }) => {
-                      const { data } = await getDictionaryChildrenByCode('Politics', keyWords);
-                      return data ? data.map(item => ({
-                        value: item.name,
-                        label: item.name
-                      })) : []
-                    }}
+                    options={politicsOptions}
                     readonly={isView}
                   />
                 </Col>
@@ -180,13 +169,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                     name="education"
                     label="最高学历"
                     rules={[{ required: false, message: '请选择最高学历' }]}
-                    request={async ({ keyWords }) => {
-                      const { data } = await getDictionaryChildrenByCode('Education', keyWords);
-                      return data ? data.map(item => ({
-                        value: item.name,
-                        label: item.name
-                      })) : []
-                    }}
+                    options={educationOptions}
                     readonly={isView}
                   />
                 </Col>
@@ -196,13 +179,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                     name="degree"
                     label="学位"
                     rules={[{ required: false, message: '请选择学位' }]}
-                    request={async ({ keyWords }) => {
-                      const { data } = await getDictionaryChildrenByCode('Degree', keyWords);
-                      return data ? data.map(item => ({
-                        value: item.name,
-                        label: item.name
-                      })) : []
-                    }}
+                    options={degreeOptions}
                     readonly={isView}
                   />
                 </Col>
@@ -309,13 +286,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                 name="applyFor"
                 label="应聘途径"
                 rules={[{ required: false, message: '请选择应聘途径' }]}
-                request={async ({ keyWords }) => {
-                  const { data } = await getDictionaryChildrenByCode('ApplyFor', keyWords);
-                  return data ? data.map(item => ({
-                    value: item.name,
-                    label: item.name
-                  })) : []
-                }}
+                options={applyForOptions}
                 readonly={isView}
               />
             </Col>
