@@ -1,26 +1,25 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
+import type {FormInstance} from 'antd';
 import { message } from 'antd';
 import { addStaff } from '@/services/staff/staff';
 import type { StaffForm } from '@/services/staff/typings';
-import FormBody from '@/pages/HR/StaffList/components/FormBody';
-import ProForm, { DrawerForm } from '@ant-design/pro-form';
+import FormBody from '@/pages/Salary/SalaryStaffList/components/FormBody';
 import type { ActionType } from '@ant-design/pro-table';
 import { convertStaffForm } from "@/utils/staff";
+import { ModalForm } from "@ant-design/pro-form";
 
 interface CreateFormProps {
-  createDrawerVisible: boolean;
-  handleCreateDrawerVisible: Dispatch<SetStateAction<boolean>>;
+  createModalVisible: boolean;
+  handleCreateModalVisible: Dispatch<SetStateAction<boolean>>;
   tableActionRef: MutableRefObject<ActionType | undefined>;
 }
 
 const CreateForm: React.FC<CreateFormProps> = (props) => {
-  const { createDrawerVisible, handleCreateDrawerVisible, tableActionRef } = props;
+  const { createModalVisible, handleCreateModalVisible, tableActionRef } = props;
 
-  const [workExperienceForm] = ProForm.useForm();
-  const [educationalExperienceForm] = ProForm.useForm();
-  const [certificateForm] = ProForm.useForm();
-  const [familyForm] = ProForm.useForm();
+  const formRef = useRef<FormInstance>();
+
 
   /**
    * 添加员工
@@ -32,7 +31,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
       await addStaff(convertStaffForm(fields));
       hide();
       message.success('添加成功');
-      handleCreateDrawerVisible(false);
+      handleCreateModalVisible(false);
       tableActionRef.current?.reloadAndRest?.();
     } catch (error) {
       hide();
@@ -42,23 +41,19 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
 
   return (
     <>
-      <DrawerForm
-        width={'75%'}
+      <ModalForm
+        width={748}
         title="新建员工薪资"
-        visible={createDrawerVisible}
-        onVisibleChange={handleCreateDrawerVisible}
-        drawerProps={{
+        visible={createModalVisible}
+        formRef={formRef}
+        onVisibleChange={handleCreateModalVisible}
+        modalProps={{
           destroyOnClose: true,
         }}
         onFinish={handleAdd}
       >
-        <FormBody
-          workExperienceForm={workExperienceForm}
-          educationalExperienceForm={educationalExperienceForm}
-          certificateForm={certificateForm}
-          familyForm={familyForm}
-        />
-      </DrawerForm>
+        <FormBody />
+      </ModalForm>
     </>
   );
 };

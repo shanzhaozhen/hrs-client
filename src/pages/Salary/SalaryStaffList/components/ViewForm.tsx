@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import FormBody from '@/pages/HR/StaffList/components/FormBody';
-import { DrawerForm } from '@ant-design/pro-form';
+import FormBody from '@/pages/Salary/SalaryStaffList/components/FormBody';
+import { ModalForm } from '@ant-design/pro-form';
 import type {StaffForm, StaffVO} from "@/services/staff/typings";
 import {HistoryOutlined} from "@ant-design/icons";
 import {Button} from "antd";
@@ -15,14 +15,14 @@ interface ViewFormProps {
 }
 
 const ViewForm: React.FC<ViewFormProps> = (props) => {
-  const { viewDrawerVisible, handleViewDrawerVisible, onCancel, values } = props
+  const { viewDrawerVisible, handleViewDrawerVisible, values } = props
 
   const [staffChangeModalVisible, setStaffChangeModalVisible] = useState<boolean>(false);
 
   return (
     <>
-      <DrawerForm
-        width={'75%'}
+      <ModalForm
+        width={748}
         title={
           <>
             <span style={{ marginRight: 15 }}>查看员工薪资</span>
@@ -40,8 +40,7 @@ const ViewForm: React.FC<ViewFormProps> = (props) => {
         visible={viewDrawerVisible}
         onVisibleChange={handleViewDrawerVisible}
         initialValues={values}
-        drawerProps={{
-          onClose: onCancel,
+        modalProps={{
           destroyOnClose: true,
         }}
         submitter={{
@@ -60,7 +59,7 @@ const ViewForm: React.FC<ViewFormProps> = (props) => {
         {values && Object.keys(values).length ? (
           <FormBody isView={true} values={values} />
         ) : null}
-      </DrawerForm>
+      </ModalForm>
 
       <StaffChangeModal
         staffChangeModalVisible={staffChangeModalVisible}

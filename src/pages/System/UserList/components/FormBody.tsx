@@ -10,7 +10,6 @@ interface FormProps {
   isEdit?: boolean;
 }
 
-
 const FormBody: React.FC<FormProps> = (props) => {
   const { isEdit } = props;
 

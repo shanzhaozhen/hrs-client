@@ -6,9 +6,9 @@ import {ProFormDatePicker, ProFormSelect, ProFormText, ProFormTextArea} from '@a
 import FormTreeSelect from "@/components/FormTreeSelect";
 import { useDepartmentList, useDepartmentTree } from "@/utils/department";
 import { ContactsOutlined } from "@ant-design/icons";
-import StaffSelect from "@/pages/HR/StaffList/components/StaffSelect";
 import ProFormItem from "@ant-design/pro-form/lib/components/FormItem";
 import {useOptions} from "@/utils/options";
+import StaffSelect from "@/components/StaffSelect";
 
 interface FormProps {
   isEdit?: boolean;

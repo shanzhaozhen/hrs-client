@@ -7,8 +7,9 @@ import { getDictionaryChildrenByCode } from "@/services/dictionary/dictionary";
 import FormTreeSelect from "@/components/FormTreeSelect";
 import { useDepartmentList, useDepartmentTree } from "@/utils/department";
 import { ContactsOutlined } from "@ant-design/icons";
-import StaffSelect from "@/pages/HR/StaffList/components/StaffSelect";
+import Index from "@/components/StaffSelect";
 import ProFormItem from "@ant-design/pro-form/lib/components/FormItem";
+import StaffSelect from "@/components/StaffSelect";
 
 interface FormProps {
   isEdit?: boolean;
