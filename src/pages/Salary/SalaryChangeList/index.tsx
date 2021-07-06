@@ -1,14 +1,14 @@
 import React from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
-import StaffChangeListBody from "@/pages/HR/StaffChangeList/components/ListBody";
+import SalaryChangeListBody from "@/pages/Salary/SalaryChangeList/components/ListBody";
 
-const StaffChangeList: React.FC = () => {
+const SalaryChangeList: React.FC = () => {
 
   return (
     <PageContainer>
-      <StaffChangeListBody />
+      <SalaryChangeListBody />
     </PageContainer>
   );
 };
 
-export default StaffChangeList;
+export default SalaryChangeList;

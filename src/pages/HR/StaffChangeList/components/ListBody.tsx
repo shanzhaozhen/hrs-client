@@ -6,7 +6,7 @@ import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import CreateForm from './CreateForm';
 import UpdateForm from './UpdateForm';
-import { getStaffChangePage, getStaffChangeById, deleteStaffChange, batchDeleteStaffChange, runTransfer } from '@/services/staff-change/staff-change';
+import { getStaffChangePage, getStaffChangeById, deleteStaffChange, batchDeleteStaffChange, runTransfer } from '@/services/staff-change/salary-change';
 import type { StaffChangeVO } from '@/services/staff-change/typings';
 import {getPageParams, getSortOrder, tableFilter} from "@/utils/common";
 import { useDepartmentList } from "@/utils/department";

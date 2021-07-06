@@ -2,9 +2,9 @@ import React, {useEffect, useRef, useState} from 'react';
 import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import type { FormInstance } from 'antd';
 import { message } from 'antd';
-import { addStaffChange } from '@/services/staff-change/staff-change';
-import type {StaffChangeForm, StaffChangeVO} from '@/services/staff-change/typings';
-import FormBody from '@/pages/HR/StaffChangeList/components/FormBody';
+import { addSalaryChange } from '@/services/salary-change/salary-change';
+import type {SalaryChangeForm, SalaryChangeVO} from '@/services/salary-change/typings';
+import FormBody from '@/pages/HR/SalaryChangeList/components/FormBody';
 import { ModalForm } from '@ant-design/pro-form';
 import type { ActionType } from '@ant-design/pro-table';
 import {getStaffById} from "@/services/staff/staff";
@@ -19,12 +19,12 @@ interface CreateFormProps {
 const CreateForm: React.FC<CreateFormProps> = (props) => {
   const { createModalVisible, handleCreateModalVisible, tableActionRef, staffId } = props;
 
-  const [staffChangeInitialValues, setStaffChangeInitialValues] = useState<StaffChangeVO>({});
+  const [staffChangeInitialValues, setSalaryChangeInitialValues] = useState<SalaryChangeVO>({});
 
   useEffect(() => {
     if (staffId) {
       getStaffById(staffId).then(({ data }) => {
-        setStaffChangeInitialValues(data ? {
+        setSalaryChangeInitialValues(data ? {
           ...data,
           id: undefined,
           staffId: data.id,
@@ -52,10 +52,10 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
    * 添加调动记录
    * @param fields
    */
-  const handleAdd = async (fields: StaffChangeForm) => {
+  const handleAdd = async (fields: SalaryChangeForm) => {
     const hide = message.loading('正在添加');
     try {
-      await addStaffChange({ ...fields });
+      await addSalaryChange({ ...fields });
       hide();
       message.success('添加成功');
       handleCreateModalVisible(false);

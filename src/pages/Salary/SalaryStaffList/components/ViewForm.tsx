@@ -2,16 +2,16 @@ import React, {useState} from 'react';
 import type { Dispatch, SetStateAction } from 'react';
 import FormBody from '@/pages/Salary/SalaryStaffList/components/FormBody';
 import { ModalForm } from '@ant-design/pro-form';
-import type {StaffForm, StaffVO} from "@/services/staff/typings";
 import {HistoryOutlined} from "@ant-design/icons";
 import {Button} from "antd";
 import StaffChangeModal from "@/pages/HR/StaffChangeList/components/ModalBody";
+import type { StaffSalaryVO } from "@/services/salary-staff/typings";
 
 interface ViewFormProps {
   viewModalVisible: boolean;
   handleViewModalVisible: Dispatch<SetStateAction<boolean>>;
   onCancel: () => void;
-  values?: StaffVO | StaffForm;
+  values?: StaffSalaryVO;
 }
 
 const ViewForm: React.FC<ViewFormProps> = (props) => {
@@ -57,7 +57,7 @@ const ViewForm: React.FC<ViewFormProps> = (props) => {
         }}
       >
         {values && Object.keys(values).length ? (
-          <FormBody isView={true} values={values} />
+          <FormBody isView={true} salaryStaffId={values.id} />
         ) : null}
       </ModalForm>
 

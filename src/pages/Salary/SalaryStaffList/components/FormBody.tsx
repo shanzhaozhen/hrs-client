@@ -11,12 +11,12 @@ import StaffSelect from "@/components/StaffSelect";
 interface FormProps {
   isView?: boolean;
   isEdit?: boolean;
-  staffId?: number;
+  salaryStaffId?: number;
   formRef?: MutableRefObject<FormInstance | any>;
 }
 
 const FormBody: React.FC<FormProps> = (props) => {
-  const { staffId, isEdit, formRef } = props;
+  const { salaryStaffId, isView, formRef } = props;
 
   const [staffSelectVisible, setStaffSelectVisible] = useState<boolean>(false);
 
@@ -28,13 +28,14 @@ const FormBody: React.FC<FormProps> = (props) => {
         <ProFormText name="id" label="调动记录id" hidden={true} />
         <ProFormText name="staffId" label="员工id" hidden={true} />
         <Col xl={12} lg={12} md={24}>
-          {staffId ? (
+          {salaryStaffId ? (
             <ProFormText
               width="md"
               name="staffCode"
               label="员工编号"
               placeholder="员工编号"
               required={true}
+              readonly={isView}
               disabled
             />
           ) : (
@@ -68,6 +69,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             label="员工姓名"
             required={true}
             placeholder="员工姓名"
+            readonly={isView}
             disabled
           />
         </Col>
@@ -78,6 +80,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             label="部门"
             required={true}
             options={departmentList.map(item => ({value: item.id || '', label: item.name}))}
+            readonly={isView}
             disabled
           />
         </Col>
@@ -87,6 +90,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             name="basicSalary"
             label="基础工资"
             rules={[{ required: true, message: '请输入基础工资' }]}
+            readonly={isView}
           />
         </Col>
         <Col xl={12} lg={12} md={24}>
@@ -95,12 +99,14 @@ const FormBody: React.FC<FormProps> = (props) => {
             name="postSalary"
             label="岗位工资"
             rules={[{ required: true, message: '请输入岗位工资' }]}
+            readonly={isView}
           />
         </Col>
         <Col xl={24} lg={24} md={24}>
           <ProFormTextArea
             name="remarks"
             label="备注"
+            readonly={isView}
           />
         </Col>
       </Row>

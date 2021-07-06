@@ -59,7 +59,7 @@ export default defineConfig({
     {
       requestLibPath: "import { request } from 'umi'",
       schemaPath: 'http://localhost:8080/v3/api-docs',
-      projectName: 'hrs',
+      projectName: 'api-hrs',
     }
   ]
   // 启动时间有点慢，试试新出的 MFSU 方案，1s+ 完成启动，详见 https://github.com/umijs/umi/issues/6766

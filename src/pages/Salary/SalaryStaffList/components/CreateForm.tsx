@@ -2,12 +2,11 @@ import React, {useRef} from 'react';
 import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import type {FormInstance} from 'antd';
 import { message } from 'antd';
-import { addStaff } from '@/services/staff/staff';
-import type { StaffForm } from '@/services/staff/typings';
 import FormBody from '@/pages/Salary/SalaryStaffList/components/FormBody';
 import type { ActionType } from '@ant-design/pro-table';
-import { convertStaffForm } from "@/utils/staff";
 import { ModalForm } from "@ant-design/pro-form";
+import { addStaffSalary } from "@/services/salary-staff/salary-staff";
+import type { StaffSalaryForm } from "@/services/salary-staff/typings";
 
 interface CreateFormProps {
   createModalVisible: boolean;
@@ -20,15 +19,14 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
 
   const formRef = useRef<FormInstance>();
 
-
   /**
-   * 添加员工
+   * 添加员工薪资
    * @param fields
    */
-  const handleAdd = async (fields: StaffForm) => {
+  const handleAdd = async (fields: StaffSalaryForm) => {
     const hide = message.loading('正在添加');
     try {
-      await addStaff(convertStaffForm(fields));
+      await addStaffSalary(fields);
       hide();
       message.success('添加成功');
       handleCreateModalVisible(false);

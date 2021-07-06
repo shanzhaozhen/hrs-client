@@ -1,17 +1,17 @@
 import React, { useRef } from 'react';
 import type {Dispatch, SetStateAction} from 'react';
-import StaffChangeListBody from "@/pages/HR/StaffChangeList/components/ListBody";
+import SalaryChangeListBody from "@/pages/HR/SalaryChangeList/components/ListBody";
 import type { ActionType } from "@ant-design/pro-table";
 import { Modal } from "antd";
 
-interface StaffChangeProps {
+interface SalaryChangeProps {
   staffChangeModalVisible: boolean;
-  handleStaffChangeModalVisible: Dispatch<SetStateAction<boolean>>;
+  handleSalaryChangeModalVisible: Dispatch<SetStateAction<boolean>>;
   staffId?: number;
 }
 
-const StaffChangeModal: React.FC<StaffChangeProps> = (props) => {
-  const { staffChangeModalVisible, handleStaffChangeModalVisible, staffId } = props;
+const SalaryChangeModal: React.FC<SalaryChangeProps> = (props) => {
+  const { staffChangeModalVisible, handleSalaryChangeModalVisible, staffId } = props;
 
   const actionRef = useRef<ActionType>();
 
@@ -22,14 +22,14 @@ const StaffChangeModal: React.FC<StaffChangeProps> = (props) => {
       destroyOnClose
       visible={staffChangeModalVisible}
       onCancel={() => {
-        handleStaffChangeModalVisible(false);
+        handleSalaryChangeModalVisible(false);
         actionRef.current?.clearSelected?.();
       }}
       footer={null}
     >
-      <StaffChangeListBody staffId={staffId} />
+      <SalaryChangeListBody staffId={staffId} />
     </Modal>
   );
 };
 
-export default StaffChangeModal;
+export default SalaryChangeModal;

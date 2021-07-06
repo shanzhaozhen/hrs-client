@@ -2,9 +2,9 @@ import React, {useRef} from 'react';
 import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import type { FormInstance } from 'antd';
 import { message } from 'antd';
-import type { StaffChangeForm, StaffChangeVO } from '@/services/staff-change/typings';
-import FormBody from '@/pages/HR/StaffChangeList/components/FormBody';
-import { updateStaffChange } from '@/services/staff-change/staff-change';
+import type { SalaryChangeForm, SalaryChangeVO } from '@/services/salary-change/typings';
+import FormBody from '@/pages/HR/SalaryChangeList/components/FormBody';
+import { updateSalaryChange } from '@/services/salary-change/salary-change';
 import { ModalForm } from '@ant-design/pro-form';
 import type { ActionType } from '@ant-design/pro-table';
 
@@ -13,7 +13,7 @@ export interface UpdateFormProps {
   handleUpdateModalVisible: Dispatch<SetStateAction<boolean>>;
   onCancel: () => void;
   tableActionRef: MutableRefObject<ActionType | undefined>;
-  values?: StaffChangeVO;
+  values?: SalaryChangeVO;
   staffId?: number;
 }
 
@@ -26,10 +26,10 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
    * 修改调动记录
    * @param fields
    */
-  const handleUpdate = async (fields: StaffChangeForm) => {
+  const handleUpdate = async (fields: SalaryChangeForm) => {
     const hide = message.loading('正在修改');
     try {
-      await updateStaffChange({
+      await updateSalaryChange({
         ...fields,
       });
       hide();

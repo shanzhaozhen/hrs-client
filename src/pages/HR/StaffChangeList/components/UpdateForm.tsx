@@ -4,7 +4,7 @@ import type { FormInstance } from 'antd';
 import { message } from 'antd';
 import type { StaffChangeForm, StaffChangeVO } from '@/services/staff-change/typings';
 import FormBody from '@/pages/HR/StaffChangeList/components/FormBody';
-import { updateStaffChange } from '@/services/staff-change/staff-change';
+import { updateStaffChange } from '@/services/staff-change/salary-change';
 import { ModalForm } from '@ant-design/pro-form';
 import type { ActionType } from '@ant-design/pro-table';
 

@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import type { FormInstance } from 'antd';
-import {Button, Divider, Input, message, Modal} from 'antd';
+import {Button, Input, message, Modal} from 'antd';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import type {ActionType, ProColumns} from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
@@ -9,7 +9,6 @@ import type { StaffSalaryForm, StaffSalaryVO } from '@/services/salary-staff/typ
 import { getPageParams, getSortOrder, tableFilter } from "@/utils/common";
 import { ExportOutlined, ImportOutlined, PlusOutlined } from "@ant-design/icons";
 import CreateForm from "@/pages/Salary/SalaryStaffList/components/CreateForm";
-import UpdateForm from "@/pages/Salary/SalaryStaffList/components/UpdateForm";
 import ViewForm from "@/pages/Salary/SalaryStaffList/components/ViewForm";
 import { useDepartmentList, useDepartmentTree } from "@/utils/department";
 import FormTreeSelect from "@/components/FormTreeSelect";
@@ -20,16 +19,14 @@ const StaffSalaryList: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const formRef = useRef<FormInstance>();
 
-  const [updateFormValues, setUpdateFormValues] = useState<StaffSalaryVO | StaffSalaryForm>({});
+  const [formValues, setFormValues] = useState<StaffSalaryVO | StaffSalaryForm>({});
   const [viewModalVisible, handleViewModalVisible] = useState<boolean>(false);
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
-  const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [selectedRowsState, setSelectedRows] = useState<StaffSalaryVO[]>([]);
   const [importModalVisible, setImportModalVisible] = useState<boolean>(false);
 
   const departmentList = useDepartmentList();
   const departmentTree = useDepartmentTree();
-
 
   // /**
   //  * 批量删除员工
@@ -142,7 +139,7 @@ const StaffSalaryList: React.FC = () => {
             onClick={async () => {
               if (record && record.id) {
                 const { data } = await getStaffSalaryById(record.id);
-                setUpdateFormValues(data || {});
+                setFormValues(data || {});
                 handleViewModalVisible(true);
               } else {
                 message.warn('没有选中有效的员工');
@@ -150,20 +147,6 @@ const StaffSalaryList: React.FC = () => {
             }}
           >
             查看
-          </a>
-          <Divider type="vertical" />
-          <a
-            onClick={async () => {
-              if (record && record.id) {
-                const { data } = await getStaffSalaryById(record.id);
-                setUpdateFormValues(data || {});
-                handleUpdateModalVisible(true);
-              } else {
-                message.warn('没有选中有效的员工');
-              }
-            }}
-          >
-            修改
           </a>
         </>
       ),
@@ -243,17 +226,12 @@ const StaffSalaryList: React.FC = () => {
       <ViewForm
         viewModalVisible={viewModalVisible}
         handleViewModalVisible={handleViewModalVisible}
-        onCancel={() => setUpdateFormValues({})}
+        values={formValues}
+        onCancel={() => setFormValues({})}
       />
       <CreateForm
         createModalVisible={createModalVisible}
         handleCreateModalVisible={handleCreateModalVisible}
-        tableActionRef={actionRef}
-      />
-      <UpdateForm
-        updateModalVisible={updateModalVisible}
-        handleUpdateModalVisible={handleUpdateModalVisible}
-        onCancel={() => setUpdateFormValues({})}
         tableActionRef={actionRef}
       />
 
