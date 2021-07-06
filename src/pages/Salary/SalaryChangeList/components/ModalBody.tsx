@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import type {Dispatch, SetStateAction} from 'react';
-import SalaryChangeListBody from "@/pages/HR/SalaryChangeList/components/ListBody";
+import SalaryChangeListBody from "@/pages/Salary/SalaryChangeList/components/ListBody";
 import type { ActionType } from "@ant-design/pro-table";
 import { Modal } from "antd";
 
@@ -17,7 +17,7 @@ const SalaryChangeModal: React.FC<SalaryChangeProps> = (props) => {
 
   return (
     <Modal
-      title="调动记录"
+      title="调薪记录"
       width={980}
       destroyOnClose
       visible={staffChangeModalVisible}

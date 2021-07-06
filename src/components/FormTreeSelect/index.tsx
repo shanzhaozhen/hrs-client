@@ -6,7 +6,7 @@ import {getTreeValue} from "@/utils/tree";
 
 interface FormTreeSelectProps {
   placeholder?: string;
-  checkStrictly?: boolean;
+  treeNodeFilterProp?: string;
   loadData?: (dataNode: LegacyDataNode) => Promise<unknown>;
   treeData?: DataNode[];
   onChange?: (value: any) => void;
@@ -17,7 +17,7 @@ interface FormTreeSelectProps {
 }
 
 const FormTreeSelect: React.FC<FormTreeSelectProps> = (props) => {
-  const { placeholder, loadData, treeData, onChange, disabled, readonly, style, value } = props;
+  const { placeholder, treeNodeFilterProp, loadData, treeData, onChange, disabled, readonly, style, value } = props;
 
   const [ viewText, setViewText ] = useState<React.ReactNode>();
 
@@ -47,14 +47,11 @@ const FormTreeSelect: React.FC<FormTreeSelectProps> = (props) => {
       loadData={loadData}
       treeData={treeData}
       onChange={triggerChange}
+      treeNodeFilterProp={treeNodeFilterProp}
       placeholder={placeholder}
       disabled={disabled}
     />
   ));
-};
-
-FormTreeSelect.defaultProps = {
-  checkStrictly: true,
 };
 
 export default FormTreeSelect;

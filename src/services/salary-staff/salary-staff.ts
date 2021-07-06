@@ -1,11 +1,11 @@
 // @ts-ignore
 import { request } from 'umi';
-import type {StaffSalaryForm, StaffSalaryVO} from "@/services/salary-staff/typings";
+import type {SalaryStaffForm, SalaryStaffVO} from "@/services/salary-staff/typings";
 import type {Orders, Page, PageParams, ResultBody} from "@/services/common/typings";
 
-/** 获取员工信息（分页） GET /salary-staff/page */
-export async function getStaffSalaryPage(pageParams: PageParams & any, orders?: Orders | undefined | null, options?: Record<string, any>) {
-  return request<ResultBody<Page<StaffSalaryVO>>>('/hrs-api/salary-staff/page', {
+/** 获取员工薪资（分页） GET /salary-staff/page */
+export async function getSalaryStaffPage(pageParams: PageParams & any, orders?: Orders | undefined | null, options?: Record<string, any>) {
+  return request<ResultBody<Page<SalaryStaffVO>>>('/hrs-api/salary-staff/page', {
     method: 'GET',
     params: {
       ...pageParams,
@@ -15,16 +15,16 @@ export async function getStaffSalaryPage(pageParams: PageParams & any, orders?: 
   });
 }
 
-/** 获取员工信息（通过员工id） GET /salary-staff/${salaryStaffId} */
-export async function getStaffSalaryById(salaryStaffId: number, options?: Record<string, any>) {
-  return request<ResultBody<StaffSalaryVO>>(`/hrs-api/salary-staff/${salaryStaffId}`, {
+/** 获取员工薪资（通过员工id） GET /salary-staff/${salaryStaffId} */
+export async function getSalaryStaffById(salaryStaffId: number, options?: Record<string, any>) {
+  return request<ResultBody<SalaryStaffVO>>(`/hrs-api/salary-staff/${salaryStaffId}`, {
     method: 'GET',
     ...(options || {}),
   });
 }
 
 /** 添加员工接口 POST /salary-staff */
-export async function addStaffSalary(body: StaffSalaryForm, options?: Record<string, any>) {
+export async function addSalaryStaff(body: SalaryStaffForm, options?: Record<string, any>) {
   return request<ResultBody<number>>('/hrs-api/salary-staff', {
     method: 'POST',
     headers: {
@@ -36,7 +36,7 @@ export async function addStaffSalary(body: StaffSalaryForm, options?: Record<str
 }
 
 /** 更新员工接口 PUT /salary-staff */
-export async function updateStaffSalary(body: StaffSalaryForm, options?: Record<string, any>) {
+export async function updateSalaryStaff(body: SalaryStaffForm, options?: Record<string, any>) {
   return request<ResultBody<number>>('/hrs-api/salary-staff', {
     method: 'PUT',
     headers: {
@@ -48,7 +48,7 @@ export async function updateStaffSalary(body: StaffSalaryForm, options?: Record<
 }
 
 /** 删除员工接口 DELETE /salary-staff/${salaryStaffId} */
-export async function deleteStaffSalary(salaryStaffId: number, options?: Record<string, any>) {
+export async function deleteSalaryStaff(salaryStaffId: number, options?: Record<string, any>) {
   return request<ResultBody<number>>(`/hrs-api/salary-staff/${salaryStaffId}`, {
     method: 'DELETE',
     ...(options || {}),
@@ -56,7 +56,7 @@ export async function deleteStaffSalary(salaryStaffId: number, options?: Record<
 }
 
 /** 批量删除员工接口 DELETE /salary-staff */
-export async function batchDeleteStaffSalary(body: number[], options?: Record<string, any>) {
+export async function batchDeleteSalaryStaff(body: number[], options?: Record<string, any>) {
   return request<ResultBody<number[]>>('/hrs-api/salary-staff', {
     method: 'DELETE',
     headers: {
@@ -67,8 +67,8 @@ export async function batchDeleteStaffSalary(body: number[], options?: Record<st
   });
 }
 
-/** 导出员工信息 GET /salary-staff/export */
-export async function exportStaffSalary(params: any, options?: Record<string, any>) {
+/** 导出员工薪资 GET /salary-staff/export */
+export async function exportSalaryStaff(params: any, options?: Record<string, any>) {
   return request('/hrs-api/salary-staff/export', {
     method: 'GET',
     responseType: 'blob',
@@ -80,8 +80,8 @@ export async function exportStaffSalary(params: any, options?: Record<string, an
   });
 }
 
-/** 打印员工信息 POST /salary-staff/print */
-export async function printStaffSalary(salaryStaffId: number, options?: Record<string, any>) {
+/** 打印员工薪资 POST /salary-staff/print */
+export async function printSalaryStaff(salaryStaffId: number, options?: Record<string, any>) {
   return request('/hrs-api/salary-staff/print', {
     method: 'GET',
     responseType: 'blob',

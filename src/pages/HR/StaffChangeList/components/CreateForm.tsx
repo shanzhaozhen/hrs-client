@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import type { FormInstance } from 'antd';
 import { message } from 'antd';
-import { addStaffChange } from '@/services/staff-change/salary-change';
+import { addStaffChange } from '@/services/staff-change/staff-change';
 import type {StaffChangeForm, StaffChangeVO} from '@/services/staff-change/typings';
 import FormBody from '@/pages/HR/StaffChangeList/components/FormBody';
 import { ModalForm } from '@ant-design/pro-form';

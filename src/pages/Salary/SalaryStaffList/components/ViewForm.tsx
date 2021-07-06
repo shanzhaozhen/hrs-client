@@ -4,20 +4,20 @@ import FormBody from '@/pages/Salary/SalaryStaffList/components/FormBody';
 import { ModalForm } from '@ant-design/pro-form';
 import {HistoryOutlined} from "@ant-design/icons";
 import {Button} from "antd";
-import StaffChangeModal from "@/pages/HR/StaffChangeList/components/ModalBody";
-import type { StaffSalaryVO } from "@/services/salary-staff/typings";
+import SalaryChangeModal from "@/pages/Salary/SalaryChangeList/components/ModalBody";
+import type { SalaryStaffVO } from "@/services/salary-staff/typings";
 
 interface ViewFormProps {
   viewModalVisible: boolean;
   handleViewModalVisible: Dispatch<SetStateAction<boolean>>;
   onCancel: () => void;
-  values?: StaffSalaryVO;
+  values?: SalaryStaffVO;
 }
 
 const ViewForm: React.FC<ViewFormProps> = (props) => {
   const { viewModalVisible, handleViewModalVisible, values } = props
 
-  const [staffChangeModalVisible, setStaffChangeModalVisible] = useState<boolean>(false);
+  const [staffChangeModalVisible, setSalaryChangeModalVisible] = useState<boolean>(false);
 
   return (
     <>
@@ -30,7 +30,7 @@ const ViewForm: React.FC<ViewFormProps> = (props) => {
               type="primary"
               icon={<HistoryOutlined />}
               onClick={() => {
-                setStaffChangeModalVisible(true);
+                setSalaryChangeModalVisible(true);
               }}
             >
               调薪记录
@@ -61,10 +61,10 @@ const ViewForm: React.FC<ViewFormProps> = (props) => {
         ) : null}
       </ModalForm>
 
-      <StaffChangeModal
+      <SalaryChangeModal
         staffChangeModalVisible={staffChangeModalVisible}
-        handleStaffChangeModalVisible={setStaffChangeModalVisible}
-        staffId={values?.id}
+        handleSalaryChangeModalVisible={setSalaryChangeModalVisible}
+        staffId={values?.staffId}
       />
     </>
   );

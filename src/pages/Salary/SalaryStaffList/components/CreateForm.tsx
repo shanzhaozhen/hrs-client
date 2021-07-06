@@ -5,8 +5,8 @@ import { message } from 'antd';
 import FormBody from '@/pages/Salary/SalaryStaffList/components/FormBody';
 import type { ActionType } from '@ant-design/pro-table';
 import { ModalForm } from "@ant-design/pro-form";
-import { addStaffSalary } from "@/services/salary-staff/salary-staff";
-import type { StaffSalaryForm } from "@/services/salary-staff/typings";
+import { addSalaryStaff } from "@/services/salary-staff/salary-staff";
+import type { SalaryStaffForm } from "@/services/salary-staff/typings";
 
 interface CreateFormProps {
   createModalVisible: boolean;
@@ -23,10 +23,10 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
    * 添加员工薪资
    * @param fields
    */
-  const handleAdd = async (fields: StaffSalaryForm) => {
+  const handleAdd = async (fields: SalaryStaffForm) => {
     const hide = message.loading('正在添加');
     try {
-      await addStaffSalary(fields);
+      await addSalaryStaff(fields);
       hide();
       message.success('添加成功');
       handleCreateModalVisible(false);

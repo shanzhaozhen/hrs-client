@@ -82,7 +82,7 @@ const StaffList: React.FC = () => {
       sorter: true,
       renderText: (_, record) => (tableFilter(record.depId, departmentList, '未分配')),
       renderFormItem: () => {
-        return <FormTreeSelect treeData={departmentTree} placeholder="请选择所属部门" />
+        return <FormTreeSelect treeData={departmentTree} placeholder="请选择部门" />
       }
     },
     {

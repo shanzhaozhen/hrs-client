@@ -26,26 +26,16 @@ export type SalaryChangeVO = {
   staffCode?: string;
   /** 员工姓名 */
   staffName?: string;
-  /** 变更前部门id */
-  preDepId?: number;
-  /** 变更后部门id */
-  postDepId?: number;
-  /** 变更前职务 */
-  preDuty?: string;
-  /** 变更后职务 */
-  postDuty?: string;
-  /** 变更前岗位 */
-  prePost?: string;
-  /** 变更后岗位 */
-  postPost?: string;
-  /** 变更前岗位类型 */
-  prePostType?: string;
-  /** 变更后岗位类型 */
-  postPostType?: string;
-  /** 变更前岗位等级 */
-  prePostLevel?: string;
-  /** 变更后岗位等级 */
-  postPostLevel?: string;
+  /** 部门id */
+  depId?: number;
+  /** 变更前基础工资 */
+  preBasicSalary?: number;
+  /** 变更后基础工资 */
+  postBasicSalary?: number;
+  /** 变更前岗位工资 */
+  prePostSalary?: number;
+  /** 变更后岗位工资 */
+  postPostSalary?: number;
   /** 生效日期 */
   effectiveDate?: string;
   /** 备注 */

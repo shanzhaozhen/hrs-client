@@ -3,7 +3,7 @@ import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import type { FormInstance } from 'antd';
 import { message } from 'antd';
 import type { SalaryChangeForm, SalaryChangeVO } from '@/services/salary-change/typings';
-import FormBody from '@/pages/HR/SalaryChangeList/components/FormBody';
+import FormBody from '@/pages/Salary/SalaryChangeList/components/FormBody';
 import { updateSalaryChange } from '@/services/salary-change/salary-change';
 import { ModalForm } from '@ant-design/pro-form';
 import type { ActionType } from '@ant-design/pro-table';
@@ -23,7 +23,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
   const formRef = useRef<FormInstance>();
 
   /**
-   * 修改调动记录
+   * 修改调薪记录
    * @param fields
    */
   const handleUpdate = async (fields: SalaryChangeForm) => {

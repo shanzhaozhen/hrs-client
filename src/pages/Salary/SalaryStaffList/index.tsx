@@ -4,8 +4,8 @@ import {Button, Input, message, Modal} from 'antd';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import type {ActionType, ProColumns} from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import {exportStaffSalary, getStaffSalaryById, getStaffSalaryPage, printStaffSalary} from '@/services/salary-staff/salary-staff';
-import type { StaffSalaryForm, StaffSalaryVO } from '@/services/salary-staff/typings';
+import {exportSalaryStaff, getSalaryStaffById, getSalaryStaffPage, printSalaryStaff} from '@/services/salary-staff/salary-staff';
+import type { SalaryStaffForm, SalaryStaffVO } from '@/services/salary-staff/typings';
 import { getPageParams, getSortOrder, tableFilter } from "@/utils/common";
 import { ExportOutlined, ImportOutlined, PlusOutlined } from "@ant-design/icons";
 import CreateForm from "@/pages/Salary/SalaryStaffList/components/CreateForm";
@@ -15,14 +15,14 @@ import FormTreeSelect from "@/components/FormTreeSelect";
 import { ProFormUploadDragger } from "@ant-design/pro-form";
 import {downloadFile} from "@/utils/file";
 
-const StaffSalaryList: React.FC = () => {
+const SalaryStaffList: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const formRef = useRef<FormInstance>();
 
-  const [formValues, setFormValues] = useState<StaffSalaryVO | StaffSalaryForm>({});
+  const [formValues, setFormValues] = useState<SalaryStaffVO | SalaryStaffForm>({});
   const [viewModalVisible, handleViewModalVisible] = useState<boolean>(false);
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
-  const [selectedRowsState, setSelectedRows] = useState<StaffSalaryVO[]>([]);
+  const [selectedRowsState, setSelectedRows] = useState<SalaryStaffVO[]>([]);
   const [importModalVisible, setImportModalVisible] = useState<boolean>(false);
 
   const departmentList = useDepartmentList();
@@ -31,7 +31,7 @@ const StaffSalaryList: React.FC = () => {
   // /**
   //  * 批量删除员工
   //  */
-  // const handleDeleteStaffSalary = () => {
+  // const handleDeleteSalaryStaff = () => {
   //   Modal.confirm({
   //     title: '确认',
   //     icon: <ExclamationCircleOutlined />,
@@ -42,7 +42,7 @@ const StaffSalaryList: React.FC = () => {
   //       const hide = message.loading('正在删除');
   //       if (!selectedRowsState) return true;
   //       try {
-  //         await batchDeleteStaffSalary(selectedRowsState.map((selectedRow) => selectedRow.id));
+  //         await batchDeleteSalaryStaff(selectedRowsState.map((selectedRow) => selectedRow.id));
   //         hide();
   //         message.success('删除成功，即将刷新');
   //         actionRef.current?.reloadAndRest?.();
@@ -56,7 +56,7 @@ const StaffSalaryList: React.FC = () => {
   //   });
   // };
 
-  const columns: ProColumns<StaffSalaryVO>[] = [
+  const columns: ProColumns<SalaryStaffVO>[] = [
     {
       title: '关键字',
       key: 'keyword',
@@ -138,7 +138,7 @@ const StaffSalaryList: React.FC = () => {
           <a
             onClick={async () => {
               if (record && record.id) {
-                const { data } = await getStaffSalaryById(record.id);
+                const { data } = await getSalaryStaffById(record.id);
                 setFormValues(data || {});
                 handleViewModalVisible(true);
               } else {
@@ -155,7 +155,7 @@ const StaffSalaryList: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<StaffSalaryVO>
+      <ProTable<SalaryStaffVO>
         headerTitle="员工薪资"
         actionRef={actionRef}
         formRef={formRef}
@@ -174,7 +174,7 @@ const StaffSalaryList: React.FC = () => {
             type="primary"
             onClick={() => {
               const fieldsValue = formRef.current?.getFieldsValue();
-              exportStaffSalary({
+              exportSalaryStaff({
                 ...fieldsValue
               }).then(data => {
                 downloadFile(data, `员工-${new Date().getTime()}.xlsx`)
@@ -187,7 +187,7 @@ const StaffSalaryList: React.FC = () => {
             type="primary"
             onClick={() => {
               const fieldsValue = formRef.current?.getFieldsValue();
-              printStaffSalary(fieldsValue.id).then(data => {
+              printSalaryStaff(fieldsValue.id).then(data => {
                 downloadFile(data, `员工-${new Date().getTime()}.docx`)
               })
             }}
@@ -196,7 +196,7 @@ const StaffSalaryList: React.FC = () => {
           </Button>,
         ]}
         request={async (params, sorter) => {
-          const { data } = await getStaffSalaryPage(getPageParams(params), getSortOrder(sorter));
+          const { data } = await getSalaryStaffPage(getPageParams(params), getSortOrder(sorter));
           return {
             // success 请返回 true，
             // 不然 table 会停止解析数据，即使有数据
@@ -219,7 +219,7 @@ const StaffSalaryList: React.FC = () => {
             </div>
           }
         >
-          {/* <Button onClick={handleDeleteStaffSalary}>批量删除</Button> */}
+          {/* <Button onClick={handleDeleteSalaryStaff}>批量删除</Button> */}
         </FooterToolbar>
       )}
 
@@ -265,4 +265,4 @@ const StaffSalaryList: React.FC = () => {
   );
 };
 
-export default StaffSalaryList;
+export default SalaryStaffList;

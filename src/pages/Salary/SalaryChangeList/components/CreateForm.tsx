@@ -4,7 +4,7 @@ import type { FormInstance } from 'antd';
 import { message } from 'antd';
 import { addSalaryChange } from '@/services/salary-change/salary-change';
 import type {SalaryChangeForm, SalaryChangeVO} from '@/services/salary-change/typings';
-import FormBody from '@/pages/HR/SalaryChangeList/components/FormBody';
+import FormBody from '@/pages/Salary/SalaryChangeList/components/FormBody';
 import { ModalForm } from '@ant-design/pro-form';
 import type { ActionType } from '@ant-design/pro-table';
 import {getStaffById} from "@/services/staff/staff";
@@ -30,16 +30,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
           staffId: data.id,
           staffCode: data.staffCode,
           staffName: data.staffName,
-          preDepId: data.depId,
-          preDuty: data.duty,
-          prePost: data.post,
-          prePostType: data.postType,
-          prePostLevel: data.postLevel,
-          postDepId: data.depId,
-          postDuty: data.duty,
-          postPost: data.post,
-          postPostType: data.postType,
-          postPostLevel: data.postLevel,
+          depId: data.depId,
         } : {});
       })
     }
@@ -49,7 +40,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
   const formRef = useRef<FormInstance>();
 
   /**
-   * 添加调动记录
+   * 添加调薪记录
    * @param fields
    */
   const handleAdd = async (fields: SalaryChangeForm) => {

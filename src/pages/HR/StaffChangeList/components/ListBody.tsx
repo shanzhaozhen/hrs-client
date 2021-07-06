@@ -6,10 +6,11 @@ import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import CreateForm from './CreateForm';
 import UpdateForm from './UpdateForm';
-import { getStaffChangePage, getStaffChangeById, deleteStaffChange, batchDeleteStaffChange, runTransfer } from '@/services/staff-change/salary-change';
+import { getStaffChangePage, getStaffChangeById, deleteStaffChange, batchDeleteStaffChange, runTransfer } from '@/services/staff-change/staff-change';
 import type { StaffChangeVO } from '@/services/staff-change/typings';
 import {getPageParams, getSortOrder, tableFilter} from "@/utils/common";
-import { useDepartmentList } from "@/utils/department";
+import {useDepartmentList, useDepartmentTree} from "@/utils/department";
+import FormTreeSelect from "@/components/FormTreeSelect";
 
 interface ListBodyProps {
   staffId?: number;
@@ -25,6 +26,7 @@ const StaffChangeListBody: React.FC<ListBodyProps> = (props) => {
   const [selectedRowsState, setSelectedRows] = useState<StaffChangeVO[]>([]);
 
   const departmentList = useDepartmentList();
+  const departmentTree = useDepartmentTree();
 
   /**
    * 批量删除调动记录
@@ -66,6 +68,21 @@ const StaffChangeListBody: React.FC<ListBodyProps> = (props) => {
       },
     },
     {
+      title: '部门',
+      dataIndex: 'depId',
+      valueType: 'text',
+      sorter: true,
+      renderText: (_, record) => {
+        if (record.preDepId === record.postDepId) {
+          return tableFilter(record.preDepId, departmentList, '未分配');
+        }
+        return ''.concat(tableFilter(record.preDepId, departmentList, '未分配'), '=>', tableFilter(record.preDepId, departmentList, '未分配'));
+      },
+      renderFormItem: () => {
+        return <FormTreeSelect treeData={departmentTree} placeholder="请选择部门" />
+      }
+    },
+    {
       title: '员工编号',
       // dataIndex: 'staffCode',
       dataIndex: 's.staff_code',
@@ -82,19 +99,6 @@ const StaffChangeListBody: React.FC<ListBodyProps> = (props) => {
       sorter: true,
       hideInSearch: true,
       renderText: (_, record) => record.staffName,
-    },
-    {
-      title: '部门',
-      dataIndex: 'depId',
-      valueType: 'text',
-      sorter: true,
-      hideInSearch: true,
-      renderText: (_, record) => {
-        if (record.preDepId === record.postDepId) {
-          return tableFilter(record.preDepId, departmentList, '未分配');
-        }
-        return ''.concat(tableFilter(record.preDepId, departmentList, '未分配'), '=>', tableFilter(record.preDepId, departmentList, '未分配'));
-      }
     },
     {
       title: '职务',

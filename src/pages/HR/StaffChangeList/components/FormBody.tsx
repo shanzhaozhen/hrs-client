@@ -168,10 +168,7 @@ const FormBody: React.FC<FormProps> = (props) => {
           />
         </Col>
         <Col xl={24} lg={24} md={24}>
-          <ProFormTextArea
-            name="remarks"
-            label="备注"
-          />
+          <ProFormTextArea name="remarks" label="备注" />
         </Col>
       </Row>
 

@@ -9,7 +9,8 @@ import UpdateForm from './UpdateForm';
 import { getSalaryChangePage, getSalaryChangeById, deleteSalaryChange, batchDeleteSalaryChange, runTransfer } from '@/services/salary-change/salary-change';
 import type { SalaryChangeVO } from '@/services/salary-change/typings';
 import {getPageParams, getSortOrder, tableFilter} from "@/utils/common";
-import { useDepartmentList } from "@/utils/department";
+import {useDepartmentList, useDepartmentTree} from "@/utils/department";
+import FormTreeSelect from "@/components/FormTreeSelect";
 
 interface ListBodyProps {
   staffId?: number;
@@ -25,15 +26,16 @@ const SalaryChangeListBody: React.FC<ListBodyProps> = (props) => {
   const [selectedRowsState, setSelectedRows] = useState<SalaryChangeVO[]>([]);
 
   const departmentList = useDepartmentList();
+  const departmentTree = useDepartmentTree();
 
   /**
-   * 批量删除调动记录
+   * 批量删除调薪记录
    */
   const handleDeleteSalaryChange = () => {
     Modal.confirm({
       title: '确认',
       icon: <ExclamationCircleOutlined />,
-      content: '确定批量删除勾选中的调动记录吗',
+      content: '确定批量删除勾选中的调薪记录吗',
       okText: '确认',
       cancelText: '取消',
       onOk: async () => {
@@ -66,6 +68,16 @@ const SalaryChangeListBody: React.FC<ListBodyProps> = (props) => {
       },
     },
     {
+      title: '部门',
+      dataIndex: 'depId',
+      valueType: 'text',
+      sorter: true,
+      renderText: (_, record) => (tableFilter(record.depId, departmentList, '未分配')),
+      renderFormItem: () => {
+        return <FormTreeSelect treeData={departmentTree} placeholder="请选择部门" treeNodeFilterProp="title" />
+      }
+    },
+    {
       title: '员工编号',
       // dataIndex: 'staffCode',
       dataIndex: 's.staff_code',
@@ -84,45 +96,18 @@ const SalaryChangeListBody: React.FC<ListBodyProps> = (props) => {
       renderText: (_, record) => record.staffName,
     },
     {
-      title: '部门',
-      dataIndex: 'depId',
+      title: '基础工资',
+      dataIndex: 'preBasicSalary',
       valueType: 'text',
-      sorter: true,
       hideInSearch: true,
-      renderText: (_, record) => {
-        if (record.preDepId === record.postDepId) {
-          return tableFilter(record.preDepId, departmentList, '未分配');
-        }
-        return ''.concat(tableFilter(record.preDepId, departmentList, '未分配'), '=>', tableFilter(record.preDepId, departmentList, '未分配'));
-      }
+      renderText: (_, record) => (record.preBasicSalary === record.postBasicSalary ? record.preBasicSalary : ''.concat(record.preBasicSalary === undefined ? '（未定）' : (record.preBasicSalary).toString(), '=>', (record.postBasicSalary === undefined ? '（未定）' : (record.postBasicSalary).toString())))
     },
     {
-      title: '职务',
-      dataIndex: 'duty',
+      title: '岗位工资',
+      dataIndex: 'prePostSalary',
       valueType: 'text',
       hideInSearch: true,
-      renderText: (_, record) => (record.preDuty === record.postDuty ? record.preDuty : ''.concat(record.preDuty || '(无)', '=>', record.postDuty || '(无)'))
-    },
-    {
-      title: '岗位',
-      dataIndex: 'prePost',
-      valueType: 'text',
-      hideInSearch: true,
-      renderText: (_, record) => (record.prePost === record.postPost ? record.postPost : ''.concat(record.prePost || '(无)', '=>', record.postPost || '(无)'))
-    },
-    {
-      title: '岗位类型',
-      dataIndex: 'postType',
-      valueType: 'text',
-      hideInSearch: true,
-      renderText: (_, record) => (record.prePostType === record.postPostType ? record.postPostType : ''.concat(record.prePostType || '(无)', '=>', record.postPostType || '(无)'))
-    },
-    {
-      title: '岗位等级',
-      dataIndex: 'postLevel',
-      valueType: 'text',
-      hideInSearch: true,
-      renderText: (_, record) => (record.prePostLevel === record.postPostLevel ? record.postPostLevel : ''.concat(record.prePostLevel || '(无)', '=>', record.postPostLevel || '(无)'))
+      renderText: (_, record) => (record.prePostSalary === record.postPostSalary ? record.prePostSalary : ''.concat(record.prePostSalary === undefined ? '（未定）' : (record.prePostSalary).toString(), '=>', (record.postPostSalary === undefined ? '（未定）' : (record.postPostSalary).toString())))
     },
     {
       title: '生效日期',
@@ -162,7 +147,7 @@ const SalaryChangeListBody: React.FC<ListBodyProps> = (props) => {
                 message.success('调动执行成功！')
                 actionRef.current?.reloadAndRest?.();
               } else {
-                message.warn('没有选中有效的调动记录');
+                message.warn('没有选中有效的调薪记录');
               }
             }}
           >
@@ -175,9 +160,9 @@ const SalaryChangeListBody: React.FC<ListBodyProps> = (props) => {
                 const { data } = await getSalaryChangeById(record.id);
                 setUpdateFormValues(data || {});
                 handleUpdateModalVisible(true);
-                // message.error(res.message || `没有获取到调动记录信息（id:${record.id}）`);
+                // message.error(res.message || `没有获取到调薪记录信息（id:${record.id}）`);
               } else {
-                message.warn('没有选中有效的调动记录');
+                message.warn('没有选中有效的调薪记录');
               }
             }}
           >
@@ -185,14 +170,14 @@ const SalaryChangeListBody: React.FC<ListBodyProps> = (props) => {
           </a>
           <Divider type="vertical" />
           <Popconfirm
-            title="确定删除该调动记录?"
+            title="确定删除该调薪记录?"
             onConfirm={async () => {
               if (record && record.id) {
                 await deleteSalaryChange(record.id);
                 message.success('删除成功！');
                 actionRef.current?.reloadAndRest?.();
               } else {
-                message.warn('没有选中有效的调动记录');
+                message.warn('没有选中有效的调薪记录');
               }
             }}
             okText="确定"
@@ -208,7 +193,7 @@ const SalaryChangeListBody: React.FC<ListBodyProps> = (props) => {
   return (
     <>
       <ProTable<SalaryChangeVO>
-        headerTitle="调动记录"
+        headerTitle="调薪记录"
         actionRef={actionRef}
         rowKey="id"
         search={{
