@@ -41,12 +41,13 @@ const FormBody: React.FC<FormProps> = (props) => {
               name="staffCode"
               label="员工编号"
               placeholder="员工编号"
+              rules={[{ required: true, message: '不是有效的员工' }]}
               disabled
             />
           ) : (
             <ProFormItem label="员工编号">
               <Input.Group compact>
-                <ProFormItem name="staffCode">
+                <ProFormItem name="staffCode" rules={[{ required: true, message: '请选择员工' }]}>
                   <Input
                     placeholder="请选择员工"
                     name="staffCode"
@@ -86,9 +87,9 @@ const FormBody: React.FC<FormProps> = (props) => {
           <ProFormItem
             name="postDepId"
             label="变更后部门"
-            rules={[{ required: false, message: '请选择部门' }]}
+            rules={[{ required: true, message: '请选择部门' }]}
           >
-            <FormTreeSelect treeData={departmentTree} placeholder="请选择部门" />
+            <FormTreeSelect treeData={departmentTree} style={{ width: 328 }} placeholder="请选择部门" />
           </ProFormItem>
         </Col>
         <Col xl={12} lg={12} md={24}>
@@ -104,7 +105,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             width="md"
             name="postDuty"
             label="变更后职务"
-            rules={[{ required: false, message: '请选择职务' }]}
+            rules={[{ required: true, message: '请选择职务' }]}
             options={dutyOptions}
           />
         </Col>
@@ -121,7 +122,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             width="md"
             name="postPost"
             label="变更后岗位"
-            rules={[{ required: false, message: '请选择岗位' }]}
+            rules={[{ required: true, message: '请选择岗位' }]}
             options={postOptions}
           />
         </Col>
@@ -138,7 +139,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             width="md"
             name="postPostType"
             label="变更后岗位类型"
-            rules={[{ required: false, message: '请选择岗位类型' }]}
+            rules={[{ required: true, message: '请选择岗位类型' }]}
             options={postTypeOptions}
           />
         </Col>
@@ -155,7 +156,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             width="md"
             name="postPostLevel"
             label="变更后岗位等级"
-            rules={[{ required: false, message: '请选择岗位等级' }]}
+            rules={[{ required: true, message: '请选择岗位等级' }]}
             options={postLevelOptions}
           />
         </Col>

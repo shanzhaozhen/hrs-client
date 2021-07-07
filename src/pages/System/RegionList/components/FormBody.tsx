@@ -70,7 +70,7 @@ const FormBody: React.FC<FormProps> = () => {
               }),
             ]}
           >
-            <FormTreeSelect treeData={regionTree} placeholder="上级区域" />
+            <FormTreeSelect treeData={regionTree} style={{ width: 328 }} placeholder="上级区域" />
           </Form.Item>
         </Col>
         <Col xl={12} lg={12} md={24}>

@@ -69,7 +69,7 @@ export async function batchDeleteSalaryChange(body: (number | undefined)[], opti
 }
 
 /** 执行薪资变动记录信息 GET /salary-change/run/${salaryChangeId} */
-export async function runTransfer(salaryChangeId: number, options?: Record<string, any>) {
+export async function runChange(salaryChangeId: number, options?: Record<string, any>) {
   return request<ResultBody<number>>(`/hrs-api/salary-change/run/${salaryChangeId}`, {
     method: 'GET',
     ...(options || {}),

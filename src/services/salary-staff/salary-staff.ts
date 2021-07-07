@@ -23,6 +23,14 @@ export async function getSalaryStaffById(salaryStaffId: number, options?: Record
   });
 }
 
+/** 获取员工薪资（通过员工id） GET /salary-staff/staff-id/${salaryStaffId} */
+export async function getSalaryStaffByStaffId(staffId: number, options?: Record<string, any>) {
+  return request<ResultBody<SalaryStaffVO>>(`/hrs-api/salary-staff/staff-id/${staffId}`, {
+    method: 'GET',
+    ...(options || {}),
+  });
+}
+
 /** 添加员工接口 POST /salary-staff */
 export async function addSalaryStaff(body: SalaryStaffForm, options?: Record<string, any>) {
   return request<ResultBody<number>>('/hrs-api/salary-staff', {

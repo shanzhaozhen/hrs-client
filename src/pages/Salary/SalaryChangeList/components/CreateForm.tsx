@@ -8,6 +8,7 @@ import FormBody from '@/pages/Salary/SalaryChangeList/components/FormBody';
 import { ModalForm } from '@ant-design/pro-form';
 import type { ActionType } from '@ant-design/pro-table';
 import {getStaffById} from "@/services/staff/staff";
+import {getSalaryStaffByStaffId} from "@/services/salary-staff/salary-staff";
 
 interface CreateFormProps {
   createModalVisible: boolean;
@@ -23,7 +24,12 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
 
   useEffect(() => {
     if (staffId) {
-      getStaffById(staffId).then(({ data }) => {
+      getStaffById(staffId).then(async ({ data }) => {
+        if (!data?.id) {
+          message.error('没有获取到有效的员工ID！');
+          return;
+        }
+        const { data: salaryStaff } = await getSalaryStaffByStaffId(data.id);
         setSalaryChangeInitialValues(data ? {
           ...data,
           id: undefined,
@@ -31,6 +37,8 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
           staffCode: data.staffCode,
           staffName: data.staffName,
           depId: data.depId,
+          preBasicSalary: salaryStaff?.basicSalary,
+          prePostSalary: salaryStaff?.postSalary,
         } : {});
       })
     }

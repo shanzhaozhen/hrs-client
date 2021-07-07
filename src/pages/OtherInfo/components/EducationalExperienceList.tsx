@@ -65,7 +65,7 @@ const EducationalExperienceList: React.FC<EducationalExperienceListProps> = (pro
       title: '是否全日制',
       dataIndex: 'fullTime',
       valueType: 'switch',
-      render: (_, {fullTime}) => (fullTime ? '是' : '否'),
+      render: (_, { fullTime }) => (fullTime ? '是' : '否'),
     },
     {
       title: '证明人姓名',

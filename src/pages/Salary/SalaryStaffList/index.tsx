@@ -75,7 +75,7 @@ const SalaryStaffList: React.FC = () => {
     },
     {
       title: '部门',
-      dataIndex: 'depId',
+      dataIndex: 's.depId',
       valueType: 'select',
       sorter: true,
       renderText: (_, record) => (tableFilter(record.depId, departmentList, '未分配')),
@@ -85,33 +85,33 @@ const SalaryStaffList: React.FC = () => {
     },
     {
       title: '员工编号',
-      dataIndex: 'salaryStaffCode',
+      dataIndex: 's.staffCode',
       valueType: 'text',
       sorter: true,
       hideInSearch: true,
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: '此项为必填项',
-          },
-        ],
-      },
+      renderText: (_, record) => record.staffCode,
     },
     {
       title: '员工姓名',
-      dataIndex: 'salaryStaffCode',
+      dataIndex: 's.staffName',
       valueType: 'text',
       sorter: true,
       hideInSearch: true,
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: '此项为必填项',
-          },
-        ],
-      },
+      renderText: (_, record) => record.staffName,
+    },
+    {
+      title: '基础工资',
+      dataIndex: 'basicSalary',
+      valueType: 'digit',
+      sorter: true,
+      hideInSearch: true,
+    },
+    {
+      title: '岗位工资',
+      dataIndex: 'postSalary',
+      valueType: 'digit',
+      sorter: true,
+      hideInSearch: true,
     },
     {
       title: '创建时间',

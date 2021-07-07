@@ -104,7 +104,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             label="所属部门"
             rules={[{ required: false, message: '请选择所属部门' }]}
           >
-            <FormTreeSelect treeData={departmentTree} placeholder="请选择所属部门" />
+            <FormTreeSelect treeData={departmentTree} style={{ width: 328 }} placeholder="请选择所属部门" />
           </Form.Item>
         </Col>
         <Col span={24}>

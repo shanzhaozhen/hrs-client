@@ -6,7 +6,7 @@ import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import CreateForm from './CreateForm';
 import UpdateForm from './UpdateForm';
-import { getSalaryChangePage, getSalaryChangeById, deleteSalaryChange, batchDeleteSalaryChange, runTransfer } from '@/services/salary-change/salary-change';
+import { getSalaryChangePage, getSalaryChangeById, deleteSalaryChange, batchDeleteSalaryChange, runChange } from '@/services/salary-change/salary-change';
 import type { SalaryChangeVO } from '@/services/salary-change/typings';
 import {getPageParams, getSortOrder, tableFilter} from "@/utils/common";
 import {useDepartmentList, useDepartmentTree} from "@/utils/department";
@@ -79,8 +79,7 @@ const SalaryChangeListBody: React.FC<ListBodyProps> = (props) => {
     },
     {
       title: '员工编号',
-      // dataIndex: 'staffCode',
-      dataIndex: 's.staff_code',
+      dataIndex: 's.staffCode',
       valueType: 'text',
       sorter: true,
       hideInSearch: true,
@@ -88,8 +87,7 @@ const SalaryChangeListBody: React.FC<ListBodyProps> = (props) => {
     },
     {
       title: '员工姓名',
-      // dataIndex: 'staffName',
-      dataIndex: 's.staff_name',
+      dataIndex: 's.staffName',
       valueType: 'text',
       sorter: true,
       hideInSearch: true,
@@ -117,6 +115,13 @@ const SalaryChangeListBody: React.FC<ListBodyProps> = (props) => {
       hideInTable: true,
     },
     {
+      title: '是否已执行',
+      dataIndex: 'executed',
+      valueType: 'text',
+      hideInSearch: true,
+      render: (_, { executed }) => (executed ? '是' : '否'),
+    },
+    {
       title: '创建时间',
       dataIndex: 'createdDate',
       valueType: 'dateTime',
@@ -140,15 +145,41 @@ const SalaryChangeListBody: React.FC<ListBodyProps> = (props) => {
         <>
           <a
             onClick={async () => {
-              if (record && record.id) {
-                const hide = message.loading('正在执行');
-                await runTransfer(record.id);
-                hide();
-                message.success('调动执行成功！')
-                actionRef.current?.reloadAndRest?.();
-              } else {
-                message.warn('没有选中有效的调薪记录');
+              const runTask = async (salaryChange: SalaryChangeVO) => {
+                if (salaryChange && salaryChange.id) {
+                  const hide = message.loading('正在执行');
+                  await runChange(salaryChange?.id);
+                  hide();
+                  message.success('调动执行成功！')
+                  actionRef.current?.reloadAndRest?.();
+                } else {
+                  message.warn('没有选中有效的调薪记录');
+                }
               }
+
+              Modal.confirm({
+                title: '确认',
+                icon: <ExclamationCircleOutlined />,
+                content: '确定执行该任务？',
+                okText: '确认',
+                cancelText: '取消',
+                onOk: async () => {
+                  if (record.executed) {
+                    Modal.confirm({
+                      title: '确认',
+                      icon: <ExclamationCircleOutlined/>,
+                      content: '该任务已被执行，是否继续执行？',
+                      okText: '确认',
+                      cancelText: '取消',
+                      onOk: async () => {
+                        await runTask(record);
+                      }
+                    });
+                  } else {
+                    await runTask(record);
+                  }
+                }
+              });
             }}
           >
             执行

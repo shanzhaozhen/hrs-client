@@ -13,6 +13,8 @@ export type SalaryChangeForm = {
   postPostSalary?: number;
   /** 生效日期 */
   effectiveDate?: string;
+  /** 是否已执行 */
+  executed?: number;
   /** 备注 */
   remarks?: string;
 };
@@ -38,6 +40,8 @@ export type SalaryChangeVO = {
   postPostSalary?: number;
   /** 生效日期 */
   effectiveDate?: string;
+  /** 是否已执行 */
+  executed?: number;
   /** 备注 */
   remarks?: string;
   /** 创建人 */

@@ -6,7 +6,7 @@ import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import CreateForm from './CreateForm';
 import UpdateForm from './UpdateForm';
-import { getStaffChangePage, getStaffChangeById, deleteStaffChange, batchDeleteStaffChange, runTransfer } from '@/services/staff-change/staff-change';
+import { getStaffChangePage, getStaffChangeById, deleteStaffChange, batchDeleteStaffChange, runChange } from '@/services/staff-change/staff-change';
 import type { StaffChangeVO } from '@/services/staff-change/typings';
 import {getPageParams, getSortOrder, tableFilter} from "@/utils/common";
 import {useDepartmentList, useDepartmentTree} from "@/utils/department";
@@ -136,6 +136,13 @@ const StaffChangeListBody: React.FC<ListBodyProps> = (props) => {
       hideInTable: true,
     },
     {
+      title: '是否已执行',
+      dataIndex: 'executed',
+      valueType: 'text',
+      hideInSearch: true,
+      render: (_, { executed }) => (executed ? '是' : '否'),
+    },
+    {
       title: '创建时间',
       dataIndex: 'createdDate',
       valueType: 'dateTime',
@@ -159,15 +166,41 @@ const StaffChangeListBody: React.FC<ListBodyProps> = (props) => {
         <>
           <a
             onClick={async () => {
-              if (record && record.id) {
-                const hide = message.loading('正在执行');
-                await runTransfer(record.id);
-                hide();
-                message.success('调动执行成功！')
-                actionRef.current?.reloadAndRest?.();
-              } else {
-                message.warn('没有选中有效的调动记录');
+              const runTask = async (staffChangeVO: StaffChangeVO) => {
+                if (staffChangeVO && staffChangeVO.id) {
+                  const hide = message.loading('正在执行');
+                  await runChange(staffChangeVO?.id);
+                  hide();
+                  message.success('调动执行成功！')
+                  actionRef.current?.reloadAndRest?.();
+                } else {
+                  message.warn('没有选中有效的调动记录');
+                }
               }
+
+              Modal.confirm({
+                title: '确认',
+                icon: <ExclamationCircleOutlined />,
+                content: '确定执行该任务？',
+                okText: '确认',
+                cancelText: '取消',
+                onOk: async () => {
+                  if (record.executed) {
+                    Modal.confirm({
+                      title: '确认',
+                      icon: <ExclamationCircleOutlined/>,
+                      content: '该任务已被执行，是否继续执行？',
+                      okText: '确认',
+                      cancelText: '取消',
+                      onOk: async () => {
+                        await runTask(record);
+                      }
+                    });
+                  } else {
+                    await runTask(record);
+                  }
+                }
+              });
             }}
           >
             执行

@@ -75,7 +75,7 @@ const FormBody: React.FC<FormProps> = () => {
               }),
             ]}
           >
-            <FormTreeSelect treeData={menuTree} placeholder="上级菜单" />
+            <FormTreeSelect treeData={menuTree} style={{ width: 328 }} placeholder="上级菜单" />
           </Form.Item>
         </Col>
         <Col xl={12} lg={12} md={24}>

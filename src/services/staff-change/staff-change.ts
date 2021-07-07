@@ -69,7 +69,7 @@ export async function batchDeleteStaffChange(body: (number | undefined)[], optio
 }
 
 /** 执行调动记录信息 GET /staff-change/run/${staffChangeId} */
-export async function runTransfer(staffChangeId: number, options?: Record<string, any>) {
+export async function runChange(staffChangeId: number, options?: Record<string, any>) {
   return request<ResultBody<number>>(`/hrs-api/staff-change/run/${staffChangeId}`, {
     method: 'GET',
     ...(options || {}),
