@@ -139,7 +139,25 @@ export default [
       // },
     ],
   },
-
+  {
+    path: '/performance',
+    name: 'performance',
+    icon: 'crown',
+    routes: [
+      {
+        path: '/performance/performance',
+        name: 'performance',
+        icon: 'smile',
+        component: './Performance/PerformanceList',
+      },
+      {
+        path: '/performance/performance-setting',
+        name: 'performance-setting',
+        icon: 'smile',
+        component: './Performance/PerformanceSettingList',
+      },
+    ],
+  },
   {
     path: '/recruit',
     name: 'recruit',

@@ -85,7 +85,7 @@ const StaffChangeListBody: React.FC<ListBodyProps> = (props) => {
     {
       title: '员工编号',
       // dataIndex: 'staffCode',
-      dataIndex: 's.staff_code',
+      dataIndex: 's.staffCode',
       valueType: 'text',
       sorter: true,
       hideInSearch: true,
@@ -94,7 +94,7 @@ const StaffChangeListBody: React.FC<ListBodyProps> = (props) => {
     {
       title: '员工姓名',
       // dataIndex: 'staffName',
-      dataIndex: 's.staff_name',
+      dataIndex: 's.staffName',
       valueType: 'text',
       sorter: true,
       hideInSearch: true,

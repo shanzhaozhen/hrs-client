@@ -41,7 +41,7 @@ export type OrderItem = {
   asc?: boolean;
 };
 
-type Orders = {
+export type Orders = {
   asc: string[];
   desc: string[];
 }
