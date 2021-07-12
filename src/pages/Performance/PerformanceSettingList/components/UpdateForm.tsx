@@ -5,10 +5,9 @@ import { message } from 'antd';
 import FormBody from '@/pages/Performance/PerformanceSettingList/components/FormBody';
 import type { ActionType } from '@ant-design/pro-table';
 import { ModalForm } from "@ant-design/pro-form";
-import { addSalaryStaff } from "@/services/salary-staff/salary-staff";
-import type { SalaryStaffForm } from "@/services/salary-staff/typings";
 import {onFormValuesChange} from "@/pages/Performance/PerformanceSettingList";
 import type {PerformanceSettingForm, PerformanceSettingVO} from "@/services/performance-setting/typings";
+import {updatePerformanceSetting} from "@/services/performance-setting/performance-setting";
 
 interface UpdateFormProps {
   updateModalVisible: boolean;
@@ -27,10 +26,10 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
    * 修改绩效设置
    * @param fields
    */
-  const handleUpdate = async (fields: SalaryStaffForm) => {
+  const handleUpdate = async (fields: PerformanceSettingForm) => {
     const hide = message.loading('正在添加');
     try {
-      await addSalaryStaff(fields);
+      await updatePerformanceSetting(fields);
       hide();
       message.success('添加成功');
       handleUpdateModalVisible(false);

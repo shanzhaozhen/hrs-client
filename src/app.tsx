@@ -49,8 +49,11 @@ export async function getInitialState(): Promise<{
 }> {
   const fetchUserInfo = async () => {
     try {
-      const { data } = await getCurrentUserInfo();
-      return data;
+      const token = localStorage.getItem('ACCESS_TOKEN');
+      if (token) {
+        const { data } = await getCurrentUserInfo();
+        return data;
+      }
     } catch (error) {
       history.push('/login');
     }

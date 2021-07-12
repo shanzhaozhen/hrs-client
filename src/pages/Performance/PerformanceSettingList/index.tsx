@@ -1,25 +1,30 @@
 import React, { useRef, useState } from 'react';
 import type { FormInstance } from 'antd';
-import {Button, Divider, Input, message, Modal} from 'antd';
+import {Button, Divider, Input, message, Modal, Popconfirm} from 'antd';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import type {ActionType, ProColumns} from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import {exportSalaryStaff, printSalaryStaff} from '@/services/salary-staff/salary-staff';
-import type { SalaryStaffForm, SalaryStaffVO } from '@/services/salary-staff/typings';
+import { exportSalaryStaff, printSalaryStaff } from '@/services/salary-staff/salary-staff';
+import type { SalaryStaffVO } from '@/services/salary-staff/typings';
 import { getPageParams, getSortOrder } from "@/utils/common";
-import { ExportOutlined, ImportOutlined, PlusOutlined } from "@ant-design/icons";
+import {ExclamationCircleOutlined, ExportOutlined, ImportOutlined, PlusOutlined} from "@ant-design/icons";
 import CreateForm from "@/pages/Performance/PerformanceSettingList/components/CreateForm";
 import ViewForm from "@/pages/Performance/PerformanceSettingList/components/ViewForm";
 import { ProFormUploadDragger } from "@ant-design/pro-form";
 import {downloadFile} from "@/utils/file";
-import {getPerformanceSettingById, getPerformanceSettingPage} from "@/services/performance-setting/performance-setting";
+import {
+  batchDeletePerformanceSetting, deletePerformanceSetting,
+  getPerformanceSettingById,
+  getPerformanceSettingPage
+} from "@/services/performance-setting/performance-setting";
 import UpdateForm from "@/pages/Performance/PerformanceSettingList/components/UpdateForm";
+import type {PerformanceSettingForm, PerformanceSettingVO} from "@/services/performance-setting/typings";
 
 export const onFormValuesChange = (changedValues: any, allValues: any, formRef: any) => {
   if (changedValues.hasOwnProperty('month')) {
     const { month } = changedValues;
     const yearMonth = month[0].split('-');
-    const quarter = parseInt(String(yearMonth[1] / 4), 10) + 1;
+    const quarter = parseInt(String(yearMonth[1] / 3), 10) + 1;
     formRef.current?.setFieldsValue({
       ...allValues,
       name: `${yearMonth[0]}年第${quarter}季度`,
@@ -35,40 +40,40 @@ const PerformanceSettingList: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const formRef = useRef<FormInstance>();
 
-  const [formValues, setFormValues] = useState<SalaryStaffVO | SalaryStaffForm>({});
+  const [formValues, setFormValues] = useState<PerformanceSettingVO | PerformanceSettingForm>({});
   const [viewModalVisible, handleViewModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
-  const [selectedRowsState, setSelectedRows] = useState<SalaryStaffVO[]>([]);
+  const [selectedRowsState, setSelectedRows] = useState<PerformanceSettingVO[]>([]);
   const [importModalVisible, setImportModalVisible] = useState<boolean>(false);
 
-  // /**
-  //  * 批量删除员工
-  //  */
-  // const handleDeleteSalaryStaff = () => {
-  //   Modal.confirm({
-  //     title: '确认',
-  //     icon: <ExclamationCircleOutlined />,
-  //     content: '确定批量删除勾选中的员工吗',
-  //     okText: '确认',
-  //     cancelText: '取消',
-  //     onOk: async () => {
-  //       const hide = message.loading('正在删除');
-  //       if (!selectedRowsState) return true;
-  //       try {
-  //         await batchDeleteSalaryStaff(selectedRowsState.map((selectedRow) => selectedRow.id));
-  //         hide();
-  //         message.success('删除成功，即将刷新');
-  //         actionRef.current?.reloadAndRest?.();
-  //         return true;
-  //       } catch (error) {
-  //         hide();
-  //         message.error('删除失败，请重试');
-  //         return false;
-  //       }
-  //     },
-  //   });
-  // };
+  /**
+   * 批量删除绩效设置
+   */
+  const handleDeletePerformanceSetting = () => {
+    Modal.confirm({
+      title: '确认',
+      icon: <ExclamationCircleOutlined />,
+      content: '确定批量删除勾选中的绩效设置吗',
+      okText: '确认',
+      cancelText: '取消',
+      onOk: async () => {
+        const hide = message.loading('正在删除');
+        if (!selectedRowsState) return true;
+        try {
+          await batchDeletePerformanceSetting(selectedRowsState.map((selectedRow) => selectedRow.id));
+          hide();
+          message.success('删除成功，即将刷新');
+          actionRef.current?.reloadAndRest?.();
+          return true;
+        } catch (error) {
+          hide();
+          message.error('删除失败，请重试');
+          return false;
+        }
+      },
+    });
+  };
 
   const columns: ProColumns<SalaryStaffVO>[] = [
     {
@@ -151,7 +156,7 @@ const PerformanceSettingList: React.FC = () => {
                 setFormValues(data || {});
                 handleViewModalVisible(true);
               } else {
-                message.warn('没有选中有效的员工');
+                message.warn('没有选中有效的绩效设置');
               }
             }}
           >
@@ -172,12 +177,29 @@ const PerformanceSettingList: React.FC = () => {
                 setFormValues(data || {});
                 handleUpdateModalVisible(true);
               } else {
-                message.warn('没有选中有效的员工');
+                message.warn('没有选中有效的绩效设置');
               }
             }}
           >
             修改
           </a>
+          <Divider type="vertical" />
+          <Popconfirm
+            title="确定删除该绩效设置?"
+            onConfirm={async () => {
+              if (record && record.id) {
+                await deletePerformanceSetting(record.id);
+                message.success('删除成功！');
+                actionRef.current?.reloadAndRest?.();
+              } else {
+                message.warn('没有选中有效的绩效设置');
+              }
+            }}
+            okText="确定"
+            cancelText="取消"
+          >
+            <a href="#">删除</a>
+          </Popconfirm>
         </>
       ),
     },
@@ -249,7 +271,7 @@ const PerformanceSettingList: React.FC = () => {
             </div>
           }
         >
-          {/* <Button onClick={handleDeleteSalaryStaff}>批量删除</Button> */}
+           <Button onClick={handleDeletePerformanceSetting}>批量删除</Button>
         </FooterToolbar>
       )}
 

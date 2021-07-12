@@ -38,28 +38,7 @@ const FormBody: React.FC<FormProps> = (props) => {
           />
         </Col>
         {
-          isView ? (
-            <>
-              <Col xl={12} lg={12} md={24}>
-                <ProFormDatePicker.Month
-                  width="md"
-                  name="startMonth"
-                  label="开始考核月份"
-                  rules={[{ required: true, message: '请选择开始考核月份' }]}
-                  readonly={isView}
-                />
-              </Col>
-              <Col xl={12} lg={12} md={24}>
-                <ProFormDatePicker.Month
-                  width="md"
-                  name="endMonth"
-                  label="结束考核月份"
-                  rules={[{ required: true, message: '请选择结束考核月份' }]}
-                  readonly={isView}
-                />
-              </Col>
-            </>
-          ) : (
+          !isView && (
             <Col xl={12} lg={12} md={24}>
               <ProFormDateRangePicker
                 width="md"
@@ -70,11 +49,30 @@ const FormBody: React.FC<FormProps> = (props) => {
                   format: 'YYYY-MM',
                 }}
                 rules={[{ required: true, message: '请选择考核起止月份' }]}
-                readonly={isView}
               />
             </Col>
           )
         }
+        <Col xl={12} lg={12} md={24}>
+          <ProFormDatePicker.Month
+            width="md"
+            name="startMonth"
+            label="开始考核月份"
+            rules={[{ required: true, message: '请选择开始考核月份' }]}
+            readonly={isView}
+            hidden={!isView}
+          />
+        </Col>
+        <Col xl={12} lg={12} md={24}>
+          <ProFormDatePicker.Month
+            width="md"
+            name="endMonth"
+            label="结束考核月份"
+            rules={[{ required: true, message: '请选择结束考核月份' }]}
+            readonly={isView}
+            hidden={!isView}
+          />
+        </Col>
         <Col xl={12} lg={12} md={24}>
           <ProFormDigit
             width="md"

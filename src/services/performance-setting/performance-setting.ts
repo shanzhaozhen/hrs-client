@@ -56,7 +56,7 @@ export async function deletePerformanceSetting(performanceSettingId: number, opt
 }
 
 /** 批量删除绩效设置接口 DELETE /performance-setting */
-export async function batchDeletePerformanceSetting(body: number[], options?: Record<string, any>) {
+export async function batchDeletePerformanceSetting(body: (number | undefined)[], options?: Record<string, any>) {
   return request<ResultBody<number[]>>('/hrs-api/performance-setting', {
     method: 'DELETE',
     headers: {
