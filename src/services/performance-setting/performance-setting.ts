@@ -15,6 +15,17 @@ export async function getPerformanceSettingPage(pageParams: PageParams & any, or
   });
 }
 
+/** 获取绩效设置（分页） GET /performance-setting/page */
+export async function getPerformanceSettingList(keyword?: string | number, options?: Record<string, any>) {
+  return request<ResultBody<PerformanceSettingVO[]>>('/hrs-api/performance-setting/list', {
+    method: 'GET',
+    params: {
+      keyword
+    },
+    ...(options || {}),
+  });
+}
+
 /** 获取绩效设置（通过绩效设置id） GET /performance-setting/${performanceSettingId} */
 export async function getPerformanceSettingById(performanceSettingId: number, options?: Record<string, any>) {
   return request<ResultBody<PerformanceSettingVO>>(`/hrs-api/performance-setting/${performanceSettingId}`, {

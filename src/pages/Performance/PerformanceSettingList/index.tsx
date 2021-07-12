@@ -4,16 +4,15 @@ import {Button, Divider, Input, message, Modal, Popconfirm} from 'antd';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import type {ActionType, ProColumns} from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { exportSalaryStaff, printSalaryStaff } from '@/services/salary-staff/salary-staff';
 import type { SalaryStaffVO } from '@/services/salary-staff/typings';
 import { getPageParams, getSortOrder } from "@/utils/common";
-import {ExclamationCircleOutlined, ExportOutlined, ImportOutlined, PlusOutlined} from "@ant-design/icons";
+import {ExclamationCircleOutlined, PlusOutlined} from "@ant-design/icons";
 import CreateForm from "@/pages/Performance/PerformanceSettingList/components/CreateForm";
 import ViewForm from "@/pages/Performance/PerformanceSettingList/components/ViewForm";
 import { ProFormUploadDragger } from "@ant-design/pro-form";
-import {downloadFile} from "@/utils/file";
 import {
-  batchDeletePerformanceSetting, deletePerformanceSetting,
+  batchDeletePerformanceSetting,
+  deletePerformanceSetting,
   getPerformanceSettingById,
   getPerformanceSettingPage
 } from "@/services/performance-setting/performance-setting";
@@ -27,7 +26,7 @@ export const onFormValuesChange = (changedValues: any, allValues: any, formRef: 
     const quarter = parseInt(String(yearMonth[1] / 3), 10) + 1;
     formRef.current?.setFieldsValue({
       ...allValues,
-      name: `${yearMonth[0]}年第${quarter}季度`,
+      name: `${yearMonth[0]}年-第${quarter}季度`,
       startMonth: month[0],
       endMonth: month[1],
       year: yearMonth[0],
@@ -219,33 +218,6 @@ const PerformanceSettingList: React.FC = () => {
           <Button type="primary" onClick={() => handleCreateModalVisible(true)}>
             <PlusOutlined /> 新建
           </Button>,
-          <Button type="primary" onClick={() => setImportModalVisible(true)}>
-            <ImportOutlined /> 导入
-          </Button>,
-          <Button
-            type="primary"
-            onClick={() => {
-              const fieldsValue = formRef.current?.getFieldsValue();
-              exportSalaryStaff({
-                ...fieldsValue
-              }).then(data => {
-                downloadFile(data, `员工-${new Date().getTime()}.xlsx`)
-              })
-            }}
-          >
-            <ExportOutlined /> 导出
-          </Button>,
-          <Button
-            type="primary"
-            onClick={() => {
-              const fieldsValue = formRef.current?.getFieldsValue();
-              printSalaryStaff(fieldsValue.id).then(data => {
-                downloadFile(data, `员工-${new Date().getTime()}.docx`)
-              })
-            }}
-          >
-            <ExportOutlined /> 打印
-          </Button>,
         ]}
         request={async (params, sorter) => {
           const { data } = await getPerformanceSettingPage(getPageParams(params), getSortOrder(sorter));
@@ -281,7 +253,7 @@ const PerformanceSettingList: React.FC = () => {
         tableActionRef={actionRef}
       />
 
-      {formValues && Object.keys(formValues).length ? (
+      {(formValues && Object.keys(formValues).length) && (
         <>
           <ViewForm
             viewModalVisible={viewModalVisible}
@@ -298,7 +270,7 @@ const PerformanceSettingList: React.FC = () => {
             tableActionRef={actionRef}
           />
         </>
-      ) : null}
+      )}
 
       <Modal
         title="导入"

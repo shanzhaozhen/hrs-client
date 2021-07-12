@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import type {MutableRefObject} from 'react';
 import type { FormInstance } from 'antd';
 import {Button, Col, Input, Row} from 'antd';
@@ -7,6 +7,8 @@ import ProFormItem from "@ant-design/pro-form/lib/components/FormItem";
 import {ContactsOutlined} from "@ant-design/icons";
 import {useDepartmentList} from "@/utils/department";
 import StaffSelect from "@/components/StaffSelect";
+import type {OptionType} from "@/services/common/typings";
+import {getPerformanceSettingList} from "@/services/performance-setting/performance-setting";
 
 interface FormProps {
   isView?: boolean;
@@ -22,10 +24,21 @@ const FormBody: React.FC<FormProps> = (props) => {
 
   const departmentList = useDepartmentList();
 
+  const [performanceSettingOptions, setPerformanceSettingOptions] = useState<OptionType[]>([]);
+  useEffect(() => {
+    getPerformanceSettingList()
+      .then(({ data }) => {
+        setPerformanceSettingOptions((data || []).map(item => ({ value: item.name || '', label: item.name || '' })));
+      })
+      .catch(() => {
+        setPerformanceSettingOptions([]);
+      });
+  }, []);
+
   return (
     <>
       <Row gutter={24}>
-        <ProFormText name="id" label="调动记录id" hidden={true} />
+        <ProFormText name="id" label="绩效评价id" hidden={true} />
         <ProFormText name="staffId" label="员工id" hidden={true} />
         <Col xl={12} lg={12} md={24}>
           {salaryStaffId ? (
@@ -79,11 +92,22 @@ const FormBody: React.FC<FormProps> = (props) => {
             name="depId"
             label="部门"
             required={true}
-            options={departmentList.map(item => ({value: item.id || '', label: item.name}))}
+            options={departmentList.map(item => ({value: item.name || '', label: item.name}))}
             readonly={isView}
             disabled
           />
         </Col>
+        { !isView && (
+          <Col xl={12} lg={12} md={24}>
+            <ProFormSelect
+              width="md"
+              name="performanceSetting"
+              label="考核季度选择"
+              options={performanceSettingOptions}
+              readonly={isView}
+            />
+          </Col>
+        ) }
         <Col xl={12} lg={12} md={24}>
           <ProFormDigit
             width="md"
@@ -103,11 +127,18 @@ const FormBody: React.FC<FormProps> = (props) => {
           />
         </Col>
         <Col xl={12} lg={12} md={24}>
-          <ProFormText
+          <ProFormSelect
             width="md"
             name="appraise"
             label="考核等级"
-            rules={[{ required: true, message: '请输入考核等级' }]}
+            rules={[{ required: true, message: '请选择考核等级' }]}
+            options={[
+              {value: 'A', label: 'A'},
+              {value: 'B', label: 'B'},
+              {value: 'C', label: 'C'},
+              {value: 'D', label: 'D'},
+              {value: 'E', label: 'E'},
+            ]}
             readonly={isView}
           />
         </Col>

@@ -5,32 +5,34 @@ import { message } from 'antd';
 import FormBody from '@/pages/Performance/PerformanceList/components/FormBody';
 import type { ActionType } from '@ant-design/pro-table';
 import { ModalForm } from "@ant-design/pro-form";
+import type { PerformanceForm, PerformanceVO } from "@/services/performance/typings";
+import { updatePerformance } from "@/services/performance/performance";
 import {onFormValuesChange} from "@/pages/Performance/PerformanceList";
-import {addPerformance} from "@/services/performance/performance";
-import {PerformanceForm} from "@/services/performance/typings";
 
-interface CreateFormProps {
-  createModalVisible: boolean;
-  handleCreateModalVisible: Dispatch<SetStateAction<boolean>>;
+interface UpdateFormProps {
+  updateModalVisible: boolean;
+  handleUpdateModalVisible: Dispatch<SetStateAction<boolean>>;
+  onCancel: () => void;
   tableActionRef: MutableRefObject<ActionType | undefined>;
+  values?: PerformanceForm | PerformanceVO;
 }
 
-const CreateForm: React.FC<CreateFormProps> = (props) => {
-  const { createModalVisible, handleCreateModalVisible, tableActionRef } = props;
+const UpdateForm: React.FC<UpdateFormProps> = (props) => {
+  const { updateModalVisible, handleUpdateModalVisible, onCancel, tableActionRef, values } = props;
 
   const formRef = useRef<FormInstance>();
 
   /**
-   * 添加绩效评价
+   * 修改绩效评价
    * @param fields
    */
-  const handleAdd = async (fields: PerformanceForm) => {
+  const handleUpdate = async (fields: PerformanceForm) => {
     const hide = message.loading('正在添加');
     try {
-      await addPerformance(fields);
+      await updatePerformance(fields);
       hide();
       message.success('添加成功');
-      handleCreateModalVisible(false);
+      handleUpdateModalVisible(false);
       tableActionRef.current?.reloadAndRest?.();
     } catch (error) {
       hide();
@@ -42,17 +44,19 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
     <>
       <ModalForm
         width={748}
-        title="新建绩效评价"
-        visible={createModalVisible}
+        title="修改绩效评价"
+        visible={updateModalVisible}
         formRef={formRef}
-        onVisibleChange={handleCreateModalVisible}
-        modalProps={{
-          destroyOnClose: true,
-        }}
+        initialValues={values}
+        onVisibleChange={handleUpdateModalVisible}
         onValuesChange={(changedValues: any, allValues: any) => {
           onFormValuesChange(changedValues, allValues, formRef);
         }}
-        onFinish={handleAdd}
+        modalProps={{
+          onCancel,
+          destroyOnClose: true,
+        }}
+        onFinish={handleUpdate}
       >
         <FormBody formRef={formRef} />
       </ModalForm>
@@ -60,4 +64,4 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
   );
 };
 
-export default CreateForm;
+export default UpdateForm;

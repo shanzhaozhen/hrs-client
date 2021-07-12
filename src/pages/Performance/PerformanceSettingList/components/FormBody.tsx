@@ -79,6 +79,8 @@ const FormBody: React.FC<FormProps> = (props) => {
             name="year"
             label="考核年度"
             rules={[{ required: true, message: '请输入考核年度' }]}
+            min={1000}
+            max={9999}
             readonly={isView}
           />
         </Col>
@@ -88,6 +90,8 @@ const FormBody: React.FC<FormProps> = (props) => {
             name="quarter"
             label="考核季度"
             rules={[{ required: true, message: '请输入考核季度' }]}
+            min={1}
+            max={12}
             readonly={isView}
           />
         </Col>
