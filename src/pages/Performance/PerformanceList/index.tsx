@@ -13,7 +13,6 @@ import ViewForm from "@/pages/Performance/PerformanceList/components/ViewForm";
 import UpdateForm from "@/pages/Performance/PerformanceList/components/UpdateForm";
 import { useDepartmentList, useDepartmentTree } from "@/utils/department";
 import FormTreeSelect from "@/components/FormTreeSelect";
-import { ProFormUploadDragger } from "@ant-design/pro-form";
 import {downloadFile} from "@/utils/file";
 import type { PerformanceVO } from "@/services/performance/typings";
 import {
