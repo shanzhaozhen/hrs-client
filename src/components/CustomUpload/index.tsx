@@ -9,6 +9,8 @@ import { targetUrlNotDiagonal } from "@/utils/common";
 
 interface CustomUploadProps {
   type: 'ProFormUploadDragger' | 'ProFormUploadButton';
+  action?: string;
+  paramName?: string;
   label?: string;
   name?: string;
   description?: string;
@@ -80,13 +82,13 @@ const CustomUpload: React.FC<CustomUploadProps> = (props) => {
         max={props.max}
         readonly={props.readonly}
         disabled={props.readonly}
-        action="/hrs-api/upload"
+        action={props.action || '/hrs-api/upload'}
         fieldProps={{
           headers: {
             // @ts-ignore
             Authorization: localStorage.getItem('ACCESS_TOKEN'),
           },
-          name: 'files',
+          name: props.paramName || 'files',
           listType: props.listType,
           // defaultFileList,
           fileList,

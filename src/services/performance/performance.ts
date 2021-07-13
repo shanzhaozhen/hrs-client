@@ -68,7 +68,15 @@ export async function batchDeletePerformance(body: (number | undefined)[], optio
   });
 }
 
-
+/** 绩效评价导入模板生成 POST /performance/template */
+export async function generatePerformanceTemplate(options?: Record<string, any>) {
+  return request('/hrs-api/performance/template', {
+    method: 'GET',
+    responseType: 'blob',
+    ...(options || {}),
+    skipErrorHandler: true
+  });
+}
 
 /** 导出绩效评价 GET /performance/print */
 export async function printPerformance(performanceId: number, options?: Record<string, any>) {

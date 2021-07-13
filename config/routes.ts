@@ -159,6 +159,19 @@ export default [
     ],
   },
   {
+    path: '/attendance',
+    name: 'attendance',
+    icon: 'crown',
+    routes: [
+      // {
+      //   path: '/attendance/attendance-collect',
+      //   name: 'attendance-collect',
+      //   icon: 'smile',
+      //   component: './Attendance/AttendanceCollectList',
+      // },
+    ],
+  },
+  {
     path: '/recruit',
     name: 'recruit',
     icon: 'crown',

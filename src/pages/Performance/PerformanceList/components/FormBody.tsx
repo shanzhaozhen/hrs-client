@@ -92,7 +92,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             name="depId"
             label="部门"
             required={true}
-            options={departmentList.map(item => ({value: item.name || '', label: item.name}))}
+            options={departmentList.map(item => ({value: item.id || '', label: item.name}))}
             readonly={isView}
             disabled
           />

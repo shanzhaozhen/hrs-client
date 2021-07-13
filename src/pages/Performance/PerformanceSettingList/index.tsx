@@ -253,7 +253,7 @@ const PerformanceSettingList: React.FC = () => {
         tableActionRef={actionRef}
       />
 
-      {(formValues && Object.keys(formValues).length) && (
+      {formValues && Object.keys(formValues).length ? (
         <>
           <ViewForm
             viewModalVisible={viewModalVisible}
@@ -270,7 +270,7 @@ const PerformanceSettingList: React.FC = () => {
             tableActionRef={actionRef}
           />
         </>
-      )}
+      ) : null}
 
       <Modal
         title="导入"

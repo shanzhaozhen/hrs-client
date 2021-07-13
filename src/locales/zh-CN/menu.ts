@@ -70,6 +70,8 @@ export default {
   'menu.performance': '绩效管理',
   'menu.performance.performance': '绩效评价',
   'menu.performance.performance-setting': '绩效设置',
+  'menu.attendance': '考勤管理',
+  'menu.attendance.attendance-collect': '考勤汇总',
   'menu.recruit': '招聘业务',
   'menu.recruit.resume': '简历库',
   'menu.recruit.maintain': '招聘维护',

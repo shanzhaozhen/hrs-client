@@ -19,9 +19,11 @@ import type { PerformanceVO } from "@/services/performance/typings";
 import {
   batchDeletePerformance,
   deletePerformance,
+  generatePerformanceTemplate,
   getPerformanceById,
   getPerformancePage
 } from "@/services/performance/performance";
+import CustomUpload from "@/components/CustomUpload";
 
 export const onFormValuesChange = (changedValues: any, allValues: any, formRef: any) => {
   if (changedValues.hasOwnProperty('performanceSetting')) {
@@ -296,7 +298,7 @@ const PerformanceList: React.FC = () => {
         tableActionRef={actionRef}
       />
 
-      {(formValues && Object.keys(formValues).length) && (
+      {formValues && Object.keys(formValues).length ? (
         <>
           <ViewForm
             viewModalVisible={viewModalVisible}
@@ -312,7 +314,7 @@ const PerformanceList: React.FC = () => {
             tableActionRef={actionRef}
           />
         </>
-      )}
+      ) : null}
 
       <Modal
         title="导入"
@@ -325,18 +327,20 @@ const PerformanceList: React.FC = () => {
           marginBottom: 15
         }}>
           <a href="#" onClick={() => {
-            // todo: 员工薪资导入
-            console.log('dd')
+            generatePerformanceTemplate().then(data => {
+              downloadFile(data, '绩效评价导入模板.xlsx')
+            })
           }}>
             点击下载
           </a>
           导入模板
           </div>
-        <ProFormUploadDragger
-          description="导入员工"
-          fieldProps={{
-            maxCount: 1
-          }}
+        <CustomUpload
+          type="ProFormUploadDragger"
+          maxCount={1}
+          paramName="file"
+          action="/hrs-api/performance/import"
+          description="导入绩效评价"
         />
       </Modal>
 
