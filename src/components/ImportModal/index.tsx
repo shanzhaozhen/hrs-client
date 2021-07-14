@@ -24,6 +24,7 @@ const ImportModal: React.FC<ImportModalProps> = (props) => {
       title={title || '导入'}
       visible={visible}
       onCancel={() => handleVisible(false)}
+      destroyOnClose
       footer={null}
     >
       { haveTemplate && (

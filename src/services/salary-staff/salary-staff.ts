@@ -64,7 +64,7 @@ export async function deleteSalaryStaff(salaryStaffId: number, options?: Record<
 }
 
 /** 批量删除员工接口 DELETE /salary-staff */
-export async function batchDeleteSalaryStaff(body: number[], options?: Record<string, any>) {
+export async function batchDeleteSalaryStaff(body: (number | undefined)[], options?: Record<string, any>) {
   return request<ResultBody<number[]>>('/hrs-api/salary-staff', {
     method: 'DELETE',
     headers: {
@@ -72,6 +72,16 @@ export async function batchDeleteSalaryStaff(body: number[], options?: Record<st
     },
     data: body,
     ...(options || {}),
+  });
+}
+
+/** 员工薪资导入模板生成 GET /salary-staff/template */
+export async function generateSalaryStaffTemplate(options?: Record<string, any>) {
+  return request('/hrs-api/salary-staff/template', {
+    method: 'GET',
+    responseType: 'blob',
+    ...(options || {}),
+    skipErrorHandler: true
   });
 }
 
@@ -88,16 +98,4 @@ export async function exportSalaryStaff(params: any, options?: Record<string, an
   });
 }
 
-/** 打印员工薪资 POST /salary-staff/print */
-export async function printSalaryStaff(salaryStaffId: number, options?: Record<string, any>) {
-  return request('/hrs-api/salary-staff/print', {
-    method: 'GET',
-    responseType: 'blob',
-    params: {
-      salaryStaffId
-    },
-    ...(options || {}),
-    skipErrorHandler: true
-  });
-}
 

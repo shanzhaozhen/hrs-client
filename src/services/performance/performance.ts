@@ -68,7 +68,7 @@ export async function batchDeletePerformance(body: (number | undefined)[], optio
   });
 }
 
-/** 绩效评价导入模板生成 POST /performance/template */
+/** 绩效评价导入模板生成 GET /performance/template */
 export async function generatePerformanceTemplate(options?: Record<string, any>) {
   return request('/hrs-api/performance/template', {
     method: 'GET',
@@ -78,27 +78,13 @@ export async function generatePerformanceTemplate(options?: Record<string, any>)
   });
 }
 
-/** 导出绩效评价 GET /performance/print */
-export async function printPerformance(performanceId: number, options?: Record<string, any>) {
-  return request<any>('/hrs-api/performance/print', {
-    method: 'GET',
-    ...(options || {}),
-  });
-}
-
 /** 导出绩效评价 GET /performance/export */
-export async function exportPerformance(
-  params: {
-    // query
-    keyword: string;
-    depId: number;
-  },
-  options?: Record<string, any>,
-) {
-  return request<any>('/hrs-api/performance/export', {
+export async function exportPerformance(pageParams: PageParams, options?: Record<string, any>) {
+  return request('/hrs-api/performance/export', {
     method: 'GET',
+    responseType: 'blob',
     params: {
-      ...params,
+      ...pageParams,
     },
     ...(options || {}),
   });

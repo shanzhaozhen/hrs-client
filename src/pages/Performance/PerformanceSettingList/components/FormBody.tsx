@@ -14,7 +14,6 @@ import StaffSelect from "@/components/StaffSelect";
 interface FormProps {
   isView?: boolean;
   isEdit?: boolean;
-  salaryStaffId?: number;
   formRef?: MutableRefObject<FormInstance | any>;
 }
 

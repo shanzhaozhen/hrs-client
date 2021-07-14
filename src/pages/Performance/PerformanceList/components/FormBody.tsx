@@ -13,12 +13,12 @@ import {getPerformanceSettingList} from "@/services/performance-setting/performa
 interface FormProps {
   isView?: boolean;
   isEdit?: boolean;
-  salaryStaffId?: number;
+  staffId?: number;
   formRef?: MutableRefObject<FormInstance | any>;
 }
 
 const FormBody: React.FC<FormProps> = (props) => {
-  const { salaryStaffId, isView, formRef } = props;
+  const { staffId, isView, formRef } = props;
 
   const [staffSelectVisible, setStaffSelectVisible] = useState<boolean>(false);
 
@@ -41,7 +41,7 @@ const FormBody: React.FC<FormProps> = (props) => {
         <ProFormText name="id" label="绩效评价id" hidden={true} />
         <ProFormText name="staffId" label="员工id" hidden={true} />
         <Col xl={12} lg={12} md={24}>
-          {salaryStaffId ? (
+          {staffId ? (
             <ProFormText
               width="md"
               name="staffCode"

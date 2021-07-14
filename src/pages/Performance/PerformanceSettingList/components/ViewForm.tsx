@@ -1,21 +1,18 @@
-import React, {useState} from 'react';
+import React from 'react';
 import type { Dispatch, SetStateAction } from 'react';
 import FormBody from '@/pages/Performance/PerformanceSettingList/components/FormBody';
 import { ModalForm } from '@ant-design/pro-form';
-import SalaryChangeModal from "@/pages/Salary/SalaryChangeList/components/ModalBody";
-import type { SalaryStaffVO } from "@/services/salary-staff/typings";
+import type {PerformanceSettingForm, PerformanceSettingVO} from "@/services/performance-setting/typings";
 
 interface ViewFormProps {
   viewModalVisible: boolean;
   handleViewModalVisible: Dispatch<SetStateAction<boolean>>;
   onCancel: () => void;
-  values?: SalaryStaffVO;
+  values?: PerformanceSettingVO | PerformanceSettingForm;
 }
 
 const ViewForm: React.FC<ViewFormProps> = (props) => {
   const { viewModalVisible, handleViewModalVisible, values } = props
-
-  const [staffChangeModalVisible, setSalaryChangeModalVisible] = useState<boolean>(false);
 
   return (
     <>
@@ -42,15 +39,9 @@ const ViewForm: React.FC<ViewFormProps> = (props) => {
         }}
       >
         {values && Object.keys(values).length ? (
-          <FormBody isView={true} salaryStaffId={values.id} />
+          <FormBody isView={true} />
         ) : null}
       </ModalForm>
-
-      <SalaryChangeModal
-        staffChangeModalVisible={staffChangeModalVisible}
-        handleSalaryChangeModalVisible={setSalaryChangeModalVisible}
-        staffId={values?.staffId}
-      />
     </>
   );
 };

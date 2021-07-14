@@ -79,19 +79,17 @@ const SalaryChangeListBody: React.FC<ListBodyProps> = (props) => {
     },
     {
       title: '员工编号',
-      dataIndex: 's.staffCode',
+      dataIndex: 'staffCode',
       valueType: 'text',
-      sorter: true,
+      sorter: 's.staffCode',
       hideInSearch: true,
-      renderText: (_, record) => record.staffCode,
     },
     {
       title: '员工姓名',
-      dataIndex: 's.staffName',
+      dataIndex: 'staffName',
       valueType: 'text',
-      sorter: true,
+      sorter: 's.staffName',
       hideInSearch: true,
-      renderText: (_, record) => record.staffName,
     },
     {
       title: '基础工资',

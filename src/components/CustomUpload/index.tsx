@@ -84,8 +84,7 @@ const CustomUpload: React.FC<CustomUploadProps> = (props) => {
         action={props.action || '/hrs-api/upload'}
         fieldProps={{
           headers: {
-            // @ts-ignore
-            Authorization: localStorage.getItem('ACCESS_TOKEN'),
+            Authorization: localStorage.getItem('ACCESS_TOKEN') || '',
           },
           name: props.paramName || 'files',
           listType: props.listType,

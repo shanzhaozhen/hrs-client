@@ -4,8 +4,6 @@ import {Button, Divider, Input, message, Modal, Popconfirm} from 'antd';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import type {ActionType, ProColumns} from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { exportSalaryStaff } from '@/services/salary-staff/salary-staff';
-import type { SalaryStaffForm, SalaryStaffVO } from '@/services/salary-staff/typings';
 import { getPageParams, getSortOrder, tableFilter } from "@/utils/common";
 import {ExclamationCircleOutlined, ExportOutlined, ImportOutlined, PlusOutlined} from "@ant-design/icons";
 import CreateForm from "@/pages/Performance/PerformanceList/components/CreateForm";
@@ -14,10 +12,10 @@ import UpdateForm from "@/pages/Performance/PerformanceList/components/UpdateFor
 import { useDepartmentList, useDepartmentTree } from "@/utils/department";
 import FormTreeSelect from "@/components/FormTreeSelect";
 import {downloadFile} from "@/utils/file";
-import type { PerformanceVO } from "@/services/performance/typings";
+import type {PerformanceForm, PerformanceVO} from "@/services/performance/typings";
 import {
   batchDeletePerformance,
-  deletePerformance,
+  deletePerformance, exportPerformance,
   generatePerformanceTemplate,
   getPerformanceById,
   getPerformancePage
@@ -44,11 +42,11 @@ const PerformanceList: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const formRef = useRef<FormInstance>();
 
-  const [formValues, setFormValues] = useState<SalaryStaffVO | SalaryStaffForm>({});
+  const [formValues, setFormValues] = useState<PerformanceVO | PerformanceForm>({});
   const [viewModalVisible, handleViewModalVisible] = useState<boolean>(false);
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-  const [selectedRowsState, setSelectedRows] = useState<SalaryStaffVO[]>([]);
+  const [selectedRowsState, setSelectedRows] = useState<PerformanceVO[]>([]);
   const [importModalVisible, setImportModalVisible] = useState<boolean>(false);
 
   const departmentList = useDepartmentList();
@@ -101,9 +99,9 @@ const PerformanceList: React.FC = () => {
     },
     {
       title: '部门',
-      dataIndex: 's.depId',
+      dataIndex: 'depId',
       valueType: 'select',
-      sorter: true,
+      sorter: 's.depId',
       renderText: (_, record) => (tableFilter(record.depId, departmentList, '未分配')),
       renderFormItem: () => {
         return <FormTreeSelect treeData={departmentTree} placeholder="请选择部门" />
@@ -111,19 +109,17 @@ const PerformanceList: React.FC = () => {
     },
     {
       title: '员工编号',
-      dataIndex: 's.staffCode',
+      dataIndex: 'staffCode',
       valueType: 'text',
-      sorter: true,
+      sorter: 's.staffCode',
       hideInSearch: true,
-      renderText: (_, record) => record.staffCode,
     },
     {
       title: '员工姓名',
-      dataIndex: 's.staffName',
+      dataIndex: 'staffName',
       valueType: 'text',
-      sorter: true,
+      sorter: 's.staffName',
       hideInSearch: true,
-      renderText: (_, record) => record.staffName,
     },
     {
       title: '考核年度',
@@ -253,10 +249,8 @@ const PerformanceList: React.FC = () => {
             type="primary"
             onClick={() => {
               const fieldsValue = formRef.current?.getFieldsValue();
-              exportSalaryStaff({
-                ...fieldsValue
-              }).then(data => {
-                downloadFile(data, `员工-${new Date().getTime()}.xlsx`)
+              exportPerformance({ ...fieldsValue }).then(data => {
+                downloadFile(data, `绩效评价数据-${new Date().getTime()}.xlsx`)
               })
             }}
           >
@@ -328,50 +322,27 @@ const PerformanceList: React.FC = () => {
         uploadProps={{
           action: '/hrs-api/performance/import',
           headers: {
-            // @ts-ignore
-            Authorization: localStorage.getItem('ACCESS_TOKEN'),
+            Authorization: localStorage.getItem('ACCESS_TOKEN') || '',
           },
           name: 'file',
           maxCount: 1,
           onChange: ({ file }) => {
             const { status, response } = file;
-            console.log(response)
             if (status === 'done') {
-              message.success(`导入成功${response.message}`).then();
+              const { data } = response;
+              message.success({
+                content: `导入成功：${data}`,
+                style: {
+                  whiteSpace: 'pre-wrap',
+                },
+            }).then();
+              actionRef.current?.reloadAndRest?.();
             } else if (status === 'error') {
               message.error(`导入失败：${response.message}`).then();
             }
           }
         }}
       />
-
-      {/* <Modal
-        title="导入"
-        visible={importModalVisible}
-        onCancel={() => setImportModalVisible(false)}
-        footer={null}
-      >
-        <div style={{
-          textAlign: "right",
-          marginBottom: 15
-        }}>
-          <a href="#" onClick={() => {
-            generatePerformanceTemplate().then(data => {
-              downloadFile(data, '绩效评价导入模板.xlsx')
-            })
-          }}>
-            点击下载
-          </a>
-          导入模板
-          </div>
-        <CustomUpload
-          type="ProFormUploadDragger"
-          maxCount={1}
-          paramName="file"
-          action="/hrs-api/performance/import"
-          description="导入绩效评价"
-        />
-      </Modal> */}
 
     </PageContainer>
   );

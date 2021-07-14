@@ -55,8 +55,7 @@ const PhotoUpload: React.FC<PhotoUploadProps> = (props) => {
           showUploadList={false}
           action="/hrs-api/upload"
           headers={{
-            // @ts-ignore
-            Authorization: localStorage.getItem('ACCESS_TOKEN'),
+            Authorization: localStorage.getItem('ACCESS_TOKEN') || '',
           }}
           name="files"
           maxCount={1}

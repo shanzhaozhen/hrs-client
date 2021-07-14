@@ -18,7 +18,7 @@ const SalaryChangeModal: React.FC<SalaryChangeProps> = (props) => {
   return (
     <Modal
       title="调薪记录"
-      width={980}
+      width={1024}
       destroyOnClose
       visible={staffChangeModalVisible}
       onCancel={() => {

@@ -4,7 +4,6 @@ import {Button, Divider, Input, message, Modal, Popconfirm} from 'antd';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import type {ActionType, ProColumns} from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import type { SalaryStaffVO } from '@/services/salary-staff/typings';
 import { getPageParams, getSortOrder } from "@/utils/common";
 import {ExclamationCircleOutlined, PlusOutlined} from "@ant-design/icons";
 import CreateForm from "@/pages/Performance/PerformanceSettingList/components/CreateForm";
@@ -74,7 +73,7 @@ const PerformanceSettingList: React.FC = () => {
     });
   };
 
-  const columns: ProColumns<SalaryStaffVO>[] = [
+  const columns: ProColumns<PerformanceSettingVO>[] = [
     {
       title: '关键字',
       key: 'keyword',
@@ -206,7 +205,7 @@ const PerformanceSettingList: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<SalaryStaffVO>
+      <ProTable<PerformanceSettingVO>
         headerTitle="绩效设置"
         actionRef={actionRef}
         formRef={formRef}
