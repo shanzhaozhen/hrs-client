@@ -2,13 +2,13 @@ import React from 'react';
 import type { Dispatch, SetStateAction } from 'react';
 import FormBody from '@/pages/Performance/PerformanceList/components/FormBody';
 import { ModalForm } from '@ant-design/pro-form';
-import type { SalaryStaffVO } from "@/services/salary-staff/typings";
+import type {PerformanceForm, PerformanceVO} from "@/services/performance/typings";
 
 interface ViewFormProps {
   viewModalVisible: boolean;
   handleViewModalVisible: Dispatch<SetStateAction<boolean>>;
   onCancel: () => void;
-  values?: SalaryStaffVO;
+  values?: PerformanceVO | PerformanceForm;
 }
 
 const ViewForm: React.FC<ViewFormProps> = (props) => {

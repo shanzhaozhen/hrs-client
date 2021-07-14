@@ -22,7 +22,7 @@ import {
   getPerformanceById,
   getPerformancePage
 } from "@/services/performance/performance";
-import CustomUpload from "@/components/CustomUpload";
+import ImportModal from "@/components/ImportModal";
 
 export const onFormValuesChange = (changedValues: any, allValues: any, formRef: any) => {
   if (changedValues.hasOwnProperty('performanceSetting')) {
@@ -315,7 +315,37 @@ const PerformanceList: React.FC = () => {
         </>
       ) : null}
 
-      <Modal
+      <ImportModal
+        visible={importModalVisible}
+        handleVisible={setImportModalVisible}
+        haveTemplate={true}
+        downloadTemplate={() => {
+          generatePerformanceTemplate().then(data => {
+            downloadFile(data, '绩效评价导入模板.xlsx')
+          })
+        }}
+        description="导入绩效评价"
+        uploadProps={{
+          action: '/hrs-api/performance/import',
+          headers: {
+            // @ts-ignore
+            Authorization: localStorage.getItem('ACCESS_TOKEN'),
+          },
+          name: 'file',
+          maxCount: 1,
+          onChange: ({ file }) => {
+            const { status, response } = file;
+            console.log(response)
+            if (status === 'done') {
+              message.success(`导入成功${response.message}`).then();
+            } else if (status === 'error') {
+              message.error(`导入失败：${response.message}`).then();
+            }
+          }
+        }}
+      />
+
+      {/* <Modal
         title="导入"
         visible={importModalVisible}
         onCancel={() => setImportModalVisible(false)}
@@ -341,7 +371,7 @@ const PerformanceList: React.FC = () => {
           action="/hrs-api/performance/import"
           description="导入绩效评价"
         />
-      </Modal>
+      </Modal> */}
 
     </PageContainer>
   );

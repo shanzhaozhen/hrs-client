@@ -64,7 +64,6 @@ const CustomUpload: React.FC<CustomUploadProps> = (props) => {
       }));
       onChange?.(uploadValue);
     }
-
   };
 
   const onPreview = async (file: UploadFile) => {
