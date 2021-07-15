@@ -6,6 +6,13 @@
  * https://pro.ant.design/docs/deploy
  */
 export default {
+  pro: {
+    '/hrs-api/': {
+      target: '',
+      changeOrigin: true,
+      pathRewrite: { '^/hrs-api': '' },
+    },
+  },
   dev: {
     '/hrs-api/': {
       target: 'http://localhost:8080/',

@@ -57,7 +57,7 @@ const ViewForm: React.FC<ViewFormProps> = (props) => {
         }}
       >
         {values && Object.keys(values).length ? (
-          <FormBody isView={true} salaryStaffId={values.id} />
+          <FormBody isView={true} />
         ) : null}
       </ModalForm>
 

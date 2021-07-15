@@ -67,5 +67,5 @@ export const tableFilter = (key: number | undefined, options: any[], defaultText
   return defaultText;
 }
 
-export const targetUrl = proxy[REACT_APP_ENV || 'dev']['/hrs-api/'].target;
+export const targetUrl = REACT_APP_ENV ? proxy[REACT_APP_ENV]['/hrs-api/'].target : '';
 export const targetUrlNotDiagonal = targetUrl.substr(0, targetUrl.length - 1);

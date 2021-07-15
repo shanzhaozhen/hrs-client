@@ -11,12 +11,11 @@ import StaffSelect from "@/components/StaffSelect";
 interface FormProps {
   isView?: boolean;
   isEdit?: boolean;
-  salaryStaffId?: number;
   formRef?: MutableRefObject<FormInstance | any>;
 }
 
 const FormBody: React.FC<FormProps> = (props) => {
-  const { salaryStaffId, isView, formRef } = props;
+  const { isView, formRef } = props;
 
   const [staffSelectVisible, setStaffSelectVisible] = useState<boolean>(false);
 
@@ -28,7 +27,7 @@ const FormBody: React.FC<FormProps> = (props) => {
         <ProFormText name="id" label="调动记录id" hidden={true} />
         <ProFormText name="staffId" label="员工id" hidden={true} />
         <Col xl={12} lg={12} md={24}>
-          {salaryStaffId ? (
+          {isView ? (
             <ProFormText
               width="md"
               name="staffCode"
@@ -44,6 +43,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                 <ProFormItem
                   name="staffCode"
                   rules={[{ required: true, message: '请选择员工' }]}
+                  style={{ width: '218px' }}
                 >
                   <Input
                     placeholder="请选择员工"

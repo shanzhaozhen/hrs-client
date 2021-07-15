@@ -57,6 +57,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                 <ProFormItem
                   name="staffCode"
                   rules={[{ required: true, message: '请选择员工' }]}
+                  style={{ width: '218px' }}
                 >
                   <Input
                     placeholder="请选择员工"
