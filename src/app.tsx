@@ -256,8 +256,8 @@ const errorHandler = async (error: ResponseError) => {
         }
       } else {
         notification.error({
-          description: res.message || '您的网络发生异常，无法连接服务器',
           message: '鉴权失败',
+          description: res.message || '您的网络发生异常，无法连接服务器',
         });
       }
     } else {
