@@ -20,7 +20,7 @@ interface FormProps {
 const FormBody: React.FC<FormProps> = (props) => {
   const { isView, formRef } = props;
 
-  const [staffSelectVisible, setStaffSelectVisible] = useState<boolean>(false);
+  const [staffSelectVisible, handleStaffSelectVisible] = useState<boolean>(false);
 
   return (
     <>
@@ -106,7 +106,7 @@ const FormBody: React.FC<FormProps> = (props) => {
 
       <StaffSelect
         staffSelectVisible={staffSelectVisible}
-        handleStaffSelectVisible={setStaffSelectVisible}
+        handleStaffSelectVisible={handleStaffSelectVisible}
         onSelectAction={(selectValue) => {
           const currentFormValue = formRef?.current.getFieldsValue();
           formRef?.current.setFieldsValue({
@@ -116,7 +116,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             staffName: selectValue.staffName,
             depId: selectValue.depId,
           })
-          setStaffSelectVisible(false);
+          handleStaffSelectVisible(false);
         }}
       />
     </>

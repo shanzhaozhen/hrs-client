@@ -1,14 +1,14 @@
 import React from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import FormBody from '@/pages/Recruit/ResumeList/components/FormBody';
-import { DrawerForm } from '@ant-design/pro-form';
-import type {ResumeForm, ResumeVO} from "@/services/resume/typings";
+import FormBody from '@/pages/Attendance/AttendanceList/components/FormBody';
+import {DrawerForm} from '@ant-design/pro-form';
+import type {AttendanceForm, AttendanceVO} from "@/services/attendance/typings";
 
 interface ViewFormProps {
   viewDrawerVisible: boolean;
   handleViewDrawerVisible: Dispatch<SetStateAction<boolean>>;
   onClose: () => void;
-  values?: ResumeVO | ResumeForm;
+  values?: AttendanceVO | AttendanceForm;
 }
 
 const ViewForm: React.FC<ViewFormProps> = (props) => {
@@ -18,7 +18,7 @@ const ViewForm: React.FC<ViewFormProps> = (props) => {
     <>
       <DrawerForm
         width={'75%'}
-        title="查看简历"
+        title="查看考勤数据"
         visible={viewDrawerVisible}
         onVisibleChange={handleViewDrawerVisible}
         initialValues={values}
@@ -40,10 +40,9 @@ const ViewForm: React.FC<ViewFormProps> = (props) => {
         }}
       >
         {values && Object.keys(values).length ? (
-          <FormBody isView={true} values={values} />
+          <FormBody isView={true} />
         ) : null}
       </DrawerForm>
-
     </>
   );
 };

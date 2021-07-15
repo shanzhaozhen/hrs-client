@@ -6,67 +6,51 @@ import type {ActionType, ProColumns} from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { getPageParams, getSortOrder, tableFilter } from "@/utils/common";
 import {ExclamationCircleOutlined, ExportOutlined, ImportOutlined, PlusOutlined} from "@ant-design/icons";
-import CreateForm from "@/pages/Performance/PerformanceList/components/CreateForm";
-import ViewForm from "@/pages/Performance/PerformanceList/components/ViewForm";
-import UpdateForm from "@/pages/Performance/PerformanceList/components/UpdateForm";
+import CreateForm from "@/pages/Attendance/AttendanceList/components/CreateForm";
+import ViewForm from "@/pages/Attendance/AttendanceList/components/ViewForm";
+import UpdateForm from "@/pages/Attendance/AttendanceList/components/UpdateForm";
 import { useDepartmentList, useDepartmentTree } from "@/utils/department";
 import FormTreeSelect from "@/components/FormTreeSelect";
 import {downloadFile} from "@/utils/file";
-import type {PerformanceForm, PerformanceVO} from "@/services/performance/typings";
+import type {AttendanceForm, AttendanceVO} from "@/services/attendance/typings";
 import {
-  batchDeletePerformance,
-  deletePerformance, exportPerformance,
-  generatePerformanceTemplate,
-  getPerformanceById,
-  getPerformancePage
-} from "@/services/performance/performance";
+  batchDeleteAttendance,
+  deleteAttendance, exportAttendance,
+  generateAttendanceTemplate,
+  getAttendanceById,
+  getAttendancePage
+} from "@/services/attendance/attendance";
 import ImportModal from "@/components/ImportModal";
 
-export const onFormValuesChange = (changedValues: any, allValues: any, formRef: any) => {
-  if (changedValues.hasOwnProperty('performanceSetting')) {
-    const { performanceSetting } = changedValues
-    if (performanceSetting) {
-      const yearAndQuarter = performanceSetting.match(/\d+(.\d+)?/g)
-      if (yearAndQuarter.length === 2) {
-        formRef.current?.setFieldsValue({
-          ...allValues,
-          year: yearAndQuarter[0],
-          quarter: yearAndQuarter[1]
-        });
-      }
-    }
-  }
-}
-
-const PerformanceList: React.FC = () => {
+const AttendanceList: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const formRef = useRef<FormInstance>();
 
-  const [formValues, setFormValues] = useState<PerformanceVO | PerformanceForm>({});
-  const [viewModalVisible, handleViewModalVisible] = useState<boolean>(false);
+  const [formValues, setFormValues] = useState<AttendanceVO | AttendanceForm>({});
+  const [viewDrawerVisible, handleViewDrawerVisible] = useState<boolean>(false);
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-  const [selectedRowsState, setSelectedRows] = useState<PerformanceVO[]>([]);
+  const [selectedRowsState, setSelectedRows] = useState<AttendanceVO[]>([]);
   const [importModalVisible, handleImportModalVisible] = useState<boolean>(false);
 
   const departmentList = useDepartmentList();
   const departmentTree = useDepartmentTree();
 
   /**
-   * 批量删除绩效评价
+   * 批量删除考勤数据
    */
-  const handleDeletePerformance = () => {
+  const handleDeleteAttendance = () => {
     Modal.confirm({
       title: '确认',
       icon: <ExclamationCircleOutlined />,
-      content: '确定批量删除勾选中的绩效评价吗',
+      content: '确定批量删除勾选中的考勤数据吗',
       okText: '确认',
       cancelText: '取消',
       onOk: async () => {
         const hide = message.loading('正在删除');
         if (!selectedRowsState) return true;
         try {
-          await batchDeletePerformance(selectedRowsState.map((selectedRow) => selectedRow.id));
+          await batchDeleteAttendance(selectedRowsState.map((selectedRow) => selectedRow.id));
           hide();
           message.success('删除成功，即将刷新');
           actionRef.current?.reloadAndRest?.();
@@ -80,7 +64,7 @@ const PerformanceList: React.FC = () => {
     });
   };
 
-  const columns: ProColumns<PerformanceVO>[] = [
+  const columns: ProColumns<AttendanceVO>[] = [
     {
       title: '关键字',
       key: 'keyword',
@@ -122,23 +106,10 @@ const PerformanceList: React.FC = () => {
       hideInSearch: true,
     },
     {
-      title: '考核年度',
-      dataIndex: 'year',
-      valueType: 'digit',
+      title: '考勤月份',
+      dataIndex: 'month',
+      valueType: 'dateMonth',
       sorter: true,
-    },
-    {
-      title: '考核季度',
-      dataIndex: 'quarter',
-      valueType: 'digit',
-      sorter: true,
-    },
-    {
-      title: '考核等级',
-      dataIndex: 'appraise',
-      valueType: 'text',
-      sorter: true,
-      hideInSearch: true,
     },
     {
       title: '备注',
@@ -174,11 +145,11 @@ const PerformanceList: React.FC = () => {
             <a
               onClick={async () => {
                 if (record && record.id) {
-                  const { data } = await getPerformanceById(record.id);
+                  const { data } = await getAttendanceById(record.id);
                   setFormValues(data || {});
-                  handleViewModalVisible(true);
+                  handleViewDrawerVisible(true);
                 } else {
-                  message.warn('没有选中有效的绩效评价');
+                  message.warn('没有选中有效的考勤数据');
                 }
               }}
             >
@@ -188,18 +159,11 @@ const PerformanceList: React.FC = () => {
             <a
               onClick={async () => {
                 if (record && record.id) {
-                  let { data } = await getPerformanceById(record.id);
-                  if (data) {
-                    data = {
-                      ...data,
-                      // @ts-ignore
-                      month: [data.startMonth, data.endMonth]
-                    }
-                  }
+                  const { data } = await getAttendanceById(record.id);
                   setFormValues(data || {});
                   handleUpdateModalVisible(true);
                 } else {
-                  message.warn('没有选中有效的绩效评价');
+                  message.warn('没有选中有效的考勤数据');
                 }
               }}
             >
@@ -207,14 +171,14 @@ const PerformanceList: React.FC = () => {
             </a>
             <Divider type="vertical" />
             <Popconfirm
-              title="确定删除该绩效评价?"
+              title="确定删除该考勤数据?"
               onConfirm={async () => {
                 if (record && record.id) {
-                  await deletePerformance(record.id);
+                  await deleteAttendance(record.id);
                   message.success('删除成功！');
                   actionRef.current?.reloadAndRest?.();
                 } else {
-                  message.warn('没有选中有效的绩效评价');
+                  message.warn('没有选中有效的考勤数据');
                 }
               }}
               okText="确定"
@@ -230,8 +194,8 @@ const PerformanceList: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<PerformanceVO>
-        headerTitle="绩效评价"
+      <ProTable<AttendanceVO>
+        headerTitle="考勤数据"
         actionRef={actionRef}
         formRef={formRef}
         rowKey="id"
@@ -249,8 +213,8 @@ const PerformanceList: React.FC = () => {
             type="primary"
             onClick={() => {
               const fieldsValue = formRef.current?.getFieldsValue();
-              exportPerformance({ ...fieldsValue }).then(data => {
-                downloadFile(data, `绩效评价数据-${new Date().getTime()}.xlsx`)
+              exportAttendance({ ...fieldsValue }).then(data => {
+                downloadFile(data, `考勤数据数据-${new Date().getTime()}.xlsx`)
               })
             }}
           >
@@ -258,7 +222,7 @@ const PerformanceList: React.FC = () => {
           </Button>,
         ]}
         request={async (params, sorter) => {
-          const { data } = await getPerformancePage(getPageParams(params), getSortOrder(sorter));
+          const { data } = await getAttendancePage(getPageParams(params), getSortOrder(sorter));
           return {
             // success 请返回 true，
             // 不然 table 会停止解析数据，即使有数据
@@ -281,7 +245,7 @@ const PerformanceList: React.FC = () => {
             </div>
           }
         >
-           <Button onClick={handleDeletePerformance}>批量删除</Button>
+           <Button onClick={handleDeleteAttendance}>批量删除</Button>
         </FooterToolbar>
       )}
 
@@ -294,16 +258,16 @@ const PerformanceList: React.FC = () => {
       {formValues && Object.keys(formValues).length ? (
         <>
           <ViewForm
-            viewModalVisible={viewModalVisible}
-            handleViewModalVisible={handleViewModalVisible}
+            viewDrawerVisible={viewDrawerVisible}
+            handleViewDrawerVisible={handleViewDrawerVisible}
             values={formValues}
-            onCancel={() => setFormValues({})}
+            onClose={() => setFormValues({})}
           />
           <UpdateForm
             updateModalVisible={updateModalVisible}
             handleUpdateModalVisible={handleUpdateModalVisible}
             values={formValues}
-            onCancel={() => setFormValues({})}
+            onClose={() => setFormValues({})}
             tableActionRef={actionRef}
           />
         </>
@@ -314,13 +278,13 @@ const PerformanceList: React.FC = () => {
         handleVisible={handleImportModalVisible}
         haveTemplate={true}
         downloadTemplate={() => {
-          generatePerformanceTemplate().then(data => {
-            downloadFile(data, '绩效评价导入模板.xlsx')
+          generateAttendanceTemplate().then(data => {
+            downloadFile(data, '考勤数据导入模板.xlsx')
           })
         }}
-        description="导入绩效评价"
+        description="导入考勤数据"
         uploadProps={{
-          action: '/hrs-api/performance/import',
+          action: '/hrs-api/attendance/import',
           headers: {
             Authorization: localStorage.getItem('ACCESS_TOKEN') || '',
           },
@@ -348,4 +312,4 @@ const PerformanceList: React.FC = () => {
   );
 };
 
-export default PerformanceList;
+export default AttendanceList;

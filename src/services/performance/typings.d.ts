@@ -20,8 +20,6 @@ export type PerformanceVO = {
   id?: number;
   /** 员工id */
   staffId?: number;
-  /** 关联的考核季度id */
-  performanceSettingId?: number;
   /** 员工编号 */
   staffCode?: string;
   /** 员工姓名 */

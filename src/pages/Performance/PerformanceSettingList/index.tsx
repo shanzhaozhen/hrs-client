@@ -43,7 +43,7 @@ const PerformanceSettingList: React.FC = () => {
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [selectedRowsState, setSelectedRows] = useState<PerformanceSettingVO[]>([]);
-  const [importModalVisible, setImportModalVisible] = useState<boolean>(false);
+  const [importModalVisible, handleImportModalVisible] = useState<boolean>(false);
 
   /**
    * 批量删除绩效设置
@@ -274,7 +274,7 @@ const PerformanceSettingList: React.FC = () => {
       <Modal
         title="导入"
         visible={importModalVisible}
-        onCancel={() => setImportModalVisible(false)}
+        onCancel={() => handleImportModalVisible(false)}
         footer={null}
       >
         <div style={{

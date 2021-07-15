@@ -10,14 +10,14 @@ import StaffChangeModal from "@/pages/HR/StaffChangeList/components/ModalBody";
 interface ViewFormProps {
   viewDrawerVisible: boolean;
   handleViewDrawerVisible: Dispatch<SetStateAction<boolean>>;
-  onCancel: () => void;
+  onClose: () => void;
   values?: StaffVO | StaffForm;
 }
 
 const ViewForm: React.FC<ViewFormProps> = (props) => {
-  const { viewDrawerVisible, handleViewDrawerVisible, onCancel, values } = props
+  const { viewDrawerVisible, handleViewDrawerVisible, onClose, values } = props
 
-  const [staffChangeModalVisible, setStaffChangeModalVisible] = useState<boolean>(false);
+  const [staffChangeModalVisible, handleStaffChangeModalVisible] = useState<boolean>(false);
 
   return (
     <>
@@ -30,7 +30,7 @@ const ViewForm: React.FC<ViewFormProps> = (props) => {
               type="primary"
               icon={<HistoryOutlined />}
               onClick={() => {
-                setStaffChangeModalVisible(true);
+                handleStaffChangeModalVisible(true);
               }}
             >
               调动记录
@@ -41,7 +41,7 @@ const ViewForm: React.FC<ViewFormProps> = (props) => {
         onVisibleChange={handleViewDrawerVisible}
         initialValues={values}
         drawerProps={{
-          onClose: onCancel,
+          onClose,
           destroyOnClose: true,
         }}
         submitter={{
@@ -64,7 +64,7 @@ const ViewForm: React.FC<ViewFormProps> = (props) => {
 
       <StaffChangeModal
         staffChangeModalVisible={staffChangeModalVisible}
-        handleStaffChangeModalVisible={setStaffChangeModalVisible}
+        handleStaffChangeModalVisible={handleStaffChangeModalVisible}
         staffId={values?.id}
       />
     </>

@@ -17,7 +17,7 @@ interface ViewFormProps {
 const ViewForm: React.FC<ViewFormProps> = (props) => {
   const { viewModalVisible, handleViewModalVisible, values } = props
 
-  const [staffChangeModalVisible, setSalaryChangeModalVisible] = useState<boolean>(false);
+  const [staffChangeModalVisible, handleSalaryChangeModalVisible] = useState<boolean>(false);
 
   return (
     <>
@@ -30,7 +30,7 @@ const ViewForm: React.FC<ViewFormProps> = (props) => {
               type="primary"
               icon={<HistoryOutlined />}
               onClick={() => {
-                setSalaryChangeModalVisible(true);
+                handleSalaryChangeModalVisible(true);
               }}
             >
               调薪记录
@@ -63,7 +63,7 @@ const ViewForm: React.FC<ViewFormProps> = (props) => {
 
       <SalaryChangeModal
         staffChangeModalVisible={staffChangeModalVisible}
-        handleSalaryChangeModalVisible={setSalaryChangeModalVisible}
+        handleSalaryChangeModalVisible={handleSalaryChangeModalVisible}
         staffId={values?.staffId}
       />
     </>

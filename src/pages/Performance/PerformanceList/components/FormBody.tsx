@@ -13,14 +13,13 @@ import {getPerformanceSettingList} from "@/services/performance-setting/performa
 interface FormProps {
   isView?: boolean;
   isEdit?: boolean;
-  staffId?: number;
   formRef?: MutableRefObject<FormInstance | any>;
 }
 
 const FormBody: React.FC<FormProps> = (props) => {
-  const { staffId, isView, formRef } = props;
+  const { isView, formRef } = props;
 
-  const [staffSelectVisible, setStaffSelectVisible] = useState<boolean>(false);
+  const [staffSelectVisible, handleStaffSelectVisible] = useState<boolean>(false);
 
   const departmentList = useDepartmentList();
 
@@ -41,7 +40,7 @@ const FormBody: React.FC<FormProps> = (props) => {
         <ProFormText name="id" label="绩效评价id" hidden={true} />
         <ProFormText name="staffId" label="员工id" hidden={true} />
         <Col xl={12} lg={12} md={24}>
-          {staffId ? (
+          {isView ? (
             <ProFormText
               width="md"
               name="staffCode"
@@ -68,7 +67,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                 <Button
                   type="primary"
                   icon={<ContactsOutlined />}
-                  onClick={() => setStaffSelectVisible(true)}
+                  onClick={() => handleStaffSelectVisible(true)}
                 >
                   选择员工
                 </Button>
@@ -155,7 +154,7 @@ const FormBody: React.FC<FormProps> = (props) => {
 
       <StaffSelect
         staffSelectVisible={staffSelectVisible}
-        handleStaffSelectVisible={setStaffSelectVisible}
+        handleStaffSelectVisible={handleStaffSelectVisible}
         onSelectAction={(selectValue) => {
           const currentFormValue = formRef?.current.getFieldsValue();
           formRef?.current.setFieldsValue({
@@ -165,7 +164,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             staffName: selectValue.staffName,
             depId: selectValue.depId,
           })
-          setStaffSelectVisible(false);
+          handleStaffSelectVisible(false);
         }}
       />
     </>

@@ -12,13 +12,13 @@ import {HistoryOutlined} from "@ant-design/icons";
 export interface UpdateFormProps {
   updateDrawerVisible: boolean;
   handleUpdateDrawerVisible: Dispatch<SetStateAction<boolean>>;
-  onCancel: () => void;
+  onClose: () => void;
   tableActionRef: MutableRefObject<ActionType | undefined>;
   values?: ResumeForm | ResumeVO;
 }
 
 const UpdateForm: React.FC<UpdateFormProps> = (props) => {
-  const { updateDrawerVisible, handleUpdateDrawerVisible, onCancel, tableActionRef, values } = props;
+  const { updateDrawerVisible, handleUpdateDrawerVisible, onClose, tableActionRef, values } = props;
 
   const [workExperienceForm] = ProForm.useForm();
   const [educationalExperienceForm] = ProForm.useForm();
@@ -64,7 +64,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
         onVisibleChange={handleUpdateDrawerVisible}
         initialValues={values}
         drawerProps={{
-          onClose: onCancel,
+          onClose,
           destroyOnClose: true,
         }}
         onFinish={handleUpdate}

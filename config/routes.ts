@@ -126,17 +126,17 @@ export default [
         component: './Salary/SalaryChangeList',
       },
       // {
-      //   path: '/salary/salary-plan',
-      //   name: 'salary-plan',
+      //   path: '/salary/salary-payment',
+      //   name: 'salary-payment',
       //   icon: 'smile',
-      //   component: './Salary/SalaryPlanList',
+      //   component: './Salary/SalaryPaymentList',
       // },
-      // {
-      //   path: '/salary/salary-actual',
-      //   name: 'salary-actual',
-      //   icon: 'smile',
-      //   component: './Salary/SalaryActualList',
-      // },
+      {
+        path: '/salary/salary-setting',
+        name: 'salary-setting',
+        icon: 'smile',
+        component: './Salary/SalarySetting',
+      },
     ],
   },
   {
@@ -163,12 +163,12 @@ export default [
     name: 'attendance',
     icon: 'crown',
     routes: [
-      // {
-      //   path: '/attendance/attendance-collect',
-      //   name: 'attendance-collect',
-      //   icon: 'smile',
-      //   component: './Attendance/AttendanceCollectList',
-      // },
+      {
+        path: '/attendance/attendance-collect',
+        name: 'attendance-collect',
+        icon: 'smile',
+        component: './Attendance/AttendanceList',
+      },
     ],
   },
   {

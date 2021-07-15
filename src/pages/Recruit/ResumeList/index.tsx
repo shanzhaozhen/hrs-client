@@ -22,7 +22,7 @@ const ResumeList: React.FC = () => {
   const [viewDrawerVisible, handleViewDrawerVisible] = useState<boolean>(false);
   const [updateDrawerVisible, handleUpdateDrawerVisible] = useState<boolean>(false);
   const [selectedRowsState, setSelectedRows] = useState<ResumeVO[]>([]);
-  const [importModalVisible, setImportModalVisible] = useState<boolean>(false);
+  const [importModalVisible, handleImportModalVisible] = useState<boolean>(false);
   const [jobViewVisible, handleJobViewVisible] = useState<boolean>(false);
 
 
@@ -151,7 +151,7 @@ const ResumeList: React.FC = () => {
           labelWidth: 120,
         }}
         toolBarRender={() => [
-          <Button type="primary" onClick={() => setImportModalVisible(true)}>
+          <Button type="primary" onClick={() => handleImportModalVisible(true)}>
             <ImportOutlined /> 导入
           </Button>,
           <Button
@@ -215,13 +215,13 @@ const ResumeList: React.FC = () => {
         viewDrawerVisible={viewDrawerVisible}
         handleViewDrawerVisible={handleViewDrawerVisible}
         values={updateFormValues}
-        onCancel={() => setUpdateFormValues({})}
+        onClose={() => setUpdateFormValues({})}
       />
       <UpdateForm
         updateDrawerVisible={updateDrawerVisible}
         handleUpdateDrawerVisible={handleUpdateDrawerVisible}
         values={updateFormValues}
-        onCancel={() => setUpdateFormValues({})}
+        onClose={() => setUpdateFormValues({})}
         tableActionRef={actionRef}
       />
       <JobView
@@ -233,7 +233,7 @@ const ResumeList: React.FC = () => {
       <Modal
         title="导入"
         visible={importModalVisible}
-        onCancel={() => setImportModalVisible(false)}
+        onCancel={() => handleImportModalVisible(false)}
         footer={null}
       >
         <div style={{

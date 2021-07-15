@@ -13,15 +13,15 @@ import StaffChangeModal from "@/pages/HR/StaffChangeList/components/ModalBody";
 export interface UpdateFormProps {
   updateDrawerVisible: boolean;
   handleUpdateDrawerVisible: Dispatch<SetStateAction<boolean>>;
-  onCancel: () => void;
+  onClose: () => void;
   tableActionRef: MutableRefObject<ActionType | undefined>;
   values?: StaffForm | StaffVO;
 }
 
 const UpdateForm: React.FC<UpdateFormProps> = (props) => {
-  const { updateDrawerVisible, handleUpdateDrawerVisible, onCancel, tableActionRef, values } = props;
+  const { updateDrawerVisible, handleUpdateDrawerVisible, onClose, tableActionRef, values } = props;
 
-  const [staffChangeModalVisible, setStaffChangeModalVisible] = useState<boolean>(false);
+  const [staffChangeModalVisible, handleStaffChangeModalVisible] = useState<boolean>(false);
 
   const [workExperienceForm] = ProForm.useForm();
   const [educationalExperienceForm] = ProForm.useForm();
@@ -62,7 +62,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
               type="primary"
               icon={<HistoryOutlined />}
               onClick={() => {
-                setStaffChangeModalVisible(true);
+                handleStaffChangeModalVisible(true);
               }}
             >
               调动记录
@@ -73,7 +73,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
         onVisibleChange={handleUpdateDrawerVisible}
         initialValues={values}
         drawerProps={{
-          onClose: onCancel,
+          onClose,
           destroyOnClose: true,
         }}
         onFinish={handleUpdate}
@@ -92,7 +92,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
 
       <StaffChangeModal
         staffChangeModalVisible={staffChangeModalVisible}
-        handleStaffChangeModalVisible={setStaffChangeModalVisible}
+        handleStaffChangeModalVisible={handleStaffChangeModalVisible}
         staffId={values?.id}
       />
     </>

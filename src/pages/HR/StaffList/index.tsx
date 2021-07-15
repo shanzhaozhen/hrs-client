@@ -25,7 +25,7 @@ const StaffList: React.FC = () => {
   const [createDrawerVisible, handleCreateDrawerVisible] = useState<boolean>(false);
   const [updateDrawerVisible, handleUpdateDrawerVisible] = useState<boolean>(false);
   const [selectedRowsState, setSelectedRows] = useState<StaffVO[]>([]);
-  const [importModalVisible, setImportModalVisible] = useState<boolean>(false);
+  const [importModalVisible, handleImportModalVisible] = useState<boolean>(false);
 
   const departmentList = useDepartmentList();
   const departmentTree = useDepartmentTree();
@@ -253,7 +253,7 @@ const StaffList: React.FC = () => {
           <Button type="primary" onClick={() => handleCreateDrawerVisible(true)}>
             <PlusOutlined /> 新建
           </Button>,
-          <Button type="primary" onClick={() => setImportModalVisible(true)}>
+          <Button type="primary" onClick={() => handleImportModalVisible(true)}>
             <ImportOutlined /> 导入
           </Button>,
           <Button
@@ -313,7 +313,7 @@ const StaffList: React.FC = () => {
         viewDrawerVisible={viewDrawerVisible}
         handleViewDrawerVisible={handleViewDrawerVisible}
         values={updateFormValues}
-        onCancel={() => setUpdateFormValues({})}
+        onClose={() => setUpdateFormValues({})}
       />
       <CreateForm
         createDrawerVisible={createDrawerVisible}
@@ -324,14 +324,14 @@ const StaffList: React.FC = () => {
         updateDrawerVisible={updateDrawerVisible}
         handleUpdateDrawerVisible={handleUpdateDrawerVisible}
         values={updateFormValues}
-        onCancel={() => setUpdateFormValues({})}
+        onClose={() => setUpdateFormValues({})}
         tableActionRef={actionRef}
       />
 
       <Modal
         title="导入"
         visible={importModalVisible}
-        onCancel={() => setImportModalVisible(false)}
+        onCancel={() => handleImportModalVisible(false)}
         footer={null}
       >
         <div style={{

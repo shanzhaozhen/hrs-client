@@ -28,7 +28,7 @@ const SalaryStaffList: React.FC = () => {
   const [viewModalVisible, handleViewModalVisible] = useState<boolean>(false);
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [selectedRowsState, setSelectedRows] = useState<SalaryStaffVO[]>([]);
-  const [importModalVisible, setImportModalVisible] = useState<boolean>(false);
+  const [importModalVisible, handleImportModalVisible] = useState<boolean>(false);
 
   const departmentList = useDepartmentList();
   const departmentTree = useDepartmentTree();
@@ -170,7 +170,7 @@ const SalaryStaffList: React.FC = () => {
           <Button type="primary" onClick={() => handleCreateModalVisible(true)}>
             <PlusOutlined /> 新建
           </Button>,
-          <Button type="primary" onClick={() => setImportModalVisible(true)}>
+          <Button type="primary" onClick={() => handleImportModalVisible(true)}>
             <ImportOutlined /> 导入
           </Button>,
           <Button
@@ -229,7 +229,7 @@ const SalaryStaffList: React.FC = () => {
 
       <ImportModal
         visible={importModalVisible}
-        handleVisible={setImportModalVisible}
+        handleVisible={handleImportModalVisible}
         haveTemplate={true}
         downloadTemplate={() => {
           generateSalaryStaffTemplate().then(data => {
