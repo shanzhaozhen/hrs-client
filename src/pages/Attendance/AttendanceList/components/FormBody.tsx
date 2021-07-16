@@ -43,7 +43,6 @@ const FormBody: React.FC<FormProps> = (props) => {
                 <ProFormItem
                   name="staffCode"
                   rules={[{ required: true, message: '请选择员工' }]}
-                  style={{ width: '218px' }}
                 >
                   <Input
                     placeholder="请选择员工"
@@ -194,8 +193,8 @@ const FormBody: React.FC<FormProps> = (props) => {
             width="md"
             name="cardMissTimes"
             label="缺卡次数"
-            fieldProps={{ precision: 0 }}
             min={0}
+            fieldProps={{ precision: 0 }}
             rules={[{ required: true, message: '请输入缺卡次数' }]}
             readonly={isView}
           />
@@ -304,7 +303,7 @@ const FormBody: React.FC<FormProps> = (props) => {
         <Col xl={8} lg={12} md={24}>
           <ProFormDigit
             width="md"
-            name="sickLeaveDays"
+            name="absenceLeaveDays"
             label="事假天数"
             min={0}
             rules={[{ required: true, message: '请输入事假天数' }]}
@@ -354,7 +353,7 @@ const FormBody: React.FC<FormProps> = (props) => {
         <Col xl={8} lg={12} md={24}>
           <ProFormDigit
             width="md"
-            name="sickLeaveDays"
+            name="onlyChildLeaveDays"
             label="独生子女父母陪护假天数"
             min={0}
             rules={[{ required: true, message: '请输入独生子女父母陪护假天数' }]}

@@ -112,6 +112,25 @@ const AttendanceList: React.FC = () => {
       sorter: true,
     },
     {
+      title: '应出勤',
+      dataIndex: 'shouldAttendanceDays',
+      valueType: 'digit',
+      sorter: true,
+    },
+    {
+      title: '实出勤',
+      dataIndex: 'actualAttendanceDays',
+      valueType: 'digit',
+      sorter: true,
+    },
+    {
+      title: '出勤率',
+      dataIndex: 'month',
+      valueType: 'text',
+      sorter: true,
+      renderText: (_, record) => (record.shouldAttendanceDays ? `${(((record.actualAttendanceDays || 0) / record.shouldAttendanceDays) * 100).toFixed(2)}%` : '0%')
+    },
+    {
       title: '备注',
       dataIndex: 'remarks',
       valueType: 'text',
