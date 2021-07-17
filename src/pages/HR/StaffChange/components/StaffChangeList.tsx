@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, {useRef, useState} from 'react';
 import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Divider, Input, message, Modal, Popconfirm } from 'antd';
 import { FooterToolbar } from '@ant-design/pro-layout';
@@ -16,7 +16,7 @@ interface ListBodyProps {
   staffId?: number;
 }
 
-const StaffChangeListBody: React.FC<ListBodyProps> = (props) => {
+const StaffChangeList: React.FC<ListBodyProps> = (props) => {
   const { staffId } = props;
 
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
@@ -299,4 +299,4 @@ const StaffChangeListBody: React.FC<ListBodyProps> = (props) => {
   );
 };
 
-export default StaffChangeListBody;
+export default StaffChangeList;

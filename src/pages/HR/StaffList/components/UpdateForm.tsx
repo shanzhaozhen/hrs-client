@@ -8,7 +8,7 @@ import ProForm, { DrawerForm } from '@ant-design/pro-form';
 import type { ActionType } from '@ant-design/pro-table';
 import {convertStaffForm} from "@/utils/staff";
 import {HistoryOutlined} from "@ant-design/icons";
-import StaffChangeModal from "@/pages/HR/StaffChangeList/components/ModalBody";
+import StaffChangeModal from "@/pages/HR/StaffChange/components/ModalBody";
 
 export interface UpdateFormProps {
   updateDrawerVisible: boolean;

@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import type {Dispatch, SetStateAction} from 'react';
-import StaffChangeListBody from "@/pages/HR/StaffChangeList/components/ListBody";
+import StaffChangeList from "@/pages/HR/StaffChange/components/StaffChangeList";
 import type { ActionType } from "@ant-design/pro-table";
 import { Modal } from "antd";
 
@@ -27,7 +27,7 @@ const StaffChangeModal: React.FC<StaffChangeProps> = (props) => {
       }}
       footer={null}
     >
-      <StaffChangeListBody staffId={staffId} />
+      <StaffChangeList staffId={staffId} />
     </Modal>
   );
 };

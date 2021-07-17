@@ -104,7 +104,7 @@ export default [
         path: '/hr/staff-change',
         name: 'staff-change',
         icon: 'smile',
-        component: './HR/StaffChangeList',
+        component: './HR/StaffChange',
       },
     ],
   },

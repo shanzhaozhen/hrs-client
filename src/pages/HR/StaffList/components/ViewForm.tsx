@@ -5,7 +5,7 @@ import { DrawerForm } from '@ant-design/pro-form';
 import type {StaffForm, StaffVO} from "@/services/staff/typings";
 import {HistoryOutlined} from "@ant-design/icons";
 import {Button} from "antd";
-import StaffChangeModal from "@/pages/HR/StaffChangeList/components/ModalBody";
+import StaffChangeModal from "@/pages/HR/StaffChange/components/ModalBody";
 
 interface ViewFormProps {
   viewDrawerVisible: boolean;

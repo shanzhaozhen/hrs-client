@@ -3,7 +3,7 @@ import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import type { FormInstance } from 'antd';
 import { message } from 'antd';
 import type { StaffChangeForm, StaffChangeVO } from '@/services/staff-change/typings';
-import FormBody from '@/pages/HR/StaffChangeList/components/FormBody';
+import FormBody from '@/pages/HR/StaffChange/components/FormBody';
 import { updateStaffChange } from '@/services/staff-change/staff-change';
 import { ModalForm } from '@ant-design/pro-form';
 import type { ActionType } from '@ant-design/pro-table';
