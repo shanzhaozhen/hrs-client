@@ -2,7 +2,14 @@ import React, { useState } from 'react';
 import type { MutableRefObject } from 'react';
 import type { FormInstance } from 'antd';
 import {Button, Col, Input, message, Row} from 'antd';
-import {ProFormDatePicker, ProFormDigit, ProFormSelect, ProFormText, ProFormTextArea} from '@ant-design/pro-form';
+import {
+  ProFormDatePicker,
+  ProFormDigit,
+  ProFormSelect,
+  ProFormSwitch,
+  ProFormText,
+  ProFormTextArea
+} from '@ant-design/pro-form';
 import { useDepartmentList } from "@/utils/department";
 import { ContactsOutlined } from "@ant-design/icons";
 import ProFormItem from "@ant-design/pro-form/lib/components/FormItem";
@@ -21,6 +28,13 @@ const FormBody: React.FC<FormProps> = (props) => {
   const [staffSelectVisible, handleStaffSelectVisible] = useState<boolean>(false);
 
   const departmentList = useDepartmentList();
+
+  const defaultOptions = [
+    { label: 'A', value: 'A' },
+    { label: 'B', value: 'B' },
+    { label: 'C', value: 'C' }
+  ];
+
 
   return (
     <>
@@ -119,6 +133,62 @@ const FormBody: React.FC<FormProps> = (props) => {
             rules={[{ required: true, message: '请填写变更后岗位工资' }]}
           />
         </Col>
+        <Col xl={12} lg={12} md={24}>
+          <ProFormSwitch
+            width="md"
+            name="preHaveOneChildAllowance"
+            label="变更前是否享有独生子女津贴"
+            checkedChildren="是"
+            unCheckedChildren="否"
+            disabled
+          />
+        </Col>
+        <Col xl={12} lg={12} md={24}>
+          <ProFormSwitch
+            width="md"
+            name="postHaveOneChildAllowance"
+            label="变更后是否享有独生子女津贴"
+            rules={[{ required: true, message: '请选择是否享有独生子女津贴' }]}
+            checkedChildren="是"
+            unCheckedChildren="否"
+          />
+        </Col>
+        <Col xl={12} lg={12} md={24}>
+          <ProFormSelect
+            width="md"
+            name="preSafetyAllowance"
+            label="变更前安全津贴档次"
+            options={defaultOptions}
+            disabled
+          />
+        </Col>
+        <Col xl={12} lg={12} md={24}>
+          <ProFormSelect
+            width="md"
+            name="postSafetyAllowance"
+            label="变更后安全津贴档次"
+            rules={[{ required: true, message: '请选择安全津贴档次' }]}
+            options={defaultOptions}
+          />
+        </Col>
+        <Col xl={12} lg={12} md={24}>
+          <ProFormSelect
+            width="md"
+            name="preHighTemperatureAllowance"
+            label="变更前高温津贴档次"
+            options={defaultOptions}
+            disabled
+          />
+        </Col>
+        <Col xl={12} lg={12} md={24}>
+          <ProFormSelect
+            width="md"
+            name="postHighTemperatureAllowance"
+            label="变更后高温津贴档次"
+            rules={[{ required: true, message: '请选择高温津贴档次' }]}
+            options={defaultOptions}
+          />
+        </Col>
         <Col xl={24} lg={24} md={24}>
           <ProFormTextArea name="remarks" label="备注" />
         </Col>
@@ -143,6 +213,9 @@ const FormBody: React.FC<FormProps> = (props) => {
             depId: selectValue.depId,
             preBasicSalary: data?.basicSalary,
             prePostSalary: data?.postSalary,
+            postHaveOneChildAllowance: data?.haveOneChildAllowance,
+            preSafetyAllowance: data?.safetyAllowance,
+            preHighTemperatureAllowance: data?.highTemperatureAllowance,
           })
           handleStaffSelectVisible(false);
         }}

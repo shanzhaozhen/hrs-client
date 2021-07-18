@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import type {MutableRefObject} from 'react';
 import type { FormInstance } from 'antd';
 import {Button, Col, Input, Row} from 'antd';
-import { ProFormDigit, ProFormSelect, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
+import {ProFormDigit, ProFormSelect, ProFormSwitch, ProFormText, ProFormTextArea} from '@ant-design/pro-form';
 import ProFormItem from "@ant-design/pro-form/lib/components/FormItem";
 import {ContactsOutlined} from "@ant-design/icons";
 import {useDepartmentList} from "@/utils/department";
@@ -20,6 +20,12 @@ const FormBody: React.FC<FormProps> = (props) => {
   const [staffSelectVisible, handleStaffSelectVisible] = useState<boolean>(false);
 
   const departmentList = useDepartmentList();
+
+  const defaultOptions = [
+    { label: 'A', value: 'A' },
+    { label: 'B', value: 'B' },
+    { label: 'C', value: 'C' }
+  ];
 
   return (
     <>
@@ -99,6 +105,37 @@ const FormBody: React.FC<FormProps> = (props) => {
             name="postSalary"
             label="岗位工资"
             rules={[{ required: true, message: '请输入岗位工资' }]}
+            readonly={isView}
+          />
+        </Col>
+        <Col xl={12} lg={12} md={24}>
+          <ProFormSwitch
+            width="md"
+            name="haveOneChildAllowance"
+            label="是否享有独生子女津贴"
+            rules={[{ required: true, message: '请选择是否享有独生子女津贴' }]}
+            checkedChildren="是"
+            unCheckedChildren="否"
+            readonly={isView}
+          />
+        </Col>
+        <Col xl={12} lg={12} md={24}>
+          <ProFormSelect
+            width="md"
+            name="safetyAllowance"
+            label="安全津贴档次"
+            rules={[{ required: true, message: '请选择安全津贴档次' }]}
+            options={defaultOptions}
+            readonly={isView}
+          />
+        </Col>
+        <Col xl={12} lg={12} md={24}>
+          <ProFormSelect
+            width="md"
+            name="highTemperatureAllowance"
+            label="高温津贴档次"
+            rules={[{ required: true, message: '请选择高温津贴档次' }]}
+            options={defaultOptions}
             readonly={isView}
           />
         </Col>

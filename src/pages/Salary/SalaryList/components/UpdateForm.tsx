@@ -43,7 +43,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
   return (
     <>
       <DrawerForm
-        width={748}
+        width={'75%'}
         title="修改薪资发放"
         visible={updateModalVisible}
         formRef={formRef}

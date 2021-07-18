@@ -41,7 +41,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
   return (
     <>
       <DrawerForm
-        width={748}
+        width={'75%'}
         title="新建薪资发放"
         visible={createModalVisible}
         formRef={formRef}

@@ -17,7 +17,7 @@ const ViewForm: React.FC<ViewFormProps> = (props) => {
   return (
     <>
       <DrawerForm
-        width={748}
+        width={'75%'}
         title="查看薪资发放"
         visible={viewModalVisible}
         onVisibleChange={handleViewModalVisible}

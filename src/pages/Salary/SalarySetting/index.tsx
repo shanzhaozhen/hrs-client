@@ -260,20 +260,21 @@ const SalarySetting: React.FC = () => {
                   readonly={viewState}
                 />
               </Col>
-              <Col xl={8} lg={12} md={24}>
-                <ProFormDateRangePicker
-                  width="md"
-                  name="highTemperatureMonth"
-                  label="高温津贴开始生效起止月份"
-                  fieldProps={{
-                    picker: 'month',
-                    format: 'YYYY-MM',
-                  }}
-                  rules={[{ required: true, message: '请选择高温津贴开始生效起止月份' }]}
-                  readonly={viewState}
-                  hidden={viewState}
-                />
-              </Col>
+              { !viewState && (
+                <Col xl={8} lg={12} md={24}>
+                  <ProFormDateRangePicker
+                    width="md"
+                    name="highTemperatureMonth"
+                    label="高温津贴开始生效起止月份"
+                    fieldProps={{
+                      picker: 'month',
+                      format: 'YYYY-MM',
+                    }}
+                    rules={[{ required: true, message: '请选择高温津贴开始生效起止月份' }]}
+                    readonly={viewState}
+                  />
+                </Col>
+              ) }
               <Col xl={8} lg={12} md={24}>
                 <ProFormDatePicker.Month
                   width="md"

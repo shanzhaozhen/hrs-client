@@ -211,6 +211,7 @@ const StaffList: React.FC = () => {
             onClick={async () => {
               if (record && record.id) {
                 const { data } = await getStaffById(record.id);
+                // todo: 简化地址转变的操作
                 setUpdateFormValues(data || {});
                 handleViewDrawerVisible(true);
               } else {
@@ -225,6 +226,7 @@ const StaffList: React.FC = () => {
             onClick={async () => {
               if (record && record.id) {
                 const { data } = await getStaffById(record.id);
+                // todo: 简化地址转变的操作
                 setUpdateFormValues(data || {});
                 handleUpdateDrawerVisible(true);
               } else {
