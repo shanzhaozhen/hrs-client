@@ -51,6 +51,7 @@ const ImportModal: React.FC<ImportModalProps> = (props) => {
         <p className="ant-upload-text">{ props.uploadTitle || '单击或拖动文件到此区域进行上传' }</p>
         <p className="ant-upload-hint">{ props.description || '支持单次或批量上传' }</p>
       </Dragger>
+      <div style={{ marginBottom: 15 }} />
     </Modal>
   );
 };

@@ -125,12 +125,12 @@ export default [
         icon: 'smile',
         component: './Salary/SalaryChangeList',
       },
-      // {
-      //   path: '/salary/salary-payment',
-      //   name: 'salary-payment',
-      //   icon: 'smile',
-      //   component: './Salary/SalaryPaymentList',
-      // },
+      {
+        path: '/salary/salary-payment',
+        name: 'salary-payment',
+        icon: 'smile',
+        component: './Salary/SalaryList',
+      },
       {
         path: '/salary/salary-setting',
         name: 'salary-setting',
