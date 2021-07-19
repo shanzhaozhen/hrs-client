@@ -13,7 +13,7 @@ env.PROGRESS = 'none';
 // flag to prevent multiple test
 let once = false;
 
-const startServer = spawn(/^win/.test(process.platform) ? 'npm.cmd' : 'npm', ['start'], {
+const startServer = spawn(/^win/.test(process.platform) ? 'npm.cmd' : 'npm', ['run', 'serve'], {
   env,
 });
 

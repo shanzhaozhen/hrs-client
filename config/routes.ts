@@ -126,8 +126,14 @@ export default [
         component: './Salary/SalaryChangeList',
       },
       {
-        path: '/salary/salary-payment',
-        name: 'salary-payment',
+        path: '/salary/allowance',
+        name: 'allowance',
+        icon: 'smile',
+        component: './Salary/AllowanceList',
+      },
+      {
+        path: '/salary/salary',
+        name: 'salary',
         icon: 'smile',
         component: './Salary/SalaryList',
       },

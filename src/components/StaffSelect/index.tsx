@@ -3,11 +3,11 @@ import type { Dispatch, SetStateAction } from 'react';
 import { Input, message, Modal } from 'antd';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { getPageParams, getSortOrder, tableFilter } from "@/utils/common";
-import type { StaffVO } from "@/services/staff/typings";
-import { getStaffPage } from "@/services/staff/staff";
-import FormTreeSelect from "@/components/FormTreeSelect";
-import { useDepartmentList, useDepartmentTree } from "@/utils/department";
+import { getPageParams, getSortOrder, tableFilter } from '@/utils/common';
+import type { StaffVO } from '@/services/staff/typings';
+import { getStaffPage } from '@/services/staff/staff';
+import FormTreeSelect from '@/components/FormTreeSelect';
+import { useDepartmentList, useDepartmentTree } from '@/utils/department';
 
 interface StaffSelectProps {
   staffSelectVisible: boolean;
@@ -20,8 +20,8 @@ const StaffSelect: React.FC<StaffSelectProps> = (props) => {
 
   const actionRef = useRef<ActionType>();
 
-  const departmentList= useDepartmentList();
-  const departmentTree= useDepartmentTree();
+  const departmentList = useDepartmentList();
+  const departmentTree = useDepartmentTree();
 
   const columns: ProColumns<StaffVO>[] = [
     {
@@ -44,10 +44,10 @@ const StaffSelect: React.FC<StaffSelectProps> = (props) => {
       dataIndex: 'depId',
       valueType: 'text',
       sorter: true,
-      renderText: (_, record) => (tableFilter(record.depId, departmentList, '未分配')),
+      renderText: (_, record) => tableFilter(record.depId, departmentList, '未分配'),
       renderFormItem: () => {
-        return <FormTreeSelect treeData={departmentTree} placeholder="请选择部门" />
-      }
+        return <FormTreeSelect treeData={departmentTree} placeholder="请选择部门" />;
+      },
     },
     {
       title: '员工编号',
@@ -89,6 +89,7 @@ const StaffSelect: React.FC<StaffSelectProps> = (props) => {
       title="员工选择"
       width={940}
       visible={staffSelectVisible}
+      destroyOnClose
       onCancel={() => {
         handleStaffSelectVisible(false);
         actionRef.current?.clearSelected?.();

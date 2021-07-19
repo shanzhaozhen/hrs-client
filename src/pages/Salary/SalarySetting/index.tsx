@@ -1,42 +1,47 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import ProForm, {
   ProFormDatePicker,
   ProFormDateRangePicker,
   ProFormDigit,
   ProFormText,
-  ProFormTextArea
+  ProFormTextArea,
 } from '@ant-design/pro-form';
-import type { FormInstance} from "antd";
-import {Button, Card, Col, message, Row} from "antd";
-import {CheckOutlined, CloseOutlined, EditOutlined, HistoryOutlined} from "@ant-design/icons";
-import SalarySettingModal from "@/pages/Salary/SalarySetting/components/SalarySettingModal";
-import type { SalarySettingForm, SalarySettingVO } from "@/services/salary-setting/typings";
-import {addSalarySetting, getSalarySettingNew} from "@/services/salary-setting/salary-setting";
+import type { FormInstance } from 'antd';
+import { Button, Card, Col, message, Row } from 'antd';
+import { CheckOutlined, CloseOutlined, EditOutlined, HistoryOutlined } from '@ant-design/icons';
+import SalarySettingModal from '@/pages/Salary/SalarySetting/components/SalarySettingModal';
+import type { SalarySettingForm, SalarySettingVO } from '@/services/salary-setting/typings';
+import { addSalarySetting, getSalarySettingNew } from '@/services/salary-setting/salary-setting';
+import { DescriptionsSkeleton } from '@ant-design/pro-skeleton';
 
 const SalarySetting: React.FC = () => {
+  const [loading, setLoading] = useState<boolean>(true);
+  const [viewState, setViewState] = useState<boolean>(true);
+  const [salarySettingListModalVisible, handleSalarySettingListModalVisible] =
+    useState<boolean>(false);
+  const [formValues, setFormValues] = useState<SalarySettingVO | SalarySettingForm>({});
 
-  const [ viewState, setViewState ] = useState<boolean>(true);
-  const [ salarySettingListModalVisible, handleSalarySettingListModalVisible ] = useState<boolean>(false);
-  const [ formValues, setFormValues ] = useState<SalarySettingVO | SalarySettingForm>({});
+  const formRef = useRef<FormInstance>();
 
   const updateFormValues = async () => {
+    setLoading(true);
     let { data } = await getSalarySettingNew();
     if (data) {
       data = {
         ...data,
         // @ts-ignore
-        highTemperatureMonth: [data.highTemperatureStartDate, data.highTemperatureEndDate]
-      }
+        highTemperatureMonth: [data.highTemperatureStartDate, data.highTemperatureEndDate],
+      };
     }
-    setFormValues(data || {})
-  }
+    setFormValues(data || {});
+    formRef.current?.setFieldsValue({ ...formValues });
+    setLoading(false);
+  };
 
   useEffect(() => {
     updateFormValues().then();
-  }, [])
-
-  const formRef = useRef<FormInstance>();
+  }, []);
 
   /**
    * 更新薪资配置
@@ -62,31 +67,31 @@ const SalarySetting: React.FC = () => {
         title={
           <>
             <span style={{ marginRight: 15 }}>薪资配置</span>
-            { viewState ? (
-                <div style={{ float: "right" }}>
-                  <Button
-                    style={{ marginRight: 20 }}
-                    type="primary"
-                    icon={<HistoryOutlined />}
-                    onClick={() => {
-                      handleSalarySettingListModalVisible(true);
-                    }}
-                  >
-                    修改记录
-                  </Button>
-                  <Button
-                    style={{ float: "right" }}
-                    type="primary"
-                    icon={<EditOutlined />}
-                    onClick={() => {
-                      setViewState(false);
-                    }}
-                  >
-                    编辑
-                  </Button>
-                </div>
+            {viewState ? (
+              <div style={{ float: 'right' }}>
+                <Button
+                  style={{ marginRight: 20 }}
+                  type="primary"
+                  icon={<HistoryOutlined />}
+                  onClick={() => {
+                    handleSalarySettingListModalVisible(true);
+                  }}
+                >
+                  修改记录
+                </Button>
+                <Button
+                  style={{ float: 'right' }}
+                  type="primary"
+                  icon={<EditOutlined />}
+                  onClick={() => {
+                    setViewState(false);
+                  }}
+                >
+                  编辑
+                </Button>
+              </div>
             ) : (
-              <div style={{ float: "right" }}>
+              <div style={{ float: 'right' }}>
                 <Button
                   style={{ marginRight: 20 }}
                   type="primary"
@@ -108,12 +113,21 @@ const SalarySetting: React.FC = () => {
                   取消
                 </Button>
               </div>
-            ) }
+            )}
           </>
         }
         bordered={false}
       >
-        {formValues && Object.keys(formValues).length ? (
+        {loading ? (
+          <div
+            style={{
+              background: '#fafafa',
+              padding: 24,
+            }}
+          >
+            <DescriptionsSkeleton active />
+          </div>
+        ) : (
           <ProForm
             formRef={formRef}
             initialValues={formValues}
@@ -260,41 +274,62 @@ const SalarySetting: React.FC = () => {
                   readonly={viewState}
                 />
               </Col>
-              { !viewState && (
-                <Col xl={8} lg={12} md={24}>
-                  <ProFormDateRangePicker
+              {viewState ? (
+                <>
+                  <Col xl={8} lg={12} md={24}>
+                    <ProFormDatePicker.Month
+                      width="md"
+                      name="highTemperatureStartDate"
+                      label="高温津贴开始生效月份"
+                      rules={[{ required: true, message: '请选择高温津贴开始生效月份' }]}
+                      readonly={viewState}
+                      hidden={!viewState}
+                    />
+                  </Col>
+                  <Col xl={8} lg={12} md={24}>
+                    <ProFormDatePicker.Month
+                      width="md"
+                      name="highTemperatureEndDate"
+                      label="高温津贴结束生效月份"
+                      rules={[{ required: true, message: '请选择高温津贴结束生效月份' }]}
+                      readonly={viewState}
+                      hidden={!viewState}
+                    />
+                  </Col>
+                </>
+              ) : (
+                <>
+                  <Col xl={8} lg={12} md={24}>
+                    <ProFormDateRangePicker
+                      width="md"
+                      name="highTemperatureMonth"
+                      label="高温津贴开始生效起止月份"
+                      fieldProps={{
+                        picker: 'month',
+                        format: 'YYYY-MM',
+                      }}
+                      rules={[{ required: true, message: '请选择高温津贴开始生效起止月份' }]}
+                      readonly={viewState}
+                    />
+                  </Col>
+                  <ProFormDatePicker.Month
                     width="md"
-                    name="highTemperatureMonth"
-                    label="高温津贴开始生效起止月份"
-                    fieldProps={{
-                      picker: 'month',
-                      format: 'YYYY-MM',
-                    }}
-                    rules={[{ required: true, message: '请选择高温津贴开始生效起止月份' }]}
+                    name="highTemperatureStartDate"
+                    label="高温津贴开始生效月份"
+                    rules={[{ required: true, message: '请选择高温津贴开始生效月份' }]}
                     readonly={viewState}
+                    hidden={!viewState}
                   />
-                </Col>
-              ) }
-              <Col xl={8} lg={12} md={24}>
-                <ProFormDatePicker.Month
-                  width="md"
-                  name="highTemperatureStartDate"
-                  label="高温津贴开始生效月份"
-                  rules={[{ required: true, message: '请选择高温津贴开始生效月份' }]}
-                  readonly={viewState}
-                  hidden={!viewState}
-                />
-              </Col>
-              <Col xl={8} lg={12} md={24}>
-                <ProFormDatePicker.Month
-                  width="md"
-                  name="highTemperatureEndDate"
-                  label="高温津贴结束生效月份"
-                  rules={[{ required: true, message: '请选择高温津贴结束生效月份' }]}
-                  readonly={viewState}
-                  hidden={!viewState}
-                />
-              </Col>
+                  <ProFormDatePicker.Month
+                    width="md"
+                    name="highTemperatureEndDate"
+                    label="高温津贴结束生效月份"
+                    rules={[{ required: true, message: '请选择高温津贴结束生效月份' }]}
+                    readonly={viewState}
+                    hidden={!viewState}
+                  />
+                </>
+              )}
               <Col xl={8} lg={12} md={24}>
                 <ProFormDigit
                   width="md"
@@ -363,7 +398,12 @@ const SalarySetting: React.FC = () => {
                   width="md"
                   name="dutyFestivalFee"
                   label="值班费（法定节假日（春节假期除外））（元/天）"
-                  rules={[{ required: true, message: '请输入值班费（法定节假日（春节假期除外））（元/天）' }]}
+                  rules={[
+                    {
+                      required: true,
+                      message: '请输入值班费（法定节假日（春节假期除外））（元/天）',
+                    },
+                  ]}
                   readonly={viewState}
                 />
               </Col>
@@ -372,7 +412,12 @@ const SalarySetting: React.FC = () => {
                   width="md"
                   name="dutyOutSpringFee"
                   label="值班费（春节假期（不含除夕、初一、初二））（元/天）"
-                  rules={[{ required: true, message: '请输入值班费（春节假期（不含除夕、初一、初二））（元/天）' }]}
+                  rules={[
+                    {
+                      required: true,
+                      message: '请输入值班费（春节假期（不含除夕、初一、初二））（元/天）',
+                    },
+                  ]}
                   readonly={viewState}
                 />
               </Col>
@@ -381,7 +426,12 @@ const SalarySetting: React.FC = () => {
                   width="md"
                   name="dutyInSpringFee"
                   label="值班费（春节假期（除夕、初一、初二））（元/天）"
-                  rules={[{ required: true, message: '请输入值班费（春节假期（除夕、初一、初二））（元/天）' }]}
+                  rules={[
+                    {
+                      required: true,
+                      message: '请输入值班费（春节假期（除夕、初一、初二））（元/天）',
+                    },
+                  ]}
                   readonly={viewState}
                 />
               </Col>
@@ -395,15 +445,11 @@ const SalarySetting: React.FC = () => {
                 />
               </Col>
               <Col xl={24} lg={24} md={24}>
-                <ProFormTextArea
-                  name="remarks"
-                  label="备注"
-                  readonly={viewState}
-                />
+                <ProFormTextArea name="remarks" label="备注" readonly={viewState} />
               </Col>
             </Row>
           </ProForm>
-        ) : null}
+        )}
       </Card>
 
       <SalarySettingModal

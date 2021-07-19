@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import type { FormInstance } from 'antd';
-import { Button, Divider, Input, message, Modal, Popconfirm, Space, Tag } from 'antd';
+import { Button, Divider, Input, message, Modal, Popconfirm } from 'antd';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
@@ -9,33 +9,30 @@ import {
   ExclamationCircleOutlined,
   ExportOutlined,
   ImportOutlined,
-  KeyOutlined,
   PlusOutlined,
-  ThunderboltOutlined,
 } from '@ant-design/icons';
-import CreateForm from '@/pages/Salary/SalaryList/components/CreateForm';
-import ViewForm from '@/pages/Salary/SalaryList/components/ViewForm';
-import UpdateForm from '@/pages/Salary/SalaryList/components/UpdateForm';
+import CreateForm from '@/pages/Salary/AllowanceList/components/CreateForm';
+import ViewForm from '@/pages/Salary/AllowanceList/components/ViewForm';
+import UpdateForm from '@/pages/Salary/AllowanceList/components/UpdateForm';
 import { useDepartmentList, useDepartmentTree } from '@/utils/department';
 import FormTreeSelect from '@/components/FormTreeSelect';
 import { downloadFile } from '@/utils/file';
-import type { SalaryForm, SalaryVO } from '@/services/salary/typings';
+import type { AllowanceForm, AllowanceVO } from '@/services/allowance/typings';
 import {
-  batchDeleteSalary,
-  deleteSalary,
-  exportSalary,
-  generateSalaryTemplate,
-  getSalaryById,
-  getSalaryPage,
-} from '@/services/salary/salary';
+  batchDeleteAllowance,
+  deleteAllowance,
+  exportAllowance,
+  generateAllowanceTemplate,
+  getAllowanceById,
+  getAllowancePage,
+} from '@/services/allowance/allowance';
 import ImportModal from '@/components/ImportModal';
-import { ModalForm, ProFormDatePicker, ProFormSwitch } from '@ant-design/pro-form';
 
 export const onFormValuesChange = (changedValues: any, allValues: any, formRef: any) => {
-  if (changedValues.hasOwnProperty('salarySetting')) {
-    const { salarySetting } = changedValues;
-    if (salarySetting) {
-      const yearAndQuarter = salarySetting.match(/\d+(.\d+)?/g);
+  if (changedValues.hasOwnProperty('allowanceSetting')) {
+    const { allowanceSetting } = changedValues;
+    if (allowanceSetting) {
+      const yearAndQuarter = allowanceSetting.match(/\d+(.\d+)?/g);
       if (yearAndQuarter.length === 2) {
         formRef.current?.setFieldsValue({
           ...allValues,
@@ -47,37 +44,35 @@ export const onFormValuesChange = (changedValues: any, allValues: any, formRef: 
   }
 };
 
-const SalaryList: React.FC = () => {
+const AllowanceList: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const formRef = useRef<FormInstance>();
 
-  const [formValues, setFormValues] = useState<SalaryVO | SalaryForm>({});
+  const [formValues, setFormValues] = useState<AllowanceVO | AllowanceForm>({});
   const [viewModalVisible, handleViewModalVisible] = useState<boolean>(false);
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-  const [selectedRowsState, setSelectedRows] = useState<SalaryVO[]>([]);
+  const [selectedRowsState, setSelectedRows] = useState<AllowanceVO[]>([]);
   const [importModalVisible, handleImportModalVisible] = useState<boolean>(false);
-  const [generateModalVisible, handleGenerateModalVisible] = useState<boolean>(false);
-  const [freezeModalVisible, handleFreezeModalVisible] = useState<boolean>(false);
 
   const departmentList = useDepartmentList();
   const departmentTree = useDepartmentTree();
 
   /**
-   * 批量删除薪资发放
+   * 批量删除津贴数据
    */
-  const handleDeleteSalary = () => {
+  const handleDeleteAllowance = () => {
     Modal.confirm({
       title: '确认',
       icon: <ExclamationCircleOutlined />,
-      content: '确定批量删除勾选中的薪资发放吗',
+      content: '确定批量删除勾选中的津贴数据吗',
       okText: '确认',
       cancelText: '取消',
       onOk: async () => {
         const hide = message.loading('正在删除');
         if (!selectedRowsState) return true;
         try {
-          await batchDeleteSalary(selectedRowsState.map((selectedRow) => selectedRow.id));
+          await batchDeleteAllowance(selectedRowsState.map((selectedRow) => selectedRow.id));
           hide();
           message.success('删除成功，即将刷新');
           actionRef.current?.reloadAndRest?.();
@@ -91,7 +86,7 @@ const SalaryList: React.FC = () => {
     });
   };
 
-  const columns: ProColumns<SalaryVO>[] = [
+  const columns: ProColumns<AllowanceVO>[] = [
     {
       title: '关键字',
       key: 'keyword',
@@ -133,55 +128,23 @@ const SalaryList: React.FC = () => {
       hideInSearch: true,
     },
     {
-      title: '发放月份',
-      dataIndex: 'month',
-      valueType: 'dateMonth',
+      title: '考核年度',
+      dataIndex: 'year',
+      valueType: 'digit',
       sorter: true,
     },
     {
-      title: '发薪类型',
-      dataIndex: 'type',
+      title: '考核季度',
+      dataIndex: 'quarter',
+      valueType: 'digit',
+      sorter: true,
+    },
+    {
+      title: '考核等级',
+      dataIndex: 'appraise',
       valueType: 'text',
-      sorter: true,
-    },
-    {
-      title: '基础工资',
-      dataIndex: 'basicSalary',
-      valueType: 'digit',
-      align: 'right',
-      sorter: true,
-    },
-    {
-      title: '岗位工资',
-      dataIndex: 'postSalary',
-      valueType: 'digit',
-      align: 'right',
-      sorter: true,
-    },
-    {
-      title: '应发工资',
-      dataIndex: 'shouldSalary',
-      valueType: 'digit',
-      align: 'right',
-      sorter: true,
-    },
-    {
-      title: '实发工资',
-      dataIndex: 'actualSalary',
-      valueType: 'digit',
-      align: 'right',
-      sorter: true,
-    },
-    {
-      title: '是否冻结',
-      dataIndex: 'freeze',
-      valueType: 'text',
-      align: 'center',
       sorter: true,
       hideInSearch: true,
-      render: (_, record) => (
-        <Space>{record.freeze ? <Tag color="green">是</Tag> : <Tag color="red">否</Tag>}</Space>
-      ),
     },
     {
       title: '备注',
@@ -199,14 +162,11 @@ const SalaryList: React.FC = () => {
       defaultSortOrder: 'descend',
       hideInSearch: true,
       hideInForm: true,
-      hideInTable: true,
     },
     {
-      title: '最后修改时间',
+      title: '修改时间',
       dataIndex: 'lastModifiedDate',
       valueType: 'dateTime',
-      sorter: true,
-      defaultSortOrder: 'descend',
       hideInSearch: true,
       hideInForm: true,
     },
@@ -220,11 +180,11 @@ const SalaryList: React.FC = () => {
             <a
               onClick={async () => {
                 if (record && record.id) {
-                  const { data } = await getSalaryById(record.id);
+                  const { data } = await getAllowanceById(record.id);
                   setFormValues(data || {});
                   handleViewModalVisible(true);
                 } else {
-                  message.warn('没有选中有效的薪资发放');
+                  message.warn('没有选中有效的津贴数据');
                 }
               }}
             >
@@ -234,7 +194,7 @@ const SalaryList: React.FC = () => {
             <a
               onClick={async () => {
                 if (record && record.id) {
-                  let { data } = await getSalaryById(record.id);
+                  let { data } = await getAllowanceById(record.id);
                   if (data) {
                     data = {
                       ...data,
@@ -245,7 +205,7 @@ const SalaryList: React.FC = () => {
                   setFormValues(data || {});
                   handleUpdateModalVisible(true);
                 } else {
-                  message.warn('没有选中有效的薪资发放');
+                  message.warn('没有选中有效的津贴数据');
                 }
               }}
             >
@@ -253,14 +213,14 @@ const SalaryList: React.FC = () => {
             </a>
             <Divider type="vertical" />
             <Popconfirm
-              title="确定删除该薪资发放?"
+              title="确定删除该津贴数据?"
               onConfirm={async () => {
                 if (record && record.id) {
-                  await deleteSalary(record.id);
+                  await deleteAllowance(record.id);
                   message.success('删除成功！');
                   actionRef.current?.reloadAndRest?.();
                 } else {
-                  message.warn('没有选中有效的薪资发放');
+                  message.warn('没有选中有效的津贴数据');
                 }
               }}
               okText="确定"
@@ -276,8 +236,8 @@ const SalaryList: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<SalaryVO>
-        headerTitle="薪资发放"
+      <ProTable<AllowanceVO>
+        headerTitle="津贴数据"
         actionRef={actionRef}
         formRef={formRef}
         rowKey="id"
@@ -288,12 +248,6 @@ const SalaryList: React.FC = () => {
           <Button type="primary" onClick={() => handleCreateModalVisible(true)}>
             <PlusOutlined /> 新建
           </Button>,
-          <Button type="primary" onClick={() => handleGenerateModalVisible(true)}>
-            <ThunderboltOutlined /> 薪资生成
-          </Button>,
-          <Button type="primary" onClick={() => handleFreezeModalVisible(true)}>
-            <KeyOutlined /> 薪资冻结
-          </Button>,
           <Button type="primary" onClick={() => handleImportModalVisible(true)}>
             <ImportOutlined /> 导入
           </Button>,
@@ -301,8 +255,8 @@ const SalaryList: React.FC = () => {
             type="primary"
             onClick={() => {
               const fieldsValue = formRef.current?.getFieldsValue();
-              exportSalary({ ...fieldsValue }).then((data) => {
-                downloadFile(data, `薪资发放数据-${new Date().getTime()}.xlsx`);
+              exportAllowance({ ...fieldsValue }).then((data) => {
+                downloadFile(data, `津贴数据数据-${new Date().getTime()}.xlsx`);
               });
             }}
           >
@@ -310,7 +264,7 @@ const SalaryList: React.FC = () => {
           </Button>,
         ]}
         request={async (params, sorter) => {
-          const { data } = await getSalaryPage(getPageParams(params), getSortOrder(sorter));
+          const { data } = await getAllowancePage(getPageParams(params), getSortOrder(sorter));
           return {
             // success 请返回 true，
             // 不然 table 会停止解析数据，即使有数据
@@ -333,7 +287,7 @@ const SalaryList: React.FC = () => {
             </div>
           }
         >
-          <Button onClick={handleDeleteSalary}>批量删除</Button>
+          <Button onClick={handleDeleteAllowance}>批量删除</Button>
         </FooterToolbar>
       )}
 
@@ -349,13 +303,13 @@ const SalaryList: React.FC = () => {
             viewModalVisible={viewModalVisible}
             handleViewModalVisible={handleViewModalVisible}
             values={formValues}
-            onClose={() => setFormValues({})}
+            onCancel={() => setFormValues({})}
           />
           <UpdateForm
             updateModalVisible={updateModalVisible}
             handleUpdateModalVisible={handleUpdateModalVisible}
             values={formValues}
-            onClose={() => setFormValues({})}
+            onCancel={() => setFormValues({})}
             tableActionRef={actionRef}
           />
         </>
@@ -366,13 +320,13 @@ const SalaryList: React.FC = () => {
         handleVisible={handleImportModalVisible}
         haveTemplate={true}
         downloadTemplate={() => {
-          generateSalaryTemplate().then((data) => {
-            downloadFile(data, '薪资发放导入模板.xlsx');
+          generateAllowanceTemplate().then((data) => {
+            downloadFile(data, '津贴数据导入模板.xlsx');
           });
         }}
-        description="导入薪资发放"
+        description="导入津贴数据"
         uploadProps={{
-          action: '/hrs-api/salary/import',
+          action: '/hrs-api/allowance/import',
           headers: {
             Authorization: localStorage.getItem('ACCESS_TOKEN') || '',
           },
@@ -397,63 +351,8 @@ const SalaryList: React.FC = () => {
           },
         }}
       />
-
-      <Modal></Modal>
-
-      <ModalForm
-        title="薪资生成"
-        width={360}
-        visible={generateModalVisible}
-        onVisibleChange={handleGenerateModalVisible}
-        onFinish={async () => handleGenerateModalVisible(false)}
-        modalProps={{
-          destroyOnClose: true,
-        }}
-        submitter={{
-          searchConfig: {
-            submitText: '开始生成',
-            resetText: '取消',
-          },
-        }}
-      >
-        <ProFormDatePicker.Month
-          label="请选择需要生成的月份"
-          name="month"
-          rules={[{ required: true, message: '请选择需要生成的月份' }]}
-        />
-      </ModalForm>
-
-      <ModalForm
-        title="薪资冻结"
-        width={360}
-        visible={freezeModalVisible}
-        onVisibleChange={handleFreezeModalVisible}
-        onFinish={async () => handleFreezeModalVisible(false)}
-        modalProps={{
-          destroyOnClose: true,
-        }}
-        submitter={{
-          searchConfig: {
-            submitText: '提交',
-            resetText: '取消',
-          },
-        }}
-      >
-        <ProFormDatePicker.Month
-          label="请选择需要处理的月份"
-          name="month"
-          rules={[{ required: true, message: '请选择需要处理的月份' }]}
-        />
-        <ProFormSwitch
-          label="请选择冻结或解除冻结"
-          checkedChildren="冻结"
-          unCheckedChildren="解除冻结"
-          name="freeze"
-          rules={[{ required: true, message: '请选择冻结或解除冻结' }]}
-        />
-      </ModalForm>
     </PageContainer>
   );
 };
 
-export default SalaryList;
+export default AllowanceList;
