@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
-import type {Dispatch, SetStateAction,MutableRefObject} from 'react';
+import type { Dispatch, SetStateAction, MutableRefObject } from 'react';
 import { Drawer, message } from 'antd';
 import { FooterToolbar } from '@ant-design/pro-layout';
-import type {ActionType, ProColumns} from '@ant-design/pro-table';
+import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { getPageParams, getSortOrder } from "@/utils/common";
-import type {SalarySettingForm, SalarySettingVO} from "@/services/salary-setting/typings";
-import {getSalarySettingById, getSalarySettingPage} from "@/services/salary-setting/salary-setting";
-import type {ProDescriptionsItemProps} from '@ant-design/pro-descriptions';
+import { getPageParams, getSortOrder } from '@/utils/common';
+import type { SalarySettingForm, SalarySettingVO } from '@/services/salary-setting/typings';
+import {
+  getSalarySettingById,
+  getSalarySettingPage,
+} from '@/services/salary-setting/salary-setting';
+import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
 import ProDescriptions from '@ant-design/pro-descriptions';
-
 
 interface SalarySettingListProps {
   actionRef: MutableRefObject<ActionType | undefined>;
@@ -311,21 +313,13 @@ const SalarySettingList: React.FC<SalarySettingListProps> = (props) => {
               已选择 <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a> 项&nbsp;&nbsp;
             </div>
           }
-        >
-        </FooterToolbar>
+        ></FooterToolbar>
       )}
 
       {formValues && Object.keys(formValues).length ? (
         <>
-{/*          <ViewForm
-            viewDrawerVisible={viewDrawerVisible}
-            handleViewDrawerVisible={handleViewDrawerVisible}
-            values={formValues}
-            onClose={() => setFormValues({})}
-          /> */}
-
           <Drawer
-            width={820}
+            width={'75%'}
             visible={viewDrawerVisible}
             onClose={() => {
               setFormValues({});
@@ -333,9 +327,8 @@ const SalarySettingList: React.FC<SalarySettingListProps> = (props) => {
             }}
             closable={false}
           >
-
             <ProDescriptions<SalarySettingVO>
-              column={2}
+              column={3}
               title="薪资配置"
               request={async () => ({
                 data: formValues || {},
@@ -348,7 +341,6 @@ const SalarySettingList: React.FC<SalarySettingListProps> = (props) => {
           </Drawer>
         </>
       ) : null}
-
     </>
   );
 };

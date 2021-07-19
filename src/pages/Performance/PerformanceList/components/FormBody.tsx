@@ -1,14 +1,12 @@
-import React, {useEffect, useState} from 'react';
-import type {MutableRefObject} from 'react';
+import React, { useState } from 'react';
+import type { MutableRefObject } from 'react';
 import type { FormInstance } from 'antd';
-import {Button, Col, Input, Row} from 'antd';
+import { Button, Col, Input, Row } from 'antd';
 import { ProFormDigit, ProFormSelect, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
-import ProFormItem from "@ant-design/pro-form/lib/components/FormItem";
-import {ContactsOutlined} from "@ant-design/icons";
-import {useDepartmentList} from "@/utils/department";
-import StaffSelect from "@/components/StaffSelect";
-import type {OptionType} from "@/services/common/typings";
-import {getPerformanceSettingList} from "@/services/performance-setting/performance-setting";
+import ProFormItem from '@ant-design/pro-form/lib/components/FormItem';
+import { ContactsOutlined } from '@ant-design/icons';
+import { useDepartmentList } from '@/utils/department';
+import StaffSelect from '@/components/StaffSelect';
 
 interface FormProps {
   isView?: boolean;
@@ -23,7 +21,7 @@ const FormBody: React.FC<FormProps> = (props) => {
 
   const departmentList = useDepartmentList();
 
-  const [performanceSettingOptions, setPerformanceSettingOptions] = useState<OptionType[]>([]);
+  /* const [performanceSettingOptions, setPerformanceSettingOptions] = useState<OptionType[]>([]);
   useEffect(() => {
     getPerformanceSettingList()
       .then(({ data }) => {
@@ -32,7 +30,7 @@ const FormBody: React.FC<FormProps> = (props) => {
       .catch(() => {
         setPerformanceSettingOptions([]);
       });
-  }, []);
+  }, []); */
 
   return (
     <>
@@ -58,11 +56,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                   rules={[{ required: true, message: '请选择员工' }]}
                   style={{ width: '218px' }}
                 >
-                  <Input
-                    placeholder="请选择员工"
-                    name="staffCode"
-                    disabled
-                  />
+                  <Input placeholder="请选择员工" name="staffCode" disabled />
                 </ProFormItem>
                 <Button
                   type="primary"
@@ -92,12 +86,12 @@ const FormBody: React.FC<FormProps> = (props) => {
             name="depId"
             label="部门"
             required={true}
-            options={departmentList.map(item => ({value: item.id || '', label: item.name}))}
+            options={departmentList.map((item) => ({ value: item.id || '', label: item.name }))}
             readonly={isView}
             disabled
           />
         </Col>
-        { !isView && (
+        {/* { !isView && (
           <Col xl={12} lg={12} md={24}>
             <ProFormSelect
               width="md"
@@ -107,7 +101,7 @@ const FormBody: React.FC<FormProps> = (props) => {
               readonly={isView}
             />
           </Col>
-        ) }
+        ) } */}
         <Col xl={12} lg={12} md={24}>
           <ProFormDigit
             width="md"
@@ -133,24 +127,19 @@ const FormBody: React.FC<FormProps> = (props) => {
             label="考核等级"
             rules={[{ required: true, message: '请选择考核等级' }]}
             options={[
-              {value: 'A', label: 'A'},
-              {value: 'B', label: 'B'},
-              {value: 'C', label: 'C'},
-              {value: 'D', label: 'D'},
-              {value: 'E', label: 'E'},
+              { value: 'A', label: 'A' },
+              { value: 'B', label: 'B' },
+              { value: 'C', label: 'C' },
+              { value: 'D', label: 'D' },
+              { value: 'E', label: 'E' },
             ]}
             readonly={isView}
           />
         </Col>
         <Col xl={24} lg={24} md={24}>
-          <ProFormTextArea
-            name="remarks"
-            label="备注"
-            readonly={isView}
-          />
+          <ProFormTextArea name="remarks" label="备注" readonly={isView} />
         </Col>
       </Row>
-
 
       <StaffSelect
         staffSelectVisible={staffSelectVisible}
@@ -163,7 +152,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             staffCode: selectValue.staffCode,
             staffName: selectValue.staffName,
             depId: selectValue.depId,
-          })
+          });
           handleStaffSelectVisible(false);
         }}
       />

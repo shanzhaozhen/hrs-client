@@ -6,9 +6,9 @@ import ProTable from '@ant-design/pro-table';
 import type { UserVO } from '@/services/user/typings';
 import { getUserPage } from '@/services/user/user';
 import ProDescriptions from '@ant-design/pro-descriptions';
-import {getPageParams, getSortOrder, tableFilter} from "@/utils/common";
-import type { RoleVO } from "@/services/role/typings";
-import { useDepartmentList } from "@/utils/department";
+import { getPageParams, getSortOrder, tableFilter } from '@/utils/common';
+import type { RoleVO } from '@/services/role/typings';
+import { useDepartmentList } from '@/utils/department';
 
 interface CheckBoxUserProps {
   checkBoxUserVisible: boolean;
@@ -75,7 +75,7 @@ const CheckBoxUser: React.FC<CheckBoxUserProps> = (props) => {
       dataIndex: 'depId',
       hideInSearch: true,
       valueType: 'select',
-      renderText: (_, record) => (tableFilter(record.depId, departmentList, '未分配'))
+      renderText: (_, record) => tableFilter(record.depId, departmentList, '未分配'),
     },
     {
       title: '操作',
@@ -87,6 +87,7 @@ const CheckBoxUser: React.FC<CheckBoxUserProps> = (props) => {
             onClick={async () => {
               if (record && record.id) {
                 await handleBatchAddUserRelate([record]);
+                actionRef.current?.reloadAndRest?.();
               } else {
                 message.warn('没有选中有效的用户');
               }
@@ -122,10 +123,14 @@ const CheckBoxUser: React.FC<CheckBoxUserProps> = (props) => {
           return (
             <Space size={16}>
               <a onClick={onCleanSelected}>取消选择</a>
-              <a onClick={async () => {
-                await handleBatchAddUserRelate(selectedRowsState);
-                onCleanSelected();
-              }}>批量关联</a>
+              <a
+                onClick={async () => {
+                  await handleBatchAddUserRelate(selectedRowsState);
+                  onCleanSelected();
+                }}
+              >
+                批量关联
+              </a>
             </Space>
           );
         }}
