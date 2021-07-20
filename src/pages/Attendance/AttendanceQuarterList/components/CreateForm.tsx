@@ -1,12 +1,12 @@
-import React, {useRef} from 'react';
+import React, { useRef } from 'react';
 import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
-import type {FormInstance} from 'antd';
+import type { FormInstance } from 'antd';
 import { message } from 'antd';
-import FormBody from '@/pages/Attendance/AttendanceList/components/FormBody';
+import FormBody from '@/pages/Attendance/AttendanceQuarterList/components/FormBody';
 import type { ActionType } from '@ant-design/pro-table';
-import {DrawerForm} from "@ant-design/pro-form";
-import {addAttendance} from "@/services/attendance/attendance";
-import type {AttendanceForm} from "@/services/attendance/typings";
+import { DrawerForm } from '@ant-design/pro-form';
+import { addAttendanceQuarter } from '@/services/attendance-quarter/attendance-quarter';
+import type { AttendanceQuarterForm } from '@/services/attendance-quarter/typings';
 
 interface CreateFormProps {
   createModalVisible: boolean;
@@ -20,13 +20,13 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
   const formRef = useRef<FormInstance>();
 
   /**
-   * 添加考勤数据
+   * 添加季度考勤
    * @param fields
    */
-  const handleAdd = async (fields: AttendanceForm) => {
+  const handleAdd = async (fields: AttendanceQuarterForm) => {
     const hide = message.loading('正在添加');
     try {
-      await addAttendance(fields);
+      await addAttendanceQuarter(fields);
       hide();
       message.success('添加成功');
       handleCreateModalVisible(false);
@@ -41,7 +41,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
     <>
       <DrawerForm
         width={'75%'}
-        title="新建考勤数据"
+        title="新建季度考勤"
         visible={createModalVisible}
         formRef={formRef}
         onVisibleChange={handleCreateModalVisible}

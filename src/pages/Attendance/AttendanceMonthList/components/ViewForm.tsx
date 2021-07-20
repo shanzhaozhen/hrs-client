@@ -1,24 +1,24 @@
 import React from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import FormBody from '@/pages/Attendance/AttendanceList/components/FormBody';
-import {DrawerForm} from '@ant-design/pro-form';
-import type {AttendanceForm, AttendanceVO} from "@/services/attendance/typings";
+import FormBody from '@/pages/Attendance/AttendanceMonthList/components/FormBody';
+import { DrawerForm } from '@ant-design/pro-form';
+import type { AttendanceMonthForm, AttendanceMonthVO } from '@/services/attendance-month/typings';
 
 interface ViewFormProps {
   viewDrawerVisible: boolean;
   handleViewDrawerVisible: Dispatch<SetStateAction<boolean>>;
   onClose: () => void;
-  values?: AttendanceVO | AttendanceForm;
+  values?: AttendanceMonthVO | AttendanceMonthForm;
 }
 
 const ViewForm: React.FC<ViewFormProps> = (props) => {
-  const { viewDrawerVisible, handleViewDrawerVisible, onClose, values } = props
+  const { viewDrawerVisible, handleViewDrawerVisible, onClose, values } = props;
 
   return (
     <>
       <DrawerForm
         width={'75%'}
-        title="查看考勤数据"
+        title="查看月度考勤"
         visible={viewDrawerVisible}
         onVisibleChange={handleViewDrawerVisible}
         initialValues={values}
@@ -39,9 +39,7 @@ const ViewForm: React.FC<ViewFormProps> = (props) => {
           },
         }}
       >
-        {values && Object.keys(values).length ? (
-          <FormBody isView={true} />
-        ) : null}
+        {values && Object.keys(values).length ? <FormBody isView={true} /> : null}
       </DrawerForm>
     </>
   );

@@ -1,4 +1,4 @@
-export type AttendanceForm = {
+export type AttendanceMonthForm = {
   /** 主键ID */
   id: number;
   /** 员工id */
@@ -79,7 +79,7 @@ export type AttendanceForm = {
   remarks?: string;
 };
 
-export type AttendanceVO = {
+export type AttendanceMonthVO = {
   /** 主键ID */
   id?: number;
   /** 员工id */

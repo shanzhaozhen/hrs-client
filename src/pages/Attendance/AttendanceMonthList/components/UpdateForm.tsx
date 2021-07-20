@@ -1,19 +1,19 @@
-import React, {useRef} from 'react';
+import React, { useRef } from 'react';
 import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
-import type {FormInstance} from 'antd';
+import type { FormInstance } from 'antd';
 import { message } from 'antd';
-import FormBody from '@/pages/Attendance/AttendanceList/components/FormBody';
+import FormBody from '@/pages/Attendance/AttendanceMonthList/components/FormBody';
 import type { ActionType } from '@ant-design/pro-table';
-import {DrawerForm} from "@ant-design/pro-form";
-import type { AttendanceForm, AttendanceVO } from "@/services/attendance/typings";
-import { updateAttendance } from "@/services/attendance/attendance";
+import { DrawerForm } from '@ant-design/pro-form';
+import type { AttendanceMonthForm, AttendanceMonthVO } from '@/services/attendance-month/typings';
+import { updateAttendanceMonth } from '@/services/attendance-month/attendance-month';
 
 interface UpdateFormProps {
   updateModalVisible: boolean;
   handleUpdateModalVisible: Dispatch<SetStateAction<boolean>>;
   onClose: () => void;
   tableActionRef: MutableRefObject<ActionType | undefined>;
-  values?: AttendanceForm | AttendanceVO;
+  values?: AttendanceMonthForm | AttendanceMonthVO;
 }
 
 const UpdateForm: React.FC<UpdateFormProps> = (props) => {
@@ -22,13 +22,13 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
   const formRef = useRef<FormInstance>();
 
   /**
-   * 修改考勤数据
+   * 修改月度考勤
    * @param fields
    */
-  const handleUpdate = async (fields: AttendanceForm) => {
+  const handleUpdate = async (fields: AttendanceMonthForm) => {
     const hide = message.loading('正在添加');
     try {
-      await updateAttendance(fields);
+      await updateAttendanceMonth(fields);
       hide();
       message.success('添加成功');
       handleUpdateModalVisible(false);
@@ -43,7 +43,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
     <>
       <DrawerForm
         width={'75%'}
-        title="修改考勤数据"
+        title="修改月度考勤"
         visible={updateModalVisible}
         formRef={formRef}
         initialValues={values}

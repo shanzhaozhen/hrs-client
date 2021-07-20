@@ -170,10 +170,16 @@ export default [
     icon: 'crown',
     routes: [
       {
-        path: '/attendance/attendance-collect',
-        name: 'attendance-collect',
+        path: '/attendance/attendance-month',
+        name: 'attendance-month',
         icon: 'smile',
-        component: './Attendance/AttendanceList',
+        component: './Attendance/AttendanceMonthList',
+      },
+      {
+        path: '/attendance/attendance-quarter',
+        name: 'attendance-quarter',
+        icon: 'smile',
+        component: './Attendance/AttendanceQuarterList',
       },
     ],
   },
