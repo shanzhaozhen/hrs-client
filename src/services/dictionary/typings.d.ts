@@ -5,6 +5,8 @@ export type DictionaryForm = {
   name?: string;
   /** 字典编码 */
   code?: string;
+  /** 字典表达值 */
+  express?: string;
   /** 上级ID */
   pid?: number;
   /** 排序等级 */
@@ -20,6 +22,8 @@ export type DictionaryVO = {
   name?: string;
   /** 字典编码 */
   code?: string;
+  /** 字典表达值 */
+  express?: string;
   /** 上级ID */
   pid?: number;
   /** 排序等级 */

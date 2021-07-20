@@ -160,9 +160,9 @@ const SalarySetting: React.FC = () => {
               <Col xl={8} lg={12} md={24}>
                 <ProFormDigit
                   width="md"
-                  name="overTimeBase"
-                  label="加班费基数"
-                  rules={[{ required: true, message: '请输入加班费基数' }]}
+                  name="meritSalary"
+                  label="绩效工资基数"
+                  rules={[{ required: true, message: '请输入绩效工资基数' }]}
                   readonly={viewState}
                 />
               </Col>

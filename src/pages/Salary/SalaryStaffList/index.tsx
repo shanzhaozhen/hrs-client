@@ -1,24 +1,30 @@
 import React, { useRef, useState } from 'react';
 import type { FormInstance } from 'antd';
-import {Button, Input, message, Modal} from 'antd';
+import { Button, Input, message, Modal } from 'antd';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
-import type {ActionType, ProColumns} from '@ant-design/pro-table';
+import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import {
   batchDeleteSalaryStaff,
-  exportSalaryStaff, generateSalaryStaffTemplate,
+  exportSalaryStaff,
+  generateSalaryStaffTemplate,
   getSalaryStaffById,
-  getSalaryStaffPage
+  getSalaryStaffPage,
 } from '@/services/salary-staff/salary-staff';
 import type { SalaryStaffForm, SalaryStaffVO } from '@/services/salary-staff/typings';
-import { getPageParams, getSortOrder, tableFilter } from "@/utils/common";
-import {ExclamationCircleOutlined, ExportOutlined, ImportOutlined, PlusOutlined} from "@ant-design/icons";
-import CreateForm from "@/pages/Salary/SalaryStaffList/components/CreateForm";
-import ViewForm from "@/pages/Salary/SalaryStaffList/components/ViewForm";
-import { useDepartmentList, useDepartmentTree } from "@/utils/department";
-import FormTreeSelect from "@/components/FormTreeSelect";
-import {downloadFile} from "@/utils/file";
-import ImportModal from "@/components/ImportModal";
+import { getPageParams, getSortOrder, tableFilter } from '@/utils/common';
+import {
+  ExclamationCircleOutlined,
+  ExportOutlined,
+  ImportOutlined,
+  PlusOutlined,
+} from '@ant-design/icons';
+import CreateForm from '@/pages/Salary/SalaryStaffList/components/CreateForm';
+import ViewForm from '@/pages/Salary/SalaryStaffList/components/ViewForm';
+import { useDepartmentList, useDepartmentTree } from '@/utils/department';
+import FormTreeSelect from '@/components/FormTreeSelect';
+import { downloadFile } from '@/utils/file';
+import ImportModal from '@/components/ImportModal';
 
 const SalaryStaffList: React.FC = () => {
   const actionRef = useRef<ActionType>();
@@ -83,10 +89,10 @@ const SalaryStaffList: React.FC = () => {
       dataIndex: 'depId',
       valueType: 'select',
       sorter: 's.depId',
-      renderText: (_, record) => (tableFilter(record.depId, departmentList, '未分配')),
+      renderText: (_, record) => tableFilter(record.depId, departmentList, '未分配'),
       renderFormItem: () => {
-        return <FormTreeSelect treeData={departmentTree} placeholder="请选择部门" />
-      }
+        return <FormTreeSelect treeData={departmentTree} placeholder="请选择部门" />;
+      },
     },
     {
       title: '员工编号',
@@ -112,6 +118,13 @@ const SalaryStaffList: React.FC = () => {
     {
       title: '岗位工资',
       dataIndex: 'postSalary',
+      valueType: 'digit',
+      sorter: true,
+      hideInSearch: true,
+    },
+    {
+      title: '公积金基数',
+      dataIndex: 'accumulationFund',
       valueType: 'digit',
       sorter: true,
       hideInSearch: true,
@@ -178,10 +191,10 @@ const SalaryStaffList: React.FC = () => {
             onClick={() => {
               const fieldsValue = formRef.current?.getFieldsValue();
               exportSalaryStaff({
-                ...fieldsValue
-              }).then(data => {
-                downloadFile(data, `员工薪资数据-${new Date().getTime()}.xlsx`)
-              })
+                ...fieldsValue,
+              }).then((data) => {
+                downloadFile(data, `员工薪资数据-${new Date().getTime()}.xlsx`);
+              });
             }}
           >
             <ExportOutlined /> 导出
@@ -211,7 +224,7 @@ const SalaryStaffList: React.FC = () => {
             </div>
           }
         >
-           <Button onClick={handleDeleteSalaryStaff}>批量删除</Button>
+          <Button onClick={handleDeleteSalaryStaff}>批量删除</Button>
         </FooterToolbar>
       )}
 
@@ -232,9 +245,9 @@ const SalaryStaffList: React.FC = () => {
         handleVisible={handleImportModalVisible}
         haveTemplate={true}
         downloadTemplate={() => {
-          generateSalaryStaffTemplate().then(data => {
-            downloadFile(data, '员工薪资导入模板.xlsx')
-          })
+          generateSalaryStaffTemplate().then((data) => {
+            downloadFile(data, '员工薪资导入模板.xlsx');
+          });
         }}
         description="导入员工薪资"
         uploadProps={{
@@ -248,20 +261,21 @@ const SalaryStaffList: React.FC = () => {
             const { status, response } = file;
             if (status === 'done') {
               const { data } = response;
-              message.success({
-                content: `导入成功：${data}`,
-                style: {
-                  whiteSpace: 'pre-wrap',
-                },
-              }).then();
+              message
+                .success({
+                  content: `导入成功：${data}`,
+                  style: {
+                    whiteSpace: 'pre-wrap',
+                  },
+                })
+                .then();
               actionRef.current?.reloadAndRest?.();
             } else if (status === 'error') {
               message.error(`导入失败：${response.message}`).then();
             }
-          }
+          },
         }}
       />
-
     </PageContainer>
   );
 };

@@ -2,13 +2,18 @@ import React, { useState } from 'react';
 import type { MutableRefObject } from 'react';
 import type { FormInstance } from 'antd';
 import { Button, Col, Input, Row } from 'antd';
-import {ProFormDatePicker, ProFormSelect, ProFormText, ProFormTextArea} from '@ant-design/pro-form';
-import FormTreeSelect from "@/components/FormTreeSelect";
-import { useDepartmentList, useDepartmentTree } from "@/utils/department";
-import { ContactsOutlined } from "@ant-design/icons";
-import ProFormItem from "@ant-design/pro-form/lib/components/FormItem";
-import {useOptions} from "@/utils/options";
-import StaffSelect from "@/components/StaffSelect";
+import {
+  ProFormDatePicker,
+  ProFormSelect,
+  ProFormText,
+  ProFormTextArea,
+} from '@ant-design/pro-form';
+import FormTreeSelect from '@/components/FormTreeSelect';
+import { useDepartmentList, useDepartmentTree } from '@/utils/department';
+import { ContactsOutlined } from '@ant-design/icons';
+import ProFormItem from '@ant-design/pro-form/lib/components/FormItem';
+import { useOptions } from '@/utils/options';
+import StaffSelect from '@/components/StaffSelect';
 
 interface FormProps {
   isEdit?: boolean;
@@ -26,8 +31,12 @@ const FormBody: React.FC<FormProps> = (props) => {
   const dutyOptions = useOptions('Duty');
   const postOptions = useOptions('Post');
   const postTypeOptions = useOptions('PostType');
-  const postLevelOptions = useOptions('PostLevel');
-
+  const postLevelOptions = useOptions(
+    'PostLevel',
+    'name',
+    'code',
+    (item) => `${item.name}(${item.code})`,
+  );
 
   return (
     <>
@@ -52,11 +61,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                   rules={[{ required: true, message: '请选择员工' }]}
                   style={{ width: '218px' }}
                 >
-                  <Input
-                    placeholder="请选择员工"
-                    name="staffCode"
-                    disabled
-                  />
+                  <Input placeholder="请选择员工" name="staffCode" disabled />
                 </ProFormItem>
                 <Button
                   type="primary"
@@ -83,7 +88,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             width="md"
             name="preDepId"
             label="变更前部门"
-            options={departmentList.map(item => ({value: item.id || '', label: item.name}))}
+            options={departmentList.map((item) => ({ value: item.id || '', label: item.name }))}
             disabled
           />
         </Col>
@@ -93,16 +98,15 @@ const FormBody: React.FC<FormProps> = (props) => {
             label="变更后部门"
             rules={[{ required: true, message: '请选择部门' }]}
           >
-            <FormTreeSelect treeData={departmentTree} style={{ width: 328 }} placeholder="请选择部门" />
+            <FormTreeSelect
+              treeData={departmentTree}
+              style={{ width: 328 }}
+              placeholder="请选择部门"
+            />
           </ProFormItem>
         </Col>
         <Col xl={12} lg={12} md={24}>
-          <ProFormText
-            width="md"
-            name="preDuty"
-            label="变更前职务"
-            disabled
-          />
+          <ProFormText width="md" name="preDuty" label="变更前职务" disabled />
         </Col>
         <Col xl={12} lg={12} md={24}>
           <ProFormSelect
@@ -114,12 +118,7 @@ const FormBody: React.FC<FormProps> = (props) => {
           />
         </Col>
         <Col xl={12} lg={12} md={24}>
-          <ProFormText
-            width="md"
-            name="prePost"
-            label="变更前岗位"
-            disabled
-          />
+          <ProFormText width="md" name="prePost" label="变更前岗位" disabled />
         </Col>
         <Col xl={12} lg={12} md={24}>
           <ProFormSelect
@@ -131,12 +130,7 @@ const FormBody: React.FC<FormProps> = (props) => {
           />
         </Col>
         <Col xl={12} lg={12} md={24}>
-          <ProFormText
-            width="md"
-            name="prePostType"
-            label="变更前岗位类型"
-            disabled
-          />
+          <ProFormText width="md" name="prePostType" label="变更前岗位类型" disabled />
         </Col>
         <Col xl={12} lg={12} md={24}>
           <ProFormSelect
@@ -148,10 +142,11 @@ const FormBody: React.FC<FormProps> = (props) => {
           />
         </Col>
         <Col xl={12} lg={12} md={24}>
-          <ProFormText
+          <ProFormSelect
             width="md"
             name="prePostLevel"
             label="变更前岗位等级"
+            options={postLevelOptions}
             disabled
           />
         </Col>
@@ -169,7 +164,17 @@ const FormBody: React.FC<FormProps> = (props) => {
             width="md"
             name="effectiveDate"
             label="生效日期"
+            tooltip="生效日期为该员工公布组织架构变化（或资格等级）的日期"
             rules={[{ required: true, message: '请选择生效日期' }]}
+          />
+        </Col>
+        <Col xl={12} lg={12} md={24}>
+          <ProFormDatePicker
+            width="md"
+            name="changeDate"
+            label="变更日期"
+            tooltip="变更日期为到达这个时间后，将会变更为本次的修改值"
+            rules={[{ required: true, message: '请选择变更日期' }]}
           />
         </Col>
         <Col xl={24} lg={24} md={24}>
@@ -190,7 +195,7 @@ const FormBody: React.FC<FormProps> = (props) => {
               postPost: selectValue.post,
               postPostType: selectValue.postType,
               postPostLevel: selectValue.postLevel,
-            }
+            };
           }
           formRef?.current.setFieldsValue({
             ...currentFormValue,
@@ -202,8 +207,8 @@ const FormBody: React.FC<FormProps> = (props) => {
             prePost: selectValue.post,
             prePostType: selectValue.postType,
             prePostLevel: selectValue.postLevel,
-            ...addFields
-          })
+            ...addFields,
+          });
           handleStaffSelectVisible(false);
         }}
       />

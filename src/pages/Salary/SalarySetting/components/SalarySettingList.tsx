@@ -33,8 +33,8 @@ const SalarySettingList: React.FC<SalarySettingListProps> = (props) => {
       width: 48,
     },
     {
-      title: '加班费基数',
-      dataIndex: 'overTimeBase',
+      title: '绩效工资基数',
+      dataIndex: 'meritSalary',
       valueType: 'digit',
       sorter: true,
       hideInSearch: true,

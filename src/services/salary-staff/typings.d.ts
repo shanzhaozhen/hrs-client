@@ -1,12 +1,20 @@
 export type SalaryStaffForm = {
   /** 主键ID */
   id: number;
-  /** 员工id */
+  /** 员工ID */
   staffId: number;
   /** 基础工资 */
   basicSalary?: number;
   /** 岗位工资 */
   postSalary?: number;
+  /** 公积金基数 */
+  accumulationFund?: number;
+  /** 是否享有独生子女津贴 */
+  haveOneChildAllowance?: boolean;
+  /** 安全津贴档次 */
+  safetyAllowance?: string;
+  /** 高温津贴档次 */
+  highTemperatureAllowance?: string;
 };
 
 export type SalaryStaffVO = {
@@ -18,12 +26,20 @@ export type SalaryStaffVO = {
   staffCode?: string;
   /** 员工姓名 */
   staffName?: string;
-  /** 部门id */
+  /** 部门ID */
   depId?: number;
   /** 基础工资 */
   basicSalary?: number;
   /** 岗位工资 */
   postSalary?: number;
+  /** 公积金基数 */
+  accumulationFund?: number;
+  /** 是否享有独生子女津贴 */
+  haveOneChildAllowance?: boolean;
+  /** 安全津贴档次 */
+  safetyAllowance?: string;
+  /** 高温津贴档次 */
+  highTemperatureAllowance?: string;
   /** 创建人 */
   createdBy?: number;
   /** 创建人名称 */

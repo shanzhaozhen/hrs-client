@@ -1,26 +1,26 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import type { FormInstance } from 'antd';
-import {Col, Divider, Row, Tabs} from 'antd';
+import { Col, Divider, Row, Tabs } from 'antd';
 import { ProFormDatePicker, ProFormSelect, ProFormText } from '@ant-design/pro-form';
-import type {StaffForm, StaffVO} from "@/services/staff/typings";
-import RegionSelect from "@/components/RegionSelect";
-import type { RegionType } from "@/services/region/typings";
-import EducationalExperienceList from "@/pages/OtherInfo/components/EducationalExperienceList";
-import WorkExperienceList from "@/pages/OtherInfo/components/WorkExperienceList";
-import CertificateList from "@/pages/OtherInfo/components/CertificateList";
-import FamilyList from "@/pages/OtherInfo/components/FamilyList";
-import ProFormItem from "@ant-design/pro-form/lib/components/FormItem";
-import PhotoUpload from "@/components/PhotoUpload";
-import DriverInfo from "@/pages/OtherInfo/components/DriverInfo";
-import PhysicalInfo from "@/pages/OtherInfo/components/PhysicalInfo";
-import ArmyInfo from "@/pages/OtherInfo/components/ArmyInfo";
-import MarriageInfo from "@/pages/OtherInfo/components/MarriageInfo";
-import EmergencyContactInfo from "@/pages/OtherInfo/components/EmergencyContactInfo";
-import ContactInfo from "@/pages/OtherInfo/components/ContactInfo";
-import CustomUpload from "@/components/CustomUpload";
-import {useOptions} from "@/utils/options";
-import FormTreeSelect from "@/components/FormTreeSelect";
-import {useDepartmentTree} from "@/utils/department";
+import type { StaffForm, StaffVO } from '@/services/staff/typings';
+import RegionSelect from '@/components/RegionSelect';
+import type { RegionType } from '@/services/region/typings';
+import EducationalExperienceList from '@/pages/OtherInfo/components/EducationalExperienceList';
+import WorkExperienceList from '@/pages/OtherInfo/components/WorkExperienceList';
+import CertificateList from '@/pages/OtherInfo/components/CertificateList';
+import FamilyList from '@/pages/OtherInfo/components/FamilyList';
+import ProFormItem from '@ant-design/pro-form/lib/components/FormItem';
+import PhotoUpload from '@/components/PhotoUpload';
+import DriverInfo from '@/pages/OtherInfo/components/DriverInfo';
+import PhysicalInfo from '@/pages/OtherInfo/components/PhysicalInfo';
+import ArmyInfo from '@/pages/OtherInfo/components/ArmyInfo';
+import MarriageInfo from '@/pages/OtherInfo/components/MarriageInfo';
+import EmergencyContactInfo from '@/pages/OtherInfo/components/EmergencyContactInfo';
+import ContactInfo from '@/pages/OtherInfo/components/ContactInfo';
+import CustomUpload from '@/components/CustomUpload';
+import { useOptions } from '@/utils/options';
+import FormTreeSelect from '@/components/FormTreeSelect';
+import { useDepartmentTree } from '@/utils/department';
 
 interface FormProps {
   isView?: boolean;
@@ -35,47 +35,47 @@ interface FormProps {
 const FormBody: React.FC<FormProps> = (props) => {
   const { isView, isEdit, values } = props;
 
-  const [birthAddress, setBirthAddress] = useState<RegionType>({})
-  const [nativeAddress, setNativeAddress] = useState<RegionType>({})
-  const [registeredAddress, setRegisteredAddress] = useState<RegionType>({})
-  const [homeAddress, setHomeAddress] = useState<RegionType>({})
-  const [currentAddress, setCurrentAddress] = useState<RegionType>({})
-  const [postalAddress, setPostalAddress] = useState<RegionType>({})
+  const [birthAddress, setBirthAddress] = useState<RegionType>({});
+  const [nativeAddress, setNativeAddress] = useState<RegionType>({});
+  const [registeredAddress, setRegisteredAddress] = useState<RegionType>({});
+  const [homeAddress, setHomeAddress] = useState<RegionType>({});
+  const [currentAddress, setCurrentAddress] = useState<RegionType>({});
+  const [postalAddress, setPostalAddress] = useState<RegionType>({});
 
   useEffect(() => {
     if (values) {
       setBirthAddress({
         province: values.staffInfo?.birthAddressProvince,
-        city: values.staffInfo?.birthAddressCity
+        city: values.staffInfo?.birthAddressCity,
       });
       setNativeAddress({
         province: values.staffInfo?.nativeAddressProvince,
-        city: values.staffInfo?.nativeAddressCity
-      })
+        city: values.staffInfo?.nativeAddressCity,
+      });
       setRegisteredAddress({
         province: values.staffInfo?.registeredAddressProvince,
         city: values.staffInfo?.registeredAddressCity,
         area: values.staffInfo?.registeredAddressArea,
-        detail: values.staffInfo?.registeredAddressDetail
-      })
+        detail: values.staffInfo?.registeredAddressDetail,
+      });
       setHomeAddress({
         province: values.staffInfo?.homeAddressProvince,
         city: values.staffInfo?.homeAddressCity,
         area: values.staffInfo?.homeAddressArea,
-        detail: values.staffInfo?.homeAddressDetail
-      })
+        detail: values.staffInfo?.homeAddressDetail,
+      });
       setCurrentAddress({
         province: values.staffInfo?.currentAddressProvince,
         city: values.staffInfo?.currentAddressCity,
         area: values.staffInfo?.currentAddressArea,
-        detail: values.staffInfo?.currentAddressDetail
-      })
+        detail: values.staffInfo?.currentAddressDetail,
+      });
       setPostalAddress({
         province: values.staffInfo?.postalAddressProvince,
         city: values.staffInfo?.postalAddressCity,
         area: values.staffInfo?.postalAddressArea,
-        detail: values.staffInfo?.postalAddressDetail
-      })
+        detail: values.staffInfo?.postalAddressDetail,
+      });
     }
   }, []);
 
@@ -83,7 +83,12 @@ const FormBody: React.FC<FormProps> = (props) => {
   const dutyOptions = useOptions('Duty');
   const postOptions = useOptions('Post');
   const postTypeOptions = useOptions('PostType');
-  const postLevelOptions = useOptions('PostLevel');
+  const postLevelOptions = useOptions(
+    'PostLevel',
+    'name',
+    'code',
+    (item) => `${item.name}(${item.code})`,
+  );
   const companyStateOptions = useOptions('CompanyState');
   const householdTypeOptions = useOptions('HouseholdType');
   const nationOptions = useOptions('Nation');
@@ -94,7 +99,7 @@ const FormBody: React.FC<FormProps> = (props) => {
   return (
     <>
       <Tabs defaultActiveKey="1">
-        <Tabs.TabPane tab="基础信息" key="1" forceRender >
+        <Tabs.TabPane tab="基础信息" key="1" forceRender>
           <Divider orientation="left">在司信息</Divider>
           <Row gutter={24}>
             <Col xl={16} lg={16} md={24}>
@@ -348,7 +353,12 @@ const FormBody: React.FC<FormProps> = (props) => {
           <Row gutter={24}>
             <Col xl={12} lg={12} md={24}>
               <ProFormItem name={['staffInfo', 'registeredAddress']} label="户口地址">
-                <RegionSelect level={3} customValue={registeredAddress} haveDetail readonly={isView} />
+                <RegionSelect
+                  level={3}
+                  customValue={registeredAddress}
+                  haveDetail
+                  readonly={isView}
+                />
               </ProFormItem>
             </Col>
             <Col xl={12} lg={12} md={24}>
@@ -406,19 +416,12 @@ const FormBody: React.FC<FormProps> = (props) => {
           />
         </Tabs.TabPane>
         <Tabs.TabPane tab="家庭信息" key="8" forceRender>
-          <FamilyList
-            readonly={isView}
-            editForm={props.familyForm}
-            value={values?.familyList}
-          />
+          <FamilyList readonly={isView} editForm={props.familyForm} value={values?.familyList} />
         </Tabs.TabPane>
         <Tabs.TabPane tab="其他附件" key="9" forceRender>
           <Row gutter={24}>
             <Col xl={24} lg={24} md={24}>
-              <ProFormItem
-                label="劳动合同"
-                name="laborContract"
-              >
+              <ProFormItem label="劳动合同" name="laborContract">
                 <CustomUpload
                   type="ProFormUploadDragger"
                   listType="picture"

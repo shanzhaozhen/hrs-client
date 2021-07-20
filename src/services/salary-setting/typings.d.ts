@@ -1,8 +1,8 @@
 export type SalarySettingForm = {
   /** 主键ID */
   id: number;
-  /** 加班费基数 */
-  overTimeBase?: number;
+  /** 绩效工资基数 */
+  meritSalary?: number;
   /** 全勤津贴标准（元/月） */
   fullAttendanceAllowance?: number;
   /** 就餐补贴（元/月） */
@@ -60,8 +60,8 @@ export type SalarySettingForm = {
 export type SalarySettingVO = {
   /** 主键ID */
   id?: number;
-  /** 加班费基数 */
-  overTimeBase?: number;
+  /** 绩效工资基数 */
+  meritSalary?: number;
   /** 全勤津贴标准（元/月） */
   fullAttendanceAllowance?: number;
   /** 就餐补贴（元/月） */
