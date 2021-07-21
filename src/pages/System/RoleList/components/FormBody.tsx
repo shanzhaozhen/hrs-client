@@ -2,8 +2,8 @@ import React from 'react';
 import { Col, Form, Row } from 'antd';
 import { ProFormText, ProFormTextArea } from '@ant-design/pro-form';
 import FormTree from '@/components/FormTree';
-import {useMenuTree} from "@/utils/menu";
-import {useResourcesTree} from "@/utils/resources";
+import { useMenuTree } from '@/utils/menu';
+import { useResourcesTree } from '@/utils/resources';
 
 interface FormProps {
   isEdit?: boolean;
@@ -15,8 +15,8 @@ const FormBody: React.FC<FormProps> = () => {
 
   return (
     <>
+      <ProFormText name="id" label="角色id" hidden={true} />
       <Row gutter={24}>
-        <ProFormText name="id" label="角色id" hidden={true} />
         <Col xl={12} lg={12} md={24}>
           <ProFormText
             width="md"

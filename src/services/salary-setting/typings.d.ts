@@ -3,6 +3,18 @@ export type SalarySettingForm = {
   id: number;
   /** 绩效工资基数 */
   meritSalary?: number;
+  /** 绩效A发放比例 */
+  meritA?: number;
+  /** 绩效B发放比例 */
+  meritB?: number;
+  /** 绩效C发放比例 */
+  meritC?: number;
+  /** 绩效D发放比例 */
+  meritD?: number;
+  /** 绩效E发放比例 */
+  meritE?: number;
+  /** 绩效F发放比例 */
+  meritF?: number;
   /** 全勤津贴标准（元/月） */
   fullAttendanceAllowance?: number;
   /** 就餐补贴（元/月） */
@@ -62,6 +74,18 @@ export type SalarySettingVO = {
   id?: number;
   /** 绩效工资基数 */
   meritSalary?: number;
+  /** 绩效A发放比例 */
+  meritA?: number;
+  /** 绩效B发放比例 */
+  meritB?: number;
+  /** 绩效C发放比例 */
+  meritC?: number;
+  /** 绩效D发放比例 */
+  meritD?: number;
+  /** 绩效E发放比例 */
+  meritE?: number;
+  /** 绩效F发放比例 */
+  meritF?: number;
   /** 全勤津贴标准（元/月） */
   fullAttendanceAllowance?: number;
   /** 就餐补贴（元/月） */

@@ -1,24 +1,30 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import type { FormInstance } from 'antd';
-import {Col, Divider, Row, Tabs} from 'antd';
-import { ProFormDatePicker, ProFormDigit, ProFormSelect, ProFormSwitch, ProFormText } from '@ant-design/pro-form';
-import type {ResumeForm, ResumeVO} from "@/services/resume/typings";
-import RegionSelect from "@/components/RegionSelect";
-import type { RegionType } from "@/services/region/typings";
-import EducationalExperienceList from "@/pages/OtherInfo/components/EducationalExperienceList";
-import WorkExperienceList from "@/pages/OtherInfo/components/WorkExperienceList";
-import CertificateList from "@/pages/OtherInfo/components/CertificateList";
-import FamilyList from "@/pages/OtherInfo/components/FamilyList";
-import ProFormItem from "@ant-design/pro-form/lib/components/FormItem";
-import PhotoUpload from "@/components/PhotoUpload";
-import DriverInfo from "@/pages/OtherInfo/components/DriverInfo";
-import PhysicalInfo from "@/pages/OtherInfo/components/PhysicalInfo";
-import MarriageInfo from "@/pages/OtherInfo/components/MarriageInfo";
-import ArmyInfo from "@/pages/OtherInfo/components/ArmyInfo";
-import FriendInfo from "@/pages/OtherInfo/components/FriendInfo";
-import EmergencyContactInfo from "@/pages/OtherInfo/components/EmergencyContactInfo";
-import ContactInfo from "@/pages/OtherInfo/components/ContactInfo";
-import {useOptions} from "@/utils/options";
+import { Col, Divider, Row, Tabs } from 'antd';
+import {
+  ProFormDatePicker,
+  ProFormDigit,
+  ProFormSelect,
+  ProFormSwitch,
+  ProFormText,
+} from '@ant-design/pro-form';
+import type { ResumeForm, ResumeVO } from '@/services/resume/typings';
+import RegionSelect from '@/components/RegionSelect';
+import type { RegionType } from '@/services/region/typings';
+import EducationalExperienceList from '@/pages/OtherInfo/components/EducationalExperienceList';
+import WorkExperienceList from '@/pages/OtherInfo/components/WorkExperienceList';
+import CertificateList from '@/pages/OtherInfo/components/CertificateList';
+import FamilyList from '@/pages/OtherInfo/components/FamilyList';
+import ProFormItem from '@ant-design/pro-form/lib/components/FormItem';
+import PhotoUpload from '@/components/PhotoUpload';
+import DriverInfo from '@/pages/OtherInfo/components/DriverInfo';
+import PhysicalInfo from '@/pages/OtherInfo/components/PhysicalInfo';
+import MarriageInfo from '@/pages/OtherInfo/components/MarriageInfo';
+import ArmyInfo from '@/pages/OtherInfo/components/ArmyInfo';
+import FriendInfo from '@/pages/OtherInfo/components/FriendInfo';
+import EmergencyContactInfo from '@/pages/OtherInfo/components/EmergencyContactInfo';
+import ContactInfo from '@/pages/OtherInfo/components/ContactInfo';
+import { useOptions } from '@/utils/options';
 
 interface FormProps {
   isView?: boolean;
@@ -33,47 +39,47 @@ interface FormProps {
 const FormBody: React.FC<FormProps> = (props) => {
   const { isView, values } = props;
 
-  const [birthAddress, setBirthAddress] = useState<RegionType>({})
-  const [nativeAddress, setNativeAddress] = useState<RegionType>({})
-  const [registeredAddress, setRegisteredAddress] = useState<RegionType>({})
-  const [homeAddress, setHomeAddress] = useState<RegionType>({})
-  const [currentAddress, setCurrentAddress] = useState<RegionType>({})
-  const [postalAddress, setPostalAddress] = useState<RegionType>({})
+  const [birthAddress, setBirthAddress] = useState<RegionType>({});
+  const [nativeAddress, setNativeAddress] = useState<RegionType>({});
+  const [registeredAddress, setRegisteredAddress] = useState<RegionType>({});
+  const [homeAddress, setHomeAddress] = useState<RegionType>({});
+  const [currentAddress, setCurrentAddress] = useState<RegionType>({});
+  const [postalAddress, setPostalAddress] = useState<RegionType>({});
 
   useEffect(() => {
     if (values) {
       setBirthAddress({
         province: values.birthAddressProvince,
-        city: values.birthAddressCity
+        city: values.birthAddressCity,
       });
       setNativeAddress({
         province: values.nativeAddressProvince,
-        city: values.nativeAddressCity
-      })
+        city: values.nativeAddressCity,
+      });
       setRegisteredAddress({
         province: values.registeredAddressProvince,
         city: values.registeredAddressCity,
         area: values.registeredAddressArea,
-        detail: values.registeredAddressDetail
-      })
+        detail: values.registeredAddressDetail,
+      });
       setHomeAddress({
         province: values.homeAddressProvince,
         city: values.homeAddressCity,
         area: values.homeAddressArea,
-        detail: values.homeAddressDetail
-      })
+        detail: values.homeAddressDetail,
+      });
       setCurrentAddress({
         province: values.currentAddressProvince,
         city: values.currentAddressCity,
         area: values.currentAddressArea,
-        detail: values.currentAddressDetail
-      })
+        detail: values.currentAddressDetail,
+      });
       setPostalAddress({
         province: values.postalAddressProvince,
         city: values.postalAddressCity,
         area: values.postalAddressArea,
-        detail: values.postalAddressDetail
-      })
+        detail: values.postalAddressDetail,
+      });
     }
   }, []);
 
@@ -89,10 +95,10 @@ const FormBody: React.FC<FormProps> = (props) => {
       <Tabs defaultActiveKey="1">
         <Tabs.TabPane tab="基础信息" key="1">
           <Divider orientation="left">个人信息</Divider>
+          <ProFormText name="id" label="简历id" hidden={true} />
           <Row gutter={24}>
             <Col xl={16} lg={16} md={24}>
               <Row gutter={24}>
-                <ProFormText name="id" label="简历id" hidden={true} />
                 <Col xl={12} lg={24} md={24}>
                   <ProFormText
                     width="sm"
@@ -224,23 +230,43 @@ const FormBody: React.FC<FormProps> = (props) => {
               <Row gutter={24}>
                 <Col xl={12} lg={12} md={24}>
                   <ProFormItem name="registeredAddress" label="户口地址">
-                    <RegionSelect level={3} customValue={registeredAddress} haveDetail readonly={isView} />
+                    <RegionSelect
+                      level={3}
+                      customValue={registeredAddress}
+                      haveDetail
+                      readonly={isView}
+                    />
                   </ProFormItem>
                 </Col>
                 <Col xl={12} lg={12} md={24}>
                   <ProFormItem name="homeAddress" label="家庭住址">
-                    <RegionSelect level={3} customValue={homeAddress} haveDetail readonly={isView} />
+                    <RegionSelect
+                      level={3}
+                      customValue={homeAddress}
+                      haveDetail
+                      readonly={isView}
+                    />
                   </ProFormItem>
                 </Col>
 
                 <Col xl={12} lg={12} md={24}>
                   <ProFormItem name="currentAddress" label="现住地址">
-                    <RegionSelect level={3} customValue={currentAddress} haveDetail readonly={isView} />
+                    <RegionSelect
+                      level={3}
+                      customValue={currentAddress}
+                      haveDetail
+                      readonly={isView}
+                    />
                   </ProFormItem>
                 </Col>
                 <Col xl={12} lg={12} md={24}>
                   <ProFormItem name="postalAddress" label="邮递地址">
-                    <RegionSelect level={3} customValue={postalAddress} haveDetail readonly={isView} />
+                    <RegionSelect
+                      level={3}
+                      customValue={postalAddress}
+                      haveDetail
+                      readonly={isView}
+                    />
                   </ProFormItem>
                 </Col>
               </Row>
@@ -308,7 +334,7 @@ const FormBody: React.FC<FormProps> = (props) => {
           <FriendInfo isView={isView} />
           <Divider orientation="left">驾照信息</Divider>
           <DriverInfo isView={isView} />
-          <Divider/>
+          <Divider />
           <Row gutter={24}>
             <Col xl={8} md={12} sm={24}>
               <ProFormSwitch
@@ -353,11 +379,7 @@ const FormBody: React.FC<FormProps> = (props) => {
           />
         </Tabs.TabPane>
         <Tabs.TabPane tab="家庭信息" key="8">
-          <FamilyList
-            readonly={isView}
-            editForm={props.familyForm}
-            value={values?.familyList}
-          />
+          <FamilyList readonly={isView} editForm={props.familyForm} value={values?.familyList} />
         </Tabs.TabPane>
       </Tabs>
     </>

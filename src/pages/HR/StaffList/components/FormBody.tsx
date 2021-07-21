@@ -103,8 +103,8 @@ const FormBody: React.FC<FormProps> = (props) => {
           <Divider orientation="left">在司信息</Divider>
           <Row gutter={24}>
             <Col xl={16} lg={16} md={24}>
+              <ProFormText name="id" label="员工id" hidden={true} />
               <Row gutter={24}>
-                <ProFormText name="id" label="员工id" hidden={true} />
                 <ProFormText name={['staffInfo', 'id']} label="员工信息id" hidden={true} />
                 <ProFormText name={['staffInfo', 'staffId']} label="关联员工id" hidden={true} />
                 <Col xl={12} lg={24} md={24}>

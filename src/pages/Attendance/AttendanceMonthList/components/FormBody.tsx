@@ -29,8 +29,8 @@ const FormBody: React.FC<FormProps> = (props) => {
 
   return (
     <>
+      <ProFormText name="id" label="月度考勤id" hidden={true} />
       <Row gutter={24}>
-        <ProFormText name="id" label="月度考勤id" hidden={true} />
         <ProFormText name="staffId" label="员工id" hidden={true} />
         <Col xl={8} lg={12} md={24}>
           {isView ? (

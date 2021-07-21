@@ -155,14 +155,92 @@ const SalarySetting: React.FC = () => {
               },
             }}
           >
+            <ProFormText name="id" label="调动记录id" hidden={true} />
             <Row gutter={24}>
-              <ProFormText name="id" label="调动记录id" hidden={true} />
               <Col xl={8} lg={12} md={24}>
                 <ProFormDigit
                   width="md"
                   name="meritSalary"
                   label="绩效工资基数"
                   rules={[{ required: true, message: '请输入绩效工资基数' }]}
+                  readonly={viewState}
+                />
+              </Col>
+              <Col xl={8} lg={12} md={24}>
+                <ProFormDigit
+                  width="md"
+                  name="meritA"
+                  label="绩效A发放比例"
+                  rules={[{ required: true, message: '请输入绩效A发放比例' }]}
+                  fieldProps={{
+                    formatter: (value) => `${value}%`,
+                    parser: (value: any) => value.replace('%', ''),
+                  }}
+                  readonly={viewState}
+                />
+              </Col>
+              <Col xl={8} lg={12} md={24}>
+                <ProFormDigit
+                  width="md"
+                  name="meritB"
+                  label="绩效B发放比例"
+                  rules={[{ required: true, message: '请输入绩效B发放比例' }]}
+                  fieldProps={{
+                    formatter: (value) => `${value}%`,
+                    parser: (value: any) => value.replace('%', ''),
+                  }}
+                  readonly={viewState}
+                />
+              </Col>
+              <Col xl={8} lg={12} md={24}>
+                <ProFormDigit
+                  width="md"
+                  name="meritC"
+                  label="绩效C发放比例"
+                  rules={[{ required: true, message: '请输入绩效C发放比例' }]}
+                  fieldProps={{
+                    formatter: (value) => `${value}%`,
+                    parser: (value: any) => value.replace('%', ''),
+                  }}
+                  readonly={viewState}
+                />
+              </Col>
+              <Col xl={8} lg={12} md={24}>
+                <ProFormDigit
+                  width="md"
+                  name="meritD"
+                  label="绩效D发放比例"
+                  rules={[{ required: true, message: '请输入绩效D发放比例' }]}
+                  fieldProps={{
+                    formatter: (value) => `${value}%`,
+                    parser: (value: any) => value.replace('%', ''),
+                  }}
+                  readonly={viewState}
+                />
+              </Col>
+              <Col xl={8} lg={12} md={24}>
+                <ProFormDigit
+                  width="md"
+                  name="meritE"
+                  label="绩效E发放比例"
+                  rules={[{ required: true, message: '请输入绩效E发放比例' }]}
+                  fieldProps={{
+                    formatter: (value) => `${value}%`,
+                    parser: (value: any) => value.replace('%', ''),
+                  }}
+                  readonly={viewState}
+                />
+              </Col>
+              <Col xl={8} lg={12} md={24}>
+                <ProFormDigit
+                  width="md"
+                  name="meritF"
+                  label="绩效F发放比例"
+                  rules={[{ required: true, message: '请输入绩效F发放比例' }]}
+                  fieldProps={{
+                    formatter: (value) => `${value}%`,
+                    parser: (value: any) => value.replace('%', ''),
+                  }}
                   readonly={viewState}
                 />
               </Col>

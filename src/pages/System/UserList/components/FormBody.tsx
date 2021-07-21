@@ -1,10 +1,10 @@
 import React from 'react';
-import {Col, Form, Row} from 'antd';
+import { Col, Form, Row } from 'antd';
 import { ProFormSelect, ProFormSwitch, ProFormText } from '@ant-design/pro-form';
 import { getAllRoles } from '@/services/role/role';
 import type { RoleVO } from '@/services/role/typings';
-import FormTreeSelect from "@/components/FormTreeSelect";
-import { useDepartmentTree } from "@/utils/department";
+import FormTreeSelect from '@/components/FormTreeSelect';
+import { useDepartmentTree } from '@/utils/department';
 
 interface FormProps {
   isEdit?: boolean;
@@ -17,8 +17,8 @@ const FormBody: React.FC<FormProps> = (props) => {
 
   return (
     <>
+      <ProFormText name="id" label="用户id" hidden={true} />
       <Row gutter={24}>
-        <ProFormText name="id" label="用户id" hidden={true} />
         <Col xl={12} lg={12} md={24}>
           <ProFormText
             width="md"
@@ -104,7 +104,11 @@ const FormBody: React.FC<FormProps> = (props) => {
             label="所属部门"
             rules={[{ required: false, message: '请选择所属部门' }]}
           >
-            <FormTreeSelect treeData={departmentTree} style={{ width: 328 }} placeholder="请选择所属部门" />
+            <FormTreeSelect
+              treeData={departmentTree}
+              style={{ width: 328 }}
+              placeholder="请选择所属部门"
+            />
           </Form.Item>
         </Col>
         <Col span={24}>

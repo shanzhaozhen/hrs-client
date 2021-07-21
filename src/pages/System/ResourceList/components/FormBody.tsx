@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col, Form, Row } from 'antd';
 import { ProFormDigit, ProFormSelect, ProFormText } from '@ant-design/pro-form';
 import { getResourceTree } from '@/services/resource/resource';
-import FormTreeSelect from "@/components/FormTreeSelect";
-import type { ResourceVO } from "@/services/resource/typings";
+import FormTreeSelect from '@/components/FormTreeSelect';
+import type { ResourceVO } from '@/services/resource/typings';
 
 interface FormProps {
   isEdit?: boolean;
@@ -29,11 +29,10 @@ const FormBody: React.FC<FormProps> = () => {
       });
   }, []);
 
-
   return (
     <>
+      <ProFormText name="id" label="资源id" hidden={true} />
       <Row gutter={24}>
-        <ProFormText name="id" label="资源id" hidden={true} />
         <Col xl={12} lg={12} md={24}>
           <ProFormText
             width="md"
@@ -63,7 +62,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[
               ({ getFieldValue }) => ({
                 required: getFieldValue('type') === 1,
-                message: '请输入资源路由'
+                message: '请输入资源路由',
               }),
             ]}
           />

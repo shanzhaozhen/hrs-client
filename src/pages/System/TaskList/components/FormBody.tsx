@@ -1,15 +1,15 @@
 import type { MutableRefObject } from 'react';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import type { FormInstance } from 'antd';
 import { Col, Form, Row } from 'antd';
 import { ProFormSelect, ProFormSwitch, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
-import { getBeanInfoByName, getBeanInfoList } from "@/services/bean/bean";
-import MethodParamInfo from "@/pages/System/TaskList/components/MethodParamInfo";
-import type { MethodInfo } from "@/services/bean/typings";
+import { getBeanInfoByName, getBeanInfoList } from '@/services/bean/bean';
+import MethodParamInfo from '@/pages/System/TaskList/components/MethodParamInfo';
+import type { MethodInfo } from '@/services/bean/typings';
 
 interface FormProps {
   isEdit?: boolean;
-  formRef: MutableRefObject<FormInstance | any>
+  formRef: MutableRefObject<FormInstance | any>;
 }
 
 const FormBody: React.FC<FormProps> = (props) => {
@@ -19,33 +19,33 @@ const FormBody: React.FC<FormProps> = (props) => {
   const [methodOptions, setMethodOptions] = useState<any[]>();
 
   const toMethodSimpleName = (value: MethodInfo) => {
-    let { methodName } = value
-    const { paramTypes } = value
-    methodName += '('
+    let { methodName } = value;
+    const { paramTypes } = value;
+    methodName += '(';
     if (paramTypes && paramTypes.length > 0) {
       paramTypes.forEach((item, index) => {
-        const splits = item.split('.')
-        methodName += splits[splits.length - 1]
+        const splits = item.split('.');
+        methodName += splits[splits.length - 1];
         if (index < paramTypes.length - 1) {
-          methodName += ', '
+          methodName += ', ';
         }
-      })
+      });
     }
-    return `${methodName})`
-  }
+    return `${methodName})`;
+  };
 
   const getMethodOptions = async (beanName: string) => {
     const { data } = await getBeanInfoByName(beanName);
     if (data && data.methods) {
-      const options = data.methods.map(method => {
+      const options = data.methods.map((method) => {
         return {
           label: toMethodSimpleName(method),
           value: JSON.stringify(method),
-        }
-      })
+        };
+      });
       setMethodOptions(options);
     }
-  }
+  };
 
   const beanSelectOnchange = async (changeValue: string) => {
     if (changeValue) {
@@ -57,50 +57,54 @@ const FormBody: React.FC<FormProps> = (props) => {
     const value = formRef.current.getFieldsValue();
     value.methodInfo = null;
     value.paramInfo = null;
-    formRef.current.setFieldsValue(value)
-  }
+    formRef.current.setFieldsValue(value);
+  };
 
   const methodSelectOnchange = (changeValue: string) => {
     if (changeValue) {
-      const method = JSON.parse(changeValue)
+      const method = JSON.parse(changeValue);
       if (method) {
         const { paramTypes } = method;
-        const methodParams = []
+        const methodParams = [];
         if (paramTypes && paramTypes.length > 0) {
-          for (let i = 0; i < paramTypes.length; i+=1) {
+          for (let i = 0; i < paramTypes.length; i += 1) {
             methodParams.push({
               paramType: paramTypes[i],
-              paramValue: ''
-            })
+              paramValue: '',
+            });
           }
         }
         const formValue = formRef.current.getFieldsValue();
         formValue.paramInfo = JSON.stringify(methodParams);
-        formRef.current.setFieldsValue(formValue)
+        formRef.current.setFieldsValue(formValue);
       }
     }
-  }
+  };
 
   useEffect(() => {
     getBeanInfoList().then(({ data }) => {
-      setBeanNameOptions(data ? data.map(({beanName}) => ({
-        label: beanName,
-        value: beanName,
-      })) : [])
+      setBeanNameOptions(
+        data
+          ? data.map(({ beanName }) => ({
+              label: beanName,
+              value: beanName,
+            }))
+          : [],
+      );
     });
 
     if (formRef) {
       const fieldValue = formRef.current.getFieldValue('beanName');
       if (fieldValue) {
-        getMethodOptions(fieldValue).then()
+        getMethodOptions(fieldValue).then();
       }
     }
-  }, [])
+  }, []);
 
   return (
     <>
+      <ProFormText name="id" label="任务id" hidden={true} />
       <Row gutter={24}>
-        <ProFormText name="id" label="任务id" hidden={true} />
         <Col xl={12} lg={12} md={24}>
           <ProFormText
             width="md"
@@ -127,7 +131,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             placeholder="请选择Bean"
             options={beanNameOptions}
             rules={[{ required: true, message: '请选择Bean名称' }]}
-            fieldProps={{onChange: beanSelectOnchange}}
+            fieldProps={{ onChange: beanSelectOnchange }}
           />
         </Col>
         <Col xl={12} lg={12} md={24}>
@@ -138,7 +142,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             placeholder="请选择Bean"
             options={methodOptions}
             rules={[{ required: true, message: '请选择方法名' }]}
-            fieldProps={{onChange: methodSelectOnchange}}
+            fieldProps={{ onChange: methodSelectOnchange }}
           />
         </Col>
         <Col span={24}>
@@ -152,7 +156,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             label="开启状态"
             checkedChildren="开启"
             unCheckedChildren="停止"
-            fieldProps={{defaultChecked: true}}
+            fieldProps={{ defaultChecked: true }}
           />
         </Col>
         <Col span={24}>

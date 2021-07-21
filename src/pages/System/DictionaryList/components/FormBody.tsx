@@ -66,9 +66,9 @@ const FormBody: React.FC<FormProps> = () => {
 
   return (
     <>
+      <ProFormText name="id" label="字典id" hidden={true} />
+      <ProFormText name="pid" label="父节点" hidden={true} />
       <Row gutter={24}>
-        <ProFormText name="id" label="字典id" hidden={true} />
-        <ProFormText name="pid" label="父节点" hidden={true} />
         <Col xl={12} lg={12} md={24}>
           <ProFormText
             width="md"

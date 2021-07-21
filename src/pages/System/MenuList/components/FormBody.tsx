@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col, Form, Row } from 'antd';
 import {
   ProFormDigit,
@@ -9,15 +9,14 @@ import {
 } from '@ant-design/pro-form';
 import type { MenuVO } from '@/services/menu/typings';
 import { iconOption } from '@/components/Common/icon';
-import {getMenuTree} from "@/services/menu/menu";
-import FormTreeSelect from "@/components/FormTreeSelect";
+import { getMenuTree } from '@/services/menu/menu';
+import FormTreeSelect from '@/components/FormTreeSelect';
 
 interface FormProps {
   isEdit?: boolean;
 }
 
 const FormBody: React.FC<FormProps> = () => {
-
   const [menuTree, setMenuTree] = useState<[]>();
 
   const loopMenuData = (menuData: MenuVO[]): any =>
@@ -39,8 +38,8 @@ const FormBody: React.FC<FormProps> = () => {
 
   return (
     <>
+      <ProFormText name="id" label="菜单id" hidden={true} />
       <Row gutter={24}>
-        <ProFormText name="id" label="菜单id" hidden={true} />
         <Col xl={12} lg={12} md={24}>
           <ProFormText
             width="md"

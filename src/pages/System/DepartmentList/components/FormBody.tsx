@@ -1,21 +1,20 @@
 import React from 'react';
-import {Col, Form, Row} from 'antd';
-import {ProFormDigit, ProFormText} from '@ant-design/pro-form';
-import FormTreeSelect from "@/components/FormTreeSelect";
-import {useDepartmentTree} from "@/utils/department";
+import { Col, Form, Row } from 'antd';
+import { ProFormDigit, ProFormText } from '@ant-design/pro-form';
+import FormTreeSelect from '@/components/FormTreeSelect';
+import { useDepartmentTree } from '@/utils/department';
 
 interface FormProps {
   isEdit?: boolean;
 }
 
 const FormBody: React.FC<FormProps> = () => {
-
   const departmentTree = useDepartmentTree();
 
   return (
     <>
+      <ProFormText name="id" label="部门id" hidden={true} />
       <Row gutter={24}>
-        <ProFormText name="id" label="部门id" hidden={true} />
         <Col xl={12} lg={12} md={24}>
           <ProFormText
             width="md"
@@ -25,12 +24,7 @@ const FormBody: React.FC<FormProps> = () => {
           />
         </Col>
         <Col xl={12} lg={12} md={24}>
-          <ProFormText
-            width="md"
-            name="code"
-            label="部门代码"
-            placeholder="请输入部门代码"
-          />
+          <ProFormText width="md" name="code" label="部门代码" placeholder="请输入部门代码" />
         </Col>
         <Col xl={12} lg={12} md={24}>
           <Form.Item
@@ -47,7 +41,11 @@ const FormBody: React.FC<FormProps> = () => {
               }),
             ]}
           >
-            <FormTreeSelect treeData={departmentTree} style={{ width: 328 }} placeholder="请选择上级部门" />
+            <FormTreeSelect
+              treeData={departmentTree}
+              style={{ width: 328 }}
+              placeholder="请选择上级部门"
+            />
           </Form.Item>
         </Col>
         <Col xl={12} lg={12} md={24}>

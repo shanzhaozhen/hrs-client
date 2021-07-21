@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col, Form, Row } from 'antd';
 import { ProFormDigit, ProFormText } from '@ant-design/pro-form';
 import { getRegionTree } from '@/services/region/region';
-import FormTreeSelect from "@/components/FormTreeSelect";
-import type { RegionVO } from "@/services/region/typings";
+import FormTreeSelect from '@/components/FormTreeSelect';
+import type { RegionVO } from '@/services/region/typings';
 
 interface FormProps {
   isEdit?: boolean;
@@ -29,11 +29,10 @@ const FormBody: React.FC<FormProps> = () => {
       });
   }, []);
 
-
   return (
     <>
+      <ProFormText name="id" label="区域id" hidden={true} />
       <Row gutter={24}>
-        <ProFormText name="id" label="区域id" hidden={true} />
         <Col xl={12} lg={12} md={24}>
           <ProFormText
             width="md"
@@ -50,7 +49,7 @@ const FormBody: React.FC<FormProps> = () => {
             rules={[
               ({ getFieldValue }) => ({
                 required: getFieldValue('type') === 1,
-                message: '请输入区域路由'
+                message: '请输入区域路由',
               }),
             ]}
           />

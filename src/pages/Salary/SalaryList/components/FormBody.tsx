@@ -1,19 +1,19 @@
-import React, {useState} from 'react';
-import type {MutableRefObject} from 'react';
+import React, { useState } from 'react';
+import type { MutableRefObject } from 'react';
 import type { FormInstance } from 'antd';
-import {Button, Col, Divider, Input, Row} from 'antd';
+import { Button, Col, Divider, Input, Row } from 'antd';
 import {
   ProFormDatePicker,
   ProFormDigit,
   ProFormSelect,
   ProFormSwitch,
   ProFormText,
-  ProFormTextArea
+  ProFormTextArea,
 } from '@ant-design/pro-form';
-import ProFormItem from "@ant-design/pro-form/lib/components/FormItem";
-import {ContactsOutlined} from "@ant-design/icons";
-import {useDepartmentList} from "@/utils/department";
-import StaffSelect from "@/components/StaffSelect";
+import ProFormItem from '@ant-design/pro-form/lib/components/FormItem';
+import { ContactsOutlined } from '@ant-design/icons';
+import { useDepartmentList } from '@/utils/department';
+import StaffSelect from '@/components/StaffSelect';
 
 interface FormProps {
   isView?: boolean;
@@ -31,9 +31,9 @@ const FormBody: React.FC<FormProps> = (props) => {
   return (
     <>
       <Divider orientation="left">薪资发放类别</Divider>
+      <ProFormText name="id" label="薪资发放id" hidden={true} />
+      <ProFormText name="staffId" label="员工id" hidden={true} />
       <Row gutter={24}>
-        <ProFormText name="id" label="薪资发放id" hidden={true} />
-        <ProFormText name="staffId" label="员工id" hidden={true} />
         <Col xl={8} lg={12} md={24}>
           {isView ? (
             <ProFormText
@@ -48,15 +48,8 @@ const FormBody: React.FC<FormProps> = (props) => {
           ) : (
             <ProFormItem label="员工编号" required={true}>
               <Input.Group compact>
-                <ProFormItem
-                  name="staffCode"
-                  rules={[{ required: true, message: '请选择员工' }]}
-                >
-                  <Input
-                    placeholder="请选择员工"
-                    name="staffCode"
-                    disabled
-                  />
+                <ProFormItem name="staffCode" rules={[{ required: true, message: '请选择员工' }]}>
+                  <Input placeholder="请选择员工" name="staffCode" disabled />
                 </ProFormItem>
                 <Button
                   type="primary"
@@ -86,7 +79,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             name="depId"
             label="部门"
             required={true}
-            options={departmentList.map(item => ({value: item.id || '', label: item.name}))}
+            options={departmentList.map((item) => ({ value: item.id || '', label: item.name }))}
             readonly={isView}
             disabled
           />
@@ -107,8 +100,8 @@ const FormBody: React.FC<FormProps> = (props) => {
             label="发薪类型"
             rules={[{ required: true, message: '请选择发薪类型' }]}
             options={[
-              {value: '工资', label: '工资'},
-              {value: '奖金', label: '奖金'},
+              { value: '工资', label: '工资' },
+              { value: '奖金', label: '奖金' },
             ]}
             readonly={isView}
           />
@@ -120,11 +113,11 @@ const FormBody: React.FC<FormProps> = (props) => {
             label="考核等级"
             rules={[{ required: true, message: '请选择考核等级' }]}
             options={[
-              {value: 'A', label: 'A'},
-              {value: 'B', label: 'B'},
-              {value: 'C', label: 'C'},
-              {value: 'D', label: 'D'},
-              {value: 'E', label: 'E'},
+              { value: 'A', label: 'A' },
+              { value: 'B', label: 'B' },
+              { value: 'C', label: 'C' },
+              { value: 'D', label: 'D' },
+              { value: 'E', label: 'E' },
             ]}
             readonly={isView}
           />
@@ -525,14 +518,9 @@ const FormBody: React.FC<FormProps> = (props) => {
           />
         </Col>
         <Col xl={24} lg={24} md={24}>
-          <ProFormTextArea
-            name="remarks"
-            label="备注"
-            readonly={isView}
-          />
+          <ProFormTextArea name="remarks" label="备注" readonly={isView} />
         </Col>
       </Row>
-
 
       <StaffSelect
         staffSelectVisible={staffSelectVisible}
@@ -545,7 +533,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             staffCode: selectValue.staffCode,
             staffName: selectValue.staffName,
             depId: selectValue.depId,
-          })
+          });
           handleStaffSelectVisible(false);
         }}
       />

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import type {MutableRefObject} from 'react';
+import type { MutableRefObject } from 'react';
 import type { FormInstance } from 'antd';
 import { Col, Row } from 'antd';
 import {
@@ -7,9 +7,9 @@ import {
   ProFormDateRangePicker,
   ProFormDigit,
   ProFormText,
-  ProFormTextArea
+  ProFormTextArea,
 } from '@ant-design/pro-form';
-import StaffSelect from "@/components/StaffSelect";
+import StaffSelect from '@/components/StaffSelect';
 
 interface FormProps {
   isView?: boolean;
@@ -24,8 +24,8 @@ const FormBody: React.FC<FormProps> = (props) => {
 
   return (
     <>
+      <ProFormText name="id" label="绩效设置id" hidden={true} />
       <Row gutter={24}>
-        <ProFormText name="id" label="绩效设置id" hidden={true} />
         <Col xl={12} lg={12} md={24}>
           <ProFormText
             width="md"
@@ -36,22 +36,20 @@ const FormBody: React.FC<FormProps> = (props) => {
             readonly={isView}
           />
         </Col>
-        {
-          !isView && (
-            <Col xl={12} lg={12} md={24}>
-              <ProFormDateRangePicker
-                width="md"
-                name="month"
-                label="考核起止月份"
-                fieldProps={{
-                  picker: 'month',
-                  format: 'YYYY-MM',
-                }}
-                rules={[{ required: true, message: '请选择考核起止月份' }]}
-              />
-            </Col>
-          )
-        }
+        {!isView && (
+          <Col xl={12} lg={12} md={24}>
+            <ProFormDateRangePicker
+              width="md"
+              name="month"
+              label="考核起止月份"
+              fieldProps={{
+                picker: 'month',
+                format: 'YYYY-MM',
+              }}
+              rules={[{ required: true, message: '请选择考核起止月份' }]}
+            />
+          </Col>
+        )}
         <Col xl={12} lg={12} md={24}>
           <ProFormDatePicker.Month
             width="md"
@@ -95,14 +93,9 @@ const FormBody: React.FC<FormProps> = (props) => {
           />
         </Col>
         <Col xl={24} lg={24} md={24}>
-          <ProFormTextArea
-            name="remarks"
-            label="备注"
-            readonly={isView}
-          />
+          <ProFormTextArea name="remarks" label="备注" readonly={isView} />
         </Col>
       </Row>
-
 
       <StaffSelect
         staffSelectVisible={staffSelectVisible}
@@ -115,7 +108,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             staffCode: selectValue.staffCode,
             staffName: selectValue.staffName,
             depId: selectValue.depId,
-          })
+          });
           handleStaffSelectVisible(false);
         }}
       />
