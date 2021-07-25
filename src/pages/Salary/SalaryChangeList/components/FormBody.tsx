@@ -155,7 +155,7 @@ const FormBody: React.FC<FormProps> = (props) => {
         <Col xl={12} lg={12} md={24}>
           <ProFormSelect
             width="md"
-            name="preSafetyAllowance"
+            name="preSafetyGrade"
             label="变更前安全津贴档次"
             options={defaultOptions}
             disabled
@@ -164,7 +164,7 @@ const FormBody: React.FC<FormProps> = (props) => {
         <Col xl={12} lg={12} md={24}>
           <ProFormSelect
             width="md"
-            name="postSafetyAllowance"
+            name="postSafetyGrade"
             label="变更后安全津贴档次"
             rules={[{ required: true, message: '请选择安全津贴档次' }]}
             options={defaultOptions}
@@ -173,7 +173,7 @@ const FormBody: React.FC<FormProps> = (props) => {
         <Col xl={12} lg={12} md={24}>
           <ProFormSelect
             width="md"
-            name="preHighTemperatureAllowance"
+            name="preHotWeatherGrade"
             label="变更前高温津贴档次"
             options={defaultOptions}
             disabled
@@ -182,7 +182,7 @@ const FormBody: React.FC<FormProps> = (props) => {
         <Col xl={12} lg={12} md={24}>
           <ProFormSelect
             width="md"
-            name="postHighTemperatureAllowance"
+            name="postHotWeatherGrade"
             label="变更后高温津贴档次"
             rules={[{ required: true, message: '请选择高温津贴档次' }]}
             options={defaultOptions}
@@ -223,8 +223,8 @@ const FormBody: React.FC<FormProps> = (props) => {
             prePostSalary: data?.postSalary,
             preAccumulationFund: data?.accumulationFund,
             postHaveOneChildAllowance: data?.haveOneChildAllowance,
-            preSafetyAllowance: data?.safetyAllowance,
-            preHighTemperatureAllowance: data?.highTemperatureAllowance,
+            preSafetyGrade: data?.safetyGrade,
+            preHotWeatherGrade: data?.hotWeatherGrade,
           });
           handleStaffSelectVisible(false);
         }}

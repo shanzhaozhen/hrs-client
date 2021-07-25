@@ -14,7 +14,7 @@ export type SalaryStaffForm = {
   /** 安全津贴档次 */
   safetyAllowance?: string;
   /** 高温津贴档次 */
-  highTemperatureAllowance?: string;
+  hotWeatherAllowance?: string;
 };
 
 export type SalaryStaffVO = {
@@ -37,9 +37,9 @@ export type SalaryStaffVO = {
   /** 是否享有独生子女津贴 */
   haveOneChildAllowance?: boolean;
   /** 安全津贴档次 */
-  safetyAllowance?: string;
+  safetyGrade?: string;
   /** 高温津贴档次 */
-  highTemperatureAllowance?: string;
+  hotWeatherGrade?: string;
   /** 创建人 */
   createdBy?: number;
   /** 创建人名称 */

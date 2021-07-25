@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import type { Dispatch, SetStateAction, MutableRefObject } from 'react';
-import { Drawer, message } from 'antd';
-import { FooterToolbar } from '@ant-design/pro-layout';
+import { message } from 'antd';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { getPageParams, getSortOrder } from '@/utils/common';
@@ -10,8 +9,7 @@ import {
   getSalarySettingById,
   getSalarySettingPage,
 } from '@/services/salary-setting/salary-setting';
-import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
-import ProDescriptions from '@ant-design/pro-descriptions';
+import ViewForm from '@/pages/Salary/SalarySetting/components/ViewForm';
 
 interface SalarySettingListProps {
   actionRef: MutableRefObject<ActionType | undefined>;
@@ -24,7 +22,6 @@ const SalarySettingList: React.FC<SalarySettingListProps> = (props) => {
 
   const [formValues, setFormValues] = useState<SalarySettingVO | SalarySettingForm>({});
   const [viewDrawerVisible, handleViewDrawerVisible] = useState<boolean>(false);
-  const [selectedRowsState, setSelectedRows] = useState<SalarySettingVO[]>([]);
 
   const columns: ProColumns<SalarySettingVO>[] = [
     {
@@ -134,21 +131,21 @@ const SalarySettingList: React.FC<SalarySettingListProps> = (props) => {
     },
     {
       title: '高温津贴开始生效月份',
-      dataIndex: 'highTemperatureStartDate',
+      dataIndex: 'hotWeatherStartMonth',
       valueType: 'dateMonth',
       sorter: true,
       hideInSearch: true,
     },
     {
       title: '高温津贴结束生效月份',
-      dataIndex: 'highTemperatureEndDate',
+      dataIndex: 'hotWeatherEndMonth',
       valueType: 'dateMonth',
       sorter: true,
       hideInSearch: true,
     },
     {
       title: '高温津贴A标准',
-      dataIndex: 'highTemperatureAllowanceA',
+      dataIndex: 'hotWeatherAllowanceA',
       valueType: 'digit',
       sorter: true,
       hideInSearch: true,
@@ -156,7 +153,7 @@ const SalarySettingList: React.FC<SalarySettingListProps> = (props) => {
     },
     {
       title: '高温津贴B标准',
-      dataIndex: 'highTemperatureAllowanceB',
+      dataIndex: 'hotWeatherAllowanceB',
       valueType: 'digit',
       sorter: true,
       hideInSearch: true,
@@ -164,7 +161,7 @@ const SalarySettingList: React.FC<SalarySettingListProps> = (props) => {
     },
     {
       title: '高温津贴C标准',
-      dataIndex: 'highTemperatureAllowanceC',
+      dataIndex: 'hotWeatherAllowanceC',
       valueType: 'digit',
       sorter: true,
       hideInSearch: true,
@@ -302,45 +299,17 @@ const SalarySettingList: React.FC<SalarySettingListProps> = (props) => {
           };
         }}
         columns={columns}
-        rowSelection={{
-          onChange: (_, selectedRows) => setSelectedRows(selectedRows),
+      />
+
+      <ViewForm
+        viewDrawerVisible={viewDrawerVisible}
+        values={formValues}
+        handleViewDrawerVisible={handleViewDrawerVisible}
+        onClose={() => {
+          setFormValues({});
+          handleViewDrawerVisible(false);
         }}
       />
-      {selectedRowsState?.length > 0 && (
-        <FooterToolbar
-          extra={
-            <div>
-              已选择 <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a> 项&nbsp;&nbsp;
-            </div>
-          }
-        ></FooterToolbar>
-      )}
-
-      {formValues && Object.keys(formValues).length ? (
-        <>
-          <Drawer
-            width={'75%'}
-            visible={viewDrawerVisible}
-            onClose={() => {
-              setFormValues({});
-              handleViewDrawerVisible(false);
-            }}
-            closable={false}
-          >
-            <ProDescriptions<SalarySettingVO>
-              column={3}
-              title="薪资配置"
-              request={async () => ({
-                data: formValues || {},
-              })}
-              params={{
-                id: formValues?.id,
-              }}
-              columns={columns as ProDescriptionsItemProps<SalarySettingVO>[]}
-            />
-          </Drawer>
-        </>
-      ) : null}
     </>
   );
 };

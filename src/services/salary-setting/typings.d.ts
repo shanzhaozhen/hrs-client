@@ -40,15 +40,15 @@ export type SalarySettingForm = {
   /** 独生子女津贴标准（元/天） */
   oneChildAllowance?: number;
   /** 高温津贴开始生效月份 */
-  highTemperatureStartDate?: string;
+  hotWeatherStartMonth?: number;
   /** 高温津贴结束生效月份 */
-  highTemperatureEndDate?: string;
+  hotWeatherEndMonth?: number;
   /** 高温津贴A标准 */
-  highTemperatureAllowanceA?: number;
+  hotWeatherAllowanceA?: number;
   /** 高温津贴B标准 */
-  highTemperatureAllowanceB?: number;
+  hotWeatherAllowanceB?: number;
   /** 高温津贴C标准 */
-  highTemperatureAllowanceC?: number;
+  hotWeatherAllowanceC?: number;
   /** 值班费（工作日）（元/天） */
   dutyWeekFee?: number;
   /** 值班费（休息日前一天）（元/天） */
@@ -111,15 +111,15 @@ export type SalarySettingVO = {
   /** 独生子女津贴标准（元/天） */
   oneChildAllowance?: number;
   /** 高温津贴开始生效月份 */
-  highTemperatureStartDate?: string;
+  hotWeatherStartMonth?: number;
   /** 高温津贴结束生效月份 */
-  highTemperatureEndDate?: string;
+  hotWeatherEndMonth?: number;
   /** 高温津贴A标准 */
-  highTemperatureAllowanceA?: number;
+  hotWeatherAllowanceA?: number;
   /** 高温津贴B标准 */
-  highTemperatureAllowanceB?: number;
+  hotWeatherAllowanceB?: number;
   /** 高温津贴C标准 */
-  highTemperatureAllowanceC?: number;
+  hotWeatherAllowanceC?: number;
   /** 值班费（工作日）（元/天） */
   dutyWeekFee?: number;
   /** 值班费（休息日前一天）（元/天） */

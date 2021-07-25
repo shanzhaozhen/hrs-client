@@ -27,12 +27,6 @@ const FormBody: React.FC<FormProps> = (props) => {
 
   const departmentList = useDepartmentList();
 
-  const defaultOptions = [
-    { label: 'A', value: 'A' },
-    { label: 'B', value: 'B' },
-    { label: 'C', value: 'C' },
-  ];
-
   return (
     <>
       <ProFormText name="id" label="调动记录id" hidden={true} />
@@ -124,20 +118,32 @@ const FormBody: React.FC<FormProps> = (props) => {
         <Col xl={12} lg={12} md={24}>
           <ProFormSelect
             width="md"
-            name="safetyAllowance"
+            name="safetyGrade"
             label="安全津贴档次"
             rules={[{ required: true, message: '请选择安全津贴档次' }]}
-            options={defaultOptions}
+            initialValue="不享有"
+            options={[
+              { label: 'A', value: 'A' },
+              { label: 'B', value: 'B' },
+              { label: 'C', value: 'C' },
+              { label: '不享有', value: '不享有' },
+            ]}
             readonly={isView}
           />
         </Col>
         <Col xl={12} lg={12} md={24}>
           <ProFormSelect
             width="md"
-            name="highTemperatureAllowance"
+            name="hotWeatherGrade"
             label="高温津贴档次"
             rules={[{ required: true, message: '请选择高温津贴档次' }]}
-            options={defaultOptions}
+            initialValue="不享有"
+            options={[
+              { label: 'A', value: 'A' },
+              { label: 'B', value: 'B' },
+              { label: 'C', value: 'C' },
+              { label: '不享有', value: '不享有' },
+            ]}
             readonly={isView}
           />
         </Col>
