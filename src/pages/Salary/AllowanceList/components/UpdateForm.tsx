@@ -43,7 +43,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
   return (
     <>
       <ModalForm
-        width={748}
+        width={820}
         title="修改津贴数据"
         visible={updateModalVisible}
         formRef={formRef}
@@ -58,7 +58,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
         }}
         onFinish={handleUpdate}
       >
-        <FormBody formRef={formRef} />
+        {values && Object.keys(values).length ? <FormBody formRef={formRef} /> : null}
       </ModalForm>
     </>
   );

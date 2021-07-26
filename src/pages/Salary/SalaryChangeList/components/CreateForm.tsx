@@ -76,7 +76,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
     <>
       <ModalForm
         width={748}
-        title="新建调动"
+        title="新建调薪"
         visible={createModalVisible}
         onVisibleChange={handleCreateModalVisible}
         formRef={formRef}

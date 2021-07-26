@@ -230,14 +230,7 @@ const AllowanceList: React.FC = () => {
             <a
               onClick={async () => {
                 if (record && record.id) {
-                  let { data } = await getAllowanceById(record.id);
-                  if (data) {
-                    data = {
-                      ...data,
-                      // @ts-ignore
-                      month: [data.startMonth, data.endMonth],
-                    };
-                  }
+                  const { data } = await getAllowanceById(record.id);
                   setFormValues(data || {});
                   handleUpdateModalVisible(true);
                 } else {
@@ -332,24 +325,19 @@ const AllowanceList: React.FC = () => {
         handleCreateModalVisible={handleCreateModalVisible}
         tableActionRef={actionRef}
       />
-
-      {formValues && Object.keys(formValues).length ? (
-        <>
-          <ViewForm
-            viewModalVisible={viewModalVisible}
-            handleViewModalVisible={handleViewModalVisible}
-            values={formValues}
-            onCancel={() => setFormValues({})}
-          />
-          <UpdateForm
-            updateModalVisible={updateModalVisible}
-            handleUpdateModalVisible={handleUpdateModalVisible}
-            values={formValues}
-            onCancel={() => setFormValues({})}
-            tableActionRef={actionRef}
-          />
-        </>
-      ) : null}
+      <ViewForm
+        viewModalVisible={viewModalVisible}
+        handleViewModalVisible={handleViewModalVisible}
+        values={formValues}
+        onCancel={() => setFormValues({})}
+      />
+      <UpdateForm
+        updateModalVisible={updateModalVisible}
+        handleUpdateModalVisible={handleUpdateModalVisible}
+        values={formValues}
+        onCancel={() => setFormValues({})}
+        tableActionRef={actionRef}
+      />
 
       <ImportModal
         visible={importModalVisible}

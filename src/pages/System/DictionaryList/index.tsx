@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react';
-import {ExclamationCircleOutlined, PlusOutlined} from '@ant-design/icons';
-import {Button, Divider, Input, message, Modal, Popconfirm} from 'antd';
-import {FooterToolbar, PageContainer} from '@ant-design/pro-layout';
-import type {ActionType, ProColumns} from '@ant-design/pro-table';
+import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { Button, Divider, Input, message, Modal, Popconfirm } from 'antd';
+import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
+import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
@@ -11,15 +11,15 @@ import {
   deleteDictionary,
   getDictionaryById,
   getDictionaryChildrenById,
-  getDictionaryRootPage
+  getDictionaryRootPage,
 } from '@/services/dictionary/dictionary';
 import type { DictionaryForm, DictionaryVO } from '@/services/dictionary/typings';
-import {getPageParams, getSortOrder} from "@/utils/common";
+import { getPageParams, getSortOrder } from '@/utils/common';
 
 const DictionaryList: React.FC = () => {
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-  const [updateFormValues, setUpdateFormValues] = useState({});
+  const [formValues, setFormValues] = useState({});
   const actionRef = useRef<ActionType>();
   const [dictionaryData, setDictionaryData] = useState<DictionaryVO[]>([]);
   const [selectedRowsState, setSelectedRows] = useState<DictionaryVO[]>([]);
@@ -124,7 +124,7 @@ const DictionaryList: React.FC = () => {
             onClick={async () => {
               if (record && record.id) {
                 const { data } = await getDictionaryById(record.id);
-                setUpdateFormValues(data as DictionaryForm);
+                setFormValues(data as DictionaryForm);
                 handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到字典信息（id:${record.id}）`);
               } else {
@@ -158,7 +158,7 @@ const DictionaryList: React.FC = () => {
           <Divider type="vertical" />
           <a
             onClick={async () => {
-              setUpdateFormValues({ pid: record.id });
+              setFormValues({ pid: record.id });
               handleCreateModalVisible(true);
             }}
           >
@@ -169,8 +169,12 @@ const DictionaryList: React.FC = () => {
     },
   ];
 
-  const updateDictionaryData = (list: DictionaryVO[], key: number | undefined, children: DictionaryVO[]): DictionaryVO[] => {
-    return list.map(node => {
+  const updateDictionaryData = (
+    list: DictionaryVO[],
+    key: number | undefined,
+    children: DictionaryVO[],
+  ): DictionaryVO[] => {
+    return list.map((node) => {
       if (node.id === key) {
         if (children && children.length > 0) {
           return {
@@ -180,7 +184,7 @@ const DictionaryList: React.FC = () => {
         }
         return {
           ...node,
-          children: undefined
+          children: undefined,
         };
       }
       if (node.children) {
@@ -191,16 +195,22 @@ const DictionaryList: React.FC = () => {
       }
       return node;
     });
-  }
+  };
 
   const onLoadDictionaryChildren = async (expanded: boolean, record: DictionaryVO) => {
     if (expanded && record && record.id) {
       const { data } = await getDictionaryChildrenById(record.id);
       if (data) {
-        setDictionaryData(origin => updateDictionaryData(origin, record.id, data.map(item => ({ ...item, children: item.hasChildren ? [] : undefined }))));
+        setDictionaryData((origin) =>
+          updateDictionaryData(
+            origin,
+            record.id,
+            data.map((item) => ({ ...item, children: item.hasChildren ? [] : undefined })),
+          ),
+        );
       }
     }
-  }
+  };
 
   return (
     <PageContainer>
@@ -219,9 +229,16 @@ const DictionaryList: React.FC = () => {
         onExpand={onLoadDictionaryChildren}
         request={async (params, sort) => {
           const { data } = await getDictionaryRootPage(getPageParams(params), getSortOrder(sort));
-          setDictionaryData(data && data.records ? data.records.map(item => ({ ...item, children: item.hasChildren ? [] : undefined })) : [])
+          setDictionaryData(
+            data && data.records
+              ? data.records.map((item) => ({
+                  ...item,
+                  children: item.hasChildren ? [] : undefined,
+                }))
+              : [],
+          );
           return {
-            total: data ? data.total : 0
+            total: data ? data.total : 0,
           };
         }}
         dataSource={dictionaryData}
@@ -244,19 +261,18 @@ const DictionaryList: React.FC = () => {
       <CreateForm
         createModalVisible={createModalVisible}
         handleCreateModalVisible={handleCreateModalVisible}
-        values={updateFormValues}
+        values={formValues}
         tableActionRef={actionRef}
       />
-      {updateFormValues && Object.keys(updateFormValues).length ? (
+      {formValues && Object.keys(formValues).length ? (
         <UpdateForm
           updateModalVisible={updateModalVisible}
           handleUpdateModalVisible={handleUpdateModalVisible}
-          values={updateFormValues}
-          onCancel={() => setUpdateFormValues({})}
+          values={formValues}
+          onCancel={() => setFormValues({})}
           tableActionRef={actionRef}
         />
       ) : null}
-
     </PageContainer>
   );
 };

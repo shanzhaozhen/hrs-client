@@ -1,12 +1,12 @@
-import {ExclamationCircleOutlined, PlusOutlined} from '@ant-design/icons';
-import {Button, message, Input, Space, Divider, Popconfirm, Modal} from 'antd';
+import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { Button, message, Input, Space, Divider, Popconfirm, Modal } from 'antd';
 import React, { useState, useRef } from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
-import {batchDeleteMenu, deleteMenu, getMenuById, getMenuTree} from '@/services/menu/menu';
+import { batchDeleteMenu, deleteMenu, getMenuById, getMenuTree } from '@/services/menu/menu';
 import type { MenuVO } from '@/services/menu/typings';
 import type { MenuForm } from '@/services/menu/typings';
 import * as iconMap from '@ant-design/icons';
@@ -14,7 +14,7 @@ import * as iconMap from '@ant-design/icons';
 const MenuList: React.FC = () => {
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-  const [updateFormValues, setUpdateFormValues] = useState<MenuForm>({});
+  const [formValues, setFormValues] = useState<MenuForm>({});
   const actionRef = useRef<ActionType>();
   const [selectedRowsState, setSelectedRows] = useState<MenuVO[]>([]);
 
@@ -24,7 +24,7 @@ const MenuList: React.FC = () => {
   const handleDelete = () => {
     Modal.confirm({
       title: '确认',
-      icon: <ExclamationCircleOutlined/>,
+      icon: <ExclamationCircleOutlined />,
       content: '确定批量删除勾选中的菜单吗',
       okText: '确认',
       cancelText: '取消',
@@ -142,7 +142,7 @@ const MenuList: React.FC = () => {
             onClick={async () => {
               if (record && record.id) {
                 const { data } = await getMenuById(record.id);
-                setUpdateFormValues(data || {});
+                setFormValues(data || {});
                 handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到菜单信息（id:${record.id}）`);
               } else {
@@ -207,7 +207,7 @@ const MenuList: React.FC = () => {
           return {
             success: true,
             data: [],
-            total: 0
+            total: 0,
           };
         }}
         columns={columns}
@@ -223,7 +223,7 @@ const MenuList: React.FC = () => {
             </div>
           }
         >
-        <Button onClick={handleDelete}>批量删除</Button>
+          <Button onClick={handleDelete}>批量删除</Button>
         </FooterToolbar>
       )}
       <CreateForm
@@ -231,16 +231,15 @@ const MenuList: React.FC = () => {
         handleCreateModalVisible={handleCreateModalVisible}
         tableActionRef={actionRef}
       />
-      {updateFormValues && Object.keys(updateFormValues).length ? (
+      {formValues && Object.keys(formValues).length ? (
         <UpdateForm
           updateModalVisible={updateModalVisible}
           handleUpdateModalVisible={handleUpdateModalVisible}
-          values={updateFormValues}
-          onCancel={() => setUpdateFormValues({})}
+          values={formValues}
+          onCancel={() => setFormValues({})}
           tableActionRef={actionRef}
         />
       ) : null}
-
     </PageContainer>
   );
 };

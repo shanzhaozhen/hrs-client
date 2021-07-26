@@ -52,7 +52,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
   return (
     <ModalForm
       width={748}
-      title="修改调动"
+      title="修改调薪"
       visible={updateModalVisible}
       onVisibleChange={handleUpdateModalVisible}
       initialValues={values}

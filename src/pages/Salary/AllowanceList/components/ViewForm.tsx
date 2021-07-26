@@ -17,7 +17,7 @@ const ViewForm: React.FC<ViewFormProps> = (props) => {
   return (
     <>
       <ModalForm
-        width={748}
+        width={820}
         title="查看津贴数据"
         visible={viewModalVisible}
         onVisibleChange={handleViewModalVisible}

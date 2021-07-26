@@ -1,26 +1,27 @@
 import React, { useRef, useState } from 'react';
 import type { FormInstance } from 'antd';
-import {Button, Divider, Input, message, Modal} from 'antd';
+import { Button, Divider, Input, message, Modal } from 'antd';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
-import type {ActionType, ProColumns} from '@ant-design/pro-table';
+import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import {exportStaff, getStaffById, getStaffPage, printStaff} from '@/services/staff/staff';
+import { exportStaff, getStaffById, getStaffPage, printStaff } from '@/services/staff/staff';
 import type { StaffForm, StaffVO } from '@/services/staff/typings';
-import { getPageParams, getSortOrder, tableFilter } from "@/utils/common";
-import { ExportOutlined, ImportOutlined, PlusOutlined } from "@ant-design/icons";
-import CreateForm from "@/pages/HR/StaffList/components/CreateForm";
-import UpdateForm from "@/pages/HR/StaffList/components/UpdateForm";
-import ViewForm from "@/pages/HR/StaffList/components/ViewForm";
-import { useDepartmentList, useDepartmentTree } from "@/utils/department";
-import FormTreeSelect from "@/components/FormTreeSelect";
-import { ProFormUploadDragger} from "@ant-design/pro-form";
-import { downloadFile } from "@/utils/file";
+import { getPageParams, getSortOrder, tableFilter } from '@/utils/common';
+import { ExportOutlined, ImportOutlined, PlusOutlined } from '@ant-design/icons';
+import CreateForm from '@/pages/HR/StaffList/components/CreateForm';
+import UpdateForm from '@/pages/HR/StaffList/components/UpdateForm';
+import ViewForm from '@/pages/HR/StaffList/components/ViewForm';
+import { useDepartmentList, useDepartmentTree } from '@/utils/department';
+import FormTreeSelect from '@/components/FormTreeSelect';
+import { ProFormUploadDragger } from '@ant-design/pro-form';
+import { downloadFile } from '@/utils/file';
+import { useOptions } from '@/utils/options';
 
 const StaffList: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const formRef = useRef<FormInstance>();
 
-  const [updateFormValues, setUpdateFormValues] = useState<StaffVO | StaffForm>({});
+  const [formValues, setFormValues] = useState<StaffVO | StaffForm>({});
   const [viewDrawerVisible, handleViewDrawerVisible] = useState<boolean>(false);
   const [createDrawerVisible, handleCreateDrawerVisible] = useState<boolean>(false);
   const [updateDrawerVisible, handleUpdateDrawerVisible] = useState<boolean>(false);
@@ -29,6 +30,13 @@ const StaffList: React.FC = () => {
 
   const departmentList = useDepartmentList();
   const departmentTree = useDepartmentTree();
+  const companyStateOptions = useOptions('CompanyState');
+  const postLevelOptions = useOptions(
+    'PostLevel',
+    'name',
+    'code',
+    (item) => `${item.name}(${item.code})`,
+  );
 
   // /**
   //  * 批量删除员工
@@ -80,10 +88,10 @@ const StaffList: React.FC = () => {
       dataIndex: 'depId',
       valueType: 'select',
       sorter: true,
-      renderText: (_, record) => (tableFilter(record.depId, departmentList, '未分配')),
+      renderText: (_, record) => tableFilter(record.depId, departmentList, '未分配'),
       renderFormItem: () => {
-        return <FormTreeSelect treeData={departmentTree} placeholder="请选择部门" />
-      }
+        return <FormTreeSelect treeData={departmentTree} placeholder="请选择部门" />;
+      },
     },
     {
       title: '员工编号',
@@ -119,15 +127,16 @@ const StaffList: React.FC = () => {
       title: '性别',
       dataIndex: 'sex',
       valueType: 'text',
+      sorter: true,
       hideInSearch: true,
-      hideInTable: true,
     },
     {
       title: '在司状态',
       dataIndex: 'companyState',
-      valueType: 'text',
-      hideInSearch: true,
-      hideInTable: true,
+      valueType: 'select',
+      sorter: true,
+      initialValue: '在职',
+      fieldProps: { options: companyStateOptions },
     },
     {
       title: '职务',
@@ -144,11 +153,11 @@ const StaffList: React.FC = () => {
       hideInTable: true,
     },
     {
-      title: '岗位类型',
-      dataIndex: 'postType',
-      valueType: 'text',
-      hideInSearch: true,
-      hideInTable: true,
+      title: '岗位等级',
+      dataIndex: 'postLevel',
+      valueType: 'select',
+      sorter: true,
+      fieldProps: { options: postLevelOptions },
     },
     {
       title: '民族',
@@ -212,7 +221,7 @@ const StaffList: React.FC = () => {
               if (record && record.id) {
                 const { data } = await getStaffById(record.id);
                 // todo: 简化地址转变的操作
-                setUpdateFormValues(data || {});
+                setFormValues(data || {});
                 handleViewDrawerVisible(true);
               } else {
                 message.warn('没有选中有效的员工');
@@ -227,7 +236,7 @@ const StaffList: React.FC = () => {
               if (record && record.id) {
                 const { data } = await getStaffById(record.id);
                 // todo: 简化地址转变的操作
-                setUpdateFormValues(data || {});
+                setFormValues(data || {});
                 handleUpdateDrawerVisible(true);
               } else {
                 message.warn('没有选中有效的员工');
@@ -263,10 +272,10 @@ const StaffList: React.FC = () => {
             onClick={() => {
               const fieldsValue = formRef.current?.getFieldsValue();
               exportStaff({
-                ...fieldsValue
-              }).then(data => {
-                downloadFile(data, `员工-${new Date().getTime()}.xlsx`)
-              })
+                ...fieldsValue,
+              }).then((data) => {
+                downloadFile(data, `员工-${new Date().getTime()}.xlsx`);
+              });
             }}
           >
             <ExportOutlined /> 导出
@@ -275,9 +284,9 @@ const StaffList: React.FC = () => {
             type="primary"
             onClick={() => {
               const fieldsValue = formRef.current?.getFieldsValue();
-              printStaff(fieldsValue.id).then(data => {
-                downloadFile(data, `员工-${new Date().getTime()}.docx`)
-              })
+              printStaff(fieldsValue.id).then((data) => {
+                downloadFile(data, `员工-${new Date().getTime()}.docx`);
+              });
             }}
           >
             <ExportOutlined /> 打印
@@ -314,8 +323,8 @@ const StaffList: React.FC = () => {
       <ViewForm
         viewDrawerVisible={viewDrawerVisible}
         handleViewDrawerVisible={handleViewDrawerVisible}
-        values={updateFormValues}
-        onClose={() => setUpdateFormValues({})}
+        values={formValues}
+        onClose={() => setFormValues({})}
       />
       <CreateForm
         createDrawerVisible={createDrawerVisible}
@@ -325,8 +334,8 @@ const StaffList: React.FC = () => {
       <UpdateForm
         updateDrawerVisible={updateDrawerVisible}
         handleUpdateDrawerVisible={handleUpdateDrawerVisible}
-        values={updateFormValues}
-        onClose={() => setUpdateFormValues({})}
+        values={formValues}
+        onClose={() => setFormValues({})}
         tableActionRef={actionRef}
       />
 
@@ -336,26 +345,30 @@ const StaffList: React.FC = () => {
         onCancel={() => handleImportModalVisible(false)}
         footer={null}
       >
-        <div style={{
-          textAlign: "right",
-          marginBottom: 15
-        }}>
-          <a href="#" onClick={() => {
-            // todo: 员工信息导入
-            console.log('dd')
-          }}>
+        <div
+          style={{
+            textAlign: 'right',
+            marginBottom: 15,
+          }}
+        >
+          <a
+            href="#"
+            onClick={() => {
+              // todo: 员工信息导入
+              console.log('dd');
+            }}
+          >
             点击下载
           </a>
           导入模板
-          </div>
+        </div>
         <ProFormUploadDragger
           description="导入员工"
           fieldProps={{
-            maxCount: 1
+            maxCount: 1,
           }}
         />
       </Modal>
-
     </PageContainer>
   );
 };

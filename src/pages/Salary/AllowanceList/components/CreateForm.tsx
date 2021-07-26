@@ -41,7 +41,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
   return (
     <>
       <ModalForm
-        width={748}
+        width={820}
         title="新建津贴数据"
         visible={createModalVisible}
         formRef={formRef}

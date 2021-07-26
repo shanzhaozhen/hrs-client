@@ -1,20 +1,25 @@
 import React, { useState, useRef } from 'react';
-import {ExclamationCircleOutlined, PlusOutlined} from '@ant-design/icons';
-import {Button, message, Input, Tag, Space, Popconfirm, Divider, Modal} from 'antd';
+import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { Button, message, Input, Tag, Space, Popconfirm, Divider, Modal } from 'antd';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
-import { getResourceById, getResourceTree, batchDeleteResource, deleteResource } from '@/services/resource/resource';
+import {
+  getResourceById,
+  getResourceTree,
+  batchDeleteResource,
+  deleteResource,
+} from '@/services/resource/resource';
 import type { ResourceVO } from '@/services/resource/typings';
 import type { ResourceForm } from '@/services/resource/typings';
-import {getPageParams} from "@/utils/common";
+import { getPageParams } from '@/utils/common';
 
 const ResourceList: React.FC = () => {
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-  const [updateFormValues, setUpdateFormValues] = useState<ResourceForm>({});
+  const [formValues, setFormValues] = useState<ResourceForm>({});
   const actionRef = useRef<ActionType>();
   const [selectedRowsState, setSelectedRows] = useState<ResourceVO[]>([]);
 
@@ -129,7 +134,7 @@ const ResourceList: React.FC = () => {
             onClick={async () => {
               if (record && record.id) {
                 const { data } = await getResourceById(record.id);
-                setUpdateFormValues(data || {});
+                setFormValues(data || {});
                 handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到资源信息（id:${record.id}）`);
               } else {
@@ -211,16 +216,15 @@ const ResourceList: React.FC = () => {
         handleCreateModalVisible={handleCreateModalVisible}
         tableActionRef={actionRef}
       />
-      {updateFormValues && Object.keys(updateFormValues).length ? (
+      {formValues && Object.keys(formValues).length ? (
         <UpdateForm
           updateModalVisible={updateModalVisible}
           handleUpdateModalVisible={handleUpdateModalVisible}
-          values={updateFormValues}
-          onCancel={() => setUpdateFormValues({})}
+          values={formValues}
+          onCancel={() => setFormValues({})}
           tableActionRef={actionRef}
         />
       ) : null}
-
     </PageContainer>
   );
 };

@@ -1,30 +1,29 @@
 import React, { useRef, useState } from 'react';
 import type { FormInstance } from 'antd';
-import {Button, Divider, Input, message, Modal} from 'antd';
+import { Button, Divider, Input, message, Modal } from 'antd';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
-import type {ActionType, ProColumns} from '@ant-design/pro-table';
+import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import {exportResume, getResumeById, getResumePage, printResume} from '@/services/resume/resume';
+import { exportResume, getResumeById, getResumePage, printResume } from '@/services/resume/resume';
 import type { ResumeForm, ResumeVO } from '@/services/resume/typings';
-import { getPageParams, getSortOrder } from "@/utils/common";
-import { ExportOutlined, ImportOutlined } from "@ant-design/icons";
-import UpdateForm from "@/pages/Recruit/ResumeList/components/UpdateForm";
-import ViewForm from "@/pages/Recruit/ResumeList/components/ViewForm";
-import { ProFormUploadDragger } from "@ant-design/pro-form";
-import {downloadFile} from "@/utils/file";
-import JobView from "@/pages/Recruit/ResumeList/components/JobView";
+import { getPageParams, getSortOrder } from '@/utils/common';
+import { ExportOutlined, ImportOutlined } from '@ant-design/icons';
+import UpdateForm from '@/pages/Recruit/ResumeList/components/UpdateForm';
+import ViewForm from '@/pages/Recruit/ResumeList/components/ViewForm';
+import { ProFormUploadDragger } from '@ant-design/pro-form';
+import { downloadFile } from '@/utils/file';
+import JobView from '@/pages/Recruit/ResumeList/components/JobView';
 
 const ResumeList: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const formRef = useRef<FormInstance>();
 
-  const [updateFormValues, setUpdateFormValues] = useState<ResumeVO | ResumeForm>({});
+  const [formValues, setFormValues] = useState<ResumeVO | ResumeForm>({});
   const [viewDrawerVisible, handleViewDrawerVisible] = useState<boolean>(false);
   const [updateDrawerVisible, handleUpdateDrawerVisible] = useState<boolean>(false);
   const [selectedRowsState, setSelectedRows] = useState<ResumeVO[]>([]);
   const [importModalVisible, handleImportModalVisible] = useState<boolean>(false);
   const [jobViewVisible, handleJobViewVisible] = useState<boolean>(false);
-
 
   const columns: ProColumns<ResumeVO>[] = [
     {
@@ -111,7 +110,7 @@ const ResumeList: React.FC = () => {
             onClick={async () => {
               if (record && record.id) {
                 const { data } = await getResumeById(record.id);
-                setUpdateFormValues(data || {});
+                setFormValues(data || {});
                 handleViewDrawerVisible(true);
               } else {
                 message.warn('没有选中有效的员工');
@@ -125,7 +124,7 @@ const ResumeList: React.FC = () => {
             onClick={async () => {
               if (record && record.id) {
                 const { data } = await getResumeById(record.id);
-                setUpdateFormValues(data || {});
+                setFormValues(data || {});
                 handleUpdateDrawerVisible(true);
               } else {
                 message.warn('没有选中有效的员工');
@@ -160,10 +159,10 @@ const ResumeList: React.FC = () => {
               const fieldsValue = formRef.current?.getFieldsValue();
               console.log(fieldsValue);
               exportResume({
-                ...fieldsValue
-              }).then(data => {
-                downloadFile(data, `简历-${new Date().getTime()}.xlsx`)
-              })
+                ...fieldsValue,
+              }).then((data) => {
+                downloadFile(data, `简历-${new Date().getTime()}.xlsx`);
+              });
             }}
           >
             <ExportOutlined /> 导出
@@ -174,10 +173,9 @@ const ResumeList: React.FC = () => {
               const fieldsValue = formRef.current?.getFieldsValue();
               console.log(fieldsValue);
               // handleJobViewVisible(true)
-              printResume(2345234523411).then(data => {
-                downloadFile(data, `员工-${new Date().getTime()}.docx`)
-              })
-
+              printResume(2345234523411).then((data) => {
+                downloadFile(data, `员工-${new Date().getTime()}.docx`);
+              });
             }}
           >
             <ExportOutlined /> 打印
@@ -214,14 +212,14 @@ const ResumeList: React.FC = () => {
       <ViewForm
         viewDrawerVisible={viewDrawerVisible}
         handleViewDrawerVisible={handleViewDrawerVisible}
-        values={updateFormValues}
-        onClose={() => setUpdateFormValues({})}
+        values={formValues}
+        onClose={() => setFormValues({})}
       />
       <UpdateForm
         updateDrawerVisible={updateDrawerVisible}
         handleUpdateDrawerVisible={handleUpdateDrawerVisible}
-        values={updateFormValues}
-        onClose={() => setUpdateFormValues({})}
+        values={formValues}
+        onClose={() => setFormValues({})}
         tableActionRef={actionRef}
       />
       <JobView
@@ -236,26 +234,30 @@ const ResumeList: React.FC = () => {
         onCancel={() => handleImportModalVisible(false)}
         footer={null}
       >
-        <div style={{
-          textAlign: "right",
-          marginBottom: 15
-        }}>
-          <a href="#" onClick={() => {
-            // todo: 简历导入
-            console.log('dd')
-          }}>
+        <div
+          style={{
+            textAlign: 'right',
+            marginBottom: 15,
+          }}
+        >
+          <a
+            href="#"
+            onClick={() => {
+              // todo: 简历导入
+              console.log('dd');
+            }}
+          >
             点击下载
           </a>
           导入模板
-          </div>
+        </div>
         <ProFormUploadDragger
           description="导入员工"
           fieldProps={{
-            maxCount: 1
+            maxCount: 1,
           }}
         />
       </Modal>
-
     </PageContainer>
   );
 };

@@ -1,6 +1,14 @@
 export type SalarySettingForm = {
   /** 主键ID */
   id: number;
+  /** 公积金基数比例 */
+  accumulationFundRate?: number;
+  /** 养老保险基数比例 */
+  endowmentInsuranceRate?: number;
+  /** 失业保险基数比例 */
+  unemploymentInsuranceRate?: number;
+  /** 医疗保险基数比例 */
+  medicalInsuranceRate?: number;
   /** 绩效工资基数 */
   meritSalary?: number;
   /** 绩效A发放比例 */
@@ -72,6 +80,14 @@ export type SalarySettingForm = {
 export type SalarySettingVO = {
   /** 主键ID */
   id?: number;
+  /** 公积金基数比例 */
+  accumulationFundRate?: number;
+  /** 养老保险基数比例 */
+  endowmentInsuranceRate?: number;
+  /** 失业保险基数比例 */
+  unemploymentInsuranceRate?: number;
+  /** 医疗保险基数比例 */
+  medicalInsuranceRate?: number;
   /** 绩效工资基数 */
   meritSalary?: number;
   /** 绩效A发放比例 */

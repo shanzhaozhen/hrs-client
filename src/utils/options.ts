@@ -20,7 +20,7 @@ export const useOptions = (
           : [],
       );
     });
-  }, [labelFieldName, labelRender, type, valueFieldName, valueRender]);
+  }, []);
   return options;
 };
 

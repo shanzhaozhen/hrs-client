@@ -29,7 +29,7 @@ const SalaryChangeListBody: React.FC<ListBodyProps> = (props) => {
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [viewModalVisible, handleViewModalVisible] = useState<boolean>(false);
-  const [updateFormValues, setUpdateFormValues] = useState<SalaryChangeVO>({});
+  const [formValues, setFormValues] = useState<SalaryChangeVO>({});
   const actionRef = useRef<ActionType>();
   const [selectedRowsState, setSelectedRows] = useState<SalaryChangeVO[]>([]);
 
@@ -97,20 +97,13 @@ const SalaryChangeListBody: React.FC<ListBodyProps> = (props) => {
       valueType: 'text',
       sorter: 's.staffCode',
       hideInSearch: true,
-    },
-    {
-      title: '员工姓名',
-      dataIndex: 'staffName',
-      valueType: 'text',
-      sorter: 's.staffName',
-      hideInSearch: true,
       render: (dom, record) => {
         return (
           <a
             onClick={async () => {
               if (record && record.id) {
                 const { data } = await getSalaryChangeById(record.id);
-                setUpdateFormValues(data || {});
+                setFormValues(data || {});
                 handleViewModalVisible(true);
               } else {
                 message.warn('没有选中有效的调薪记录');
@@ -121,6 +114,13 @@ const SalaryChangeListBody: React.FC<ListBodyProps> = (props) => {
           </a>
         );
       },
+    },
+    {
+      title: '员工姓名',
+      dataIndex: 'staffName',
+      valueType: 'text',
+      sorter: 's.staffName',
+      hideInSearch: true,
     },
     {
       title: '基础工资',
@@ -141,6 +141,7 @@ const SalaryChangeListBody: React.FC<ListBodyProps> = (props) => {
       title: '岗位工资',
       dataIndex: 'prePostSalary',
       valueType: 'text',
+      align: 'center',
       hideInSearch: true,
       renderText: (_, record) =>
         record.prePostSalary === record.postPostSalary
@@ -254,7 +255,7 @@ const SalaryChangeListBody: React.FC<ListBodyProps> = (props) => {
             onClick={async () => {
               if (record && record.id) {
                 const { data } = await getSalaryChangeById(record.id);
-                setUpdateFormValues(data || {});
+                setFormValues(data || {});
                 handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到调薪记录信息（id:${record.id}）`);
               } else {
@@ -342,8 +343,8 @@ const SalaryChangeListBody: React.FC<ListBodyProps> = (props) => {
       <UpdateForm
         updateModalVisible={updateModalVisible}
         handleUpdateModalVisible={handleUpdateModalVisible}
-        values={updateFormValues}
-        onCancel={() => setUpdateFormValues({})}
+        values={formValues}
+        onCancel={() => setFormValues({})}
         tableActionRef={actionRef}
         staffId={staffId}
       />
@@ -351,8 +352,8 @@ const SalaryChangeListBody: React.FC<ListBodyProps> = (props) => {
       <ViewForm
         viewModalVisible={viewModalVisible}
         handleViewModalVisible={handleViewModalVisible}
-        values={updateFormValues}
-        onCancel={() => setUpdateFormValues({})}
+        values={formValues}
+        onCancel={() => setFormValues({})}
         staffId={staffId}
       />
     </>

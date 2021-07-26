@@ -19,16 +19,55 @@ const SalarySetting: React.FC = () => {
 
   const formRef = useRef<FormInstance>();
 
-  const updateFormValues = async () => {
+  const queryFormValues = async () => {
     setLoading(true);
     const { data } = await getSalarySettingNew();
-    setFormValues(data || {});
+    setFormValues(
+      data || {
+        accumulationFundRate: 12,
+        endowmentInsuranceRate: 8,
+        unemploymentInsuranceRate: 0.2,
+        medicalInsuranceRate: 2,
+        meritSalary: 1500,
+        meritA: 120,
+        meritB: 110,
+        meritC: 100,
+        meritD: 90,
+        meritE: 80,
+        meritF: 60,
+        fullAttendanceAllowance: 200,
+        mealAllowance: 0,
+        trafficAllowanceOwnA: 2000,
+        trafficAllowanceOwnB: 1400,
+        trafficAllowanceOwnC: 600,
+        trafficAllowanceBusA: 1800,
+        trafficAllowanceBusB: 1200,
+        trafficAllowanceBusC: 400,
+        safetyAllowanceA: 320,
+        safetyAllowanceB: 320,
+        safetyAllowanceC: 0,
+        oneChildAllowance: 5,
+        hotWeatherStartMonth: 6,
+        hotWeatherEndMonth: 10,
+        hotWeatherAllowanceA: 300,
+        hotWeatherAllowanceB: 150,
+        hotWeatherAllowanceC: 0,
+        dutyWeekFee: 100,
+        dutyBeforeWeekFee: 150,
+        dutyBeforeFestivalFee: 150,
+        dutyWeekendFee: 200,
+        dutyFestivalFee: 300,
+        dutyOutSpringFee: 500,
+        dutyInSpringFee: 800,
+        unionFees: 12.5,
+      },
+    );
     formRef.current?.setFieldsValue({ ...formValues });
     setLoading(false);
   };
 
   useEffect(() => {
-    updateFormValues().then();
+    queryFormValues().then();
   }, []);
 
   /**
@@ -39,7 +78,7 @@ const SalarySetting: React.FC = () => {
     const hide = message.loading('正在更新');
     try {
       await addSalarySetting(fields);
-      await updateFormValues();
+      await queryFormValues();
       hide();
       message.success('更新成功');
       setViewState(true);

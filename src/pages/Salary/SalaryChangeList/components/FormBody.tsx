@@ -29,16 +29,11 @@ const FormBody: React.FC<FormProps> = (props) => {
 
   const departmentList = useDepartmentList();
 
-  const defaultOptions = [
-    { label: 'A', value: 'A' },
-    { label: 'B', value: 'B' },
-    { label: 'C', value: 'C' },
-  ];
-
   return (
     <>
       <ProFormText name="id" label="调薪记录id" hidden={true} />
       <ProFormText name="staffId" label="员工id" hidden={true} />
+      <ProFormSwitch name="executed" label="是否已执行" hidden={true} />
       <Row gutter={24}>
         <Col xl={12} lg={12} md={24}>
           {staffId || isView ? (
@@ -123,8 +118,7 @@ const FormBody: React.FC<FormProps> = (props) => {
         <Col xl={12} lg={12} md={24}>
           <ProFormDigit
             width="md"
-            name="
-            prePostSalary"
+            name="prePostSalary"
             label="变更前岗位工资"
             readonly={isView}
             disabled
@@ -180,11 +174,10 @@ const FormBody: React.FC<FormProps> = (props) => {
           />
         </Col>
         <Col xl={12} lg={12} md={24}>
-          <ProFormSelect
+          <ProFormText
             width="md"
             name="preSafetyGrade"
             label="变更前安全津贴档次"
-            options={defaultOptions}
             readonly={isView}
             disabled
           />
@@ -195,16 +188,20 @@ const FormBody: React.FC<FormProps> = (props) => {
             name="postSafetyGrade"
             label="变更后安全津贴档次"
             rules={[{ required: true, message: '请选择安全津贴档次' }]}
-            options={defaultOptions}
+            options={[
+              { label: 'A', value: 'A' },
+              { label: 'B', value: 'B' },
+              { label: 'C', value: 'C' },
+              { label: '不享有', value: '不享有' },
+            ]}
             readonly={isView}
           />
         </Col>
         <Col xl={12} lg={12} md={24}>
-          <ProFormSelect
+          <ProFormText
             width="md"
             name="preHotWeatherGrade"
             label="变更前高温津贴档次"
-            options={defaultOptions}
             readonly={isView}
             disabled
           />
@@ -215,7 +212,12 @@ const FormBody: React.FC<FormProps> = (props) => {
             name="postHotWeatherGrade"
             label="变更后高温津贴档次"
             rules={[{ required: true, message: '请选择高温津贴档次' }]}
-            options={defaultOptions}
+            options={[
+              { label: 'A', value: 'A' },
+              { label: 'B', value: 'B' },
+              { label: 'C', value: 'C' },
+              { label: '不享有', value: '不享有' },
+            ]}
             readonly={isView}
           />
         </Col>

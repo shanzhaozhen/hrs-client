@@ -6,6 +6,7 @@ import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import CreateForm from './CreateForm';
 import UpdateForm from './UpdateForm';
+import ViewForm from './ViewForm';
 import {
   getStaffChangePage,
   getStaffChangeById,
@@ -27,7 +28,8 @@ const StaffChangeList: React.FC<ListBodyProps> = (props) => {
 
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-  const [updateFormValues, setUpdateFormValues] = useState<StaffChangeVO>({});
+  const [viewModalVisible, handleViewModalVisible] = useState<boolean>(false);
+  const [formValues, setFormValues] = useState<StaffChangeVO>({});
   const actionRef = useRef<ActionType>();
   const [selectedRowsState, setSelectedRows] = useState<StaffChangeVO[]>([]);
 
@@ -98,6 +100,23 @@ const StaffChangeList: React.FC<ListBodyProps> = (props) => {
       valueType: 'text',
       sorter: 's.staffCode',
       hideInSearch: true,
+      render: (dom, record) => {
+        return (
+          <a
+            onClick={async () => {
+              if (record && record.id) {
+                const { data } = await getStaffChangeById(record.id);
+                setFormValues(data || {});
+                handleViewModalVisible(true);
+              } else {
+                message.warn('没有选中有效的调薪记录');
+              }
+            }}
+          >
+            {dom}
+          </a>
+        );
+      },
     },
     {
       title: '员工姓名',
@@ -234,7 +253,7 @@ const StaffChangeList: React.FC<ListBodyProps> = (props) => {
             onClick={async () => {
               if (record && record.id) {
                 const { data } = await getStaffChangeById(record.id);
-                setUpdateFormValues(data || {});
+                setFormValues(data || {});
                 handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到调动记录信息（id:${record.id}）`);
               } else {
@@ -317,16 +336,23 @@ const StaffChangeList: React.FC<ListBodyProps> = (props) => {
         tableActionRef={actionRef}
         staffId={staffId}
       />
-      {updateFormValues && Object.keys(updateFormValues).length ? (
-        <UpdateForm
-          updateModalVisible={updateModalVisible}
-          handleUpdateModalVisible={handleUpdateModalVisible}
-          values={updateFormValues}
-          onCancel={() => setUpdateFormValues({})}
-          tableActionRef={actionRef}
-          staffId={staffId}
-        />
-      ) : null}
+
+      <UpdateForm
+        updateModalVisible={updateModalVisible}
+        handleUpdateModalVisible={handleUpdateModalVisible}
+        values={formValues}
+        onCancel={() => setFormValues({})}
+        tableActionRef={actionRef}
+        staffId={staffId}
+      />
+
+      <ViewForm
+        viewModalVisible={viewModalVisible}
+        handleViewModalVisible={handleViewModalVisible}
+        values={formValues}
+        onCancel={() => setFormValues({})}
+        staffId={staffId}
+      />
     </>
   );
 };

@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, { useRef } from 'react';
 import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import type { FormInstance } from 'antd';
 import { message } from 'antd';
@@ -18,7 +18,14 @@ export interface UpdateFormProps {
 }
 
 const UpdateForm: React.FC<UpdateFormProps> = (props) => {
-  const { updateModalVisible, handleUpdateModalVisible, onCancel, tableActionRef, values, staffId } = props;
+  const {
+    updateModalVisible,
+    handleUpdateModalVisible,
+    onCancel,
+    tableActionRef,
+    values,
+    staffId,
+  } = props;
 
   const formRef = useRef<FormInstance>();
 
@@ -56,7 +63,9 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
       }}
       onFinish={handleUpdate}
     >
-      <FormBody isEdit staffId={staffId} formRef={formRef} />
+      {values && Object.keys(values).length ? (
+        <FormBody isEdit staffId={staffId} formRef={formRef} />
+      ) : null}
     </ModalForm>
   );
 };

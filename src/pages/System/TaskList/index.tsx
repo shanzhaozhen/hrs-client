@@ -1,19 +1,27 @@
-import React, {useRef, useState} from 'react';
-import {ExclamationCircleOutlined, PlusOutlined} from '@ant-design/icons';
-import {Button, Divider, Input, message, Modal, Space, Tag} from 'antd';
-import {FooterToolbar, PageContainer} from '@ant-design/pro-layout';
-import type {ActionType, ProColumns} from '@ant-design/pro-table';
-import ProTable, {TableDropdown} from '@ant-design/pro-table';
+import React, { useRef, useState } from 'react';
+import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { Button, Divider, Input, message, Modal, Space, Tag } from 'antd';
+import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
+import type { ActionType, ProColumns } from '@ant-design/pro-table';
+import ProTable, { TableDropdown } from '@ant-design/pro-table';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
-import { batchDeleteTask, deleteTask, getTaskById, getTaskPage, runTask, startTask, stopTask } from '@/services/task/task';
+import {
+  batchDeleteTask,
+  deleteTask,
+  getTaskById,
+  getTaskPage,
+  runTask,
+  startTask,
+  stopTask,
+} from '@/services/task/task';
 import type { TaskForm, TaskVO } from '@/services/task/typings';
-import {getPageParams, getSortOrder} from "@/utils/common";
+import { getPageParams, getSortOrder } from '@/utils/common';
 
 const TaskList: React.FC = () => {
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-  const [updateFormValues, setUpdateFormValues] = useState<TaskVO | TaskForm>({});
+  const [formValues, setFormValues] = useState<TaskVO | TaskForm>({});
   const actionRef = useRef<ActionType>();
   const [selectedRowsState, setSelectedRows] = useState<TaskVO[]>([]);
 
@@ -91,9 +99,7 @@ const TaskList: React.FC = () => {
       hideInSearch: true,
       render: (_, record) => (
         <Space>
-          <Tag color={record.open ? "green" : "red"}>
-            {record.open ? '开启' : '停止'}
-          </Tag>
+          <Tag color={record.open ? 'green' : 'red'}>{record.open ? '开启' : '停止'}</Tag>
         </Space>
       ),
     },
@@ -133,11 +139,11 @@ const TaskList: React.FC = () => {
                 if (record.open) {
                   await stopTask(record.id);
                   hide();
-                  message.success('任务停止成功！')
+                  message.success('任务停止成功！');
                 } else {
                   await startTask(record.id);
                   hide();
-                  message.success('任务开启成功！')
+                  message.success('任务开启成功！');
                 }
                 actionRef.current?.reloadAndRest?.();
               } else {
@@ -145,14 +151,14 @@ const TaskList: React.FC = () => {
               }
             }}
           >
-            { record.open ? '停止' : '开启' }
+            {record.open ? '停止' : '开启'}
           </a>
           <Divider type="vertical" />
           <a
             onClick={async () => {
               if (record && record.id) {
                 const { data } = await getTaskById(record.id);
-                setUpdateFormValues(data || {});
+                setFormValues(data || {});
                 handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到任务信息（id:${record.id}）`);
               } else {
@@ -169,11 +175,11 @@ const TaskList: React.FC = () => {
               if (key === 'run') {
                 if (record && record.id) {
                   const hide = message.loading('正在执行');
-                  const { data } = await runTask(record.id)
+                  const { data } = await runTask(record.id);
                   hide();
-                  message.success('任务执行成功！返回结果已打印在控制台上。')
+                  message.success('任务执行成功！返回结果已打印在控制台上。');
                   // eslint-disable-next-line no-console
-                  console.log(data)
+                  console.log(data);
                 } else {
                   message.warn('没有选中有效的任务');
                 }
@@ -261,16 +267,15 @@ const TaskList: React.FC = () => {
         handleCreateModalVisible={handleCreateModalVisible}
         tableActionRef={actionRef}
       />
-      {updateFormValues && Object.keys(updateFormValues).length ? (
+      {formValues && Object.keys(formValues).length ? (
         <UpdateForm
           updateModalVisible={updateModalVisible}
           handleUpdateModalVisible={handleUpdateModalVisible}
-          values={updateFormValues}
-          onCancel={() => setUpdateFormValues({})}
+          values={formValues}
+          onCancel={() => setFormValues({})}
           tableActionRef={actionRef}
         />
       ) : null}
-
     </PageContainer>
   );
 };

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
-import {Button, Divider, Drawer, Input, message, Popconfirm} from 'antd';
+import { Button, Divider, Drawer, Input, message, Popconfirm } from 'antd';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import type { UserForm, UserVO } from '@/services/user/typings';
@@ -9,13 +9,13 @@ import { FooterToolbar } from '@ant-design/pro-layout';
 import { PlusOutlined } from '@ant-design/icons';
 import UpdateForm from '@/pages/System/UserList/components/UpdateForm';
 import CreateForm from '@/pages/System/UserList/components/CreateForm';
-import type { RoleVO } from "@/services/role/typings";
-import CheckBoxUser from "@/pages/System/UserRelateList/components/CheckBoxUser";
-import type {Page, ResultBody} from "@/services/common/typings";
-import type { PageParams } from "@/services/common/typings";
-import type { SortOrder } from "antd/lib/table/interface";
-import { getPageParams, tableFilter } from "@/utils/common";
-import {useDepartmentList} from "@/utils/department";
+import type { RoleVO } from '@/services/role/typings';
+import CheckBoxUser from '@/pages/System/UserRelateList/components/CheckBoxUser';
+import type { Page, ResultBody } from '@/services/common/typings';
+import type { PageParams } from '@/services/common/typings';
+import type { SortOrder } from 'antd/lib/table/interface';
+import { getPageParams, tableFilter } from '@/utils/common';
+import { useDepartmentList } from '@/utils/department';
 
 interface UserRelateListProps {
   userRelateListVisible: boolean;
@@ -25,7 +25,10 @@ interface UserRelateListProps {
   handleBatchAddUserRelate: (selectRows: RoleVO[]) => void;
   handleDeleteUserRelate: (record: RoleVO) => void;
   handleBatchDeleteUserRelate: (selectRows: RoleVO[]) => void;
-  queryList: (params: PageParams, sorter: Record<string, SortOrder>) => Promise<ResultBody<Page<UserVO>>>;
+  queryList: (
+    params: PageParams,
+    sorter: Record<string, SortOrder>,
+  ) => Promise<ResultBody<Page<UserVO>>>;
   values: RoleVO;
 }
 
@@ -38,13 +41,13 @@ const UserRelateList: React.FC<UserRelateListProps> = (props) => {
     handleBatchDeleteUserRelate,
     onCancel,
     queryList,
-    values
+    values,
   } = props;
 
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [checkBoxUserVisible, handleCheckBoxUserVisible] = useState<boolean>(false);
-  const [updateFormValues, setUpdateFormValues] = useState<UserForm>({});
+  const [formValues, setFormValues] = useState<UserForm>({});
   const [selectedRowsState, setSelectedRows] = useState<UserVO[]>([]);
 
   const departmentList = useDepartmentList();
@@ -98,7 +101,7 @@ const UserRelateList: React.FC<UserRelateListProps> = (props) => {
       dataIndex: 'depId',
       hideInSearch: true,
       valueType: 'select',
-      renderText: (_, record) => (tableFilter(record.depId, departmentList, '未分配'))
+      renderText: (_, record) => tableFilter(record.depId, departmentList, '未分配'),
     },
     {
       title: '操作',
@@ -110,7 +113,7 @@ const UserRelateList: React.FC<UserRelateListProps> = (props) => {
             onClick={async () => {
               if (record && record.id) {
                 const { data } = await getUserById(record.id);
-                setUpdateFormValues(data || {});
+                setFormValues(data || {});
                 handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到用户信息（id:${record.id}）`);
               } else {
@@ -123,7 +126,7 @@ const UserRelateList: React.FC<UserRelateListProps> = (props) => {
           <Divider type="vertical" />
           <Popconfirm
             title="确定取消该用户与角色的关联关系？"
-            onConfirm={() => (handleDeleteUserRelate(record))}
+            onConfirm={() => handleDeleteUserRelate(record)}
             okText="确定"
             cancelText="取消"
           >
@@ -155,9 +158,12 @@ const UserRelateList: React.FC<UserRelateListProps> = (props) => {
           <Button type="primary" onClick={() => handleCreateModalVisible(true)}>
             <PlusOutlined /> 新建用户
           </Button>,
-          <Button type="primary" onClick={() => {
-            handleCheckBoxUserVisible(true)
-          }}>
+          <Button
+            type="primary"
+            onClick={() => {
+              handleCheckBoxUserVisible(true);
+            }}
+          >
             <PlusOutlined /> 已有用户
           </Button>,
         ]}
@@ -185,9 +191,13 @@ const UserRelateList: React.FC<UserRelateListProps> = (props) => {
             </div>
           }
         >
-          <Button onClick={() => {
-            handleBatchDeleteUserRelate(selectedRowsState);
-          }}>批量取消关联</Button>
+          <Button
+            onClick={() => {
+              handleBatchDeleteUserRelate(selectedRowsState);
+            }}
+          >
+            批量取消关联
+          </Button>
         </FooterToolbar>
       )}
       <CreateForm
@@ -195,12 +205,12 @@ const UserRelateList: React.FC<UserRelateListProps> = (props) => {
         handleCreateModalVisible={handleCreateModalVisible}
         tableActionRef={actionRef}
       />
-      {updateFormValues && Object.keys(updateFormValues).length ? (
+      {formValues && Object.keys(formValues).length ? (
         <UpdateForm
           updateModalVisible={updateModalVisible}
           handleUpdateModalVisible={handleUpdateModalVisible}
-          values={updateFormValues}
-          onCancel={() => setUpdateFormValues({})}
+          values={formValues}
+          onCancel={() => setFormValues({})}
           tableActionRef={actionRef}
         />
       ) : null}
@@ -210,7 +220,6 @@ const UserRelateList: React.FC<UserRelateListProps> = (props) => {
         handleBatchAddUserRelate={handleBatchAddUserRelate}
         values={values}
       />
-
     </Drawer>
   );
 };

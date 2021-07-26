@@ -1,24 +1,29 @@
-import {ExclamationCircleOutlined, PlusOutlined} from '@ant-design/icons';
-import {Button, message, Input, Divider, Modal, Popconfirm} from 'antd';
+import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { Button, message, Input, Divider, Modal, Popconfirm } from 'antd';
 import React, { useState, useRef } from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
-import { batchDeleteDepartment, deleteDepartment, getDepartmentById, getDepartmentTree } from '@/services/department/department';
+import {
+  batchDeleteDepartment,
+  deleteDepartment,
+  getDepartmentById,
+  getDepartmentTree,
+} from '@/services/department/department';
 import type { DepartmentVO } from '@/services/department/typings';
 import type { DepartmentForm } from '@/services/department/typings';
-import type { UserVO } from "@/services/user/typings";
-import UserRelateList from "@/pages/System/UserRelateList";
-import type { PageParams } from "@/services/common/typings";
-import type { SortOrder } from "antd/lib/table/interface";
-import { getPageParams, getSortOrder } from "@/utils/common";
-import {batchUpdateUserDepartment, getUserPageByDepartmentId} from "@/services/user/user";
+import type { UserVO } from '@/services/user/typings';
+import UserRelateList from '@/pages/System/UserRelateList';
+import type { PageParams } from '@/services/common/typings';
+import type { SortOrder } from 'antd/lib/table/interface';
+import { getPageParams, getSortOrder } from '@/utils/common';
+import { batchUpdateUserDepartment, getUserPageByDepartmentId } from '@/services/user/user';
 
 const DepartmentList: React.FC = () => {
   const actionRef = useRef<ActionType>();
-  const [updateFormValues, setUpdateFormValues] = useState<DepartmentVO | DepartmentForm>({});
+  const [formValues, setFormValues] = useState<DepartmentVO | DepartmentForm>({});
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [userDepartmentListVisible, handleUserDepartmentListVisible] = useState<boolean>(false);
@@ -31,7 +36,7 @@ const DepartmentList: React.FC = () => {
   const handleDelete = () => {
     Modal.confirm({
       title: '确认',
-      icon: <ExclamationCircleOutlined/>,
+      icon: <ExclamationCircleOutlined />,
       content: '确定批量删除勾选中的部门吗',
       okText: '确认',
       cancelText: '取消',
@@ -64,7 +69,7 @@ const DepartmentList: React.FC = () => {
       const userIds = selectedUserRoleRows.map((user) => user.id);
       await batchUpdateUserDepartment({
         userIds,
-        departmentId: updateFormValues.id,
+        departmentId: formValues.id,
       });
       hide();
       message.success('添加成功');
@@ -75,7 +80,7 @@ const DepartmentList: React.FC = () => {
       message.error('添加失败，请重试');
       return false;
     }
-  }
+  };
 
   /**
    * 取消用户部门关联
@@ -85,14 +90,14 @@ const DepartmentList: React.FC = () => {
     if (record && record.id) {
       await batchUpdateUserDepartment({
         userIds: [record.id],
-        departmentId: undefined
+        departmentId: undefined,
       });
       message.success('取消关联成功！');
       userDepartmentActionRef.current?.reloadAndRest?.();
     } else {
       message.warn('没有选中有效的部门');
     }
-  }
+  };
 
   /**
    * 批量取消用户部门关联
@@ -101,7 +106,7 @@ const DepartmentList: React.FC = () => {
   const handleBatchDeleteUserDepartment = (selectedUserDepartmentRows: UserVO[]) => {
     Modal.confirm({
       title: '确认',
-      icon: <ExclamationCircleOutlined/>,
+      icon: <ExclamationCircleOutlined />,
       content: '确定批量取消勾选中的用户与部门的关联关系吗？',
       okText: '确认',
       cancelText: '取消',
@@ -111,7 +116,7 @@ const DepartmentList: React.FC = () => {
         try {
           await batchUpdateUserDepartment({
             userIds: selectedUserDepartmentRows.map((selectedRow) => selectedRow.id) || [],
-            departmentId: undefined
+            departmentId: undefined,
           });
           hide();
           message.success('取消关联成功，即将刷新');
@@ -192,7 +197,7 @@ const DepartmentList: React.FC = () => {
             onClick={async () => {
               if (record && record.id) {
                 const { data } = await getDepartmentById(record.id);
-                setUpdateFormValues(data || {});
+                setFormValues(data || {});
                 handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到部门信息（id:${record.id}）`);
               } else {
@@ -206,7 +211,7 @@ const DepartmentList: React.FC = () => {
           <a
             onClick={async () => {
               if (record && record.id) {
-                setUpdateFormValues(record);
+                setFormValues(record);
                 handleUserDepartmentListVisible(true);
                 // message.error(res.message || `没有获取到部门信息（id:${record.id}）`);
               } else {
@@ -284,32 +289,37 @@ const DepartmentList: React.FC = () => {
         handleCreateModalVisible={handleCreateModalVisible}
         tableActionRef={actionRef}
       />
-      {updateFormValues && Object.keys(updateFormValues).length ? (
+      {formValues && Object.keys(formValues).length ? (
         <UpdateForm
           updateModalVisible={updateModalVisible}
           handleUpdateModalVisible={handleUpdateModalVisible}
-          values={updateFormValues}
-          onCancel={() => setUpdateFormValues({})}
+          values={formValues}
+          onCancel={() => setFormValues({})}
           tableActionRef={actionRef}
         />
       ) : null}
-      {updateFormValues && Object.keys(updateFormValues).length ? (
+      {formValues && Object.keys(formValues).length ? (
         <UserRelateList
           userRelateListVisible={userDepartmentListVisible}
           handleUserRelateListVisible={handleUserDepartmentListVisible}
           userRelateActionRef={userDepartmentActionRef}
           onCancel={() => {
-            setUpdateFormValues({});
+            setFormValues({});
             handleUserDepartmentListVisible(false);
           }}
           handleBatchAddUserRelate={handleBatchAddUserDepartment}
           handleDeleteUserRelate={handleDeleteUserDepartment}
           handleBatchDeleteUserRelate={handleBatchDeleteUserDepartment}
-          queryList={async (params: PageParams, sorter: Record<string, SortOrder>) => (await getUserPageByDepartmentId(getPageParams(params), updateFormValues.id, getSortOrder(sorter)))}
-          values={updateFormValues}
+          queryList={async (params: PageParams, sorter: Record<string, SortOrder>) =>
+            await getUserPageByDepartmentId(
+              getPageParams(params),
+              formValues.id,
+              getSortOrder(sorter),
+            )
+          }
+          values={formValues}
         />
       ) : null}
-
     </PageContainer>
   );
 };

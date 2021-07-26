@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
-import {ExclamationCircleOutlined, PlusOutlined} from '@ant-design/icons';
-import {Button, message, Input, Popconfirm, Divider, Modal} from 'antd';
+import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { Button, message, Input, Popconfirm, Divider, Modal } from 'antd';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
@@ -10,17 +10,18 @@ import {
   getRegionById,
   batchDeleteRegion,
   deleteRegion,
-  getRegionRootPage, getRegionChildrenById
+  getRegionRootPage,
+  getRegionChildrenById,
 } from '@/services/region/region';
 import type { RegionVO } from '@/services/region/typings';
 import type { RegionForm } from '@/services/region/typings';
-import {getPageParams, getSortOrder} from "@/utils/common";
-import type {DictionaryVO} from "@/services/dictionary/typings";
+import { getPageParams, getSortOrder } from '@/utils/common';
+import type { DictionaryVO } from '@/services/dictionary/typings';
 
 const RegionList: React.FC = () => {
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-  const [updateFormValues, setUpdateFormValues] = useState<RegionVO | RegionForm>({});
+  const [formValues, setFormValues] = useState<RegionVO | RegionForm>({});
   const actionRef = useRef<ActionType>();
   const [regionData, setRegionData] = useState<RegionVO[]>([]);
   const [selectedRowsState, setSelectedRows] = useState<RegionVO[]>([]);
@@ -119,7 +120,7 @@ const RegionList: React.FC = () => {
             onClick={async () => {
               if (record && record.id) {
                 const { data } = await getRegionById(record.id);
-                setUpdateFormValues(data || {});
+                setFormValues(data || {});
                 handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到资源信息（id:${record.id}）`);
               } else {
@@ -155,8 +156,12 @@ const RegionList: React.FC = () => {
     },
   ];
 
-  const updateRegionData = (list: DictionaryVO[], key: number | undefined, children: DictionaryVO[]): DictionaryVO[] => {
-    return list.map(node => {
+  const updateRegionData = (
+    list: DictionaryVO[],
+    key: number | undefined,
+    children: DictionaryVO[],
+  ): DictionaryVO[] => {
+    return list.map((node) => {
       if (node.id === key) {
         if (children && children.length > 0) {
           return {
@@ -166,7 +171,7 @@ const RegionList: React.FC = () => {
         }
         return {
           ...node,
-          children: undefined
+          children: undefined,
         };
       }
       if (node.children) {
@@ -177,16 +182,22 @@ const RegionList: React.FC = () => {
       }
       return node;
     });
-  }
+  };
 
   const onLoadRegionChildren = async (expanded: boolean, record: DictionaryVO) => {
     if (expanded && record && record.id) {
       const { data } = await getRegionChildrenById(record.id);
       if (data) {
-        setRegionData(origin => updateRegionData(origin, record.id, data.map(item => ({ ...item, children: item.hasChildren ? [] : undefined }))));
+        setRegionData((origin) =>
+          updateRegionData(
+            origin,
+            record.id,
+            data.map((item) => ({ ...item, children: item.hasChildren ? [] : undefined })),
+          ),
+        );
       }
     }
-  }
+  };
 
   return (
     <PageContainer>
@@ -205,7 +216,14 @@ const RegionList: React.FC = () => {
         onExpand={onLoadRegionChildren}
         request={async (params, sort) => {
           const { data } = await getRegionRootPage(getPageParams(params), getSortOrder(sort));
-          setRegionData(data && data.records ? data.records.map(item => ({ ...item, children: item.hasChildren ? [] : undefined })) : []);
+          setRegionData(
+            data && data.records
+              ? data.records.map((item) => ({
+                  ...item,
+                  children: item.hasChildren ? [] : undefined,
+                }))
+              : [],
+          );
           return {
             total: data ? data.total : 0,
           };
@@ -232,16 +250,15 @@ const RegionList: React.FC = () => {
         handleCreateModalVisible={handleCreateModalVisible}
         tableActionRef={actionRef}
       />
-      {updateFormValues && Object.keys(updateFormValues).length ? (
+      {formValues && Object.keys(formValues).length ? (
         <UpdateForm
           updateModalVisible={updateModalVisible}
           handleUpdateModalVisible={handleUpdateModalVisible}
-          values={updateFormValues}
-          onCancel={() => setUpdateFormValues({})}
+          values={formValues}
+          onCancel={() => setFormValues({})}
           tableActionRef={actionRef}
         />
       ) : null}
-
     </PageContainer>
   );
 };

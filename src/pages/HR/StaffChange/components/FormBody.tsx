@@ -5,6 +5,7 @@ import { Button, Col, Input, Row } from 'antd';
 import {
   ProFormDatePicker,
   ProFormSelect,
+  ProFormSwitch,
   ProFormText,
   ProFormTextArea,
 } from '@ant-design/pro-form';
@@ -16,13 +17,14 @@ import { useOptions } from '@/utils/options';
 import StaffSelect from '@/components/StaffSelect';
 
 interface FormProps {
+  isView?: boolean;
   isEdit?: boolean;
   staffId?: number;
   formRef?: MutableRefObject<FormInstance | any>;
 }
 
 const FormBody: React.FC<FormProps> = (props) => {
-  const { isEdit, staffId, formRef } = props;
+  const { isView, isEdit, staffId, formRef } = props;
 
   const [staffSelectVisible, handleStaffSelectVisible] = useState<boolean>(false);
 
@@ -41,16 +43,18 @@ const FormBody: React.FC<FormProps> = (props) => {
   return (
     <>
       <ProFormText name="id" label="调动记录id" hidden={true} />
+      <ProFormText name="staffId" label="员工id" hidden={true} />
+      <ProFormSwitch name="executed" label="是否已执行" hidden={true} />
       <Row gutter={24}>
-        <ProFormText name="staffId" label="员工id" hidden={true} />
         <Col xl={12} lg={12} md={24}>
-          {staffId ? (
+          {staffId || isView ? (
             <ProFormText
               width="md"
               name="staffCode"
               label="员工编号"
               placeholder="员工编号"
               rules={[{ required: true, message: '不是有效的员工' }]}
+              readonly={isView}
               disabled
             />
           ) : (
@@ -80,6 +84,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             name="staffName"
             label="员工姓名"
             placeholder="员工姓名"
+            readonly={isView}
             disabled
           />
         </Col>
@@ -89,6 +94,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             name="preDepId"
             label="变更前部门"
             options={departmentList.map((item) => ({ value: item.id || '', label: item.name }))}
+            readonly={isView}
             disabled
           />
         </Col>
@@ -102,11 +108,12 @@ const FormBody: React.FC<FormProps> = (props) => {
               treeData={departmentTree}
               style={{ width: 328 }}
               placeholder="请选择部门"
+              readonly={isView}
             />
           </ProFormItem>
         </Col>
         <Col xl={12} lg={12} md={24}>
-          <ProFormText width="md" name="preDuty" label="变更前职务" disabled />
+          <ProFormText width="md" name="preDuty" label="变更前职务" readonly={isView} disabled />
         </Col>
         <Col xl={12} lg={12} md={24}>
           <ProFormSelect
@@ -115,10 +122,11 @@ const FormBody: React.FC<FormProps> = (props) => {
             label="变更后职务"
             rules={[{ required: false, message: '请选择职务' }]}
             options={dutyOptions}
+            readonly={isView}
           />
         </Col>
         <Col xl={12} lg={12} md={24}>
-          <ProFormText width="md" name="prePost" label="变更前岗位" disabled />
+          <ProFormText width="md" name="prePost" label="变更前岗位" readonly={isView} disabled />
         </Col>
         <Col xl={12} lg={12} md={24}>
           <ProFormSelect
@@ -127,10 +135,17 @@ const FormBody: React.FC<FormProps> = (props) => {
             label="变更后岗位"
             rules={[{ required: true, message: '请选择岗位' }]}
             options={postOptions}
+            readonly={isView}
           />
         </Col>
         <Col xl={12} lg={12} md={24}>
-          <ProFormText width="md" name="prePostType" label="变更前岗位类型" disabled />
+          <ProFormText
+            width="md"
+            name="prePostType"
+            label="变更前岗位类型"
+            readonly={isView}
+            disabled
+          />
         </Col>
         <Col xl={12} lg={12} md={24}>
           <ProFormSelect
@@ -139,6 +154,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             label="变更后岗位类型"
             rules={[{ required: true, message: '请选择岗位类型' }]}
             options={postTypeOptions}
+            readonly={isView}
           />
         </Col>
         <Col xl={12} lg={12} md={24}>
@@ -147,6 +163,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             name="prePostLevel"
             label="变更前岗位等级"
             options={postLevelOptions}
+            readonly={isView}
             disabled
           />
         </Col>
@@ -157,6 +174,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             label="变更后岗位等级"
             rules={[{ required: true, message: '请选择岗位等级' }]}
             options={postLevelOptions}
+            readonly={isView}
           />
         </Col>
         <Col xl={12} lg={12} md={24}>
@@ -166,6 +184,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             label="生效日期"
             tooltip="生效日期为该员工公布组织架构变化（或资格等级）的日期"
             rules={[{ required: true, message: '请选择生效日期' }]}
+            readonly={isView}
           />
         </Col>
         <Col xl={12} lg={12} md={24}>
@@ -175,10 +194,11 @@ const FormBody: React.FC<FormProps> = (props) => {
             label="变更日期"
             tooltip="变更日期为到达这个时间后，将会变更为本次的修改值"
             rules={[{ required: true, message: '请选择变更日期' }]}
+            readonly={isView}
           />
         </Col>
         <Col xl={24} lg={24} md={24}>
-          <ProFormTextArea name="remarks" label="备注" />
+          <ProFormTextArea name="remarks" label="备注" readonly={isView} />
         </Col>
       </Row>
 

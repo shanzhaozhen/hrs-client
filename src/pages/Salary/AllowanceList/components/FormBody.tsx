@@ -32,7 +32,7 @@ const FormBody: React.FC<FormProps> = (props) => {
       <ProFormText name="id" label="津贴数据id" hidden={true} />
       <ProFormText name="staffId" label="员工id" hidden={true} />
       <Row gutter={24}>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={8} lg={12} md={24}>
           {isView ? (
             <ProFormText
               width="md"
@@ -49,7 +49,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                 <ProFormItem
                   name="staffCode"
                   rules={[{ required: true, message: '请选择员工' }]}
-                  style={{ width: '218px' }}
+                  style={{ width: '130px' }}
                 >
                   <Input placeholder="请选择员工" name="staffCode" disabled />
                 </ProFormItem>
@@ -64,7 +64,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             </ProFormItem>
           )}
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={8} lg={12} md={24}>
           <ProFormText
             width="md"
             name="staffName"
@@ -75,7 +75,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             disabled
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={8} lg={12} md={24}>
           <ProFormSelect
             width="md"
             name="depId"

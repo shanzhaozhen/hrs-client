@@ -9,17 +9,17 @@ import UpdateForm from './components/UpdateForm';
 import { batchDeleteUser, deleteUser, getUserById, getUserPage } from '@/services/user/user';
 import type { UserVO } from '@/services/user/typings';
 import type { UserForm } from '@/services/user/typings';
-import {getSortOrder, tableFilter} from "@/utils/common";
-import {useDepartmentList} from "@/utils/department";
+import { getSortOrder, tableFilter } from '@/utils/common';
+import { useDepartmentList } from '@/utils/department';
 
 const UserList: React.FC = () => {
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-  const [updateFormValues, setUpdateFormValues] = useState<UserForm>({});
+  const [formValues, setFormValues] = useState<UserForm>({});
   const actionRef = useRef<ActionType>();
   const [selectedRowsState, setSelectedRows] = useState<UserVO[]>([]);
 
-  const departmentList= useDepartmentList();
+  const departmentList = useDepartmentList();
 
   /**
    *  删除用户
@@ -98,7 +98,7 @@ const UserList: React.FC = () => {
       dataIndex: 'depId',
       hideInSearch: true,
       valueType: 'select',
-      renderText: (_, record) => (tableFilter(record.depId, departmentList, '未分配'))
+      renderText: (_, record) => tableFilter(record.depId, departmentList, '未分配'),
     },
     {
       title: '性别',
@@ -197,7 +197,7 @@ const UserList: React.FC = () => {
             onClick={async () => {
               if (record && record.id) {
                 const { data } = await getUserById(record.id);
-                setUpdateFormValues(data || {});
+                setFormValues(data || {});
                 handleUpdateModalVisible(true);
                 // message.error(res.message || `没有获取到用户信息（id:${record.id}）`);
               } else {
@@ -275,16 +275,15 @@ const UserList: React.FC = () => {
         handleCreateModalVisible={handleCreateModalVisible}
         tableActionRef={actionRef}
       />
-      {updateFormValues && Object.keys(updateFormValues).length ? (
+      {formValues && Object.keys(formValues).length ? (
         <UpdateForm
           updateModalVisible={updateModalVisible}
           handleUpdateModalVisible={handleUpdateModalVisible}
-          values={updateFormValues}
-          onCancel={() => setUpdateFormValues({})}
+          values={formValues}
+          onCancel={() => setFormValues({})}
           tableActionRef={actionRef}
         />
       ) : null}
-
     </PageContainer>
   );
 };
