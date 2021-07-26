@@ -37,7 +37,7 @@ export type SalarySettingForm = {
   safetyAllowanceB?: number;
   /** 安全岗岗位津贴C */
   safetyAllowanceC?: number;
-  /** 独生子女津贴标准（元/天） */
+  /** 独生子女津贴标准（元/月） */
   oneChildAllowance?: number;
   /** 高温津贴开始生效月份 */
   hotWeatherStartMonth?: number;
@@ -108,7 +108,7 @@ export type SalarySettingVO = {
   safetyAllowanceB?: number;
   /** 安全岗岗位津贴C */
   safetyAllowanceC?: number;
-  /** 独生子女津贴标准（元/天） */
+  /** 独生子女津贴标准（元/月） */
   oneChildAllowance?: number;
   /** 高温津贴开始生效月份 */
   hotWeatherStartMonth?: number;

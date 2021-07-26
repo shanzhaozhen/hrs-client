@@ -251,7 +251,7 @@ const SalaryStaffList: React.FC = () => {
         }}
         description="导入员工薪资"
         uploadProps={{
-          action: '/hrs-api/salary-change/import',
+          action: '/hrs-api/salary-staff/import',
           headers: {
             Authorization: localStorage.getItem('ACCESS_TOKEN') || '',
           },

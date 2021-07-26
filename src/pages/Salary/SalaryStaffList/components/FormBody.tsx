@@ -105,6 +105,15 @@ const FormBody: React.FC<FormProps> = (props) => {
           />
         </Col>
         <Col xl={12} lg={12} md={24}>
+          <ProFormDigit
+            width="md"
+            name="accumulationFund"
+            label="公积金基数"
+            rules={[{ required: true, message: '请输入公积金基数' }]}
+            readonly={isView}
+          />
+        </Col>
+        <Col xl={12} lg={12} md={24}>
           <ProFormSwitch
             width="md"
             name="haveOneChildAllowance"
@@ -121,7 +130,6 @@ const FormBody: React.FC<FormProps> = (props) => {
             name="safetyGrade"
             label="安全津贴档次"
             rules={[{ required: true, message: '请选择安全津贴档次' }]}
-            initialValue="不享有"
             options={[
               { label: 'A', value: 'A' },
               { label: 'B', value: 'B' },
@@ -137,7 +145,6 @@ const FormBody: React.FC<FormProps> = (props) => {
             name="hotWeatherGrade"
             label="高温津贴档次"
             rules={[{ required: true, message: '请选择高温津贴档次' }]}
-            initialValue="不享有"
             options={[
               { label: 'A', value: 'A' },
               { label: 'B', value: 'B' },

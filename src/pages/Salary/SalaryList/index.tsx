@@ -29,7 +29,7 @@ import {
   getSalaryPage,
 } from '@/services/salary/salary';
 import ImportModal from '@/components/ImportModal';
-import { ModalForm, ProFormDatePicker, ProFormSwitch } from '@ant-design/pro-form';
+import { ModalForm, ProFormDatePicker, ProFormSwitch, ProFormText } from '@ant-design/pro-form';
 
 export const onFormValuesChange = (changedValues: any, allValues: any, formRef: any) => {
   if (changedValues.hasOwnProperty('salarySetting')) {
@@ -398,8 +398,6 @@ const SalaryList: React.FC = () => {
         }}
       />
 
-      <Modal></Modal>
-
       <ModalForm
         title="薪资生成"
         width={360}
@@ -420,6 +418,12 @@ const SalaryList: React.FC = () => {
           label="请选择需要生成的月份"
           name="month"
           rules={[{ required: true, message: '请选择需要生成的月份' }]}
+        />
+        <FormTreeSelect treeData={departmentTree} placeholder="请选择需要生成的部门" />
+        <ProFormText
+          label="请选择需要生成的员工编号"
+          name="month"
+          placeholder="请选择需要生成的员工编号"
         />
       </ModalForm>
 

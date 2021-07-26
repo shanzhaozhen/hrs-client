@@ -156,7 +156,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                     width="sm"
                     name="post"
                     label="岗位"
-                    rules={[{ required: false, message: '请选择岗位' }]}
+                    rules={[{ required: true, message: '请选择岗位' }]}
                     options={postOptions}
                     readonly={isView}
                     disabled={isEdit}
@@ -167,7 +167,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                     width="sm"
                     name="postType"
                     label="岗位类型"
-                    rules={[{ required: false, message: '请选择岗位类型' }]}
+                    rules={[{ required: true, message: '请选择岗位类型' }]}
                     options={postTypeOptions}
                     readonly={isView}
                     disabled={isEdit}
@@ -178,7 +178,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                     width="sm"
                     name="postLevel"
                     label="岗位等级"
-                    rules={[{ required: false, message: '请选择岗位等级' }]}
+                    rules={[{ required: true, message: '请选择岗位等级' }]}
                     options={postLevelOptions}
                     readonly={isView}
                     disabled={isEdit}
@@ -189,7 +189,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                     width="sm"
                     name="companyState"
                     label="在司状态"
-                    rules={[{ required: false, message: '请输入在司状态' }]}
+                    rules={[{ required: true, message: '请输入在司状态' }]}
                     options={companyStateOptions}
                     readonly={isView}
                   />
@@ -199,7 +199,16 @@ const FormBody: React.FC<FormProps> = (props) => {
                     width="sm"
                     name="entryDate"
                     label="入职日期"
-                    rules={[{ required: false, message: '请选择入职日期' }]}
+                    rules={[{ required: true, message: '请选择入职日期' }]}
+                    readonly={isView}
+                  />
+                </Col>
+                <Col xl={12} lg={24} md={24}>
+                  <ProFormDatePicker
+                    width="sm"
+                    name="departureDate"
+                    label="离职日期"
+                    rules={[{ required: false, message: '请选择离职日期' }]}
                     readonly={isView}
                   />
                 </Col>
@@ -208,6 +217,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                     width="sm"
                     name="socialSecurityNumber"
                     label="社保号"
+                    rules={[{ required: true, message: '请选择入职日期' }]}
                     placeholder="请输入社保号"
                     readonly={isView}
                   />

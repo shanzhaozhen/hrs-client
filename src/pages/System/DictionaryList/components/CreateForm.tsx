@@ -6,7 +6,7 @@ import type { DictionaryForm } from '@/services/dictionary/typings';
 import FormBody from '@/pages/System/DictionaryList/components/FormBody';
 import { ModalForm } from '@ant-design/pro-form';
 import type { ActionType } from '@ant-design/pro-table';
-import {DictionaryVO} from "@/services/dictionary/typings";
+import type { DictionaryVO } from '@/services/dictionary/typings';
 
 interface CreateFormProps {
   createModalVisible: boolean;

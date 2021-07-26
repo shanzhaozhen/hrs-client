@@ -1,16 +1,22 @@
-import React, {useRef, useState} from 'react';
+import React, { useRef, useState } from 'react';
 import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Divider, Input, message, Modal, Popconfirm } from 'antd';
+import { Button, Divider, Input, message, Modal, Popconfirm, Tag } from 'antd';
 import { FooterToolbar } from '@ant-design/pro-layout';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import CreateForm from './CreateForm';
 import UpdateForm from './UpdateForm';
-import { getStaffChangePage, getStaffChangeById, deleteStaffChange, batchDeleteStaffChange, runChange } from '@/services/staff-change/staff-change';
+import {
+  getStaffChangePage,
+  getStaffChangeById,
+  deleteStaffChange,
+  batchDeleteStaffChange,
+  runChange,
+} from '@/services/staff-change/staff-change';
 import type { StaffChangeVO } from '@/services/staff-change/typings';
-import {getPageParams, getSortOrder, tableFilter} from "@/utils/common";
-import {useDepartmentList, useDepartmentTree} from "@/utils/department";
-import FormTreeSelect from "@/components/FormTreeSelect";
+import { getPageParams, getSortOrder, tableFilter } from '@/utils/common';
+import { useDepartmentList, useDepartmentTree } from '@/utils/department';
+import FormTreeSelect from '@/components/FormTreeSelect';
 
 interface ListBodyProps {
   staffId?: number;
@@ -76,11 +82,15 @@ const StaffChangeList: React.FC<ListBodyProps> = (props) => {
         if (record.preDepId === record.postDepId) {
           return tableFilter(record.preDepId, departmentList, '未分配');
         }
-        return ''.concat(tableFilter(record.preDepId, departmentList, '未分配'), '=>', tableFilter(record.preDepId, departmentList, '未分配'));
+        return ''.concat(
+          tableFilter(record.preDepId, departmentList, '未分配'),
+          '=>',
+          tableFilter(record.preDepId, departmentList, '未分配'),
+        );
       },
       renderFormItem: () => {
-        return <FormTreeSelect treeData={departmentTree} placeholder="请选择部门" />
-      }
+        return <FormTreeSelect treeData={departmentTree} placeholder="请选择部门" />;
+      },
     },
     {
       title: '员工编号',
@@ -100,29 +110,45 @@ const StaffChangeList: React.FC<ListBodyProps> = (props) => {
       title: '职务',
       dataIndex: 'duty',
       valueType: 'text',
+      align: 'center',
       hideInSearch: true,
-      renderText: (_, record) => (record.preDuty === record.postDuty ? record.preDuty : ''.concat(record.preDuty || '(无)', '=>', record.postDuty || '(无)'))
+      renderText: (_, record) =>
+        record.preDuty === record.postDuty
+          ? `${record.preDuty}（不变）`
+          : ''.concat(record.preDuty || '(无)', '=>', record.postDuty || '(无)'),
     },
     {
       title: '岗位',
       dataIndex: 'prePost',
       valueType: 'text',
+      align: 'center',
       hideInSearch: true,
-      renderText: (_, record) => (record.prePost === record.postPost ? record.postPost : ''.concat(record.prePost || '(无)', '=>', record.postPost || '(无)'))
+      renderText: (_, record) =>
+        record.prePost === record.postPost
+          ? `${record.postPost}（不变）`
+          : ''.concat(record.prePost || '(无)', '=>', record.postPost || '(无)'),
     },
     {
       title: '岗位类型',
       dataIndex: 'postType',
       valueType: 'text',
+      align: 'center',
       hideInSearch: true,
-      renderText: (_, record) => (record.prePostType === record.postPostType ? record.postPostType : ''.concat(record.prePostType || '(无)', '=>', record.postPostType || '(无)'))
+      renderText: (_, record) =>
+        record.prePostType === record.postPostType
+          ? `${record.postPostType}（不变）`
+          : ''.concat(record.prePostType || '(无)', '=>', record.postPostType || '(无)'),
     },
     {
       title: '岗位等级',
       dataIndex: 'postLevel',
       valueType: 'text',
+      align: 'center',
       hideInSearch: true,
-      renderText: (_, record) => (record.prePostLevel === record.postPostLevel ? record.postPostLevel : ''.concat(record.prePostLevel || '(无)', '=>', record.postPostLevel || '(无)'))
+      renderText: (_, record) =>
+        record.prePostLevel === record.postPostLevel
+          ? `${record.postPostLevel}（不变）`
+          : ''.concat(record.prePostLevel || '(无)', '=>', record.postPostLevel || '(无)'),
     },
     {
       title: '生效日期',
@@ -135,8 +161,10 @@ const StaffChangeList: React.FC<ListBodyProps> = (props) => {
       title: '是否已执行',
       dataIndex: 'executed',
       valueType: 'text',
+      align: 'center',
       hideInSearch: true,
-      render: (_, { executed }) => (executed ? '是' : '否'),
+      render: (_, { executed }) =>
+        executed ? <Tag color="success">是</Tag> : <Tag color="default">否</Tag>,
     },
     {
       title: '创建时间',
@@ -167,12 +195,12 @@ const StaffChangeList: React.FC<ListBodyProps> = (props) => {
                   const hide = message.loading('正在执行');
                   await runChange(staffChangeVO?.id);
                   hide();
-                  message.success('调动执行成功！')
+                  message.success('调动执行成功！');
                   actionRef.current?.reloadAndRest?.();
                 } else {
                   message.warn('没有选中有效的调动记录');
                 }
-              }
+              };
 
               Modal.confirm({
                 title: '确认',
@@ -184,18 +212,18 @@ const StaffChangeList: React.FC<ListBodyProps> = (props) => {
                   if (record.executed) {
                     Modal.confirm({
                       title: '确认',
-                      icon: <ExclamationCircleOutlined/>,
+                      icon: <ExclamationCircleOutlined />,
                       content: '该任务已被执行，是否继续执行？',
                       okText: '确认',
                       cancelText: '取消',
                       onOk: async () => {
                         await runTask(record);
-                      }
+                      },
                     });
                   } else {
                     await runTask(record);
                   }
-                }
+                },
               });
             }}
           >
@@ -253,7 +281,11 @@ const StaffChangeList: React.FC<ListBodyProps> = (props) => {
           </Button>,
         ]}
         request={async (params, sorter) => {
-          const { data } = await getStaffChangePage(getPageParams(params), staffId, getSortOrder(sorter));
+          const { data } = await getStaffChangePage(
+            getPageParams(params),
+            staffId,
+            getSortOrder(sorter),
+          );
           return {
             // success 请返回 true，
             // 不然 table 会停止解析数据，即使有数据

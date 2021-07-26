@@ -10,6 +10,7 @@ import {
   getSalarySettingPage,
 } from '@/services/salary-setting/salary-setting';
 import ViewForm from '@/pages/Salary/SalarySetting/components/ViewForm';
+import { monthOptions } from '@/utils/options';
 
 interface SalarySettingListProps {
   actionRef: MutableRefObject<ActionType | undefined>;
@@ -123,7 +124,7 @@ const SalarySettingList: React.FC<SalarySettingListProps> = (props) => {
       hideInTable: true,
     },
     {
-      title: '独生子女津贴标准（元/天）',
+      title: '独生子女津贴标准（元/月）',
       dataIndex: 'oneChildAllowance',
       valueType: 'digit',
       sorter: true,
@@ -132,16 +133,18 @@ const SalarySettingList: React.FC<SalarySettingListProps> = (props) => {
     {
       title: '高温津贴开始生效月份',
       dataIndex: 'hotWeatherStartMonth',
-      valueType: 'dateMonth',
+      valueType: 'select',
       sorter: true,
       hideInSearch: true,
+      fieldProps: { options: monthOptions },
     },
     {
       title: '高温津贴结束生效月份',
       dataIndex: 'hotWeatherEndMonth',
-      valueType: 'dateMonth',
+      valueType: 'select',
       sorter: true,
       hideInSearch: true,
+      fieldProps: { options: monthOptions },
     },
     {
       title: '高温津贴A标准',

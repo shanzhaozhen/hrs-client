@@ -11,10 +11,24 @@ export type SalaryChangeForm = {
   prePostSalary?: number;
   /** 变更后岗位工资 */
   postPostSalary?: number;
+  /** 变更前公积金基数 */
+  preAccumulationFund?: number;
+  /** 变更后公积金基数 */
+  postAccumulationFund?: number;
+  /** 变更前是否享有独生子女津贴 */
+  preHaveOneChildAllowance?: boolean;
+  /** 变更后是否享有独生子女津贴 */
+  postHaveOneChildAllowance?: boolean;
+  /** 变更前安全津贴档次 */
+  preSafetyGrade?: string;
+  /** 变更后安全津贴档次 */
+  postSafetyGrade?: string;
+  /** 变更前高温津贴档次 */
+  preHotWeatherGrade?: string;
+  /** 变更后高温津贴档次 */
+  postHotWeatherGrade?: string;
   /** 生效日期 */
   effectiveDate?: string;
-  /** 是否已执行 */
-  executed?: number;
   /** 备注 */
   remarks?: string;
 };
@@ -28,7 +42,7 @@ export type SalaryChangeVO = {
   staffCode?: string;
   /** 员工姓名 */
   staffName?: string;
-  /** 部门id */
+  /** 部门ID */
   depId?: number;
   /** 变更前基础工资 */
   preBasicSalary?: number;
@@ -38,10 +52,28 @@ export type SalaryChangeVO = {
   prePostSalary?: number;
   /** 变更后岗位工资 */
   postPostSalary?: number;
+  /** 变更前公积金基数 */
+  preAccumulationFund?: number;
+  /** 变更后公积金基数 */
+  postAccumulationFund?: number;
+  /** 变更前是否享有独生子女津贴 */
+  preHaveOneChildAllowance?: boolean;
+  /** 变更后是否享有独生子女津贴 */
+  postHaveOneChildAllowance?: boolean;
+  /** 变更前安全津贴档次 */
+  preSafetyGrade?: string;
+  /** 变更后安全津贴档次 */
+  postSafetyGrade?: string;
+  /** 变更前高温津贴档次 */
+  preHotWeatherGrade?: string;
+  /** 变更后高温津贴档次 */
+  postHotWeatherGrade?: string;
   /** 生效日期 */
   effectiveDate?: string;
+  /** 变更日期 */
+  changeDate?: string;
   /** 是否已执行 */
-  executed?: number;
+  executed?: boolean;
   /** 备注 */
   remarks?: string;
   /** 创建人 */

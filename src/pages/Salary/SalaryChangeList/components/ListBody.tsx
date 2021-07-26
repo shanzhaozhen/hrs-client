@@ -1,16 +1,23 @@
 import React, { useRef, useState } from 'react';
 import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Divider, Input, message, Modal, Popconfirm } from 'antd';
+import { Button, Divider, Input, message, Modal, Popconfirm, Tag } from 'antd';
 import { FooterToolbar } from '@ant-design/pro-layout';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import CreateForm from './CreateForm';
 import UpdateForm from './UpdateForm';
-import { getSalaryChangePage, getSalaryChangeById, deleteSalaryChange, batchDeleteSalaryChange, runChange } from '@/services/salary-change/salary-change';
+import {
+  getSalaryChangePage,
+  getSalaryChangeById,
+  deleteSalaryChange,
+  batchDeleteSalaryChange,
+  runChange,
+} from '@/services/salary-change/salary-change';
 import type { SalaryChangeVO } from '@/services/salary-change/typings';
-import {getPageParams, getSortOrder, tableFilter} from "@/utils/common";
-import {useDepartmentList, useDepartmentTree} from "@/utils/department";
-import FormTreeSelect from "@/components/FormTreeSelect";
+import { getPageParams, getSortOrder, tableFilter } from '@/utils/common';
+import { useDepartmentList, useDepartmentTree } from '@/utils/department';
+import FormTreeSelect from '@/components/FormTreeSelect';
+import ViewForm from '@/pages/Salary/SalaryChangeList/components/ViewForm';
 
 interface ListBodyProps {
   staffId?: number;
@@ -21,6 +28,7 @@ const SalaryChangeListBody: React.FC<ListBodyProps> = (props) => {
 
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
+  const [viewModalVisible, handleViewModalVisible] = useState<boolean>(false);
   const [updateFormValues, setUpdateFormValues] = useState<SalaryChangeVO>({});
   const actionRef = useRef<ActionType>();
   const [selectedRowsState, setSelectedRows] = useState<SalaryChangeVO[]>([]);
@@ -72,10 +80,16 @@ const SalaryChangeListBody: React.FC<ListBodyProps> = (props) => {
       dataIndex: 'depId',
       valueType: 'text',
       sorter: true,
-      renderText: (_, record) => (tableFilter(record.depId, departmentList, '未分配')),
+      renderText: (_, record) => tableFilter(record.depId, departmentList, '未分配'),
       renderFormItem: () => {
-        return <FormTreeSelect treeData={departmentTree} placeholder="请选择部门" treeNodeFilterProp="title" />
-      }
+        return (
+          <FormTreeSelect
+            treeData={departmentTree}
+            placeholder="请选择部门"
+            treeNodeFilterProp="title"
+          />
+        );
+      },
     },
     {
       title: '员工编号',
@@ -90,20 +104,71 @@ const SalaryChangeListBody: React.FC<ListBodyProps> = (props) => {
       valueType: 'text',
       sorter: 's.staffName',
       hideInSearch: true,
+      render: (dom, record) => {
+        return (
+          <a
+            onClick={async () => {
+              if (record && record.id) {
+                const { data } = await getSalaryChangeById(record.id);
+                setUpdateFormValues(data || {});
+                handleViewModalVisible(true);
+              } else {
+                message.warn('没有选中有效的调薪记录');
+              }
+            }}
+          >
+            {dom}
+          </a>
+        );
+      },
     },
     {
       title: '基础工资',
       dataIndex: 'preBasicSalary',
       valueType: 'text',
+      align: 'center',
       hideInSearch: true,
-      renderText: (_, record) => (record.preBasicSalary === record.postBasicSalary ? record.preBasicSalary : ''.concat(record.preBasicSalary === undefined ? '（未定）' : (record.preBasicSalary).toString(), '=>', (record.postBasicSalary === undefined ? '（未定）' : (record.postBasicSalary).toString())))
+      renderText: (_, record) =>
+        record.preBasicSalary === record.postBasicSalary
+          ? `${record.preBasicSalary}（不变）`
+          : ''.concat(
+              record.preBasicSalary === undefined ? '（未定）' : record.preBasicSalary.toString(),
+              '=>',
+              record.postBasicSalary === undefined ? '（未定）' : record.postBasicSalary.toString(),
+            ),
     },
     {
       title: '岗位工资',
       dataIndex: 'prePostSalary',
       valueType: 'text',
       hideInSearch: true,
-      renderText: (_, record) => (record.prePostSalary === record.postPostSalary ? record.prePostSalary : ''.concat(record.prePostSalary === undefined ? '（未定）' : (record.prePostSalary).toString(), '=>', (record.postPostSalary === undefined ? '（未定）' : (record.postPostSalary).toString())))
+      renderText: (_, record) =>
+        record.prePostSalary === record.postPostSalary
+          ? `${record.prePostSalary}（不变）`
+          : ''.concat(
+              record.prePostSalary === undefined ? '（未定）' : record.prePostSalary.toString(),
+              '=>',
+              record.postPostSalary === undefined ? '（未定）' : record.postPostSalary.toString(),
+            ),
+    },
+    {
+      title: '公积金基数',
+      dataIndex: 'prePostSalary',
+      valueType: 'text',
+      align: 'center',
+      hideInSearch: true,
+      renderText: (_, record) =>
+        record.preAccumulationFund === record.postAccumulationFund
+          ? `${record.preAccumulationFund}（不变）`
+          : ''.concat(
+              record.preAccumulationFund === undefined
+                ? '（未定）'
+                : record.preAccumulationFund.toString(),
+              '=>',
+              record.postAccumulationFund === undefined
+                ? '（未定）'
+                : record.postAccumulationFund.toString(),
+            ),
     },
     {
       title: '生效日期',
@@ -116,8 +181,10 @@ const SalaryChangeListBody: React.FC<ListBodyProps> = (props) => {
       title: '是否已执行',
       dataIndex: 'executed',
       valueType: 'text',
+      align: 'center',
       hideInSearch: true,
-      render: (_, { executed }) => (executed ? '是' : '否'),
+      render: (_, { executed }) =>
+        executed ? <Tag color="success">是</Tag> : <Tag color="default">否</Tag>,
     },
     {
       title: '创建时间',
@@ -148,12 +215,12 @@ const SalaryChangeListBody: React.FC<ListBodyProps> = (props) => {
                   const hide = message.loading('正在执行');
                   await runChange(salaryChange?.id);
                   hide();
-                  message.success('调动执行成功！')
+                  message.success('调动执行成功！');
                   actionRef.current?.reloadAndRest?.();
                 } else {
                   message.warn('没有选中有效的调薪记录');
                 }
-              }
+              };
 
               Modal.confirm({
                 title: '确认',
@@ -165,18 +232,18 @@ const SalaryChangeListBody: React.FC<ListBodyProps> = (props) => {
                   if (record.executed) {
                     Modal.confirm({
                       title: '确认',
-                      icon: <ExclamationCircleOutlined/>,
+                      icon: <ExclamationCircleOutlined />,
                       content: '该任务已被执行，是否继续执行？',
                       okText: '确认',
                       cancelText: '取消',
                       onOk: async () => {
                         await runTask(record);
-                      }
+                      },
                     });
                   } else {
                     await runTask(record);
                   }
-                }
+                },
               });
             }}
           >
@@ -234,7 +301,11 @@ const SalaryChangeListBody: React.FC<ListBodyProps> = (props) => {
           </Button>,
         ]}
         request={async (params, sorter) => {
-          const { data } = await getSalaryChangePage(getPageParams(params), staffId, getSortOrder(sorter));
+          const { data } = await getSalaryChangePage(
+            getPageParams(params),
+            staffId,
+            getSortOrder(sorter),
+          );
           return {
             // success 请返回 true，
             // 不然 table 会停止解析数据，即使有数据
@@ -260,22 +331,30 @@ const SalaryChangeListBody: React.FC<ListBodyProps> = (props) => {
           <Button onClick={handleDeleteSalaryChange}>批量删除</Button>
         </FooterToolbar>
       )}
+
       <CreateForm
         createModalVisible={createModalVisible}
         handleCreateModalVisible={handleCreateModalVisible}
         tableActionRef={actionRef}
         staffId={staffId}
       />
-      {updateFormValues && Object.keys(updateFormValues).length ? (
-        <UpdateForm
-          updateModalVisible={updateModalVisible}
-          handleUpdateModalVisible={handleUpdateModalVisible}
-          values={updateFormValues}
-          onCancel={() => setUpdateFormValues({})}
-          tableActionRef={actionRef}
-          staffId={staffId}
-        />
-      ) : null}
+
+      <UpdateForm
+        updateModalVisible={updateModalVisible}
+        handleUpdateModalVisible={handleUpdateModalVisible}
+        values={updateFormValues}
+        onCancel={() => setUpdateFormValues({})}
+        tableActionRef={actionRef}
+        staffId={staffId}
+      />
+
+      <ViewForm
+        viewModalVisible={viewModalVisible}
+        handleViewModalVisible={handleViewModalVisible}
+        values={updateFormValues}
+        onCancel={() => setUpdateFormValues({})}
+        staffId={staffId}
+      />
     </>
   );
 };

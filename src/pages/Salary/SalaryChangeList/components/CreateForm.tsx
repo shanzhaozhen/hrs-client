@@ -1,14 +1,14 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import type { FormInstance } from 'antd';
 import { message } from 'antd';
 import { addSalaryChange } from '@/services/salary-change/salary-change';
-import type {SalaryChangeForm, SalaryChangeVO} from '@/services/salary-change/typings';
+import type { SalaryChangeForm, SalaryChangeVO } from '@/services/salary-change/typings';
 import FormBody from '@/pages/Salary/SalaryChangeList/components/FormBody';
 import { ModalForm } from '@ant-design/pro-form';
 import type { ActionType } from '@ant-design/pro-table';
-import {getStaffById} from "@/services/staff/staff";
-import {getSalaryStaffByStaffId} from "@/services/salary-staff/salary-staff";
+import { getStaffById } from '@/services/staff/staff';
+import { getSalaryStaffByStaffId } from '@/services/salary-staff/salary-staff';
 
 interface CreateFormProps {
   createModalVisible: boolean;
@@ -30,20 +30,27 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
           return;
         }
         const { data: salaryStaff } = await getSalaryStaffByStaffId(data.id);
-        setSalaryChangeInitialValues(data ? {
-          ...data,
-          id: undefined,
-          staffId: data.id,
-          staffCode: data.staffCode,
-          staffName: data.staffName,
-          depId: data.depId,
-          preBasicSalary: salaryStaff?.basicSalary,
-          prePostSalary: salaryStaff?.postSalary,
-        } : {});
-      })
+        setSalaryChangeInitialValues(
+          data
+            ? {
+                ...data,
+                id: undefined,
+                staffId: data.id,
+                staffCode: data.staffCode,
+                staffName: data.staffName,
+                depId: data.depId,
+                preBasicSalary: salaryStaff?.basicSalary,
+                prePostSalary: salaryStaff?.postSalary,
+                preAccumulationFund: salaryStaff?.accumulationFund,
+                preHaveOneChildAllowance: salaryStaff?.haveOneChildAllowance,
+                preSafetyGrade: salaryStaff?.safetyGrade,
+                preHotWeatherGrade: salaryStaff?.hotWeatherGrade,
+              }
+            : {},
+        );
+      });
     }
-  }, [])
-
+  }, []);
 
   const formRef = useRef<FormInstance>();
 
@@ -79,7 +86,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
         }}
         onFinish={handleAdd}
       >
-        {!staffId || staffChangeInitialValues && Object.keys(staffChangeInitialValues).length ? (
+        {!staffId || (staffChangeInitialValues && Object.keys(staffChangeInitialValues).length) ? (
           <FormBody staffId={staffId} formRef={formRef} />
         ) : null}
       </ModalForm>

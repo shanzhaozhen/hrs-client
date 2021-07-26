@@ -113,7 +113,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             width="md"
             name="postDuty"
             label="变更后职务"
-            rules={[{ required: true, message: '请选择职务' }]}
+            rules={[{ required: false, message: '请选择职务' }]}
             options={dutyOptions}
           />
         </Col>

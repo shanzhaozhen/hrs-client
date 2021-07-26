@@ -7,63 +7,6 @@ interface FormProps {
 }
 
 const FormBody: React.FC<FormProps> = () => {
-  // const [dictionaryTree, setDictionaryTree] = useState<any[]>([]);
-  //
-  // useEffect(() => {
-  //   getDictionaryRootList()
-  //     .then(res => {
-  //       if (res) {
-  //         setDictionaryTree(res.map(({ id, name, pid }) => ({
-  //           key: id,
-  //           value: id,
-  //           title: name,
-  //           pid,
-  //           isLeaf: false
-  //         })));
-  //       } else {
-  //         setDictionaryTree([]);
-  //       }
-  //     })
-  //     .catch(() => {
-  //       setDictionaryTree([]);
-  //     });
-  // }, []);
-  //
-  // const updateDictionaryTreeData = (list: DataNode[], key: React.Key, children: any[]): DataNode[] => {
-  //   return list.map(node => {
-  //     if (node.key === key) {
-  //       if (children && children.length > 0) {
-  //         return {
-  //           ...node,
-  //           children,
-  //         };
-  //       }
-  //       return {
-  //         ...node,
-  //         isLeaf: true,
-  //       };
-  //     }
-  //     if (node.children) {
-  //       return {
-  //         ...node,
-  //         children: updateDictionaryTreeData(node.children, key, children),
-  //       };
-  //     }
-  //     return node;
-  //   });
-  // }
-  //
-  // const onLoadDictionaryTreeData = async ({ key }: any) => {
-  //   const { data } = await getDictionaryChildrenById(key);
-  //
-  //   setDictionaryTree(origin => updateDictionaryTreeData(origin, key, data.map(({ id, name }) => ({
-  //     key: id,
-  //     value: id,
-  //     title: name,
-  //     isLeaf: false
-  //   }))));
-  // }
-
   return (
     <>
       <ProFormText name="id" label="字典id" hidden={true} />
