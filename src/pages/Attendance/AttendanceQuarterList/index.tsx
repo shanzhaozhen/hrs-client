@@ -322,7 +322,7 @@ const AttendanceQuarterList: React.FC = () => {
             <PlusOutlined /> 新建
           </Button>,
           <Button type="primary" onClick={() => handleFreezeModalVisible(true)}>
-            <KeyOutlined /> 薪资冻结
+            <KeyOutlined /> 季度考勤冻结
           </Button>,
           <Button type="primary" onClick={() => handleImportModalVisible(true)}>
             <ImportOutlined /> 导入
