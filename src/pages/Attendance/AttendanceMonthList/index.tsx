@@ -131,7 +131,7 @@ const AttendanceMonthList: React.FC = () => {
     },
     {
       title: '出勤率',
-      dataIndex: 'month',
+      dataIndex: 'attendanceMonthRate',
       valueType: 'text',
       sorter: true,
       renderText: (_, record) =>

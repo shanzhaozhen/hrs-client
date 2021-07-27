@@ -110,7 +110,7 @@ const StaffList: React.FC = () => {
     },
     {
       title: '员工姓名',
-      dataIndex: 'staffCode',
+      dataIndex: 'staffName',
       valueType: 'text',
       sorter: true,
       hideInSearch: true,

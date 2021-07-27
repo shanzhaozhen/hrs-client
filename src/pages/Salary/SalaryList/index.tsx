@@ -24,12 +24,16 @@ import {
   batchDeleteSalary,
   deleteSalary,
   exportSalary,
+  freezeSalaryByIds,
+  freezeSalaryByMonth,
+  generateSalaryData,
   generateSalaryTemplate,
   getSalaryById,
   getSalaryPage,
 } from '@/services/salary/salary';
 import ImportModal from '@/components/ImportModal';
 import { ModalForm, ProFormDatePicker, ProFormSwitch, ProFormText } from '@ant-design/pro-form';
+import ProFormItem from '@ant-design/pro-form/lib/components/FormItem';
 
 export const onFormValuesChange = (changedValues: any, allValues: any, formRef: any) => {
   if (changedValues.hasOwnProperty('salarySetting')) {
@@ -91,6 +95,37 @@ const SalaryList: React.FC = () => {
     });
   };
 
+  /**
+   * 批量冻结/解冻薪资发放
+   */
+  const handleFreezeSalary = (freeze: boolean) => {
+    Modal.confirm({
+      title: '确认',
+      icon: <ExclamationCircleOutlined />,
+      content: `确定批量${freeze ? '冻结' : '解冻'}勾选中的薪资发放吗`,
+      okText: '确认',
+      cancelText: '取消',
+      onOk: async () => {
+        const hide = message.loading('正在处理');
+        if (!selectedRowsState) return true;
+        try {
+          const { data } = await freezeSalaryByIds({
+            salaryIds: selectedRowsState.map((selectedRow) => selectedRow.id),
+            freeze,
+          });
+          hide();
+          message.success(data);
+          actionRef.current?.reloadAndRest?.();
+          return true;
+        } catch (error) {
+          hide();
+          message.error(`${freeze ? '解冻' : '冻结'}失败`);
+          return false;
+        }
+      },
+    });
+  };
+
   const columns: ProColumns<SalaryVO>[] = [
     {
       title: '关键字',
@@ -124,6 +159,23 @@ const SalaryList: React.FC = () => {
       valueType: 'text',
       sorter: 's.staffCode',
       hideInSearch: true,
+      render: (dom, record) => {
+        return (
+          <a
+            onClick={async () => {
+              if (record && record.id) {
+                const { data } = await getSalaryById(record.id);
+                setFormValues(data || {});
+                handleViewModalVisible(true);
+              } else {
+                message.warn('没有选中有效的薪资发放');
+              }
+            }}
+          >
+            {dom}
+          </a>
+        );
+      },
     },
     {
       title: '员工姓名',
@@ -141,8 +193,14 @@ const SalaryList: React.FC = () => {
     {
       title: '发薪类型',
       dataIndex: 'type',
-      valueType: 'text',
+      valueType: 'select',
       sorter: true,
+      fieldProps: {
+        options: [
+          { value: '工资', label: '工资' },
+          { value: '奖金', label: '奖金' },
+        ],
+      },
     },
     {
       title: '基础工资',
@@ -150,6 +208,7 @@ const SalaryList: React.FC = () => {
       valueType: 'digit',
       align: 'right',
       sorter: true,
+      hideInSearch: true,
     },
     {
       title: '岗位工资',
@@ -157,6 +216,7 @@ const SalaryList: React.FC = () => {
       valueType: 'digit',
       align: 'right',
       sorter: true,
+      hideInSearch: true,
     },
     {
       title: '应发工资',
@@ -164,6 +224,7 @@ const SalaryList: React.FC = () => {
       valueType: 'digit',
       align: 'right',
       sorter: true,
+      hideInSearch: true,
     },
     {
       title: '实发工资',
@@ -171,6 +232,7 @@ const SalaryList: React.FC = () => {
       valueType: 'digit',
       align: 'right',
       sorter: true,
+      hideInSearch: true,
     },
     {
       title: '是否冻结',
@@ -178,7 +240,12 @@ const SalaryList: React.FC = () => {
       valueType: 'text',
       align: 'center',
       sorter: true,
-      hideInSearch: true,
+      fieldProps: {
+        options: [
+          { value: true, label: '是' },
+          { value: false, label: '否' },
+        ],
+      },
       render: (_, record) => (
         <Space>{record.freeze ? <Tag color="green">是</Tag> : <Tag color="red">否</Tag>}</Space>
       ),
@@ -222,27 +289,6 @@ const SalaryList: React.FC = () => {
                 if (record && record.id) {
                   const { data } = await getSalaryById(record.id);
                   setFormValues(data || {});
-                  handleViewModalVisible(true);
-                } else {
-                  message.warn('没有选中有效的薪资发放');
-                }
-              }}
-            >
-              查看
-            </a>
-            <Divider type="vertical" />
-            <a
-              onClick={async () => {
-                if (record && record.id) {
-                  let { data } = await getSalaryById(record.id);
-                  if (data) {
-                    data = {
-                      ...data,
-                      // @ts-ignore
-                      month: [data.startMonth, data.endMonth],
-                    };
-                  }
-                  setFormValues(data || {});
                   handleUpdateModalVisible(true);
                 } else {
                   message.warn('没有选中有效的薪资发放');
@@ -250,6 +296,25 @@ const SalaryList: React.FC = () => {
               }}
             >
               修改
+            </a>
+            <Divider type="vertical" />
+            <a
+              onClick={async () => {
+                if (record && record.id) {
+                  const hide = message.loading('正在处理');
+                  const { data } = await freezeSalaryByIds({
+                    salaryIds: [record.id],
+                    freeze: !record.freeze,
+                  });
+                  hide();
+                  message.success(data);
+                  actionRef.current?.reloadAndRest?.();
+                } else {
+                  message.warn('没有选中有效的薪资');
+                }
+              }}
+            >
+              {record.freeze ? '解冻' : '冻结'}
             </a>
             <Divider type="vertical" />
             <Popconfirm
@@ -333,6 +398,20 @@ const SalaryList: React.FC = () => {
             </div>
           }
         >
+          <Button
+            onClick={() => {
+              handleFreezeSalary(true);
+            }}
+          >
+            批量冻结
+          </Button>
+          <Button
+            onClick={() => {
+              handleFreezeSalary(false);
+            }}
+          >
+            批量解冻
+          </Button>
           <Button onClick={handleDeleteSalary}>批量删除</Button>
         </FooterToolbar>
       )}
@@ -400,10 +479,26 @@ const SalaryList: React.FC = () => {
 
       <ModalForm
         title="薪资生成"
-        width={360}
+        width={480}
         visible={generateModalVisible}
         onVisibleChange={handleGenerateModalVisible}
-        onFinish={async () => handleGenerateModalVisible(false)}
+        onFinish={async (fields) => {
+          const hide = message.loading('正在生成');
+          try {
+            const { data } = await generateSalaryData(fields);
+            hide();
+            message.success({
+              content: `生成成功：${data}`,
+              style: {
+                whiteSpace: 'pre-wrap',
+              },
+            });
+            actionRef.current?.reloadAndRest?.();
+          } catch (error) {
+            hide();
+            message.error('添加失败请重试！');
+          }
+        }}
         modalProps={{
           destroyOnClose: true,
         }}
@@ -416,13 +511,16 @@ const SalaryList: React.FC = () => {
       >
         <ProFormDatePicker.Month
           label="请选择需要生成的月份"
+          width="lg"
           name="month"
           rules={[{ required: true, message: '请选择需要生成的月份' }]}
         />
-        <FormTreeSelect treeData={departmentTree} placeholder="请选择需要生成的部门" />
+        <ProFormItem name="depId" label="请选择需要生成的部门">
+          <FormTreeSelect treeData={departmentTree} placeholder="请选择需要生成的部门" />
+        </ProFormItem>
         <ProFormText
           label="请选择需要生成的员工编号"
-          name="month"
+          name="staffCode"
           placeholder="请选择需要生成的员工编号"
         />
       </ModalForm>
@@ -431,8 +529,26 @@ const SalaryList: React.FC = () => {
         title="薪资冻结"
         width={360}
         visible={freezeModalVisible}
+        initialValues={{ freeze: false }}
         onVisibleChange={handleFreezeModalVisible}
-        onFinish={async () => handleFreezeModalVisible(false)}
+        onFinish={async (fields) => {
+          const hide = message.loading('正在处理');
+          try {
+            const { data } = await freezeSalaryByMonth(fields);
+            hide();
+            message.success({
+              content: data,
+              style: {
+                whiteSpace: 'pre-wrap',
+              },
+            });
+            actionRef.current?.reloadAndRest?.();
+            handleFreezeModalVisible(true);
+          } catch (error) {
+            hide();
+            message.error('添加失败请重试！');
+          }
+        }}
         modalProps={{
           destroyOnClose: true,
         }}

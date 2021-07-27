@@ -82,7 +82,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             disabled
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={8} lg={12} md={24}>
           <ProFormDigit
             width="md"
             name="year"
@@ -91,7 +91,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             readonly={isView}
           />
         </Col>
-        <Col xl={12} lg={12} md={24}>
+        <Col xl={8} lg={12} md={24}>
           <ProFormDigit
             width="md"
             name="quarter"
@@ -129,7 +129,6 @@ const FormBody: React.FC<FormProps> = (props) => {
             tooltip="冻结的作用主要为工资发放自动生成数据时防止再次重新统计月度考勤时使用，冻结后将不会重新生成季度考勤"
             checkedChildren="是"
             unCheckedChildren="否"
-            initialValue={false}
             rules={[{ required: true, message: '请选择是否冻结' }]}
             readonly={isView}
           />

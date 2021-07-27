@@ -134,8 +134,22 @@ const AllowanceList: React.FC = () => {
       sorter: true,
     },
     {
+      title: '就餐补贴',
+      dataIndex: 'mealAllowance',
+      valueType: 'digit',
+      sorter: true,
+      hideInSearch: true,
+    },
+    {
       title: '通讯补贴',
       dataIndex: 'communicationAllowance',
+      valueType: 'digit',
+      sorter: true,
+      hideInSearch: true,
+    },
+    {
+      title: '节日慰问金',
+      dataIndex: 'festivalAllowance',
       valueType: 'digit',
       sorter: true,
       hideInSearch: true,
@@ -146,6 +160,7 @@ const AllowanceList: React.FC = () => {
       valueType: 'digit',
       sorter: true,
       hideInSearch: true,
+      hideInTable: true,
     },
     {
       title: '生日卡',
@@ -153,6 +168,7 @@ const AllowanceList: React.FC = () => {
       valueType: 'digit',
       sorter: true,
       hideInSearch: true,
+      hideInTable: true,
     },
     {
       title: '清凉饮料',
@@ -160,6 +176,7 @@ const AllowanceList: React.FC = () => {
       valueType: 'digit',
       sorter: true,
       hideInSearch: true,
+      hideInTable: true,
     },
     {
       title: '慰问品',
@@ -167,6 +184,7 @@ const AllowanceList: React.FC = () => {
       valueType: 'digit',
       sorter: true,
       hideInSearch: true,
+      hideInTable: true,
     },
     {
       title: '房租',
@@ -174,6 +192,7 @@ const AllowanceList: React.FC = () => {
       valueType: 'digit',
       sorter: true,
       hideInSearch: true,
+      hideInTable: true,
     },
     {
       title: '话费',
@@ -181,6 +200,7 @@ const AllowanceList: React.FC = () => {
       valueType: 'digit',
       sorter: true,
       hideInSearch: true,
+      hideInTable: true,
     },
     {
       title: '备注',

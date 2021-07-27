@@ -1,10 +1,14 @@
 // @ts-ignore
 import { request } from 'umi';
-import type {Orders, Page, PageParams, ResultBody} from "@/services/common/typings";
-import type {SalaryForm, SalaryVO} from "@/services/salary/typings";
+import type { Orders, Page, PageParams, ResultBody } from '@/services/common/typings';
+import type { SalaryForm, SalaryVO } from '@/services/salary/typings';
 
 /** 获取薪资发放（分页） GET /salary/page */
-export async function getSalaryPage(pageParams: PageParams, orders?: Orders | undefined | null, options?: Record<string, any>) {
+export async function getSalaryPage(
+  pageParams: PageParams,
+  orders?: Orders | undefined | null,
+  options?: Record<string, any>,
+) {
   return request<ResultBody<Page<SalaryVO>>>('/hrs-api/salary/page', {
     method: 'GET',
     params: {
@@ -55,9 +59,11 @@ export async function deleteSalary(salaryId: number, options?: Record<string, an
   });
 }
 
-
 /** 批量删除薪资发放接口 DELETE /salary */
-export async function batchDeleteSalary(body: (number | undefined)[], options?: Record<string, any>) {
+export async function batchDeleteSalary(
+  body: (number | undefined)[],
+  options?: Record<string, any>,
+) {
   return request<ResultBody<number[]>>('/hrs-api/salary', {
     method: 'DELETE',
     headers: {
@@ -68,13 +74,55 @@ export async function batchDeleteSalary(body: (number | undefined)[], options?: 
   });
 }
 
+/** 生成薪资发放 GET /salary/generate */
+export async function generateSalaryData(
+  params: Record<string, any>,
+  options?: Record<string, any>,
+) {
+  return request<ResultBody<string>>('/hrs-api/salary/generate', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+
+/** 冻结/解冻薪资编辑 GET /salary/freeze */
+export async function freezeSalaryByIds(
+  params: Record<string, any>,
+  options?: Record<string, any>,
+) {
+  return request<ResultBody<string>>('/hrs-api/salary/freeze', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+
+/** 冻结/解冻薪资编辑 GET /salary/freeze/month */
+export async function freezeSalaryByMonth(
+  params: Record<string, any>,
+  options?: Record<string, any>,
+) {
+  return request<ResultBody<string>>('/hrs-api/salary/freeze/month', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+
 /** 薪资发放导入模板生成 GET /salary/template */
 export async function generateSalaryTemplate(options?: Record<string, any>) {
   return request('/hrs-api/salary/template', {
     method: 'GET',
     responseType: 'blob',
     ...(options || {}),
-    skipErrorHandler: true
+    skipErrorHandler: true,
   });
 }
 

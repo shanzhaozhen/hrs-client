@@ -67,6 +67,60 @@ const FormBody: React.FC<FormProps> = (props) => {
             readonly={viewState}
           />
         </Col>
+        <Col xl={8} lg={12} md={24}>
+          <ProFormDigit
+            width="md"
+            name="endowmentInsuranceLower"
+            label="养老保险基数下限"
+            rules={[{ required: true, message: '请输入养老保险基数下限' }]}
+            readonly={viewState}
+          />
+        </Col>
+        <Col xl={8} lg={12} md={24}>
+          <ProFormDigit
+            width="md"
+            name="endowmentInsuranceUpper"
+            label="养老保险基数上限"
+            rules={[{ required: true, message: '请输入养老保险基数上限' }]}
+            readonly={viewState}
+          />
+        </Col>
+        <Col xl={8} lg={12} md={24}>
+          <ProFormDigit
+            width="md"
+            name="unemploymentInsuranceLower"
+            label="失业保险基数下限"
+            rules={[{ required: true, message: '请输入失业保险基数下限' }]}
+            readonly={viewState}
+          />
+        </Col>
+        <Col xl={8} lg={12} md={24}>
+          <ProFormDigit
+            width="md"
+            name="unemploymentInsuranceUpper"
+            label="失业保险基数上限"
+            rules={[{ required: true, message: '请输入失业保险基数上限' }]}
+            readonly={viewState}
+          />
+        </Col>
+        <Col xl={8} lg={12} md={24}>
+          <ProFormDigit
+            width="md"
+            name="medicalInsuranceLower"
+            label="医疗保险基数下限"
+            rules={[{ required: true, message: '请输入医疗保险基数下限' }]}
+            readonly={viewState}
+          />
+        </Col>
+        <Col xl={8} lg={12} md={24}>
+          <ProFormDigit
+            width="md"
+            name="medicalInsuranceUpper"
+            label="医疗保险基数上限"
+            rules={[{ required: true, message: '请输入医疗保险基数上限' }]}
+            readonly={viewState}
+          />
+        </Col>
       </Row>
       <Divider orientation="left">绩效相关</Divider>
       <Row gutter={24}>

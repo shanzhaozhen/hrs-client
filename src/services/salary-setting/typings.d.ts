@@ -9,6 +9,18 @@ export type SalarySettingForm = {
   unemploymentInsuranceRate?: number;
   /** 医疗保险基数比例 */
   medicalInsuranceRate?: number;
+  /** 养老保险基数下限 */
+  endowmentInsuranceLower?: number;
+  /** 养老保险基数上限 */
+  endowmentInsuranceUpper?: number;
+  /** 失业保险基数下限 */
+  unemploymentInsuranceLower?: number;
+  /** 失业保险基数上限 */
+  unemploymentInsuranceUpper?: number;
+  /** 医疗保险基数下限 */
+  medicalInsuranceLower?: number;
+  /** 医疗保险基数上限 */
+  medicalInsuranceUpper?: number;
   /** 绩效工资基数 */
   meritSalary?: number;
   /** 绩效A发放比例 */
@@ -88,6 +100,18 @@ export type SalarySettingVO = {
   unemploymentInsuranceRate?: number;
   /** 医疗保险基数比例 */
   medicalInsuranceRate?: number;
+  /** 养老保险基数下限 */
+  endowmentInsuranceLower?: number;
+  /** 养老保险基数上限 */
+  endowmentInsuranceUpper?: number;
+  /** 失业保险基数下限 */
+  unemploymentInsuranceLower?: number;
+  /** 失业保险基数上限 */
+  unemploymentInsuranceUpper?: number;
+  /** 医疗保险基数下限 */
+  medicalInsuranceLower?: number;
+  /** 医疗保险基数上限 */
+  medicalInsuranceUpper?: number;
   /** 绩效工资基数 */
   meritSalary?: number;
   /** 绩效A发放比例 */

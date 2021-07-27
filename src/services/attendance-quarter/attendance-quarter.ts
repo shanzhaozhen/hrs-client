@@ -92,6 +92,34 @@ export async function batchDeleteAttendanceQuarter(
   });
 }
 
+/** 冻结/解冻季度考勤 GET /attendance-quarter/freeze */
+export async function freezeAttendanceQuarterByIds(
+  params: Record<string, any>,
+  options?: Record<string, any>,
+) {
+  return request<ResultBody<string>>('/hrs-api/attendance-quarter/freeze', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+
+/** 冻结/解冻季度考勤 GET /attendance-quarter/freeze/quarter */
+export async function freezeAttendanceQuarterByQuarter(
+  params: Record<string, any>,
+  options?: Record<string, any>,
+) {
+  return request<ResultBody<string>>('/hrs-api/attendance-quarter/freeze/quarter', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+
 /** 季度考勤导入模板生成 GET /attendance-quarter/template */
 export async function generateAttendanceQuarterTemplate(options?: Record<string, any>) {
   return request('/hrs-api/attendance-quarter/template', {

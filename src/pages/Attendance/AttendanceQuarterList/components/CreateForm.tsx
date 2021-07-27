@@ -44,6 +44,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
         title="新建季度考勤"
         visible={createModalVisible}
         formRef={formRef}
+        initialValues={{ freeze: false }}
         onVisibleChange={handleCreateModalVisible}
         drawerProps={{
           destroyOnClose: true,
