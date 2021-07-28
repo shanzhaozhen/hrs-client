@@ -1,13 +1,13 @@
-import React, {useRef} from 'react';
+import React, { useRef } from 'react';
 import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
-import type {FormInstance} from 'antd';
+import type { FormInstance } from 'antd';
 import { message } from 'antd';
 import FormBody from '@/pages/Salary/SalaryList/components/FormBody';
 import type { ActionType } from '@ant-design/pro-table';
-import { DrawerForm } from "@ant-design/pro-form";
-import {onFormValuesChange} from "@/pages/Salary/SalaryList";
-import {addSalary} from "@/services/salary/salary";
-import type {SalaryForm} from "@/services/salary/typings";
+import { DrawerForm } from '@ant-design/pro-form';
+import { onFormValuesChange } from '@/pages/Salary/SalaryList';
+import { addSalary } from '@/services/salary/salary';
+import type { SalaryForm } from '@/services/salary/typings';
 
 interface CreateFormProps {
   createModalVisible: boolean;
@@ -46,6 +46,9 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
         visible={createModalVisible}
         formRef={formRef}
         onVisibleChange={handleCreateModalVisible}
+        initialValues={{
+          freeze: false,
+        }}
         drawerProps={{
           destroyOnClose: true,
         }}

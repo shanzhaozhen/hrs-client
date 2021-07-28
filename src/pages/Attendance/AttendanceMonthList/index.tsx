@@ -122,18 +122,20 @@ const AttendanceMonthList: React.FC = () => {
       dataIndex: 'shouldAttendanceDays',
       valueType: 'digit',
       sorter: true,
+      hideInSearch: true,
     },
     {
       title: '实出勤',
       dataIndex: 'actualAttendanceDays',
       valueType: 'digit',
+      hideInSearch: true,
       sorter: true,
     },
     {
       title: '出勤率',
       dataIndex: 'attendanceMonthRate',
       valueType: 'text',
-      sorter: true,
+      hideInSearch: true,
       renderText: (_, record) =>
         record.shouldAttendanceDays
           ? `${(((record.actualAttendanceDays || 0) / record.shouldAttendanceDays) * 100).toFixed(
@@ -287,25 +289,19 @@ const AttendanceMonthList: React.FC = () => {
         handleCreateModalVisible={handleCreateModalVisible}
         tableActionRef={actionRef}
       />
-
-      {formValues && Object.keys(formValues).length ? (
-        <>
-          <ViewForm
-            viewDrawerVisible={viewDrawerVisible}
-            handleViewDrawerVisible={handleViewDrawerVisible}
-            values={formValues}
-            onClose={() => setFormValues({})}
-          />
-          <UpdateForm
-            updateModalVisible={updateModalVisible}
-            handleUpdateModalVisible={handleUpdateModalVisible}
-            values={formValues}
-            onClose={() => setFormValues({})}
-            tableActionRef={actionRef}
-          />
-        </>
-      ) : null}
-
+      <ViewForm
+        viewDrawerVisible={viewDrawerVisible}
+        handleViewDrawerVisible={handleViewDrawerVisible}
+        values={formValues}
+        onClose={() => setFormValues({})}
+      />
+      <UpdateForm
+        updateModalVisible={updateModalVisible}
+        handleUpdateModalVisible={handleUpdateModalVisible}
+        values={formValues}
+        onClose={() => setFormValues({})}
+        tableActionRef={actionRef}
+      />
       <ImportModal
         visible={importModalVisible}
         handleVisible={handleImportModalVisible}

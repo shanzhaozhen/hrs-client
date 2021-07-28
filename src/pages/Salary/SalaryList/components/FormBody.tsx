@@ -14,6 +14,7 @@ import ProFormItem from '@ant-design/pro-form/lib/components/FormItem';
 import { ContactsOutlined } from '@ant-design/icons';
 import { useDepartmentList } from '@/utils/department';
 import StaffSelect from '@/components/StaffSelect';
+import { useOptions } from '@/utils/options';
 
 interface FormProps {
   isView?: boolean;
@@ -27,6 +28,12 @@ const FormBody: React.FC<FormProps> = (props) => {
   const [staffSelectVisible, handleStaffSelectVisible] = useState<boolean>(false);
 
   const departmentList = useDepartmentList();
+  const postLevelOptions = useOptions(
+    'PostLevel',
+    'name',
+    'code',
+    (item) => `${item.name}(${item.code})`,
+  );
 
   return (
     <>
@@ -106,6 +113,16 @@ const FormBody: React.FC<FormProps> = (props) => {
             readonly={isView}
           />
         </Col>
+        <Col xl={8} lg={24} md={24}>
+          <ProFormSelect
+            width="md"
+            name="postLevel"
+            label="岗位等级"
+            rules={[{ required: true, message: '请选择岗位等级' }]}
+            options={postLevelOptions}
+            readonly={isView}
+          />
+        </Col>
         <Col xl={8} lg={12} md={24}>
           <ProFormSelect
             width="md"
@@ -129,7 +146,6 @@ const FormBody: React.FC<FormProps> = (props) => {
             label="是否冻结"
             checkedChildren="是"
             unCheckedChildren="否"
-            initialValue={false}
             rules={[{ required: true, message: '请选择是否冻结' }]}
             readonly={isView}
           />

@@ -1,13 +1,13 @@
-import React, {useRef} from 'react';
+import React, { useRef } from 'react';
 import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
-import type {FormInstance} from 'antd';
+import type { FormInstance } from 'antd';
 import { message } from 'antd';
 import FormBody from '@/pages/Salary/SalaryList/components/FormBody';
 import type { ActionType } from '@ant-design/pro-table';
-import { DrawerForm } from "@ant-design/pro-form";
-import type { SalaryForm, SalaryVO } from "@/services/salary/typings";
-import { updateSalary } from "@/services/salary/salary";
-import {onFormValuesChange} from "@/pages/Salary/SalaryList";
+import { DrawerForm } from '@ant-design/pro-form';
+import type { SalaryForm, SalaryVO } from '@/services/salary/typings';
+import { updateSalary } from '@/services/salary/salary';
+import { onFormValuesChange } from '@/pages/Salary/SalaryList';
 
 interface UpdateFormProps {
   updateModalVisible: boolean;
@@ -58,7 +58,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
         }}
         onFinish={handleUpdate}
       >
-        <FormBody formRef={formRef} />
+        {values && Object.keys(values).length ? <FormBody formRef={formRef} /> : null}
       </DrawerForm>
     </>
   );

@@ -34,6 +34,7 @@ import {
 import ImportModal from '@/components/ImportModal';
 import { ModalForm, ProFormDatePicker, ProFormSwitch, ProFormText } from '@ant-design/pro-form';
 import ProFormItem from '@ant-design/pro-form/lib/components/FormItem';
+import { useOptions } from '@/utils/options';
 
 export const onFormValuesChange = (changedValues: any, allValues: any, formRef: any) => {
   if (changedValues.hasOwnProperty('salarySetting')) {
@@ -66,6 +67,8 @@ const SalaryList: React.FC = () => {
 
   const departmentList = useDepartmentList();
   const departmentTree = useDepartmentTree();
+
+  const postLevelOptions = useOptions('PostLevel', 'code', 'code');
 
   /**
    * 批量删除薪资发放
@@ -203,6 +206,19 @@ const SalaryList: React.FC = () => {
       },
     },
     {
+      title: '岗位等级',
+      dataIndex: 'postLevel',
+      valueType: 'select',
+      sorter: true,
+      fieldProps: { options: postLevelOptions },
+    },
+    {
+      title: '考核等级',
+      dataIndex: 'appraise',
+      valueType: 'text',
+      sorter: true,
+    },
+    {
       title: '基础工资',
       dataIndex: 'basicSalary',
       valueType: 'digit',
@@ -284,20 +300,24 @@ const SalaryList: React.FC = () => {
       render: (text, record) => (
         <>
           <>
-            <a
-              onClick={async () => {
-                if (record && record.id) {
-                  const { data } = await getSalaryById(record.id);
-                  setFormValues(data || {});
-                  handleUpdateModalVisible(true);
-                } else {
-                  message.warn('没有选中有效的薪资发放');
-                }
-              }}
-            >
-              修改
-            </a>
-            <Divider type="vertical" />
+            {!record.freeze && (
+              <>
+                <a
+                  onClick={async () => {
+                    if (record && record.id) {
+                      const { data } = await getSalaryById(record.id);
+                      setFormValues(data || {});
+                      handleUpdateModalVisible(true);
+                    } else {
+                      message.warn('没有选中有效的薪资发放');
+                    }
+                  }}
+                >
+                  修改
+                </a>
+                <Divider type="vertical" />
+              </>
+            )}
             <a
               onClick={async () => {
                 if (record && record.id) {
@@ -421,24 +441,19 @@ const SalaryList: React.FC = () => {
         handleCreateModalVisible={handleCreateModalVisible}
         tableActionRef={actionRef}
       />
-
-      {formValues && Object.keys(formValues).length ? (
-        <>
-          <ViewForm
-            viewModalVisible={viewModalVisible}
-            handleViewModalVisible={handleViewModalVisible}
-            values={formValues}
-            onClose={() => setFormValues({})}
-          />
-          <UpdateForm
-            updateModalVisible={updateModalVisible}
-            handleUpdateModalVisible={handleUpdateModalVisible}
-            values={formValues}
-            onClose={() => setFormValues({})}
-            tableActionRef={actionRef}
-          />
-        </>
-      ) : null}
+      <ViewForm
+        viewModalVisible={viewModalVisible}
+        handleViewModalVisible={handleViewModalVisible}
+        values={formValues}
+        onClose={() => setFormValues({})}
+      />
+      <UpdateForm
+        updateModalVisible={updateModalVisible}
+        handleUpdateModalVisible={handleUpdateModalVisible}
+        values={formValues}
+        onClose={() => setFormValues({})}
+        tableActionRef={actionRef}
+      />
 
       <ImportModal
         visible={importModalVisible}

@@ -21,7 +21,7 @@ export async function getAttendanceMonthPage(
 
 /** 获取月度考勤（通过月度考勤id） GET /attendance-month/${attendanceId} */
 export async function getAttendanceMonthById(attendanceId: number, options?: Record<string, any>) {
-  return request<ResultBody<AttendanceMonthVO>>(`/hrs-api/attendance/${attendanceId}`, {
+  return request<ResultBody<AttendanceMonthVO>>(`/hrs-api/attendance-month/${attendanceId}`, {
     method: 'GET',
     ...(options || {}),
   });
@@ -56,7 +56,7 @@ export async function updateAttendanceMonth(
 
 /** 删除月度考勤接口 DELETE /attendance-month/${attendanceId} */
 export async function deleteAttendanceMonth(attendanceId: number, options?: Record<string, any>) {
-  return request<ResultBody<number>>(`/hrs-api/attendance/${attendanceId}`, {
+  return request<ResultBody<number>>(`/hrs-api/attendance-month/${attendanceId}`, {
     method: 'DELETE',
     ...(options || {}),
   });

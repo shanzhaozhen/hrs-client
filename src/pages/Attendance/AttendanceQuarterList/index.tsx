@@ -197,7 +197,6 @@ const AttendanceQuarterList: React.FC = () => {
       title: '出勤率',
       dataIndex: 'attendanceQuarterRate',
       valueType: 'text',
-      sorter: true,
       renderText: (_, record) =>
         record.shouldAttendanceDays
           ? `${(((record.actualAttendanceDays || 0) / record.shouldAttendanceDays) * 100).toFixed(
@@ -252,20 +251,24 @@ const AttendanceQuarterList: React.FC = () => {
       render: (text, record) => (
         <>
           <>
-            <a
-              onClick={async () => {
-                if (record && record.id) {
-                  const { data } = await getAttendanceQuarterById(record.id);
-                  setFormValues(data || {});
-                  handleUpdateModalVisible(true);
-                } else {
-                  message.warn('没有选中有效的季度考勤');
-                }
-              }}
-            >
-              修改
-            </a>
-            <Divider type="vertical" />
+            {!record.freeze && (
+              <>
+                <a
+                  onClick={async () => {
+                    if (record && record.id) {
+                      const { data } = await getAttendanceQuarterById(record.id);
+                      setFormValues(data || {});
+                      handleUpdateModalVisible(true);
+                    } else {
+                      message.warn('没有选中有效的季度考勤');
+                    }
+                  }}
+                >
+                  修改
+                </a>
+                <Divider type="vertical" />
+              </>
+            )}
             <a
               onClick={async () => {
                 if (record && record.id) {
@@ -390,23 +393,19 @@ const AttendanceQuarterList: React.FC = () => {
         tableActionRef={actionRef}
       />
 
-      {formValues && Object.keys(formValues).length ? (
-        <>
-          <ViewForm
-            viewDrawerVisible={viewDrawerVisible}
-            handleViewDrawerVisible={handleViewDrawerVisible}
-            values={formValues}
-            onClose={() => setFormValues({})}
-          />
-          <UpdateForm
-            updateModalVisible={updateModalVisible}
-            handleUpdateModalVisible={handleUpdateModalVisible}
-            values={formValues}
-            onClose={() => setFormValues({})}
-            tableActionRef={actionRef}
-          />
-        </>
-      ) : null}
+      <ViewForm
+        viewDrawerVisible={viewDrawerVisible}
+        handleViewDrawerVisible={handleViewDrawerVisible}
+        values={formValues}
+        onClose={() => setFormValues({})}
+      />
+      <UpdateForm
+        updateModalVisible={updateModalVisible}
+        handleUpdateModalVisible={handleUpdateModalVisible}
+        values={formValues}
+        onClose={() => setFormValues({})}
+        tableActionRef={actionRef}
+      />
 
       <ModalForm
         title="季度考勤冻结"

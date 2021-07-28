@@ -94,7 +94,7 @@ const FormBody: React.FC<FormProps> = (props) => {
         <Col xl={8} lg={12} md={24}>
           <ProFormDigit
             width="md"
-            name="shouldAttendanceMonthDays"
+            name="shouldAttendanceDays"
             label="应出勤天数"
             min={0}
             fieldProps={{ precision: 0 }}
@@ -105,14 +105,23 @@ const FormBody: React.FC<FormProps> = (props) => {
         <Col xl={8} lg={12} md={24}>
           <ProFormDigit
             width="md"
-            name="actualAttendanceMonthDays"
+            name="actualAttendanceDays"
             label="实出勤天数"
             min={0}
             rules={[{ required: true, message: '请输入实出勤天数' }]}
             readonly={isView}
           />
         </Col>
-
+        <Col xl={8} lg={12} md={24}>
+          <ProFormDigit
+            width="md"
+            name="hotWeatherDays"
+            label="高温天数"
+            min={0}
+            rules={[{ required: true, message: '请输入高温天数' }]}
+            readonly={isView}
+          />
+        </Col>
         <Col xl={8} lg={12} md={24}>
           <ProFormDigit
             width="md"
@@ -295,6 +304,16 @@ const FormBody: React.FC<FormProps> = (props) => {
             label="病假天数"
             min={0}
             rules={[{ required: true, message: '请输入病假天数' }]}
+            readonly={isView}
+          />
+        </Col>
+        <Col xl={8} lg={12} md={24}>
+          <ProFormDigit
+            width="md"
+            name="sickLeaveDaysTotal"
+            label="休病假总天数"
+            min={0}
+            rules={[{ required: true, message: '请输入休病假总天数' }]}
             readonly={isView}
           />
         </Col>

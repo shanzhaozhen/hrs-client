@@ -57,7 +57,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
         }}
         onFinish={handleUpdate}
       >
-        <FormBody formRef={formRef} />
+        {values && Object.keys(values).length ? <FormBody formRef={formRef} /> : null}
       </DrawerForm>
     </>
   );
