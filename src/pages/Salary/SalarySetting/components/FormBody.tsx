@@ -453,6 +453,29 @@ const FormBody: React.FC<FormProps> = (props) => {
             readonly={viewState}
           />
         </Col>
+        <Col xl={8} lg={12} md={24}>
+          <ProFormDigit
+            width="md"
+            name="overtimeFees"
+            label="加班费基数"
+            rules={[{ required: true, message: '请输入加班费基数' }]}
+            readonly={viewState}
+          />
+        </Col>
+        <Col xl={8} lg={12} md={24}>
+          <ProFormSelect
+            width="md"
+            name="overtimeMode"
+            label="加班费基数计算方式"
+            rules={[{ required: true, message: '请输入加班费基数计算方式' }]}
+            readonly={viewState}
+            options={[
+              { label: '全公司统一加班费基数', value: '1' },
+              { label: '员工基本工资', value: '2' },
+              { label: '员工基本工资+岗位工资', value: '3' },
+            ]}
+          />
+        </Col>
         <Col xl={24} lg={24} md={24}>
           <ProFormTextArea name="remarks" label="备注" readonly={viewState} />
         </Col>

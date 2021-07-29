@@ -66,6 +66,8 @@ const SalarySetting: React.FC = () => {
         dutyOutSpringFee: 500,
         dutyInSpringFee: 800,
         unionFees: 12.5,
+        overtimeFees: 2500,
+        overtimeMode: '1',
       },
     );
     formRef.current?.setFieldsValue({ ...formValues });

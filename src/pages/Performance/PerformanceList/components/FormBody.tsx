@@ -132,6 +132,7 @@ const FormBody: React.FC<FormProps> = (props) => {
               { value: 'C', label: 'C' },
               { value: 'D', label: 'D' },
               { value: 'E', label: 'E' },
+              { value: 'F', label: 'F' },
             ]}
             readonly={isView}
           />

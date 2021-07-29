@@ -85,6 +85,10 @@ export type SalarySettingForm = {
   dutyInSpringFee?: number;
   /** 工会费 */
   unionFees?: number;
+  /** 加班费基数 */
+  overtimeFees?: number;
+  /** 加班费基数计算方式 */
+  overtimeMode?: string;
   /** 备注 */
   remarks?: string;
 };
@@ -176,6 +180,10 @@ export type SalarySettingVO = {
   dutyInSpringFee?: number;
   /** 工会费 */
   unionFees?: number;
+  /** 加班费基数 */
+  overtimeFees?: number;
+  /** 加班费基数计算方式 */
+  overtimeMode?: string;
   /** 备注 */
   remarks?: string;
   /** 创建人 */

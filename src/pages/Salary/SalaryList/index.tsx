@@ -4,7 +4,7 @@ import { Button, Divider, Input, message, Modal, Popconfirm, Space, Tag } from '
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { getPageParams, getSortOrder, tableFilter } from '@/utils/common';
+import { checkHasKey, getPageParams, getSortOrder, tableFilter } from '@/utils/common';
 import {
   ExclamationCircleOutlined,
   ExportOutlined,
@@ -27,6 +27,7 @@ import {
   freezeSalaryByIds,
   freezeSalaryByMonth,
   generateSalaryData,
+  generateSalaryTaxTemplate,
   generateSalaryTemplate,
   getSalaryById,
   getSalaryPage,
@@ -37,18 +38,235 @@ import ProFormItem from '@ant-design/pro-form/lib/components/FormItem';
 import { useOptions } from '@/utils/options';
 
 export const onFormValuesChange = (changedValues: any, allValues: any, formRef: any) => {
-  if (changedValues.hasOwnProperty('salarySetting')) {
-    const { salarySetting } = changedValues;
-    if (salarySetting) {
-      const yearAndQuarter = salarySetting.match(/\d+(.\d+)?/g);
-      if (yearAndQuarter.length === 2) {
-        formRef.current?.setFieldsValue({
-          ...allValues,
-          year: yearAndQuarter[0],
-          quarter: yearAndQuarter[1],
-        });
-      }
-    }
+  if (
+    checkHasKey(changedValues, [
+      'basicSalary',
+      'postSalary',
+      'meritSalary',
+      'sickSalary',
+      'backSalary',
+      'overtimeSalary',
+    ])
+  ) {
+    const salarySubtotal =
+      allValues.basicSalary +
+      allValues.postSalary +
+      allValues.meritSalary +
+      allValues.sickSalary +
+      allValues.backSalary +
+      allValues.overtimeSalary;
+    const shouldSalary =
+      salarySubtotal +
+      allValues.bonusSubtotal +
+      allValues.allowanceSubtotal +
+      allValues.preTaxDeductSubtotal;
+    const preTaxSalary = shouldSalary + allValues.materialSubtotal - allValues.oneChildAllowance;
+    const actualSalary =
+      shouldSalary + allValues.aftTaxDeductSubtotal + allValues.communicationAllowance;
+    formRef.current?.setFieldsValue({
+      ...allValues,
+      salarySubtotal,
+      shouldSalary,
+      preTaxSalary,
+      actualSalary,
+    });
+  }
+  if (
+    checkHasKey(changedValues, [
+      'annualBonus',
+      'safetyBonus',
+      'stabilityBonus',
+      'familyPlanningBonus',
+      'excellenceBonus',
+      'specialBonus',
+    ])
+  ) {
+    const bonusSubtotal =
+      allValues.annualBonus +
+      allValues.safetyBonus +
+      allValues.stabilityBonus +
+      allValues.familyPlanningBonus +
+      allValues.excellenceBonus +
+      allValues.specialBonus;
+    const shouldSalary =
+      allValues.salarySubtotal +
+      bonusSubtotal +
+      allValues.allowanceSubtotal +
+      allValues.preTaxDeductSubtotal;
+    const preTaxSalary = shouldSalary + allValues.materialSubtotal - allValues.oneChildAllowance;
+    const actualSalary =
+      shouldSalary + allValues.aftTaxDeductSubtotal + allValues.communicationAllowance;
+    formRef.current?.setFieldsValue({
+      ...allValues,
+      bonusSubtotal,
+      shouldSalary,
+      preTaxSalary,
+      actualSalary,
+    });
+  }
+  if (
+    checkHasKey(changedValues, [
+      'oneChildAllowance',
+      'hotWeatherAllowance',
+      'fullAttendanceAllowance',
+      'nightShiftAllowance',
+      'onDutyAllowance',
+      'mealAllowance',
+      'trafficAllowance',
+      'festivalAllowance',
+      'safetyAllowance',
+      'otherAllowance',
+    ])
+  ) {
+    const allowanceSubtotal =
+      allValues.oneChildAllowance +
+      allValues.hotWeatherAllowance +
+      allValues.fullAttendanceAllowance +
+      allValues.nightShiftAllowance +
+      allValues.onDutyAllowance +
+      allValues.mealAllowance +
+      allValues.trafficAllowance +
+      allValues.festivalAllowance +
+      allValues.safetyAllowance +
+      allValues.otherAllowance;
+    const shouldSalary =
+      allValues.salarySubtotal +
+      allValues.bonusSubtotal +
+      allowanceSubtotal +
+      allValues.preTaxDeductSubtotal;
+    const preTaxSalary = shouldSalary + allValues.materialSubtotal - allValues.oneChildAllowance;
+    const actualSalary =
+      shouldSalary + allValues.aftTaxDeductSubtotal + allValues.communicationAllowance;
+    formRef.current?.setFieldsValue({
+      ...allValues,
+      allowanceSubtotal,
+      shouldSalary,
+      preTaxSalary,
+      actualSalary,
+    });
+  }
+  if (
+    checkHasKey(changedValues, [
+      'sickLeaveDeduct',
+      'entryExitDeduct',
+      'fullAttendanceDeduct',
+      'meritDeduct',
+    ])
+  ) {
+    const preTaxDeductSubtotal =
+      allValues.sickLeaveDeduct +
+      allValues.entryExitDeduct +
+      allValues.fullAttendanceDeduct +
+      allValues.meritDeduct;
+    const shouldSalary =
+      allValues.salarySubtotal +
+      allValues.bonusSubtotal +
+      allValues.allowanceSubtotal +
+      preTaxDeductSubtotal;
+    const preTaxSalary = shouldSalary + allValues.materialSubtotal - allValues.oneChildAllowance;
+    const actualSalary =
+      shouldSalary + allValues.aftTaxDeductSubtotal + allValues.communicationAllowance;
+    formRef.current?.setFieldsValue({
+      ...allValues,
+      preTaxDeductSubtotal,
+      shouldSalary,
+      preTaxSalary,
+      actualSalary,
+    });
+  }
+  if (checkHasKey(changedValues, ['birthdayCard', 'coolDrink', 'condolenceGoods'])) {
+    const materialSubtotal =
+      allValues.birthdayCard + allValues.coolDrink + allValues.condolenceGoods;
+    const preTaxSalary = allValues.shouldSalary + materialSubtotal - allValues.oneChildAllowance;
+    const actualSalary =
+      allValues.shouldSalary + allValues.aftTaxDeductSubtotal + allValues.communicationAllowance;
+
+    formRef.current?.setFieldsValue({
+      ...allValues,
+      materialSubtotal,
+      preTaxSalary,
+      actualSalary,
+    });
+  }
+  if (
+    checkHasKey(changedValues, [
+      'accumulationFund',
+      'endowmentInsurance',
+      'unemploymentInsurance',
+      'medicalInsurance',
+      'unionFees',
+      'rent',
+      'phoneBill',
+      'individualIncomeTax',
+      'otherAftTaxDeduct',
+    ])
+  ) {
+    const aftTaxDeductSubtotal =
+      allValues.accumulationFund +
+      allValues.endowmentInsurance +
+      allValues.unemploymentInsurance +
+      allValues.medicalInsurance +
+      allValues.unionFees +
+      allValues.rent +
+      allValues.phoneBill +
+      allValues.individualIncomeTax +
+      allValues.otherAftTaxDeduct;
+    const actualSalary =
+      allValues.shouldSalary + aftTaxDeductSubtotal + allValues.communicationAllowance;
+    formRef.current?.setFieldsValue({
+      ...allValues,
+      aftTaxDeductSubtotal,
+      actualSalary,
+    });
+  }
+  if (changedValues.hasOwnProperty('通讯补贴')) {
+    const actualSalary =
+      allValues.shouldSalary + allValues.aftTaxDeductSubtotal + allValues.communicationAllowance;
+    formRef.current?.setFieldsValue({
+      ...allValues,
+      actualSalary,
+    });
+  }
+  if (
+    checkHasKey(changedValues, [
+      'salarySubtotal',
+      'bonusSubtotal',
+      'allowanceSubtotal',
+      'preTaxDeductSubtotal',
+    ])
+  ) {
+    const shouldSalary =
+      allValues.salarySubtotal +
+      allValues.bonusSubtotal +
+      allValues.allowanceSubtotal +
+      allValues.preTaxDeductSubtotal;
+    const preTaxSalary = shouldSalary + allValues.materialSubtotal - allValues.oneChildAllowance;
+    const actualSalary =
+      shouldSalary + allValues.aftTaxDeductSubtotal + allValues.communicationAllowance;
+    formRef.current?.setFieldsValue({
+      ...allValues,
+      shouldSalary,
+      preTaxSalary,
+      actualSalary,
+    });
+  }
+  if (changedValues.hasOwnProperty('materialSubtotal')) {
+    const preTaxSalary =
+      allValues.shouldSalary + allValues.materialSubtotal - allValues.oneChildAllowance;
+    const actualSalary =
+      allValues.shouldSalary + allValues.aftTaxDeductSubtotal + allValues.communicationAllowance;
+    formRef.current?.setFieldsValue({
+      ...allValues,
+      preTaxSalary,
+      actualSalary,
+    });
+  }
+  if (changedValues.hasOwnProperty('aftTaxDeductSubtotal')) {
+    formRef.current?.setFieldsValue({
+      ...allValues,
+      actualSalary:
+        allValues.shouldSalary + allValues.aftTaxDeductSubtotal + allValues.communicationAllowance,
+    });
   }
 };
 
@@ -61,7 +279,8 @@ const SalaryList: React.FC = () => {
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [selectedRowsState, setSelectedRows] = useState<SalaryVO[]>([]);
-  const [importModalVisible, handleImportModalVisible] = useState<boolean>(false);
+  const [importSalaryModalVisible, handleImportSalaryModalVisible] = useState<boolean>(false);
+  const [importTaxModalVisible, handleImportTaxModalVisible] = useState<boolean>(false);
   const [generateModalVisible, handleGenerateModalVisible] = useState<boolean>(false);
   const [freezeModalVisible, handleFreezeModalVisible] = useState<boolean>(false);
 
@@ -379,8 +598,11 @@ const SalaryList: React.FC = () => {
           <Button type="primary" onClick={() => handleFreezeModalVisible(true)}>
             <KeyOutlined /> 薪资冻结
           </Button>,
-          <Button type="primary" onClick={() => handleImportModalVisible(true)}>
-            <ImportOutlined /> 导入
+          <Button type="primary" onClick={() => handleImportSalaryModalVisible(true)}>
+            <ImportOutlined /> 薪资导入
+          </Button>,
+          <Button type="primary" onClick={() => handleImportTaxModalVisible(true)}>
+            <ImportOutlined /> 个税导入
           </Button>,
           <Button
             type="primary"
@@ -456,8 +678,8 @@ const SalaryList: React.FC = () => {
       />
 
       <ImportModal
-        visible={importModalVisible}
-        handleVisible={handleImportModalVisible}
+        visible={importSalaryModalVisible}
+        handleVisible={handleImportSalaryModalVisible}
         haveTemplate={true}
         downloadTemplate={() => {
           generateSalaryTemplate().then((data) => {
@@ -467,6 +689,43 @@ const SalaryList: React.FC = () => {
         description="导入薪资发放"
         uploadProps={{
           action: '/hrs-api/salary/import',
+          headers: {
+            Authorization: localStorage.getItem('ACCESS_TOKEN') || '',
+          },
+          name: 'file',
+          maxCount: 1,
+          onChange: ({ file }) => {
+            const { status, response } = file;
+            if (status === 'done') {
+              const { data } = response;
+              message
+                .success({
+                  content: `导入成功：${data}`,
+                  style: {
+                    whiteSpace: 'pre-wrap',
+                  },
+                })
+                .then();
+              actionRef.current?.reloadAndRest?.();
+            } else if (status === 'error') {
+              message.error(`导入失败：${response.message}`).then();
+            }
+          },
+        }}
+      />
+
+      <ImportModal
+        visible={importTaxModalVisible}
+        handleVisible={handleImportTaxModalVisible}
+        haveTemplate={true}
+        downloadTemplate={() => {
+          generateSalaryTaxTemplate().then((data) => {
+            downloadFile(data, '个税导入模板.xlsx');
+          });
+        }}
+        description="个税导入"
+        uploadProps={{
+          action: '/hrs-api/salary/tax/import',
           headers: {
             Authorization: localStorage.getItem('ACCESS_TOKEN') || '',
           },

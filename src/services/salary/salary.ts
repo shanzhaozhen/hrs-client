@@ -137,3 +137,13 @@ export async function exportSalary(pageParams: PageParams, options?: Record<stri
     ...(options || {}),
   });
 }
+
+/** 个税导入模板生成 GET /salary/tax/template */
+export async function generateSalaryTaxTemplate(options?: Record<string, any>) {
+  return request('/hrs-api/salary/tax/template', {
+    method: 'GET',
+    responseType: 'blob',
+    ...(options || {}),
+    skipErrorHandler: true,
+  });
+}

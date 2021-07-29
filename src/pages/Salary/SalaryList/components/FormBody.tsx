@@ -37,7 +37,7 @@ const FormBody: React.FC<FormProps> = (props) => {
 
   return (
     <>
-      <Divider orientation="left">薪资发放类别</Divider>
+      <Divider orientation="left">员工信息</Divider>
       <ProFormText name="id" label="薪资发放id" hidden={true} />
       <ProFormText name="staffId" label="员工id" hidden={true} />
       <Row gutter={24}>
@@ -135,6 +135,7 @@ const FormBody: React.FC<FormProps> = (props) => {
               { value: 'C', label: 'C' },
               { value: 'D', label: 'D' },
               { value: 'E', label: 'E' },
+              { value: 'F', label: 'F' },
             ]}
             readonly={isView}
           />
@@ -148,6 +149,7 @@ const FormBody: React.FC<FormProps> = (props) => {
             unCheckedChildren="否"
             rules={[{ required: true, message: '请选择是否冻结' }]}
             readonly={isView}
+            hidden={true}
           />
         </Col>
       </Row>
@@ -207,6 +209,15 @@ const FormBody: React.FC<FormProps> = (props) => {
             readonly={isView}
           />
         </Col>
+        <Col xl={8} lg={12} md={24}>
+          <ProFormDigit
+            width="md"
+            name="salarySubtotal"
+            label="工资小计"
+            rules={[{ required: true, message: '请输入工资小计' }]}
+            readonly={isView}
+          />
+        </Col>
       </Row>
       <Divider orientation="left">奖金</Divider>
       <Row gutter={24}>
@@ -261,6 +272,15 @@ const FormBody: React.FC<FormProps> = (props) => {
             name="specialBonus"
             label="专项奖"
             rules={[{ required: true, message: '请输入专项奖' }]}
+            readonly={isView}
+          />
+        </Col>
+        <Col xl={8} lg={12} md={24}>
+          <ProFormDigit
+            width="md"
+            name="bonusSubtotal"
+            label="奖金小计"
+            rules={[{ required: true, message: '请输入奖金小计' }]}
             readonly={isView}
           />
         </Col>
@@ -342,18 +362,18 @@ const FormBody: React.FC<FormProps> = (props) => {
         <Col xl={8} lg={12} md={24}>
           <ProFormDigit
             width="md"
-            name="communicationAllowance"
-            label="通讯补贴"
-            rules={[{ required: true, message: '请输入通讯补贴' }]}
+            name="otherAllowance"
+            label="其他补贴"
+            rules={[{ required: true, message: '请输入其他补贴' }]}
             readonly={isView}
           />
         </Col>
         <Col xl={8} lg={12} md={24}>
           <ProFormDigit
             width="md"
-            name="otherAllowance"
-            label="其他补贴"
-            rules={[{ required: true, message: '请输入其他补贴' }]}
+            name="allowanceSubtotal"
+            label="津贴小计"
+            rules={[{ required: true, message: '请输入津贴小计' }]}
             readonly={isView}
           />
         </Col>
@@ -396,6 +416,15 @@ const FormBody: React.FC<FormProps> = (props) => {
             readonly={isView}
           />
         </Col>
+        <Col xl={8} lg={12} md={24}>
+          <ProFormDigit
+            width="md"
+            name="preTaxDeductSubtotal"
+            label="税前扣款小计"
+            rules={[{ required: true, message: '请输入税前扣款小计' }]}
+            readonly={isView}
+          />
+        </Col>
       </Row>
       <Divider orientation="left">实物</Divider>
       <Row gutter={24}>
@@ -423,6 +452,15 @@ const FormBody: React.FC<FormProps> = (props) => {
             name="condolenceGoods"
             label="慰问品"
             rules={[{ required: true, message: '请输入慰问品' }]}
+            readonly={isView}
+          />
+        </Col>
+        <Col xl={8} lg={12} md={24}>
+          <ProFormDigit
+            width="md"
+            name="materialSubtotal"
+            label="实物小计"
+            rules={[{ required: true, message: '请输入实物小计' }]}
             readonly={isView}
           />
         </Col>
@@ -510,8 +548,29 @@ const FormBody: React.FC<FormProps> = (props) => {
             readonly={isView}
           />
         </Col>
+        <Col xl={8} lg={12} md={24}>
+          <ProFormDigit
+            width="md"
+            name="aftTaxDeductSubtotal"
+            label="税后应扣小计"
+            rules={[{ required: true, message: '请输入税后应扣小计' }]}
+            readonly={isView}
+          />
+        </Col>
       </Row>
-      <Divider orientation="left">其他</Divider>
+      <Divider orientation="left">实报实销</Divider>
+      <Row gutter={24}>
+        <Col xl={8} lg={12} md={24}>
+          <ProFormDigit
+            width="md"
+            name="communicationAllowance"
+            label="通讯补贴"
+            rules={[{ required: true, message: '请输入通讯补贴' }]}
+            readonly={isView}
+          />
+        </Col>
+      </Row>
+      <Divider orientation="left">总计</Divider>
       <Row gutter={24}>
         <Col xl={8} lg={12} md={24}>
           <ProFormDigit
@@ -520,7 +579,15 @@ const FormBody: React.FC<FormProps> = (props) => {
             label="应发工资"
             rules={[{ required: true, message: '请输入应发工资' }]}
             readonly={isView}
-            disabled
+          />
+        </Col>
+        <Col xl={8} lg={12} md={24}>
+          <ProFormDigit
+            width="md"
+            name="preTaxSalary"
+            label="计税收入"
+            rules={[{ required: true, message: '请输入计税收入' }]}
+            readonly={isView}
           />
         </Col>
         <Col xl={8} lg={12} md={24}>
@@ -530,9 +597,11 @@ const FormBody: React.FC<FormProps> = (props) => {
             label="实发工资"
             rules={[{ required: true, message: '请输入实发工资' }]}
             readonly={isView}
-            disabled
           />
         </Col>
+      </Row>
+      <Divider orientation="left">其他</Divider>
+      <Row gutter={24}>
         <Col xl={24} lg={24} md={24}>
           <ProFormTextArea name="remarks" label="备注" readonly={isView} />
         </Col>

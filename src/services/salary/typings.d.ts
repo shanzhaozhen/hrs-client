@@ -7,10 +7,12 @@ export type SalaryForm = {
   month?: string;
   /** 发薪类型（工资、奖金） */
   type?: string;
-  /** 是否冻结 */
-  freeze?: boolean;
+  /** 岗位等级 */
+  postLevel?: string;
   /** 考核等级 */
   appraise?: string;
+  /** 是否冻结 */
+  freeze?: boolean;
   /** 基础工资 */
   basicSalary?: number;
   /** 岗位工资 */
@@ -23,6 +25,8 @@ export type SalaryForm = {
   backSalary?: number;
   /** 加班工资 */
   overtimeSalary?: number;
+  /** 工资小计 */
+  salarySubtotal?: number;
   /** 年终奖 */
   annualBonus?: number;
   /** 安全奖 */
@@ -35,6 +39,8 @@ export type SalaryForm = {
   excellenceBonus?: number;
   /** 专项奖 */
   specialBonus?: number;
+  /** 奖金小计 */
+  bonusSubtotal?: number;
   /** 独生子女津贴 */
   oneChildAllowance?: number;
   /** 高温津贴 */
@@ -53,10 +59,10 @@ export type SalaryForm = {
   festivalAllowance?: number;
   /** 安全岗岗位津贴 */
   safetyAllowance?: number;
-  /** 通讯补贴 */
-  communicationAllowance?: number;
   /** 其他 */
   otherAllowance?: number;
+  /** 津贴小计 */
+  allowanceSubtotal?: number;
   /** 扣病假工资 */
   sickLeaveDeduct?: number;
   /** 扣试用期/入离职结算 */
@@ -65,12 +71,16 @@ export type SalaryForm = {
   fullAttendanceDeduct?: number;
   /** 扣季度绩效 */
   meritDeduct?: number;
+  /** 税前扣款小计 */
+  preTaxDeductSubtotal?: number;
   /** 生日卡 */
   birthdayCard?: number;
   /** 清凉饮料 */
   coolDrink?: number;
   /** 慰问品 */
   condolenceGoods?: number;
+  /** 实物小计 */
+  materialSubtotal?: number;
   /** 公积金 */
   accumulationFund?: number;
   /** 养老保险 */
@@ -89,8 +99,14 @@ export type SalaryForm = {
   individualIncomeTax?: number;
   /** 其他税后应扣 */
   otherAftTaxDeduct?: number;
+  /** 税后应扣小计 */
+  aftTaxDeductSubtotal?: number;
+  /** 通讯补贴 */
+  communicationAllowance?: number;
   /** 应发工资 */
   shouldSalary?: number;
+  /** 计税收入 */
+  preTaxSalary?: number;
   /** 实发工资 */
   actualSalary?: number;
   /** 备注 */
@@ -112,10 +128,12 @@ export type SalaryVO = {
   month?: string;
   /** 发薪类型（工资、奖金） */
   type?: string;
-  /** 是否冻结 */
-  freeze?: boolean;
+  /** 岗位等级 */
+  postLevel?: string;
   /** 考核等级 */
   appraise?: string;
+  /** 是否冻结 */
+  freeze?: boolean;
   /** 基础工资 */
   basicSalary?: number;
   /** 岗位工资 */
@@ -128,6 +146,8 @@ export type SalaryVO = {
   backSalary?: number;
   /** 加班工资 */
   overtimeSalary?: number;
+  /** 工资小计 */
+  salarySubtotal?: number;
   /** 年终奖 */
   annualBonus?: number;
   /** 安全奖 */
@@ -140,6 +160,8 @@ export type SalaryVO = {
   excellenceBonus?: number;
   /** 专项奖 */
   specialBonus?: number;
+  /** 奖金小计 */
+  bonusSubtotal?: number;
   /** 独生子女津贴 */
   oneChildAllowance?: number;
   /** 高温津贴 */
@@ -158,10 +180,10 @@ export type SalaryVO = {
   festivalAllowance?: number;
   /** 安全岗岗位津贴 */
   safetyAllowance?: number;
-  /** 通讯补贴 */
-  communicationAllowance?: number;
   /** 其他 */
   otherAllowance?: number;
+  /** 津贴小计 */
+  allowanceSubtotal?: number;
   /** 扣病假工资 */
   sickLeaveDeduct?: number;
   /** 扣试用期/入离职结算 */
@@ -170,12 +192,16 @@ export type SalaryVO = {
   fullAttendanceDeduct?: number;
   /** 扣季度绩效 */
   meritDeduct?: number;
+  /** 税前扣款小计 */
+  preTaxDeductSubtotal?: number;
   /** 生日卡 */
   birthdayCard?: number;
   /** 清凉饮料 */
   coolDrink?: number;
   /** 慰问品 */
   condolenceGoods?: number;
+  /** 实物小计 */
+  materialSubtotal?: number;
   /** 公积金 */
   accumulationFund?: number;
   /** 养老保险 */
@@ -194,8 +220,14 @@ export type SalaryVO = {
   individualIncomeTax?: number;
   /** 其他税后应扣 */
   otherAftTaxDeduct?: number;
+  /** 税后应扣小计 */
+  aftTaxDeductSubtotal?: number;
+  /** 通讯补贴 */
+  communicationAllowance?: number;
   /** 应发工资 */
   shouldSalary?: number;
+  /** 计税收入 */
+  preTaxSalary?: number;
   /** 实发工资 */
   actualSalary?: number;
   /** 备注 */
