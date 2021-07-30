@@ -12,13 +12,17 @@ export type FamilyForm = {
   /** 政治面貌 */
   politics?: string;
   /** 工作单位 */
-  workUnit?: string;
+  workCompany?: string;
   /** 职务 */
   duty?: string;
   /** 移动电话 */
   mobilePhone?: string;
   /** 固话 */
   landlinePhone?: string;
+  /** 是否紧急联系人 */
+  isEmergency?: string;
+  /** 备注 */
+  remarks?: string;
 };
 
 export type FamilyVO = {
@@ -35,13 +39,17 @@ export type FamilyVO = {
   /** 政治面貌 */
   politics?: string;
   /** 工作单位 */
-  workUnit?: string;
+  workCompany?: string;
   /** 职务 */
   duty?: string;
   /** 移动电话 */
   mobilePhone?: string;
   /** 固话 */
   landlinePhone?: string;
+  /** 是否紧急联系人 */
+  isEmergency?: string;
+  /** 备注 */
+  remarks?: string;
   /** 创建人 */
   createdBy?: number;
   /** 创建人名称 */

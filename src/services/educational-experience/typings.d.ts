@@ -9,18 +9,36 @@ export type EducationalExperienceForm = {
   startDate?: string;
   /** 结束日期 */
   endDate?: string;
-  /** 学历 */
-  education?: string;
   /** 专业 */
   major?: string;
   /** 学制 */
   studyYears?: number;
-  /** 是否全日制 */
-  fullTime?: boolean;
+  /** 学习方式 */
+  style?: string;
+  /** 学历 */
+  education?: string;
+  /** 学位 */
+  degree?: string;
+  /** 学位授予日期 */
+  degreeDate?: string;
+  /** 学位授予单位 */
+  degreeCompany?: string;
+  /** 学历证书编号 */
+  educationNumber?: string;
+  /** 学位证书编号 */
+  degreeNumber?: string;
+  /** 是否最高学历 */
+  isHighestEducation?: string;
+  /** 入职学历 */
+  entryEducation?: string;
+  /** 是否入职学历 */
+  isEntryEducation?: string;
   /** 证明人姓名 */
   witnessName?: string;
   /** 证明人电话 */
   witnessPhone?: string;
+  /** 备注 */
+  remarks?: string;
 };
 
 export type EducationalExperienceVO = {
@@ -34,18 +52,36 @@ export type EducationalExperienceVO = {
   startDate?: string;
   /** 结束日期 */
   endDate?: string;
-  /** 学历 */
-  education?: string;
   /** 专业 */
   major?: string;
   /** 学制 */
   studyYears?: number;
-  /** 是否全日制 */
-  fullTime?: boolean;
+  /** 学习方式 */
+  style?: string;
+  /** 学历 */
+  education?: string;
+  /** 学位 */
+  degree?: string;
+  /** 学位授予日期 */
+  degreeDate?: string;
+  /** 学位授予单位 */
+  degreeCompany?: string;
+  /** 学历证书编号 */
+  educationNumber?: string;
+  /** 学位证书编号 */
+  degreeNumber?: string;
+  /** 是否最高学历 */
+  isHighestEducation?: string;
+  /** 入职学历 */
+  entryEducation?: string;
+  /** 是否入职学历 */
+  isEntryEducation?: string;
   /** 证明人姓名 */
   witnessName?: string;
   /** 证明人电话 */
   witnessPhone?: string;
+  /** 备注 */
+  remarks?: string;
   /** 创建人 */
   createdBy?: number;
   /** 创建时间 */

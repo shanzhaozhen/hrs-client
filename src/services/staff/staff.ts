@@ -1,15 +1,19 @@
 // @ts-ignore
 import { request } from 'umi';
-import type {StaffForm, StaffVO} from "@/services/staff/typings";
-import type {Orders, Page, PageParams, ResultBody} from "@/services/common/typings";
+import type { StaffForm, StaffVO } from '@/services/staff/typings';
+import type { Orders, Page, PageParams, ResultBody } from '@/services/common/typings';
 
 /** 获取员工信息（分页） GET /staff/page */
-export async function getStaffPage(pageParams: PageParams & any, orders?: Orders | undefined | null, options?: Record<string, any>) {
+export async function getStaffPage(
+  pageParams: PageParams & any,
+  orders?: Orders | undefined | null,
+  options?: Record<string, any>,
+) {
   return request<ResultBody<Page<StaffVO>>>('/hrs-api/staff/page', {
     method: 'GET',
     params: {
       ...pageParams,
-      ...orders
+      ...orders,
     },
     ...(options || {}),
   });
@@ -67,16 +71,26 @@ export async function batchDeleteStaff(body: number[], options?: Record<string, 
   });
 }
 
+/** 员工导入模板生成 GET /staff/template */
+export async function generateStaffTemplate(options?: Record<string, any>) {
+  return request('/hrs-api/staff/template', {
+    method: 'GET',
+    responseType: 'blob',
+    ...(options || {}),
+    skipErrorHandler: true,
+  });
+}
+
 /** 导出员工信息 GET /staff/export */
 export async function exportStaff(params: any, options?: Record<string, any>) {
   return request('/hrs-api/staff/export', {
     method: 'GET',
     responseType: 'blob',
     params: {
-      ...params
+      ...params,
     },
     ...(options || {}),
-    skipErrorHandler: true
+    skipErrorHandler: true,
   });
 }
 
@@ -86,10 +100,9 @@ export async function printStaff(staffId: number, options?: Record<string, any>)
     method: 'GET',
     responseType: 'blob',
     params: {
-      staffId
+      staffId,
     },
     ...(options || {}),
-    skipErrorHandler: true
+    skipErrorHandler: true,
   });
 }
-

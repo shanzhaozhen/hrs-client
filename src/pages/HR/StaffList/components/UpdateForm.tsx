@@ -1,14 +1,14 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
-import {Button, message} from 'antd';
+import { Button, message } from 'antd';
 import type { StaffForm, StaffVO } from '@/services/staff/typings';
 import FormBody from '@/pages/HR/StaffList/components/FormBody';
 import { updateStaff } from '@/services/staff/staff';
 import ProForm, { DrawerForm } from '@ant-design/pro-form';
 import type { ActionType } from '@ant-design/pro-table';
-import {convertStaffForm} from "@/utils/staff";
-import {HistoryOutlined} from "@ant-design/icons";
-import StaffChangeModal from "@/pages/HR/StaffChange/components/ModalBody";
+import { convertStaffForm } from '@/utils/staff';
+import { HistoryOutlined } from '@ant-design/icons';
+import StaffChangeModal from '@/pages/HR/StaffChange/components/ModalBody';
 
 export interface UpdateFormProps {
   updateDrawerVisible: boolean;
@@ -23,10 +23,14 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
 
   const [staffChangeModalVisible, handleStaffChangeModalVisible] = useState<boolean>(false);
 
+  const [workRecordForm] = ProForm.useForm();
   const [workExperienceForm] = ProForm.useForm();
   const [educationalExperienceForm] = ProForm.useForm();
-  const [certificateForm] = ProForm.useForm();
   const [familyForm] = ProForm.useForm();
+  const [contractForm] = ProForm.useForm();
+  const [titleForm] = ProForm.useForm();
+  const [qualificationForm] = ProForm.useForm();
+  const [driverLicenseForm] = ProForm.useForm();
 
   /**
    * 修改员工
@@ -35,10 +39,14 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
   const handleUpdate = async (fields: StaffForm) => {
     const hide = message.loading('正在修改');
     try {
+      await workRecordForm.validateFields();
       await workExperienceForm.validateFields();
       await educationalExperienceForm.validateFields();
-      await certificateForm.validateFields();
       await familyForm.validateFields();
+      await contractForm.validateFields();
+      await titleForm.validateFields();
+      await qualificationForm.validateFields();
+      await driverLicenseForm.validateFields();
       await updateStaff(convertStaffForm(fields));
       hide();
       message.success('修改成功');
@@ -54,7 +62,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
   return (
     <>
       <DrawerForm
-        width={'75%'}
+        width={'80%'}
         title={
           <>
             <span style={{ marginRight: 15 }}>修改员工</span>
@@ -82,10 +90,14 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
           <FormBody
             values={values}
             isEdit
+            workRecordForm={workRecordForm}
             workExperienceForm={workExperienceForm}
             educationalExperienceForm={educationalExperienceForm}
-            certificateForm={certificateForm}
             familyForm={familyForm}
+            contractForm={contractForm}
+            titleForm={titleForm}
+            qualificationForm={qualificationForm}
+            driverLicenseForm={driverLicenseForm}
           />
         ) : null}
       </DrawerForm>

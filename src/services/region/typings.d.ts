@@ -42,11 +42,11 @@ export type RegionVO = {
 
 export type RegionType = {
   /** 省 */
-  province?: string | number;
+  province?: string;
   /** 市 */
-  city?: string | number;
+  city?: string;
   /** 区 */
-  area?: string | number;
+  area?: string;
   /** 详细地址 */
   detail?: string;
-}
+};

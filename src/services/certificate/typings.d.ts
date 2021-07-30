@@ -12,15 +12,15 @@ export type CertificateForm = {
   /** 取证日期 */
   obtainDate?: string;
   /** 发证单位 */
-  issueUnit?: string;
-  /** 附件id */
+  issueCompany?: string;
+  /** 附件 */
   fileId?: number;
 };
 
 export type CertificateVO = {
   /** 主键ID */
   id: number;
-  /** 关联id */
+  /** 关联ID */
   pid?: number;
   /** 证件名称 */
   name?: string;
@@ -31,8 +31,8 @@ export type CertificateVO = {
   /** 取证日期 */
   obtainDate?: string;
   /** 发证单位 */
-  issueUnit?: string;
-  /** 附件id */
+  issueCompany?: string;
+  /** 附件 */
   fileId?: number;
   /** 创建人 */
   createdBy?: number;

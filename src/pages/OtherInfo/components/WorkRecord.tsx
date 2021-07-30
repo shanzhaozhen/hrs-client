@@ -1,31 +1,27 @@
 import React, { useState } from 'react';
 import type { ProColumns } from '@ant-design/pro-table';
 import { EditableProTable } from '@ant-design/pro-table';
-import type { FamilyForm, FamilyVO } from '@/services/family/typings';
+import type { WorkRecordForm, WorkRecordVO } from '@/services/work-record/typings';
 import type { FormInstance } from 'antd';
 import ProFormItem from '@ant-design/pro-form/lib/components/FormItem';
-import { useOptions } from '@/utils/options';
 
-interface FamilyListProps {
+interface WorkRecordListProps {
   readonly?: boolean;
   editForm?: FormInstance;
-  value?: (FamilyVO | FamilyForm)[];
+  value?: (WorkRecordVO | WorkRecordForm)[];
 }
 
-const FamilyList: React.FC<FamilyListProps> = (props) => {
+const WorkRecordList: React.FC<WorkRecordListProps> = (props) => {
   const { readonly, editForm, value } = props;
-
-  const relationOptions = useOptions('Relation');
-  const politicsOptions = useOptions('Politics');
 
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>(() =>
     !readonly && value ? value.map((item) => item.id) : [],
   );
 
-  const columns: ProColumns<FamilyForm>[] = [
+  const columns: ProColumns<WorkRecordForm>[] = [
     {
-      title: '姓名',
-      dataIndex: 'name',
+      title: '组织',
+      dataIndex: 'organization',
       valueType: 'text',
       formItemProps: {
         rules: [
@@ -37,33 +33,33 @@ const FamilyList: React.FC<FamilyListProps> = (props) => {
       },
     },
     {
-      title: '关系',
-      dataIndex: 'relation',
-      valueType: 'select',
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: '此项为必填项',
-          },
-        ],
-      },
-      fieldProps: { options: relationOptions },
+      title: '人员类别',
+      dataIndex: 'category',
+      valueType: 'text',
     },
     {
-      title: '出生日期',
-      dataIndex: 'birthday',
+      title: '开始时间',
+      dataIndex: 'startDate',
       valueType: 'date',
     },
     {
-      title: '政治面貌',
-      dataIndex: 'politics',
-      valueType: 'text',
-      fieldProps: { options: politicsOptions },
+      title: '结束时间',
+      dataIndex: 'endDate',
+      valueType: 'date',
     },
     {
-      title: '工作单位',
-      dataIndex: 'workUnit',
+      title: '部门',
+      dataIndex: 'department',
+      valueType: 'text',
+    },
+    {
+      title: '岗位',
+      dataIndex: 'post',
+      valueType: 'text',
+    },
+    {
+      title: '岗位序列',
+      dataIndex: 'postType',
       valueType: 'text',
     },
     {
@@ -72,19 +68,44 @@ const FamilyList: React.FC<FamilyListProps> = (props) => {
       valueType: 'text',
     },
     {
-      title: '移动电话',
-      dataIndex: 'mobilePhone',
+      title: '职务类别',
+      dataIndex: 'dutyType',
       valueType: 'text',
     },
     {
-      title: '固话',
-      dataIndex: 'landlinePhone',
+      title: '异动事件',
+      dataIndex: 'changeEvent',
       valueType: 'text',
     },
     {
-      title: '是否紧急联系人',
-      dataIndex: 'isEmergency',
+      title: '异动类型',
+      dataIndex: 'changeType',
       valueType: 'text',
+    },
+    {
+      title: '异动原因',
+      dataIndex: 'changeReason',
+      valueType: 'text',
+    },
+    {
+      title: '试用',
+      dataIndex: 'trial',
+      valueType: 'text',
+    },
+    {
+      title: '试用类型',
+      dataIndex: 'trialType',
+      valueType: 'text',
+    },
+    {
+      title: '部门详情',
+      dataIndex: 'departmentDetails',
+      valueType: 'text',
+    },
+    {
+      title: '备注',
+      dataIndex: 'remarks',
+      valueType: 'textarea',
     },
     {
       title: '操作',
@@ -95,8 +116,8 @@ const FamilyList: React.FC<FamilyListProps> = (props) => {
 
   return (
     <>
-      <ProFormItem name="familyList" trigger="onValuesChange">
-        <EditableProTable<FamilyForm>
+      <ProFormItem name="workRecordList" trigger="onValuesChange">
+        <EditableProTable<WorkRecordForm>
           dataSource={value}
           rowKey="id"
           toolBarRender={false}
@@ -127,4 +148,4 @@ const FamilyList: React.FC<FamilyListProps> = (props) => {
   );
 };
 
-export default FamilyList;
+export default WorkRecordList;

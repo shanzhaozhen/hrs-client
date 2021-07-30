@@ -1,10 +1,12 @@
-import React, {useState} from 'react';
-import type { ProColumns } from "@ant-design/pro-table";
-import { EditableProTable } from "@ant-design/pro-table";
-import type { EducationalExperienceForm, EducationalExperienceVO } from "@/services/educational-experience/typings";
-import type { FormInstance } from "antd";
-import ProFormItem from "@ant-design/pro-form/lib/components/FormItem";
-import {useOptions} from "@/utils/options";
+import React, { useState } from 'react';
+import type { ProColumns } from '@ant-design/pro-table';
+import { EditableProTable } from '@ant-design/pro-table';
+import type {
+  EducationalExperienceForm,
+  EducationalExperienceVO,
+} from '@/services/educational-experience/typings';
+import type { FormInstance } from 'antd';
+import ProFormItem from '@ant-design/pro-form/lib/components/FormItem';
 
 interface EducationalExperienceListProps {
   readonly?: boolean;
@@ -15,10 +17,8 @@ interface EducationalExperienceListProps {
 const EducationalExperienceList: React.FC<EducationalExperienceListProps> = (props) => {
   const { readonly, editForm, value } = props;
 
-  const educationOptions = useOptions('Education');
-
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>(() =>
-    !readonly && value ? value.map((item) => item.id) : []
+    !readonly && value ? value.map((item) => item.id) : [],
   );
 
   const columns: ProColumns<EducationalExperienceForm>[] = [
@@ -46,26 +46,54 @@ const EducationalExperienceList: React.FC<EducationalExperienceListProps> = (pro
       valueType: 'date',
     },
     {
-      title: '学历',
-      dataIndex: 'education',
-      valueType: 'text',
-      fieldProps: { options: educationOptions }
-    },
-    {
       title: '专业',
       dataIndex: 'major',
       valueType: 'text',
     },
     {
-      title: '学制',
-      dataIndex: 'studyYears',
-      valueType: 'digit',
+      title: '学历',
+      dataIndex: 'education',
+      valueType: 'text',
     },
     {
-      title: '是否全日制',
-      dataIndex: 'fullTime',
-      valueType: 'switch',
-      render: (_, { fullTime }) => (fullTime ? '是' : '否'),
+      title: '学位',
+      dataIndex: 'degree',
+      valueType: 'text',
+    },
+    {
+      title: '学位授予日期',
+      dataIndex: 'degreeDate',
+      valueType: 'date',
+    },
+    {
+      title: '学位授予单位',
+      dataIndex: 'degreeCompany',
+      valueType: 'text',
+    },
+    {
+      title: '学历证书编号',
+      dataIndex: 'educationNumber',
+      valueType: 'text',
+    },
+    {
+      title: '学位证书编号',
+      dataIndex: 'degreeNumber',
+      valueType: 'text',
+    },
+    {
+      title: '是否最高学历',
+      dataIndex: 'isHighestEducation',
+      valueType: 'text',
+    },
+    {
+      title: '入职学历',
+      dataIndex: 'entryEducation',
+      valueType: 'text',
+    },
+    {
+      title: '是否入职学历',
+      dataIndex: 'isEntryEducation',
+      valueType: 'text',
     },
     {
       title: '证明人姓名',
@@ -82,26 +110,32 @@ const EducationalExperienceList: React.FC<EducationalExperienceListProps> = (pro
       valueType: 'option',
       hideInTable: readonly,
     },
+    {
+      title: '备注',
+      dataIndex: 'remarks',
+      valueType: 'textarea',
+    },
   ];
 
   return (
     <>
-      <ProFormItem
-        name="educationalExperienceList"
-        trigger="onValuesChange"
-      >
+      <ProFormItem name="educationalExperienceList" trigger="onValuesChange">
         <EditableProTable<EducationalExperienceForm>
           dataSource={value}
           rowKey="id"
           toolBarRender={false}
           columns={columns}
-          recordCreatorProps={readonly ? false : {
-            newRecordType: 'dataSource',
-            position: 'bottom',
-            record: () => ({
-              id: new Date().getTime(),
-            }),
-          }}
+          recordCreatorProps={
+            readonly
+              ? false
+              : {
+                  newRecordType: 'dataSource',
+                  position: 'bottom',
+                  record: () => ({
+                    id: new Date().getTime(),
+                  }),
+                }
+          }
           editable={{
             type: 'multiple',
             form: editForm,

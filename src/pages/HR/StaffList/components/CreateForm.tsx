@@ -6,7 +6,7 @@ import type { StaffForm } from '@/services/staff/typings';
 import FormBody from '@/pages/HR/StaffList/components/FormBody';
 import ProForm, { DrawerForm } from '@ant-design/pro-form';
 import type { ActionType } from '@ant-design/pro-table';
-import { convertStaffForm } from "@/utils/staff";
+import { convertStaffForm } from '@/utils/staff';
 
 interface CreateFormProps {
   createDrawerVisible: boolean;
@@ -17,10 +17,14 @@ interface CreateFormProps {
 const CreateForm: React.FC<CreateFormProps> = (props) => {
   const { createDrawerVisible, handleCreateDrawerVisible, tableActionRef } = props;
 
+  const [workRecordForm] = ProForm.useForm();
   const [workExperienceForm] = ProForm.useForm();
   const [educationalExperienceForm] = ProForm.useForm();
-  const [certificateForm] = ProForm.useForm();
   const [familyForm] = ProForm.useForm();
+  const [contractForm] = ProForm.useForm();
+  const [titleForm] = ProForm.useForm();
+  const [qualificationForm] = ProForm.useForm();
+  const [driverLicenseForm] = ProForm.useForm();
 
   /**
    * 添加员工
@@ -29,10 +33,14 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
   const handleAdd = async (fields: StaffForm) => {
     const hide = message.loading('正在添加');
     try {
+      await workRecordForm.validateFields();
       await workExperienceForm.validateFields();
       await educationalExperienceForm.validateFields();
-      await certificateForm.validateFields();
       await familyForm.validateFields();
+      await contractForm.validateFields();
+      await titleForm.validateFields();
+      await qualificationForm.validateFields();
+      await driverLicenseForm.validateFields();
       await addStaff(convertStaffForm(fields));
       hide();
       message.success('添加成功');
@@ -47,7 +55,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
   return (
     <>
       <DrawerForm
-        width={'75%'}
+        width={'80%'}
         title="新建员工"
         visible={createDrawerVisible}
         onVisibleChange={handleCreateDrawerVisible}
@@ -55,16 +63,20 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
           destroyOnClose: true,
         }}
         onValuesChange={(changedValues: any, allValues: any) => {
-          console.log('changedValues', changedValues)
-          console.log('allValues', allValues)
+          console.log('changedValues', changedValues);
+          console.log('allValues', allValues);
         }}
         onFinish={handleAdd}
       >
         <FormBody
+          workRecordForm={workRecordForm}
           workExperienceForm={workExperienceForm}
           educationalExperienceForm={educationalExperienceForm}
-          certificateForm={certificateForm}
           familyForm={familyForm}
+          contractForm={contractForm}
+          titleForm={titleForm}
+          qualificationForm={qualificationForm}
+          driverLicenseForm={driverLicenseForm}
         />
       </DrawerForm>
     </>

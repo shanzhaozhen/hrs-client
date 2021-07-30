@@ -1,10 +1,15 @@
 import React, { useRef, useState } from 'react';
 import type { FormInstance } from 'antd';
-import { Button, Divider, Input, message, Modal } from 'antd';
+import { Button, Divider, Input, message } from 'antd';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { exportStaff, getStaffById, getStaffPage, printStaff } from '@/services/staff/staff';
+import {
+  exportStaff,
+  generateStaffTemplate,
+  getStaffById,
+  getStaffPage,
+} from '@/services/staff/staff';
 import type { StaffForm, StaffVO } from '@/services/staff/typings';
 import { getPageParams, getSortOrder, tableFilter } from '@/utils/common';
 import { ExportOutlined, ImportOutlined, PlusOutlined } from '@ant-design/icons';
@@ -13,9 +18,9 @@ import UpdateForm from '@/pages/HR/StaffList/components/UpdateForm';
 import ViewForm from '@/pages/HR/StaffList/components/ViewForm';
 import { useDepartmentList, useDepartmentTree } from '@/utils/department';
 import FormTreeSelect from '@/components/FormTreeSelect';
-import { ProFormUploadDragger } from '@ant-design/pro-form';
 import { downloadFile } from '@/utils/file';
 import { useOptions } from '@/utils/options';
+import ImportModal from '@/components/ImportModal';
 
 const StaffList: React.FC = () => {
   const actionRef = useRef<ActionType>();
@@ -265,7 +270,7 @@ const StaffList: React.FC = () => {
             <PlusOutlined /> 新建
           </Button>,
           <Button type="primary" onClick={() => handleImportModalVisible(true)}>
-            <ImportOutlined /> 导入
+            <ImportOutlined /> 员工导入
           </Button>,
           <Button
             type="primary"
@@ -278,18 +283,7 @@ const StaffList: React.FC = () => {
               });
             }}
           >
-            <ExportOutlined /> 导出
-          </Button>,
-          <Button
-            type="primary"
-            onClick={() => {
-              const fieldsValue = formRef.current?.getFieldsValue();
-              printStaff(fieldsValue.id).then((data) => {
-                downloadFile(data, `员工-${new Date().getTime()}.docx`);
-              });
-            }}
-          >
-            <ExportOutlined /> 打印
+            <ExportOutlined /> 员工导出
           </Button>,
         ]}
         request={async (params, sorter) => {
@@ -339,36 +333,42 @@ const StaffList: React.FC = () => {
         tableActionRef={actionRef}
       />
 
-      <Modal
-        title="导入"
+      <ImportModal
         visible={importModalVisible}
-        onCancel={() => handleImportModalVisible(false)}
-        footer={null}
-      >
-        <div
-          style={{
-            textAlign: 'right',
-            marginBottom: 15,
-          }}
-        >
-          <a
-            href="#"
-            onClick={() => {
-              // todo: 员工信息导入
-              console.log('dd');
-            }}
-          >
-            点击下载
-          </a>
-          导入模板
-        </div>
-        <ProFormUploadDragger
-          description="导入员工"
-          fieldProps={{
-            maxCount: 1,
-          }}
-        />
-      </Modal>
+        handleVisible={handleImportModalVisible}
+        haveTemplate={true}
+        downloadTemplate={() => {
+          generateStaffTemplate().then((data) => {
+            downloadFile(data, '员工导入模板.xlsx');
+          });
+        }}
+        description="导入员工"
+        uploadProps={{
+          action: '/hrs-api/staff/import',
+          headers: {
+            Authorization: localStorage.getItem('ACCESS_TOKEN') || '',
+          },
+          name: 'file',
+          maxCount: 1,
+          onChange: ({ file }) => {
+            const { status, response } = file;
+            if (status === 'done') {
+              const { data } = response;
+              message
+                .success({
+                  content: `导入成功：${data}`,
+                  style: {
+                    whiteSpace: 'pre-wrap',
+                  },
+                })
+                .then();
+              actionRef.current?.reloadAndRest?.();
+            } else if (status === 'error') {
+              message.error(`导入失败：${response.message}`).then();
+            }
+          },
+        }}
+      />
     </PageContainer>
   );
 };

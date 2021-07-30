@@ -1,10 +1,10 @@
-import React, {useState} from 'react';
-import type { ProColumns } from "@ant-design/pro-table";
-import { EditableProTable } from "@ant-design/pro-table";
-import type { WorkExperienceForm, WorkExperienceVO } from "@/services/work-experience/typings";
-import type { FormInstance } from "antd";
-import ProFormItem from "@ant-design/pro-form/lib/components/FormItem";
-import {useOptions} from "@/utils/options";
+import React, { useState } from 'react';
+import type { ProColumns } from '@ant-design/pro-table';
+import { EditableProTable } from '@ant-design/pro-table';
+import type { WorkExperienceForm, WorkExperienceVO } from '@/services/work-experience/typings';
+import type { FormInstance } from 'antd';
+import ProFormItem from '@ant-design/pro-form/lib/components/FormItem';
+import { useOptions } from '@/utils/options';
 
 interface WorkExperienceListProps {
   readonly?: boolean;
@@ -18,7 +18,7 @@ const WorkExperienceList: React.FC<WorkExperienceListProps> = (props) => {
   const unitTypeOptions = useOptions('UnitType');
 
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>(() =>
-    !readonly && value ? value.map((item) => item.id) : []
+    !readonly && value ? value.map((item) => item.id) : [],
   );
 
   const columns: ProColumns<WorkExperienceForm>[] = [
@@ -46,6 +46,11 @@ const WorkExperienceList: React.FC<WorkExperienceListProps> = (props) => {
       valueType: 'date',
     },
     {
+      title: '部门',
+      dataIndex: 'department',
+      valueType: 'text',
+    },
+    {
       title: '职务/岗位',
       dataIndex: 'duty',
       valueType: 'text',
@@ -54,7 +59,7 @@ const WorkExperienceList: React.FC<WorkExperienceListProps> = (props) => {
       title: '单位性质',
       dataIndex: 'unitType',
       valueType: 'select',
-      fieldProps: { options: unitTypeOptions }
+      fieldProps: { options: unitTypeOptions },
     },
     {
       title: '月薪',
@@ -80,22 +85,23 @@ const WorkExperienceList: React.FC<WorkExperienceListProps> = (props) => {
 
   return (
     <>
-      <ProFormItem
-        name="workExperienceList"
-        trigger="onValuesChange"
-      >
+      <ProFormItem name="workExperienceList" trigger="onValuesChange">
         <EditableProTable<WorkExperienceForm>
           dataSource={value}
           rowKey="id"
           toolBarRender={false}
           columns={columns}
-          recordCreatorProps={readonly ? false : {
-            newRecordType: 'dataSource',
-            position: 'bottom',
-            record: () => ({
-              id: new Date().getTime(),
-            }),
-          }}
+          recordCreatorProps={
+            readonly
+              ? false
+              : {
+                  newRecordType: 'dataSource',
+                  position: 'bottom',
+                  record: () => ({
+                    id: new Date().getTime(),
+                  }),
+                }
+          }
           editable={{
             type: 'multiple',
             form: editForm,

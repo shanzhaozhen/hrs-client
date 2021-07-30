@@ -7,7 +7,6 @@ import RegionSelect from '@/components/RegionSelect';
 import type { RegionType } from '@/services/region/typings';
 import EducationalExperienceList from '@/pages/OtherInfo/components/EducationalExperienceList';
 import WorkExperienceList from '@/pages/OtherInfo/components/WorkExperienceList';
-import CertificateList from '@/pages/OtherInfo/components/CertificateList';
 import FamilyList from '@/pages/OtherInfo/components/FamilyList';
 import ProFormItem from '@ant-design/pro-form/lib/components/FormItem';
 import PhotoUpload from '@/components/PhotoUpload';
@@ -17,19 +16,27 @@ import ArmyInfo from '@/pages/OtherInfo/components/ArmyInfo';
 import MarriageInfo from '@/pages/OtherInfo/components/MarriageInfo';
 import EmergencyContactInfo from '@/pages/OtherInfo/components/EmergencyContactInfo';
 import ContactInfo from '@/pages/OtherInfo/components/ContactInfo';
-import CustomUpload from '@/components/CustomUpload';
 import { useOptions } from '@/utils/options';
 import FormTreeSelect from '@/components/FormTreeSelect';
 import { useDepartmentTree } from '@/utils/department';
+import WorkRecordList from '@/pages/OtherInfo/components/WorkRecord';
+import ContractList from '@/pages/OtherInfo/components/ContractList';
+import TitleList from '@/pages/OtherInfo/components/TitleList';
+import QualificationList from '@/pages/OtherInfo/components/QualificationList';
+import DriverLicenseList from '@/pages/OtherInfo/components/DriverLicenseList';
 
 interface FormProps {
   isView?: boolean;
   isEdit?: boolean;
   values?: StaffForm | StaffVO;
+  workRecordForm?: FormInstance;
   workExperienceForm?: FormInstance;
   educationalExperienceForm?: FormInstance;
-  certificateForm?: FormInstance;
   familyForm?: FormInstance;
+  contractForm?: FormInstance;
+  titleForm?: FormInstance;
+  qualificationForm?: FormInstance;
+  driverLicenseForm?: FormInstance;
 }
 
 const FormBody: React.FC<FormProps> = (props) => {
@@ -89,6 +96,7 @@ const FormBody: React.FC<FormProps> = (props) => {
     'code',
     (item) => `${item.name}(${item.code})`,
   );
+
   const companyStateOptions = useOptions('CompanyState');
   const householdTypeOptions = useOptions('HouseholdType');
   const nationOptions = useOptions('Nation');
@@ -404,31 +412,56 @@ const FormBody: React.FC<FormProps> = (props) => {
         <Tabs.TabPane tab="服兵役信息" key="4">
           <ArmyInfo isView={isView} />
         </Tabs.TabPane>
-        <Tabs.TabPane tab="工作履历" key="5" forceRender>
+        <Tabs.TabPane tab="工作记录" key="5" forceRender>
+          <WorkRecordList
+            readonly={isView}
+            editForm={props.workRecordForm}
+            value={values?.workRecordList}
+          />
+        </Tabs.TabPane>
+        <Tabs.TabPane tab="工作履历" key="6" forceRender>
           <WorkExperienceList
             readonly={isView}
             editForm={props.workExperienceForm}
             value={values?.workExperienceList}
           />
         </Tabs.TabPane>
-        <Tabs.TabPane tab="教育经历" key="6" forceRender>
+        <Tabs.TabPane tab="教育经历" key="7" forceRender>
           <EducationalExperienceList
             readonly={isView}
             editForm={props.educationalExperienceForm}
             value={values?.educationalExperienceList}
           />
         </Tabs.TabPane>
-        <Tabs.TabPane tab="证书信息" key="7" forceRender>
-          <CertificateList
-            readonly={isView}
-            editForm={props.certificateForm}
-            value={values?.certificateList}
-          />
-        </Tabs.TabPane>
         <Tabs.TabPane tab="家庭信息" key="8" forceRender>
           <FamilyList readonly={isView} editForm={props.familyForm} value={values?.familyList} />
         </Tabs.TabPane>
-        <Tabs.TabPane tab="其他附件" key="9" forceRender>
+        <Tabs.TabPane tab="合同信息" key="9" forceRender>
+          <ContractList
+            readonly={isView}
+            editForm={props.contractForm}
+            value={values?.contractList}
+          />
+        </Tabs.TabPane>
+        <Tabs.TabPane tab="职称信息" key="10" forceRender>
+          <TitleList readonly={isView} editForm={props.titleForm} value={values?.titleList} />
+        </Tabs.TabPane>
+        <Tabs.TabPane tab="职业资格" key="11" forceRender>
+          <QualificationList
+            readonly={isView}
+            editForm={props.qualificationForm}
+            value={values?.qualificationList}
+          />
+        </Tabs.TabPane>
+        <Tabs.TabPane tab="驾驶证信息" key="12" forceRender>
+          <DriverLicenseList
+            readonly={isView}
+            editForm={props.driverLicenseForm}
+            value={values?.driverLicenseList}
+          />
+        </Tabs.TabPane>
+
+        {/* <Tabs.TabPane tab="其他附件" key="9" forceRender>
           <Row gutter={24}>
             <Col xl={24} lg={24} md={24}>
               <ProFormItem label="劳动合同" name="laborContract">
@@ -442,7 +475,7 @@ const FormBody: React.FC<FormProps> = (props) => {
               </ProFormItem>
             </Col>
           </Row>
-        </Tabs.TabPane>
+        </Tabs.TabPane> */}
       </Tabs>
     </>
   );
