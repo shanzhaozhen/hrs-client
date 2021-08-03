@@ -225,8 +225,25 @@ const FormBody: React.FC<FormProps> = (props) => {
                     width="sm"
                     name="socialSecurityNumber"
                     label="社保号"
-                    rules={[{ required: true, message: '请选择入职日期' }]}
-                    placeholder="请输入社保号"
+                    rules={[{ required: true, message: '请选择社保号' }]}
+                    readonly={isView}
+                  />
+                </Col>
+                <Col xl={12} lg={24} md={24}>
+                  <ProFormText
+                    width="sm"
+                    name="bankCardNumber"
+                    label="银行卡号"
+                    rules={[{ required: true, message: '请选择银行卡号' }]}
+                    readonly={isView}
+                  />
+                </Col>
+                <Col xl={12} lg={24} md={24}>
+                  <ProFormText
+                    width="sm"
+                    name="bankName"
+                    label="开户行"
+                    rules={[{ required: true, message: '请选择开户行' }]}
                     readonly={isView}
                   />
                 </Col>
@@ -291,6 +308,15 @@ const FormBody: React.FC<FormProps> = (props) => {
               />
             </Col>
             <Col xl={8} lg={12} md={24}>
+              <ProFormDatePicker
+                width="sm"
+                name="entryGacDate"
+                label="进入商贸集团时间"
+                rules={[{ required: false, message: '请选择进入商贸集团时间' }]}
+                readonly={isView}
+              />
+            </Col>
+            <Col xl={8} lg={12} md={24}>
               <ProFormSelect
                 width="sm"
                 name={['staffInfo', 'politics']}
@@ -307,6 +333,24 @@ const FormBody: React.FC<FormProps> = (props) => {
                 label="最高学历"
                 rules={[{ required: false, message: '请选择最高学历' }]}
                 options={educationOptions}
+                readonly={isView}
+              />
+            </Col>
+            <Col xl={8} lg={12} md={24}>
+              <ProFormText
+                width="sm"
+                name={['staffInfo', 'major']}
+                label="最高学历专业"
+                rules={[{ required: false, message: '请输入最高学历专业' }]}
+                readonly={isView}
+              />
+            </Col>
+            <Col xl={8} lg={12} md={24}>
+              <ProFormText
+                width="sm"
+                name={['staffInfo', 'schoolName']}
+                label="最高学历毕业学校"
+                rules={[{ required: false, message: '请输入最高学历毕业学校' }]}
                 readonly={isView}
               />
             </Col>
