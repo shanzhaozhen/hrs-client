@@ -14,21 +14,41 @@
 
 ### 运行截图
 
-<center class="half">
-    <img src="https://raw.githubusercontent.com/shanzhaozhen/hrs/master/doc/img/%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86.png" alt="用户管理" width="33%"/>
-    <img src="https://raw.githubusercontent.com/shanzhaozhen/hrs/master/doc/img/%E8%8F%9C%E5%8D%95%E7%AE%A1%E7%90%86.png" alt="菜单管理" width="33%"/>
-    <img src="https://raw.githubusercontent.com/shanzhaozhen/hrs/master/doc/img/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E8%AE%BE%E7%BD%AE.png" alt="定时任务设置" width="33%"/>
-</center>
-<center class="half">
-    <img src="https://raw.githubusercontent.com/shanzhaozhen/hrs/master/doc/img/%E8%A7%92%E8%89%B2%E7%AE%A1%E7%90%86.png" alt="角色管理" width="33%"/>
-    <img src="https://raw.githubusercontent.com/shanzhaozhen/hrs/master/doc/img/%E8%A7%92%E8%89%B2%E5%88%86%E9%85%8D.png" alt="角色分配" width="33%"/>
-    <img src="https://raw.githubusercontent.com/shanzhaozhen/hrs/master/doc/img/%E4%BF%AE%E6%94%B9%E8%A7%92%E8%89%B2.png" alt="修改角色" width="33%"/>
-</center>
-<center class="half">
-    <img src="https://raw.githubusercontent.com/shanzhaozhen/hrs/master/doc/img/%E5%AD%97%E5%85%B8%E7%AE%A1%E7%90%86.png" alt="字典管理" width="33%"/>
-    <img src="https://raw.githubusercontent.com/shanzhaozhen/hrs/master/doc/img/%E5%91%98%E5%B7%A5%E7%AE%A1%E7%90%86.png" alt="员工管理" width="33%"/>
-    <img src="https://raw.githubusercontent.com/shanzhaozhen/hrs/master/doc/img/%E8%96%AA%E8%B5%84%E5%8F%91%E6%94%BE%E8%AE%A1%E7%AE%97.png" alt="薪资发放计算" width="33%"/>
-</center>
+<table>
+  <tr>
+    <td>
+      <img src="https://raw.githubusercontent.com/shanzhaozhen/hrs/master/doc/img/%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86.png" alt="用户管理"/>
+    </td>
+    <td>
+      <img src="https://raw.githubusercontent.com/shanzhaozhen/hrs/master/doc/img/%E8%8F%9C%E5%8D%95%E7%AE%A1%E7%90%86.png" alt="菜单管理"/>
+    </td>
+    <td>
+      <img src="https://raw.githubusercontent.com/shanzhaozhen/hrs/master/doc/img/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E8%AE%BE%E7%BD%AE.png" alt="定时任务设置"/>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="https://raw.githubusercontent.com/shanzhaozhen/hrs/master/doc/img/%E8%A7%92%E8%89%B2%E7%AE%A1%E7%90%86.png" alt="角色管理"/>
+    </td>
+    <td> 
+      <img src="https://raw.githubusercontent.com/shanzhaozhen/hrs/master/doc/img/%E8%A7%92%E8%89%B2%E5%88%86%E9%85%8D.png" alt="角色分配"/>
+    </td>
+    <td>
+      <img src="https://raw.githubusercontent.com/shanzhaozhen/hrs/master/doc/img/%E4%BF%AE%E6%94%B9%E8%A7%92%E8%89%B2.png" alt="修改角色"/>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="https://raw.githubusercontent.com/shanzhaozhen/hrs/master/doc/img/%E5%AD%97%E5%85%B8%E7%AE%A1%E7%90%86.png" alt="字典管理"/>
+    </td>
+    <td>
+      <img src="https://raw.githubusercontent.com/shanzhaozhen/hrs/master/doc/img/%E5%91%98%E5%B7%A5%E7%AE%A1%E7%90%86.png" alt="员工管理"/>
+    </td>
+    <td>
+      <img src="https://raw.githubusercontent.com/shanzhaozhen/hrs/master/doc/img/%E8%96%AA%E8%B5%84%E5%8F%91%E6%94%BE%E8%AE%A1%E7%AE%97.png" alt="薪资发放计算"/>
+    </td>
+  </tr>
+</table>
 
 ### 功能实现
 
