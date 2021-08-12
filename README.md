@@ -52,7 +52,7 @@
 
 ### 功能实现
 
-请看项目中 doc 中的[人事系统脑图](https://github.com/shanzhaozhen/hrs/blob/master/doc/%E4%BA%BA%E4%BA%8B%E7%B3%BB%E7%BB%9F%E8%84%91%E5%9B%BE.vsdx)
+请看项目中 doc 中的[人事系统脑图](https://github.com/shanzhaozhen/hrs/blob/master/doc/%E4%BA%BA%E4%BA%8B%E7%B3%BB%E7%BB%9F%E8%84%91%E5%9B%BE.vsdx) ![人事系统功能脑图](https://raw.githubusercontent.com/shanzhaozhen/hrs/master/doc/img/%E4%BA%BA%E4%BA%8B%E7%B3%BB%E7%BB%9F%E5%8A%9F%E8%83%BD%E8%84%91%E5%9B%BE.png)
 
 ### 区域信息
 
@@ -80,6 +80,7 @@
 - redis（必须）
 - 运行 api 子工程下的测试用例，`testRegion`方法，加载区域信息，因为数据量比较大，读取区域信息的 json 数据插入到数据库中。（非必要）
 - 默认账号：`admin`，密码为：`123456`
+- 该项目使用的是 Gradle，如果使用 idea 的用户请将编译方式修改为 Gradle，否则使用 idea 内置的编译方式可能会造成 xml 文件不会编译到目标路径
 
 ### 运行方式
 
@@ -93,15 +94,10 @@ yarn run start
 
 2. 后台：
 
-- 先准备好 mysql 环境，
--
-
 ```shell
 cd hrs/api
 gradle bootRun
 ```
-
-该项目使用的是 Gradle，如果使用 idea 的用户请将编译方式修改为 Gradle，否则使用 idea 内置的编译方式可能会造成 xml 文件不会编译到目标路径
 
 ### 打包部署
 
