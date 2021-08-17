@@ -137,7 +137,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                   <ProFormItem
                     name="depId"
                     label="部门"
-                    rules={[{ required: true, message: '请选择部门' }]}
+                    rules={[{ required: !isEdit, message: '请选择部门' }]}
                   >
                     <FormTreeSelect
                       treeData={departmentTree}
@@ -153,7 +153,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                     width="sm"
                     name="duty"
                     label="职务"
-                    rules={[{ required: false, message: '请选择职务' }]}
+                    rules={[{ required: !isEdit, message: '请选择职务' }]}
                     options={dutyOptions}
                     readonly={isView}
                     disabled={isEdit}
@@ -164,7 +164,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                     width="sm"
                     name="post"
                     label="岗位"
-                    rules={[{ required: true, message: '请选择岗位' }]}
+                    rules={[{ required: !isEdit, message: '请选择岗位' }]}
                     options={postOptions}
                     readonly={isView}
                     disabled={isEdit}
@@ -175,7 +175,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                     width="sm"
                     name="postType"
                     label="岗位类型"
-                    rules={[{ required: true, message: '请选择岗位类型' }]}
+                    rules={[{ required: !isEdit, message: '请选择岗位类型' }]}
                     options={postTypeOptions}
                     readonly={isView}
                     disabled={isEdit}
@@ -186,7 +186,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                     width="sm"
                     name="postLevel"
                     label="岗位等级"
-                    rules={[{ required: true, message: '请选择岗位等级' }]}
+                    rules={[{ required: !isEdit, message: '请选择岗位等级' }]}
                     options={postLevelOptions}
                     readonly={isView}
                     disabled={isEdit}
@@ -197,9 +197,10 @@ const FormBody: React.FC<FormProps> = (props) => {
                     width="sm"
                     name="companyState"
                     label="在司状态"
-                    rules={[{ required: true, message: '请输入在司状态' }]}
+                    rules={[{ required: !isEdit, message: '请输入在司状态' }]}
                     options={companyStateOptions}
                     readonly={isView}
+                    disabled={isEdit}
                   />
                 </Col>
                 <Col xl={12} lg={24} md={24}>
@@ -225,7 +226,8 @@ const FormBody: React.FC<FormProps> = (props) => {
                     width="sm"
                     name="socialSecurityNumber"
                     label="社保号"
-                    rules={[{ required: true, message: '请选择社保号' }]}
+                    rules={[{ required: false, message: '请输入社保号' }]}
+                    placeholder="请输入社保号"
                     readonly={isView}
                   />
                 </Col>
@@ -234,7 +236,8 @@ const FormBody: React.FC<FormProps> = (props) => {
                     width="sm"
                     name="bankCardNumber"
                     label="银行卡号"
-                    rules={[{ required: true, message: '请选择银行卡号' }]}
+                    rules={[{ required: false, message: '请输入银行卡号' }]}
+                    placeholder="请输入银行卡号"
                     readonly={isView}
                   />
                 </Col>
@@ -243,7 +246,7 @@ const FormBody: React.FC<FormProps> = (props) => {
                     width="sm"
                     name="bankName"
                     label="开户行"
-                    rules={[{ required: true, message: '请选择开户行' }]}
+                    rules={[{ required: false, message: '请选择开户行' }]}
                     readonly={isView}
                   />
                 </Col>

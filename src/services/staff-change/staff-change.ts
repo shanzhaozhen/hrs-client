@@ -1,16 +1,21 @@
 // @ts-ignore
 import { request } from 'umi';
-import type { StaffChangeForm, StaffChangeVO } from "@/services/staff-change/typings";
-import type { Orders, Page, PageParams, ResultBody } from "@/services/common/typings";
+import type { StaffChangeForm, StaffChangeVO } from '@/services/staff-change/typings';
+import type { Orders, Page, PageParams, ResultBody } from '@/services/common/typings';
 
 /** 获取调动记录信息（分页） GET /staff-change/page */
-export async function getStaffChangePage(pageParams: PageParams, staffId: number | undefined | null, orders?: Orders | undefined | null, options?: Record<string, any>) {
+export async function getStaffChangePage(
+  pageParams: PageParams,
+  staffId: number | undefined | null,
+  orders?: Orders | undefined | null,
+  options?: Record<string, any>,
+) {
   return request<ResultBody<Page<StaffChangeVO>>>('/hrs-api/staff-change/page', {
     method: 'GET',
     params: {
       ...pageParams,
       ...orders,
-      staffId
+      staffId,
     },
     ...(options || {}),
   });
@@ -25,7 +30,7 @@ export async function getStaffChangeById(staffChangeId: number, options?: Record
 }
 
 /** 添加调动记录接口 POST /staff-change */
-export async function addStaffChange(body: StaffChangeForm, options?: Record<string, any>,) {
+export async function addStaffChange(body: StaffChangeForm, options?: Record<string, any>) {
   return request<ResultBody<number>>('/hrs-api/staff-change', {
     method: 'POST',
     headers: {
@@ -37,7 +42,7 @@ export async function addStaffChange(body: StaffChangeForm, options?: Record<str
 }
 
 /** 修改调动记录接口 PUT /staff-change */
-export async function updateStaffChange(body: StaffChangeForm, options?: Record<string, any>,) {
+export async function updateStaffChange(body: StaffChangeForm, options?: Record<string, any>) {
   return request<ResultBody<number>>('/hrs-api/staff-change', {
     method: 'PUT',
     headers: {
@@ -57,7 +62,10 @@ export async function deleteStaffChange(staffChangeId: number, options?: Record<
 }
 
 /** 批量删除调动记录接口 DELETE /staff-change */
-export async function batchDeleteStaffChange(body: (number | undefined)[], options?: Record<string, any>) {
+export async function batchDeleteStaffChange(
+  body: (number | undefined)[],
+  options?: Record<string, any>,
+) {
   return request<ResultBody<number[]>>('/hrs-api/staff-change', {
     method: 'DELETE',
     headers: {
@@ -65,6 +73,29 @@ export async function batchDeleteStaffChange(body: (number | undefined)[], optio
     },
     data: body,
     ...(options || {}),
+  });
+}
+
+/** 调动记录导入模板生成 GET /staff-change/template */
+export async function generateStaffChangeTemplate(options?: Record<string, any>) {
+  return request('/hrs-api/staff-change/template', {
+    method: 'GET',
+    responseType: 'blob',
+    ...(options || {}),
+    skipErrorHandler: true,
+  });
+}
+
+/** 导出调动记录 GET /staff-change/export */
+export async function exportStaffChange(params: any, options?: Record<string, any>) {
+  return request('/hrs-api/staff-change/export', {
+    method: 'GET',
+    responseType: 'blob',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+    skipErrorHandler: true,
   });
 }
 

@@ -23,6 +23,10 @@ export type StaffChangeForm = {
   prePostLevel?: string;
   /** 变更后岗位等级 */
   postPostLevel?: string;
+  /** 变更前岗位等级 */
+  preCompanyState?: string;
+  /** 变更后岗位等级 */
+  postCompanyState?: string;
   /** 生效日期 */
   effectiveDate?: string;
   /** 是否已执行 */
@@ -56,10 +60,14 @@ export type StaffChangeVO = {
   prePostType?: string;
   /** 变更后岗位类型 */
   postPostType?: string;
-  /** 变更前岗位等级 */
+  /** 变更前在司状态 */
   prePostLevel?: string;
-  /** 变更后岗位等级 */
+  /** 变更后在司状态 */
   postPostLevel?: string;
+  /** 变更前岗位等级 */
+  preCompanyState?: string;
+  /** 变更后岗位等级 */
+  postCompanyState?: string;
   /** 生效日期 */
   effectiveDate?: string;
   /** 是否已执行 */

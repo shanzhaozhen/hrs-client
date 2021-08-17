@@ -488,10 +488,16 @@ const SalaryList: React.FC = () => {
     {
       title: '备注',
       dataIndex: 'remarks',
-      valueType: 'text',
-      sorter: true,
-      hideInSearch: true,
-      hideInTable: true,
+      copyable: true,
+      ellipsis: true,
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: '此项为必填项',
+          },
+        ],
+      },
     },
     {
       title: '创建时间',

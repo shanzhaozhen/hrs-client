@@ -1,6 +1,11 @@
 import React, { useRef, useState } from 'react';
-import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Divider, Input, message, Modal, Popconfirm, Tag } from 'antd';
+import {
+  ExclamationCircleOutlined,
+  ExportOutlined,
+  ImportOutlined,
+  PlusOutlined,
+} from '@ant-design/icons';
+import { Button, Divider, FormInstance, Input, message, Modal, Popconfirm, Tag } from 'antd';
 import { FooterToolbar } from '@ant-design/pro-layout';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
@@ -12,12 +17,16 @@ import {
   deleteSalaryChange,
   batchDeleteSalaryChange,
   runChange,
+  generateSalaryChangeTemplate,
+  exportSalaryChange,
 } from '@/services/salary-change/salary-change';
 import type { SalaryChangeVO } from '@/services/salary-change/typings';
 import { getPageParams, getSortOrder, tableFilter } from '@/utils/common';
 import { useDepartmentList, useDepartmentTree } from '@/utils/department';
 import FormTreeSelect from '@/components/FormTreeSelect';
 import ViewForm from '@/pages/Salary/SalaryChangeList/components/ViewForm';
+import { downloadFile } from '@/utils/file';
+import ImportModal from '@/components/ImportModal';
 
 interface ListBodyProps {
   staffId?: number;
@@ -29,8 +38,10 @@ const SalaryChangeListBody: React.FC<ListBodyProps> = (props) => {
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [viewModalVisible, handleViewModalVisible] = useState<boolean>(false);
+  const [importModalVisible, handleImportModalVisible] = useState<boolean>(false);
   const [formValues, setFormValues] = useState<SalaryChangeVO>({});
   const actionRef = useRef<ActionType>();
+  const formRef = useRef<FormInstance>();
   const [selectedRowsState, setSelectedRows] = useState<SalaryChangeVO[]>([]);
 
   const departmentList = useDepartmentList();
@@ -292,6 +303,7 @@ const SalaryChangeListBody: React.FC<ListBodyProps> = (props) => {
       <ProTable<SalaryChangeVO>
         headerTitle="调薪记录"
         actionRef={actionRef}
+        formRef={formRef}
         rowKey="id"
         search={{
           labelWidth: 120,
@@ -299,6 +311,20 @@ const SalaryChangeListBody: React.FC<ListBodyProps> = (props) => {
         toolBarRender={() => [
           <Button type="primary" onClick={() => handleCreateModalVisible(true)}>
             <PlusOutlined /> 新建
+          </Button>,
+          <Button type="primary" onClick={() => handleImportModalVisible(true)}>
+            <ImportOutlined /> 导入
+          </Button>,
+          <Button
+            type="primary"
+            onClick={() => {
+              const fieldsValue = formRef.current?.getFieldsValue();
+              exportSalaryChange({ ...fieldsValue }).then((data) => {
+                downloadFile(data, `薪资变动-${new Date().getTime()}.xlsx`);
+              });
+            }}
+          >
+            <ExportOutlined /> 导出
           </Button>,
         ]}
         request={async (params, sorter) => {
@@ -340,6 +366,14 @@ const SalaryChangeListBody: React.FC<ListBodyProps> = (props) => {
         staffId={staffId}
       />
 
+      <ViewForm
+        viewModalVisible={viewModalVisible}
+        handleViewModalVisible={handleViewModalVisible}
+        values={formValues}
+        onCancel={() => setFormValues({})}
+        staffId={staffId}
+      />
+
       <UpdateForm
         updateModalVisible={updateModalVisible}
         handleUpdateModalVisible={handleUpdateModalVisible}
@@ -349,12 +383,41 @@ const SalaryChangeListBody: React.FC<ListBodyProps> = (props) => {
         staffId={staffId}
       />
 
-      <ViewForm
-        viewModalVisible={viewModalVisible}
-        handleViewModalVisible={handleViewModalVisible}
-        values={formValues}
-        onCancel={() => setFormValues({})}
-        staffId={staffId}
+      <ImportModal
+        visible={importModalVisible}
+        handleVisible={handleImportModalVisible}
+        haveTemplate={true}
+        downloadTemplate={() => {
+          generateSalaryChangeTemplate().then((data) => {
+            downloadFile(data, '薪资变动导入模板.xlsx');
+          });
+        }}
+        description="导入薪资变动"
+        uploadProps={{
+          action: '/hrs-api/salary-change/import',
+          headers: {
+            Authorization: localStorage.getItem('ACCESS_TOKEN') || '',
+          },
+          name: 'file',
+          maxCount: 1,
+          onChange: ({ file }) => {
+            const { status, response } = file;
+            if (status === 'done') {
+              const { data } = response;
+              message
+                .success({
+                  content: `导入成功：${data}`,
+                  style: {
+                    whiteSpace: 'pre-wrap',
+                  },
+                })
+                .then();
+              actionRef.current?.reloadAndRest?.();
+            } else if (status === 'error') {
+              message.error(`导入失败：${response.message}`).then();
+            }
+          },
+        }}
       />
     </>
   );

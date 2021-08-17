@@ -1,5 +1,11 @@
 import React, { useRef, useState } from 'react';
-import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import {
+  ExclamationCircleOutlined,
+  ExportOutlined,
+  ImportOutlined,
+  PlusOutlined,
+} from '@ant-design/icons';
+import type { FormInstance } from 'antd';
 import { Button, Divider, Input, message, Modal, Popconfirm, Tag } from 'antd';
 import { FooterToolbar } from '@ant-design/pro-layout';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
@@ -13,11 +19,15 @@ import {
   deleteStaffChange,
   batchDeleteStaffChange,
   runChange,
+  generateStaffChangeTemplate,
+  exportStaffChange,
 } from '@/services/staff-change/staff-change';
 import type { StaffChangeVO } from '@/services/staff-change/typings';
 import { getPageParams, getSortOrder, tableFilter } from '@/utils/common';
 import { useDepartmentList, useDepartmentTree } from '@/utils/department';
 import FormTreeSelect from '@/components/FormTreeSelect';
+import { downloadFile } from '@/utils/file';
+import ImportModal from '@/components/ImportModal';
 
 interface ListBodyProps {
   staffId?: number;
@@ -29,8 +39,11 @@ const StaffChangeList: React.FC<ListBodyProps> = (props) => {
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [viewModalVisible, handleViewModalVisible] = useState<boolean>(false);
+  const [importModalVisible, handleImportModalVisible] = useState<boolean>(false);
+
   const [formValues, setFormValues] = useState<StaffChangeVO>({});
   const actionRef = useRef<ActionType>();
+  const formRef = useRef<FormInstance>();
   const [selectedRowsState, setSelectedRows] = useState<StaffChangeVO[]>([]);
 
   const departmentList = useDepartmentList();
@@ -290,6 +303,7 @@ const StaffChangeList: React.FC<ListBodyProps> = (props) => {
       <ProTable<StaffChangeVO>
         headerTitle="调动记录"
         actionRef={actionRef}
+        formRef={formRef}
         rowKey="id"
         search={{
           labelWidth: 120,
@@ -297,6 +311,20 @@ const StaffChangeList: React.FC<ListBodyProps> = (props) => {
         toolBarRender={() => [
           <Button type="primary" onClick={() => handleCreateModalVisible(true)}>
             <PlusOutlined /> 新建
+          </Button>,
+          <Button type="primary" onClick={() => handleImportModalVisible(true)}>
+            <ImportOutlined /> 导入
+          </Button>,
+          <Button
+            type="primary"
+            onClick={() => {
+              const fieldsValue = formRef.current?.getFieldsValue();
+              exportStaffChange({ ...fieldsValue }).then((data) => {
+                downloadFile(data, `调动记录-${new Date().getTime()}.xlsx`);
+              });
+            }}
+          >
+            <ExportOutlined /> 导出
           </Button>,
         ]}
         request={async (params, sorter) => {
@@ -337,6 +365,14 @@ const StaffChangeList: React.FC<ListBodyProps> = (props) => {
         staffId={staffId}
       />
 
+      <ViewForm
+        viewModalVisible={viewModalVisible}
+        handleViewModalVisible={handleViewModalVisible}
+        values={formValues}
+        onCancel={() => setFormValues({})}
+        staffId={staffId}
+      />
+
       <UpdateForm
         updateModalVisible={updateModalVisible}
         handleUpdateModalVisible={handleUpdateModalVisible}
@@ -346,12 +382,41 @@ const StaffChangeList: React.FC<ListBodyProps> = (props) => {
         staffId={staffId}
       />
 
-      <ViewForm
-        viewModalVisible={viewModalVisible}
-        handleViewModalVisible={handleViewModalVisible}
-        values={formValues}
-        onCancel={() => setFormValues({})}
-        staffId={staffId}
+      <ImportModal
+        visible={importModalVisible}
+        handleVisible={handleImportModalVisible}
+        haveTemplate={true}
+        downloadTemplate={() => {
+          generateStaffChangeTemplate().then((data) => {
+            downloadFile(data, '调动记录导入模板.xlsx');
+          });
+        }}
+        description="导入调动"
+        uploadProps={{
+          action: '/hrs-api/staff-change/import',
+          headers: {
+            Authorization: localStorage.getItem('ACCESS_TOKEN') || '',
+          },
+          name: 'file',
+          maxCount: 1,
+          onChange: ({ file }) => {
+            const { status, response } = file;
+            if (status === 'done') {
+              const { data } = response;
+              message
+                .success({
+                  content: `导入成功：${data}`,
+                  style: {
+                    whiteSpace: 'pre-wrap',
+                  },
+                })
+                .then();
+              actionRef.current?.reloadAndRest?.();
+            } else if (status === 'error') {
+              message.error(`导入失败：${response.message}`).then();
+            }
+          },
+        }}
       />
     </>
   );

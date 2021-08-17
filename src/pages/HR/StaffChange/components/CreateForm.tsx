@@ -1,13 +1,13 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import type { FormInstance } from 'antd';
 import { message } from 'antd';
 import { addStaffChange } from '@/services/staff-change/staff-change';
-import type {StaffChangeForm, StaffChangeVO} from '@/services/staff-change/typings';
+import type { StaffChangeForm, StaffChangeVO } from '@/services/staff-change/typings';
 import FormBody from '@/pages/HR/StaffChange/components/FormBody';
 import { ModalForm } from '@ant-design/pro-form';
 import type { ActionType } from '@ant-design/pro-table';
-import {getStaffById} from "@/services/staff/staff";
+import { getStaffById } from '@/services/staff/staff';
 
 interface CreateFormProps {
   createModalVisible: boolean;
@@ -24,27 +24,32 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
   useEffect(() => {
     if (staffId) {
       getStaffById(staffId).then(({ data }) => {
-        setStaffChangeInitialValues(data ? {
-          ...data,
-          id: undefined,
-          staffId: data.id,
-          staffCode: data.staffCode,
-          staffName: data.staffName,
-          preDepId: data.depId,
-          preDuty: data.duty,
-          prePost: data.post,
-          prePostType: data.postType,
-          prePostLevel: data.postLevel,
-          postDepId: data.depId,
-          postDuty: data.duty,
-          postPost: data.post,
-          postPostType: data.postType,
-          postPostLevel: data.postLevel,
-        } : {});
-      })
+        setStaffChangeInitialValues(
+          data
+            ? {
+                ...data,
+                id: undefined,
+                staffId: data.id,
+                staffCode: data.staffCode,
+                staffName: data.staffName,
+                preDepId: data.depId,
+                preDuty: data.duty,
+                prePost: data.post,
+                prePostType: data.postType,
+                prePostLevel: data.postLevel,
+                preCompanyState: data.companyState,
+                postDepId: data.depId,
+                postDuty: data.duty,
+                postPost: data.post,
+                postPostType: data.postType,
+                postPostLevel: data.postLevel,
+                postCompanyState: data.companyState,
+              }
+            : {},
+        );
+      });
     }
-  }, [])
-
+  }, []);
 
   const formRef = useRef<FormInstance>();
 
@@ -80,7 +85,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
         }}
         onFinish={handleAdd}
       >
-        {!staffId || staffChangeInitialValues && Object.keys(staffChangeInitialValues).length ? (
+        {!staffId || (staffChangeInitialValues && Object.keys(staffChangeInitialValues).length) ? (
           <FormBody staffId={staffId} formRef={formRef} />
         ) : null}
       </ModalForm>
