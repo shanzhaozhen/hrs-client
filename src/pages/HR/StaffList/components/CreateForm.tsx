@@ -7,6 +7,7 @@ import FormBody from '@/pages/HR/StaffList/components/FormBody';
 import ProForm, { DrawerForm } from '@ant-design/pro-form';
 import type { ActionType } from '@ant-design/pro-table';
 import { convertStaffForm } from '@/utils/staff';
+import { validateForm } from '@/utils/validate';
 
 interface CreateFormProps {
   createDrawerVisible: boolean;
@@ -27,25 +28,100 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
   const [driverLicenseForm] = ProForm.useForm();
 
   /**
+   * 校验信息
+   */
+  const validateStaffOtherInfoForm = async () => {
+    let validateResult: boolean;
+    validateResult = await validateForm(
+      workRecordForm,
+      '工作记录列表校验失败，请检查填写是否正确',
+    ).then();
+    if (validateResult) {
+      validateResult = await validateForm(
+        workExperienceForm,
+        '工作履历列表校验失败，请检查填写是否正确',
+      ).then();
+    } else {
+      return false;
+    }
+    if (validateResult) {
+      validateResult = await validateForm(
+        educationalExperienceForm,
+        '教育经历列表校验失败，请检查填写是否正确',
+      ).then();
+    } else {
+      return false;
+    }
+    if (validateResult) {
+      validateResult = await validateForm(
+        familyForm,
+        '家庭信息列表校验失败，请检查填写是否正确',
+      ).then();
+    } else {
+      return false;
+    }
+    if (validateResult) {
+      validateResult = await validateForm(
+        contractForm,
+        '合同信息列表校验失败，请检查填写是否正确',
+      ).then();
+    } else {
+      return false;
+    }
+    if (validateResult) {
+      validateResult = await validateForm(
+        titleForm,
+        '职称信息列表校验失败，请检查填写是否正确',
+      ).then();
+    } else {
+      return false;
+    }
+    if (validateResult) {
+      validateResult = await validateForm(
+        qualificationForm,
+        '工作记录列表校验失败，请检查填写是否正确',
+      ).then();
+    } else {
+      return false;
+    }
+    if (validateResult) {
+      validateResult = await validateForm(
+        workExperienceForm,
+        '职业资格列表校验失败，请检查填写是否正确',
+      ).then();
+    } else {
+      return false;
+    }
+    if (validateResult) {
+      validateResult = await validateForm(
+        driverLicenseForm,
+        '驾驶证信息列表校验失败，请检查填写是否正确',
+      ).then();
+    } else {
+      return false;
+    }
+    return validateResult;
+  };
+
+  /**
    * 添加员工
    * @param fields
    */
   const handleAdd = async (fields: StaffForm) => {
     const hide = message.loading('正在添加');
     try {
-      await workRecordForm.validateFields();
-      await workExperienceForm.validateFields();
-      await educationalExperienceForm.validateFields();
-      await familyForm.validateFields();
-      await contractForm.validateFields();
-      await titleForm.validateFields();
-      await qualificationForm.validateFields();
-      await driverLicenseForm.validateFields();
-      await addStaff(convertStaffForm(fields));
-      hide();
-      message.success('添加成功');
-      handleCreateDrawerVisible(false);
-      tableActionRef.current?.reloadAndRest?.();
+      // 校验信息
+      const validateResult = await validateStaffOtherInfoForm();
+
+      if (validateResult) {
+        await addStaff(convertStaffForm(fields));
+        hide();
+        message.success('添加成功');
+        handleCreateDrawerVisible(false);
+        tableActionRef.current?.reloadAndRest?.();
+      } else {
+        hide();
+      }
     } catch (error) {
       hide();
       message.error('添加失败请重试！');

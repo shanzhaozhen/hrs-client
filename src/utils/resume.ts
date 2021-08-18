@@ -1,6 +1,6 @@
-import type {ResumeForm} from "@/services/resume/typings";
-import type {Dispatch, SetStateAction} from "react";
-import type {RegionType} from "@/services/region/typings";
+import type { ResumeForm } from '@/services/resume/typings';
+import type { Dispatch, SetStateAction } from 'react';
+import type { RegionType } from '@/services/region/typings';
 
 /**
  * 地址转换
@@ -13,11 +13,11 @@ export const convertAddress = (address: RegionType, field: string): any => {
       [`${field}Province`]: address.province || undefined,
       [`${field}City`]: address.city || undefined,
       [`${field}Area`]: address.area || undefined,
-      [`${field}Detail`]: address.detail || undefined
-    }
+      [`${field}Detail`]: address.detail || undefined,
+    };
   }
   return {};
-}
+};
 
 /**
  * 简历转变
@@ -38,7 +38,7 @@ export const convertResumeForm = (fields: ResumeForm): ResumeForm => {
     registeredAddress,
     homeAddress,
     currentAddress,
-    postalAddress
+    postalAddress,
   };
 };
 
@@ -48,10 +48,12 @@ export const convertResumeForm = (fields: ResumeForm): ResumeForm => {
  */
 export const getBirthdayFromIdNumber = (idNumber: string) => {
   if (idNumber && idNumber.length > 13) {
-    return new Date(`${idNumber.substring(6, 10)}-${idNumber.substring(10, 12)}-${idNumber.substring(12, 14)}`);
+    return new Date(
+      `${idNumber.substring(6, 10)}-${idNumber.substring(10, 12)}-${idNumber.substring(12, 14)}`,
+    );
   }
-  return ''
-}
+  return '';
+};
 
 /**
  * 身份证号码提取性别
@@ -59,17 +61,20 @@ export const getBirthdayFromIdNumber = (idNumber: string) => {
  */
 export const getSexFromIdNumber = (idNumber: string) => {
   if (idNumber && idNumber.length > 16) {
-    return Number(idNumber.substr(16,1)) % 2 ? '男' : '女';
+    return Number(idNumber.substr(16, 1)) % 2 ? '男' : '女';
   }
-  return ''
-}
+  return '';
+};
 
 /**
  * 校验工作简历
  * @param currentValue
  * @param setErrors
  */
-export const validateWorkExperienceList = (currentValue: any[], setErrors: Dispatch<SetStateAction<any>>) => {
+export const validateWorkExperienceList = (
+  currentValue: any[],
+  setErrors: Dispatch<SetStateAction<any>>,
+) => {
   let isPass = true;
   if (currentValue && currentValue.length > 0) {
     setErrors((origin: any) => {
@@ -78,8 +83,8 @@ export const validateWorkExperienceList = (currentValue: any[], setErrors: Dispa
         workExperienceList: currentValue.map((item: any) => {
           const error: Record<string, any> = {};
           if (item) {
-            if (!(item.hasOwnProperty('workUnit') && item.workUnit)) {
-              error.workUnit = '不能为空';
+            if (!(item.hasOwnProperty('workCompany') && item.workCompany)) {
+              error.workCompany = '不能为空';
               isPass = false;
             }
             if (!(item.hasOwnProperty('startDate') && item.startDate)) {
@@ -108,22 +113,24 @@ export const validateWorkExperienceList = (currentValue: any[], setErrors: Dispa
             }
           }
           return error;
-        })
-      }
+        }),
+      };
     });
   }
   if (!isPass) {
     throw new Error('请正确填写工作经历');
   }
-}
-
+};
 
 /**
  * 校验教育经历成员
  * @param currentValue
  * @param setErrors
  */
-export const validateEducationalList = (currentValue: any[], setErrors: Dispatch<SetStateAction<any>>) => {
+export const validateEducationalList = (
+  currentValue: any[],
+  setErrors: Dispatch<SetStateAction<any>>,
+) => {
   let isPass = true;
   if (currentValue && currentValue.length > 0) {
     setErrors((origin: any) => {
@@ -170,21 +177,24 @@ export const validateEducationalList = (currentValue: any[], setErrors: Dispatch
             }
           }
           return error;
-        })
-      }
+        }),
+      };
     });
   }
   if (!isPass) {
     throw new Error('请正确填写教育经历');
   }
-}
+};
 
 /**
  * 校验家庭成员
  * @param currentValue
  * @param setErrors
  */
-export const validateFamilyList = (currentValue: any[], setErrors: Dispatch<SetStateAction<any>>) => {
+export const validateFamilyList = (
+  currentValue: any[],
+  setErrors: Dispatch<SetStateAction<any>>,
+) => {
   let isPass = true;
   if (currentValue && currentValue.length > 0) {
     setErrors((origin: any) => {
@@ -194,7 +204,7 @@ export const validateFamilyList = (currentValue: any[], setErrors: Dispatch<SetS
           const error: Record<string, any> = {};
           if (item) {
             if (!(item.hasOwnProperty('name') && item.name)) {
-              error.workUnit = '不能为空';
+              error.workCompany = '不能为空';
               isPass = false;
             }
             if (!(item.hasOwnProperty('relation') && item.relation)) {
@@ -209,7 +219,7 @@ export const validateFamilyList = (currentValue: any[], setErrors: Dispatch<SetS
               error.duty = '不能为空';
               isPass = false;
             }
-            if (!(item.hasOwnProperty('workUnit') && item.workUnit)) {
+            if (!(item.hasOwnProperty('workCompany') && item.workCompany)) {
               error.unitType = '不能为空';
               isPass = false;
             }
@@ -223,22 +233,24 @@ export const validateFamilyList = (currentValue: any[], setErrors: Dispatch<SetS
             }
           }
           return error;
-        })
-      }
+        }),
+      };
     });
   }
   if (!isPass) {
     throw new Error('请正确填写家庭信息');
   }
-}
-
+};
 
 /**
  * 校验证书信息
  * @param currentValue
  * @param setErrors
  */
-export const validateCertificateList = (currentValue: any[], setErrors: Dispatch<SetStateAction<any>>) => {
+export const validateCertificateList = (
+  currentValue: any[],
+  setErrors: Dispatch<SetStateAction<any>>,
+) => {
   let isPass = true;
   if (currentValue && currentValue.length > 0) {
     setErrors((origin: any) => {
@@ -248,7 +260,7 @@ export const validateCertificateList = (currentValue: any[], setErrors: Dispatch
           const error: Record<string, any> = {};
           if (item) {
             if (!(item.hasOwnProperty('name') && item.name)) {
-              error.workUnit = '不能为空';
+              error.workCompany = '不能为空';
               isPass = false;
             }
             if (!(item.hasOwnProperty('type') && item.relation)) {
@@ -263,17 +275,17 @@ export const validateCertificateList = (currentValue: any[], setErrors: Dispatch
               error.duty = '不能为空';
               isPass = false;
             }
-            if (!(item.hasOwnProperty('issueUnit') && item.workUnit)) {
+            if (!(item.hasOwnProperty('issueUnit') && item.workCompany)) {
               error.unitType = '不能为空';
               isPass = false;
             }
           }
           return error;
-        })
-      }
+        }),
+      };
     });
   }
   if (!isPass) {
     throw new Error('请正确填写证书信息');
   }
-}
+};

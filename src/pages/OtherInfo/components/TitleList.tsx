@@ -24,6 +24,7 @@ const TitleList: React.FC<TitleListProps> = (props) => {
       title: '职称',
       dataIndex: 'title',
       valueType: 'text',
+      fixed: 'left',
       formItemProps: {
         rules: [
           {
@@ -82,6 +83,9 @@ const TitleList: React.FC<TitleListProps> = (props) => {
     {
       title: '操作',
       valueType: 'option',
+      width: 80,
+      align: 'center',
+      fixed: 'right',
       hideInTable: readonly,
     },
   ];
@@ -94,6 +98,7 @@ const TitleList: React.FC<TitleListProps> = (props) => {
           rowKey="id"
           toolBarRender={false}
           columns={columns}
+          scroll={{ x: 1800 }}
           recordCreatorProps={
             readonly
               ? false

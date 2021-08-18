@@ -38,12 +38,14 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
                 prePostType: data.postType,
                 prePostLevel: data.postLevel,
                 preCompanyState: data.companyState,
+                preEmployType: data.employType,
                 postDepId: data.depId,
                 postDuty: data.duty,
                 postPost: data.post,
                 postPostType: data.postType,
                 postPostLevel: data.postLevel,
                 postCompanyState: data.companyState,
+                postEmployType: data.employType,
               }
             : {},
         );

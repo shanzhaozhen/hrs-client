@@ -36,6 +36,7 @@ const StaffList: React.FC = () => {
   const departmentList = useDepartmentList();
   const departmentTree = useDepartmentTree();
   const companyStateOptions = useOptions('CompanyState');
+  const employTypeOptions = useOptions('EmployType');
   const postLevelOptions = useOptions(
     'PostLevel',
     'name',
@@ -142,6 +143,13 @@ const StaffList: React.FC = () => {
       sorter: true,
       initialValue: '在职',
       fieldProps: { options: companyStateOptions },
+    },
+    {
+      title: '用工性质',
+      dataIndex: 'employType',
+      valueType: 'select',
+      sorter: true,
+      fieldProps: { options: employTypeOptions },
     },
     {
       title: '职务',

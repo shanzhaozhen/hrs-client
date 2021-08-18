@@ -24,6 +24,7 @@ const DriverLicenseList: React.FC<DriverLicenseListProps> = (props) => {
       title: '准驾车型',
       dataIndex: 'modal',
       valueType: 'text',
+      fixed: 'left',
       formItemProps: {
         rules: [
           {
@@ -77,6 +78,9 @@ const DriverLicenseList: React.FC<DriverLicenseListProps> = (props) => {
     {
       title: '操作',
       valueType: 'option',
+      width: 80,
+      align: 'center',
+      fixed: 'right',
       hideInTable: readonly,
     },
   ];
@@ -89,6 +93,7 @@ const DriverLicenseList: React.FC<DriverLicenseListProps> = (props) => {
           rowKey="id"
           toolBarRender={false}
           columns={columns}
+          scroll={{ x: 1500 }}
           recordCreatorProps={
             readonly
               ? false

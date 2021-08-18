@@ -100,7 +100,7 @@ const StaffChangeList: React.FC<ListBodyProps> = (props) => {
         return ''.concat(
           tableFilter(record.preDepId, departmentList, '未分配'),
           '=>',
-          tableFilter(record.preDepId, departmentList, '未分配'),
+          tableFilter(record.postDepId, departmentList, '未分配'),
         );
       },
       renderFormItem: () => {
@@ -319,7 +319,10 @@ const StaffChangeList: React.FC<ListBodyProps> = (props) => {
             type="primary"
             onClick={() => {
               const fieldsValue = formRef.current?.getFieldsValue();
-              exportStaffChange({ ...fieldsValue }).then((data) => {
+              exportStaffChange({
+                ...fieldsValue,
+                staffId,
+              }).then((data) => {
                 downloadFile(data, `调动记录-${new Date().getTime()}.xlsx`);
               });
             }}

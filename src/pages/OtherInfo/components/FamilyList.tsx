@@ -27,6 +27,7 @@ const FamilyList: React.FC<FamilyListProps> = (props) => {
       title: '姓名',
       dataIndex: 'name',
       valueType: 'text',
+      fixed: 'left',
       formItemProps: {
         rules: [
           {
@@ -40,6 +41,7 @@ const FamilyList: React.FC<FamilyListProps> = (props) => {
       title: '关系',
       dataIndex: 'relation',
       valueType: 'select',
+      fixed: 'left',
       formItemProps: {
         rules: [
           {
@@ -63,7 +65,7 @@ const FamilyList: React.FC<FamilyListProps> = (props) => {
     },
     {
       title: '工作单位',
-      dataIndex: 'workUnit',
+      dataIndex: 'workCompany',
       valueType: 'text',
     },
     {
@@ -89,6 +91,9 @@ const FamilyList: React.FC<FamilyListProps> = (props) => {
     {
       title: '操作',
       valueType: 'option',
+      width: 80,
+      align: 'center',
+      fixed: 'right',
       hideInTable: readonly,
     },
   ];
@@ -101,6 +106,7 @@ const FamilyList: React.FC<FamilyListProps> = (props) => {
           rowKey="id"
           toolBarRender={false}
           columns={columns}
+          scroll={{ x: 1500 }}
           recordCreatorProps={
             readonly
               ? false

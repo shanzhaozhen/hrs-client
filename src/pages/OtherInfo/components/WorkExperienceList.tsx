@@ -24,8 +24,9 @@ const WorkExperienceList: React.FC<WorkExperienceListProps> = (props) => {
   const columns: ProColumns<WorkExperienceForm>[] = [
     {
       title: '工作单位',
-      dataIndex: 'workUnit',
+      dataIndex: 'workCompany',
       valueType: 'text',
+      fixed: 'left',
       formItemProps: {
         rules: [
           {
@@ -79,6 +80,9 @@ const WorkExperienceList: React.FC<WorkExperienceListProps> = (props) => {
     {
       title: '操作',
       valueType: 'option',
+      width: 80,
+      align: 'center',
+      fixed: 'right',
       hideInTable: readonly,
     },
   ];
@@ -91,6 +95,7 @@ const WorkExperienceList: React.FC<WorkExperienceListProps> = (props) => {
           rowKey="id"
           toolBarRender={false}
           columns={columns}
+          scroll={{ x: 1800 }}
           recordCreatorProps={
             readonly
               ? false

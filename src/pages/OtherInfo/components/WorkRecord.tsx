@@ -23,6 +23,7 @@ const WorkRecordList: React.FC<WorkRecordListProps> = (props) => {
       title: '组织',
       dataIndex: 'organization',
       valueType: 'text',
+      fixed: 'left',
       formItemProps: {
         rules: [
           {
@@ -110,6 +111,9 @@ const WorkRecordList: React.FC<WorkRecordListProps> = (props) => {
     {
       title: '操作',
       valueType: 'option',
+      width: 80,
+      align: 'center',
+      fixed: 'right',
       hideInTable: readonly,
     },
   ];
@@ -122,6 +126,7 @@ const WorkRecordList: React.FC<WorkRecordListProps> = (props) => {
           rowKey="id"
           toolBarRender={false}
           columns={columns}
+          scroll={{ x: 2500 }}
           recordCreatorProps={
             readonly
               ? false

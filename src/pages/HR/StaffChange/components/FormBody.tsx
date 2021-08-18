@@ -34,6 +34,7 @@ const FormBody: React.FC<FormProps> = (props) => {
   const postOptions = useOptions('Post');
   const postTypeOptions = useOptions('PostType');
   const companyStateOptions = useOptions('CompanyState');
+  const employTypeOptions = useOptions('EmployType');
   const postLevelOptions = useOptions(
     'PostLevel',
     'name',
@@ -194,6 +195,25 @@ const FormBody: React.FC<FormProps> = (props) => {
             label="变更后在司状态"
             rules={[{ required: true, message: '请选择在司状态' }]}
             options={companyStateOptions}
+            readonly={isView}
+          />
+        </Col>
+        <Col xl={12} lg={12} md={24}>
+          <ProFormText
+            width="md"
+            name="preEmployType"
+            label="变更前用工性质"
+            readonly={isView}
+            disabled
+          />
+        </Col>
+        <Col xl={12} lg={12} md={24}>
+          <ProFormSelect
+            width="md"
+            name="postEmployType"
+            label="变更后用工性质"
+            rules={[{ required: true, message: '请选择用工性质' }]}
+            options={employTypeOptions}
             readonly={isView}
           />
         </Col>

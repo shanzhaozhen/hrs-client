@@ -197,7 +197,18 @@ const FormBody: React.FC<FormProps> = (props) => {
                     width="sm"
                     name="companyState"
                     label="在司状态"
-                    rules={[{ required: !isEdit, message: '请输入在司状态' }]}
+                    rules={[{ required: !isEdit, message: '请选择在司状态' }]}
+                    options={companyStateOptions}
+                    readonly={isView}
+                    disabled={isEdit}
+                  />
+                </Col>
+                <Col xl={12} lg={24} md={24}>
+                  <ProFormSelect
+                    width="sm"
+                    name="employType"
+                    label="用工性质"
+                    rules={[{ required: !isEdit, message: '请选择用工性质' }]}
                     options={companyStateOptions}
                     readonly={isView}
                     disabled={isEdit}

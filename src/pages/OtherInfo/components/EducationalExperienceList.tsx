@@ -26,6 +26,7 @@ const EducationalExperienceList: React.FC<EducationalExperienceListProps> = (pro
       title: '学校',
       dataIndex: 'schoolName',
       valueType: 'text',
+      fixed: 'left',
       formItemProps: {
         rules: [
           {
@@ -106,14 +107,17 @@ const EducationalExperienceList: React.FC<EducationalExperienceListProps> = (pro
       valueType: 'text',
     },
     {
-      title: '操作',
-      valueType: 'option',
-      hideInTable: readonly,
-    },
-    {
       title: '备注',
       dataIndex: 'remarks',
       valueType: 'textarea',
+    },
+    {
+      title: '操作',
+      valueType: 'option',
+      width: 80,
+      align: 'center',
+      fixed: 'right',
+      hideInTable: readonly,
     },
   ];
 
@@ -125,6 +129,7 @@ const EducationalExperienceList: React.FC<EducationalExperienceListProps> = (pro
           rowKey="id"
           toolBarRender={false}
           columns={columns}
+          scroll={{ x: 2500 }}
           recordCreatorProps={
             readonly
               ? false

@@ -24,6 +24,7 @@ const ContractList: React.FC<ContractListProps> = (props) => {
       title: '合同名称',
       dataIndex: 'name',
       valueType: 'text',
+      fixed: 'left',
       formItemProps: {
         rules: [
           {
@@ -127,6 +128,9 @@ const ContractList: React.FC<ContractListProps> = (props) => {
     {
       title: '操作',
       valueType: 'option',
+      width: 80,
+      align: 'center',
+      fixed: 'right',
       hideInTable: readonly,
     },
   ];
@@ -139,6 +143,7 @@ const ContractList: React.FC<ContractListProps> = (props) => {
           rowKey="id"
           toolBarRender={false}
           columns={columns}
+          scroll={{ x: 3000 }}
           recordCreatorProps={
             readonly
               ? false

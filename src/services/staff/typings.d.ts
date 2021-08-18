@@ -89,6 +89,8 @@ export type StaffVO = {
   depId?: number;
   /** 在司状态 */
   companyState?: string;
+  /** 用工性质 */
+  employType?: string;
   /** 职务 */
   duty?: string;
   /** 岗位 */

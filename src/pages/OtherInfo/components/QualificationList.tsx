@@ -24,11 +24,21 @@ const QualificationList: React.FC<QualificationListProps> = (props) => {
       title: '职业资格',
       dataIndex: 'qualification',
       valueType: 'text',
+      fixed: 'left',
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: '此项为必填项',
+          },
+        ],
+      },
     },
     {
       title: '职业',
       dataIndex: 'profession',
       valueType: 'text',
+      fixed: 'left',
       formItemProps: {
         rules: [
           {
@@ -87,6 +97,9 @@ const QualificationList: React.FC<QualificationListProps> = (props) => {
     {
       title: '操作',
       valueType: 'option',
+      width: 80,
+      align: 'center',
+      fixed: 'right',
       hideInTable: readonly,
     },
   ];
@@ -99,6 +112,7 @@ const QualificationList: React.FC<QualificationListProps> = (props) => {
           rowKey="id"
           toolBarRender={false}
           columns={columns}
+          scroll={{ x: 1800 }}
           recordCreatorProps={
             readonly
               ? false
